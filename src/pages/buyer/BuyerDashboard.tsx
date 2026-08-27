@@ -1,0 +1,203 @@
+import React from 'react';
+import { useAuth } from '../../context/AuthContext';
+import { useAppData } from '../../context/AppDataContext';
+import { StatWidget } from '../../components/ui/StatWidget';
+import { RFQCard } from '../../components/rfq/RFQCard';
+import { Button } from '../../components/ui/Button';
+import { Card, CardHeader, CardContent } from '../../components/ui/Card';
+import { StatusBadge } from '../../components/ui/Badge';
+import { formatAED, formatDate } from '../../lib/utils';
+import {
+  FileText,
+  GitCompare,
+  Package,
+  TrendingDown,
+  PlusCircle,
+  Clock,
+  ArrowRight,
+  ShieldCheck,
+  AlertCircle
+} from 'lucide-react';
+
+interface BuyerDashboardProps {
+  onNavigate: (view: string, params?: any) => void;
+}
+
+export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) => {
+  const { currentCompany, currentUser } = useAuth();
+  const { rfqs, quotations, purchaseOrders } = useAppData();
+
+  const myRFQs = rfqs.filter(r => r.buyerCompanyId === currentCompany.id);
+  const evaluatingRFQs = myRFQs.filter(r => r.quotesCount > 0 && r.status !== 'closed' && r.status !== 'awarded');
+  const totalQuotes = quotations.length;
+  const activeOrders = purchaseOrders.filter(p => p.buyerCompanyId === currentCompany.id);
+
+  return (
+    <div className="space-y-8">
+      {/* Top Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
+              Procurement Command Dashboard
+            </h1>
+            <span className="bg-brand-50 text-brand-700 text-xs font-bold px-2 py-0.5 rounded border border-brand-200">
+              {currentCompany.name}
+            </span>
+          </div>
+          <p className="text-xs sm:text-sm text-slate-500 mt-1">
+            Manage your project material RFQs, compare multi-vendor quotations, and track UAE site deliveries.
+          </p>
+        </div>
+
+        <Button
+          variant="primary"
+          onClick={() => onNavigate('create-rfq')}
+          leftIcon={<PlusCircle className="w-4 h-4" />}
+          className="shadow-sm"
+        >
+          Create New RFQ
+        </Button>
+      </div>
+
+      {/* Action Alert for Evaluating Quotes */}
+      {evaluatingRFQs.length > 0 && (
+        <div className="p-4 bg-gradient-to-r from-brand-900 to-slate-900 text-white rounded-2xl border border-brand-700 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-brand-500/30 border border-brand-400/40 flex items-center justify-center text-amber-400 shrink-0">
+              <GitCompare className="w-5 h-5" />
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-white">
+                {evaluatingRFQs[0].quotesCount} Quotations Ready for Evaluation ({evaluatingRFQs[0].rfqNumber})
+              </h4>
+              <p className="text-xs text-slate-300">
+                Suppliers in Al Quoz & Sharjah have submitted offers for "{evaluatingRFQs[0].title}".
+              </p>
+            </div>
+          </div>
+          <Button
+            variant="amber"
+            size="sm"
+            onClick={() => onNavigate('buyer-compare', { rfqId: evaluatingRFQs[0].id })}
+            rightIcon={<ArrowRight className="w-4 h-4" />}
+          >
+            Open Comparison Matrix
+          </Button>
+        </div>
+      )}
+
+      {/* KPI Stats Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatWidget
+          title="Active RFQs"
+          value={myRFQs.length}
+          subtitle="Across Dubai & Sharjah"
+          icon={<FileText className="w-6 h-6" />}
+          trend={{ value: '+2', isPositive: true }}
+        />
+        <StatWidget
+          title="Quotations Received"
+          value={totalQuotes}
+          subtitle="From verified UAE stockists"
+          icon={<GitCompare className="w-6 h-6" />}
+          trend={{ value: '100% SLA', isPositive: true }}
+        />
+        <StatWidget
+          title="Active Purchase Orders"
+          value={activeOrders.length}
+          subtitle="In processing & delivery"
+          icon={<Package className="w-6 h-6" />}
+        />
+        <StatWidget
+          title="Estimated Procurement Savings"
+          value="AED 48,200"
+          subtitle="Compared to single-source list"
+          icon={<TrendingDown className="w-6 h-6 text-emerald-600" />}
+          trend={{ value: '14.2%', isPositive: true }}
+        />
+      </div>
+
+      {/* Active RFQs Section */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-bold text-slate-900">Active Material RFQs</h3>
+          <button
+            onClick={() => onNavigate('buyer-rfqs')}
+            className="text-xs font-bold text-brand-600 hover:text-brand-700 flex items-center gap-1"
+          >
+            View All ({myRFQs.length}) <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {myRFQs.slice(0, 4).map((rfq) => (
+            <RFQCard
+              key={rfq.id}
+              rfq={rfq}
+              onView={(r) => onNavigate('rfq-detail', { rfqId: r.id })}
+              onCompare={(r) => onNavigate('buyer-compare', { rfqId: r.id })}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Recent Orders Table */}
+      <Card>
+        <CardHeader>
+          <div>
+            <h3 className="text-base font-bold text-slate-900">Recent Purchase Orders & Deliveries</h3>
+            <p className="text-xs text-slate-500">Track PO dispatch, site gate receipts, and supplier ratings.</p>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => onNavigate('buyer-orders')}
+          >
+            All Orders
+          </Button>
+        </CardHeader>
+        <CardContent className="p-0 overflow-x-auto">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
+              <tr>
+                <th className="p-3">PO Number</th>
+                <th className="p-3">Project / RFQ</th>
+                <th className="p-3">Awarded Supplier</th>
+                <th className="p-3">Total (AED)</th>
+                <th className="p-3">Expected Date</th>
+                <th className="p-3">Status</th>
+                <th className="p-3 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {activeOrders.map((po) => (
+                <tr key={po.id} className="hover:bg-slate-50/60">
+                  <td className="p-3 font-mono font-bold text-brand-700">{po.poNumber}</td>
+                  <td className="p-3">
+                    <p className="font-semibold text-slate-900">{po.rfqTitle}</p>
+                    <span className="text-[10px] text-slate-400 font-mono">{po.rfqNumber}</span>
+                  </td>
+                  <td className="p-3 font-semibold text-slate-800">{po.supplierCompanyName}</td>
+                  <td className="p-3 font-extrabold text-slate-900">{formatAED(po.totalAmountAED)}</td>
+                  <td className="p-3 text-slate-600">{formatDate(po.expectedDeliveryDate)}</td>
+                  <td className="p-3">
+                    <StatusBadge status={po.status} />
+                  </td>
+                  <td className="p-3 text-right">
+                    <button
+                      onClick={() => onNavigate('buyer-orders')}
+                      className="text-brand-600 hover:text-brand-800 font-bold"
+                    >
+                      Track PO
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
