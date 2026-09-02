@@ -6,7 +6,7 @@ import { UserRole } from '../../types';
 import { Layers, Lock, User, AlertCircle, Building2, Store } from 'lucide-react';
 
 interface LoginPageProps {
-  onSuccess: () => void;
+  onSuccess: (targetView?: string) => void;
   onNavigateToRegister?: () => void;
   isAdminMode?: boolean;
 }
@@ -31,7 +31,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
       const ok = adminLogin(adminPassword || password);
       setLoading(false);
       if (ok) {
-        onSuccess();
+        onSuccess('admin-dashboard');
       } else {
         setErrorMsg('Invalid Master Admin Key. Only authorized operators may access the Admin Desk.');
       }
@@ -41,7 +41,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
     const res = await signIn(identifier, password);
     setLoading(false);
     if (res.success) {
-      onSuccess();
+      const target = role === 'supplier' ? 'supplier-dashboard' : 'buyer-dashboard';
+      onSuccess(target);
     } else {
       setErrorMsg(res.error || 'Invalid username, email, or password');
     }
@@ -182,7 +183,10 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
             Don't have an account yet?{' '}
             <button
               type="button"
-              onClick={onNavigateToRegister || onSuccess}
+              onClick={() => {
+                if (onNavigateToRegister) onNavigateToRegister();
+                else onSuccess();
+              }}
               className="text-brand-600 font-bold hover:underline"
             >
               Sign Up as Contractor or Supplier

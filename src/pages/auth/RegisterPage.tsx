@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 
 interface RegisterPageProps {
-  onSuccess: () => void;
+  onSuccess: (targetView?: string) => void;
   onNavigateToLogin?: () => void;
 }
 
@@ -108,7 +108,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
 
     setLoading(false);
     if (res.success) {
-      onSuccess();
+      onSuccess('buyer-dashboard');
     } else {
       setErrorMsg(res.error || 'Failed to create account');
     }
@@ -154,7 +154,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
 
     setLoading(false);
     if (res.success) {
-      onSuccess();
+      onSuccess('supplier-dashboard');
     } else {
       setErrorMsg(res.error || 'Failed to register supplier');
     }
@@ -575,7 +575,10 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
           Already have an account?{' '}
           <button
             type="button"
-            onClick={onNavigateToLogin || onSuccess}
+            onClick={() => {
+              if (onNavigateToLogin) onNavigateToLogin();
+              else onSuccess();
+            }}
             className="text-brand-600 font-bold hover:underline"
           >
             Login to your portal

@@ -44,7 +44,16 @@ const AppContent: React.FC = () => {
   const [currentView, setCurrentView] = useState<string>('home');
   const [viewParams, setViewParams] = useState<any>({});
 
-  const handleNavigate = (view: string, params: any = {}) => {
+  // Auto-redirect to dashboard when authenticated on login/register pages
+  React.useEffect(() => {
+    if (isAuthenticated && (currentView === 'login' || currentView === 'register')) {
+      const destination = role === 'supplier' ? 'supplier-dashboard' : role === 'admin' ? 'admin-dashboard' : 'buyer-dashboard';
+      setCurrentView(destination);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [isAuthenticated, role, currentView]);
+
+  const handleNavigate = (view: string, params: any = {}, allowBypass: boolean = false) => {
     setViewParams(params);
 
     const publicViews = [
@@ -53,12 +62,12 @@ const AppContent: React.FC = () => {
       'suppliers', 
       'how-it-works', 
       'onboarding-guide', 
-      'invoice-audit',
+      'invoice-audit', 
       'login', 
       'register'
     ];
 
-    if (!isAuthenticated && !publicViews.includes(view)) {
+    if (!isAuthenticated && !allowBypass && !publicViews.includes(view)) {
       setCurrentView('login');
     } else {
       setCurrentView(view);
@@ -73,7 +82,7 @@ const AppContent: React.FC = () => {
     'suppliers', 
     'how-it-works', 
     'onboarding-guide', 
-    'invoice-audit',
+    'invoice-audit', 
     'login', 
     'register'
   ].includes(currentView);
@@ -86,7 +95,10 @@ const AppContent: React.FC = () => {
         <Navbar currentView={currentView} setCurrentView={handleNavigate} />
         <main className="flex-1">
           <LoginPage 
-            onSuccess={() => handleNavigate(role === 'supplier' ? 'supplier-dashboard' : role === 'admin' ? 'admin-dashboard' : 'buyer-dashboard')} 
+            onSuccess={(target) => {
+              const dest = target || (role === 'supplier' ? 'supplier-dashboard' : role === 'admin' ? 'admin-dashboard' : 'buyer-dashboard');
+              handleNavigate(dest, {}, true);
+            }} 
             onNavigateToRegister={() => handleNavigate('register')}
           />
         </main>
@@ -143,13 +155,19 @@ const AppContent: React.FC = () => {
           )}
           {currentView === 'login' && (
             <LoginPage 
-              onSuccess={() => handleNavigate(role === 'supplier' ? 'supplier-dashboard' : role === 'admin' ? 'admin-dashboard' : 'buyer-dashboard')} 
+              onSuccess={(target) => {
+                const dest = target || (role === 'supplier' ? 'supplier-dashboard' : role === 'admin' ? 'admin-dashboard' : 'buyer-dashboard');
+                handleNavigate(dest, {}, true);
+              }} 
               onNavigateToRegister={() => handleNavigate('register')}
             />
           )}
           {currentView === 'register' && (
             <RegisterPage 
-              onSuccess={() => handleNavigate(role === 'supplier' ? 'supplier-dashboard' : 'buyer-dashboard')} 
+              onSuccess={(target) => {
+                const dest = target || (role === 'supplier' ? 'supplier-dashboard' : 'buyer-dashboard');
+                handleNavigate(dest, {}, true);
+              }} 
               onNavigateToLogin={() => handleNavigate('login')}
             />
           )}
