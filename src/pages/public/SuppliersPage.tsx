@@ -154,25 +154,37 @@ export const SuppliersPage: React.FC<{ onRequestQuote: (supplier?: any, category
           ))}
         </div>
       ) : (
-        <div className="text-center py-16 bg-white rounded-2xl border border-dashed border-slate-300 p-8 space-y-3">
-          <div className="w-12 h-12 rounded-full bg-slate-100 text-slate-400 mx-auto flex items-center justify-center">
-            <Search className="w-6 h-6" />
+        <div className="text-center py-16 bg-white rounded-2xl border border-dashed border-slate-300 p-8 space-y-4">
+          <div className="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 mx-auto flex items-center justify-center font-bold">
+            <Zap className="w-7 h-7" />
           </div>
-          <h3 className="text-base font-bold text-slate-800">No Verified Suppliers Found</h3>
-          <p className="text-xs text-slate-500 max-w-md mx-auto">
-            No active stockists match your filter in <strong>{selectedCategory}</strong> ({emirateFilter} Emirate). Try clearing filters or post a custom RFQ to our supplier network.
-          </p>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              setSelectedCategory('All');
-              setEmirateFilter('All');
-              setSearchTerm('');
-            }}
-          >
-            Clear All Filters
-          </Button>
+          <div className="space-y-1.5 max-w-lg mx-auto">
+            <h3 className="text-lg font-bold text-slate-900">Verified UAE Vendor Network</h3>
+            <p className="text-xs text-slate-500">
+              Are you a UAE material importer, stockist, or distributor? Register your company to be listed in our verified directory and receive contractor RFQs directly on your sales desk.
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={() => onRequestQuote(undefined, selectedCategory !== 'All' ? selectedCategory : undefined)}
+              leftIcon={<Zap className="w-4 h-4 text-amber-300" />}
+            >
+              Post an RFQ to All UAE Vendors
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setSelectedCategory('All');
+                setEmirateFilter('All');
+                setSearchTerm('');
+              }}
+            >
+              Clear Filters
+            </Button>
+          </div>
         </div>
       )}
     </div>

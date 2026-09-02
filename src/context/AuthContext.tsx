@@ -143,10 +143,10 @@ export const mockAdminUser: UserProfile = {
   createdAt: '2023-01-01T00:00:00Z'
 };
 
-const defaultUsers: UserProfile[] = [mockBuyerUser, mockSupplierUser, mockAdminUser];
+const defaultUsers: UserProfile[] = [mockAdminUser];
 
-const AUTH_STORAGE_KEY = 'supplysouq_auth_session_v10';
-const USERS_STORAGE_KEY = 'supplysouq_registered_users_v10';
+const AUTH_STORAGE_KEY = 'supplysouq_auth_session_clean_v11';
+const USERS_STORAGE_KEY = 'supplysouq_registered_users_clean_v11';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 

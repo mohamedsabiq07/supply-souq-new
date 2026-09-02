@@ -74,7 +74,7 @@ interface AppDataContextType {
 
 const AppDataContext = createContext<AppDataContextType | undefined>(undefined);
 
-const STORAGE_KEY = 'supplysouq_supabase_live_v8';
+const STORAGE_KEY = 'supplysouq_production_clean_v10';
 
 export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isSupabaseConnected, setIsSupabaseConnected] = useState(true);
@@ -86,7 +86,7 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
       const saved = localStorage.getItem(`${STORAGE_KEY}_rfqs`);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) {
+        if (Array.isArray(parsed)) {
           return parsed;
         }
       }
@@ -99,7 +99,7 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
       const saved = localStorage.getItem(`${STORAGE_KEY}_quotes`);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) {
+        if (Array.isArray(parsed)) {
           return parsed;
         }
       }
@@ -121,7 +121,7 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
       const saved = localStorage.getItem(`${STORAGE_KEY}_companies`);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) {
+        if (Array.isArray(parsed)) {
           return parsed;
         }
       }
@@ -173,16 +173,6 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
             prev.forEach(c => map.set(c.id, c));
             result.companies.forEach(c => map.set(c.id, c));
             return Array.from(map.values());
-          });
-        } else {
-          // If Supabase is empty, seed initial data to the database
-          await supabaseService.seedInitialData({
-            companies: initialCompanies,
-            rfqs: initialRFQs,
-            quotations: initialQuotations,
-            purchaseOrders: initialPurchaseOrders,
-            messages: initialMessages,
-            verifications: initialVerifications,
           });
         }
 
@@ -325,44 +315,38 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const createRFQ = (newRFQData: Omit<RFQ, 'id' | 'rfqNumber' | 'createdAt' | 'updatedAt' | 'quotesCount' | 'invitedCount'>): RFQ => {
     const randomNum = Math.floor(10000 + Math.random() * 90000);
     
-    // Intelligent 5-Supplier Matchmaking Engine based on Category & Industrial Zone
+    // 1. Get all registered suppliers in the system
     const supplierPool = companies.filter((c) => c.companyType === 'supplier');
     const categoryQuery = (newRFQData.category || '').toLowerCase();
     const itemQuery = (newRFQData.items || []).map(i => (i.description || '').toLowerCase()).join(' ');
 
-    // Check if buyer targeted a specific supplier
+    // 2. Check if buyer targeted a specific supplier
     const targetSupplier = newRFQData.targetSupplierId 
       ? supplierPool.find(s => s.id === newRFQData.targetSupplierId || s.name.toLowerCase() === newRFQData.targetSupplierName?.toLowerCase())
       : null;
 
-    const scoredSuppliers = supplierPool.map((supplier) => {
-      let score = 0;
-      if (targetSupplier && supplier.id === targetSupplier.id) {
-        score += 1000; // Guaranteed top priority
-      }
+    // 3. Find ALL registered vendors whose categories match the RFQ category
+    const matchingSuppliers = supplierPool.filter((supplier) => {
+      if (targetSupplier && supplier.id === targetSupplier.id) return true;
       const supplierCats = (supplier.categories || []).map(c => c.toLowerCase());
-      
-      if (supplierCats.some(c => categoryQuery.includes(c) || c.includes(categoryQuery))) {
-        score += 10;
-      }
-      if (supplierCats.some(c => itemQuery.includes(c) || c.includes(itemQuery))) {
-        score += 5;
-      }
-      if (supplier.emirate === newRFQData.deliveryEmirate) {
-        score += 3;
-      }
-      if (supplier.verificationStatus === 'verified') {
-        score += 2;
-      }
-      return { supplier, score };
+      return supplierCats.some(c => 
+        categoryQuery.includes(c) || 
+        c.includes(categoryQuery) ||
+        (itemQuery && (itemQuery.includes(c) || c.includes(itemQuery)))
+      );
     });
 
-    scoredSuppliers.sort((a, b) => b.score - a.score);
-    const top5 = (scoredSuppliers.length >= 5 ? scoredSuppliers.slice(0, 5) : scoredSuppliers).map(s => s.supplier);
-    const final5 = top5.length > 0 ? top5 : supplierPool.slice(0, 5);
+    // 4. Combine target supplier + all matching vendors under this category
+    const allRecipients = targetSupplier && !matchingSuppliers.some(s => s.id === targetSupplier.id)
+      ? [targetSupplier, ...matchingSuppliers]
+      : matchingSuppliers.length > 0
+        ? matchingSuppliers
+        : targetSupplier 
+          ? [targetSupplier] 
+          : [];
 
-    const matchedSupplierCompanyIds = final5.map(s => s.id);
-    const matchedSupplierNames = final5.map(s => s.name);
+    const matchedSupplierCompanyIds = allRecipients.map(s => s.id);
+    const matchedSupplierNames = allRecipients.map(s => s.name);
     const deadline24h = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
 
     const newRFQ: RFQ = {
@@ -372,7 +356,7 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
       targetSupplierId: targetSupplier?.id || newRFQData.targetSupplierId,
       targetSupplierName: targetSupplier?.name || newRFQData.targetSupplierName,
       status: 'published',
-      invitedCount: final5.length || 5,
+      invitedCount: allRecipients.length,
       quotesCount: 0,
       matchedSupplierCompanyIds,
       matchedSupplierNames,
@@ -383,25 +367,45 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
     setRfqs((prev) => [newRFQ, ...prev]);
 
-    // Create automated dispatch message/notification for the 5 matched stockists
-    const newMsg: Message = {
-      id: `msg-${Date.now()}`,
-      rfqId: newRFQ.id,
-      rfqNumber: newRFQ.rfqNumber,
-      senderId: 'system-matchmaker',
-      senderName: 'SupplySouq Dispatch Engine',
-      senderCompanyId: newRFQ.buyerCompanyId,
-      senderCompanyName: newRFQ.buyerCompanyName,
-      senderRole: 'buyer',
-      recipientCompanyId: targetSupplier ? targetSupplier.id : 'all-matched-suppliers',
-      recipientCompanyName: targetSupplier ? targetSupplier.name : '5 Matched Verified UAE Stockists',
-      messageText: targetSupplier 
-        ? `[Direct RFQ Request] ${newRFQ.buyerCompanyName} has sent a direct material requirement for "${newRFQ.title}" specifically to your sales desk. Quotation SLA: 24 Hours.`
-        : `[Automated Matchmaking Dispatch] RFQ #${newRFQ.rfqNumber} for "${newRFQ.title}" has been delivered to 5 verified stockists: ${matchedSupplierNames.join(', ')}. Quotation SLA: 24 Hours.`,
-      createdAt: new Date().toISOString(),
-      isRead: false,
-    };
-    setMessages((prev) => [...prev, newMsg]);
+    // Deliver direct notification messages to each vendor in this category
+    if (allRecipients.length > 0) {
+      allRecipients.forEach(sup => {
+        const supMsg: Message = {
+          id: `msg-${Date.now()}-${sup.id}`,
+          rfqId: newRFQ.id,
+          rfqNumber: newRFQ.rfqNumber,
+          senderId: newRFQ.buyerCompanyId,
+          senderName: newRFQ.buyerCompanyName,
+          senderCompanyId: newRFQ.buyerCompanyId,
+          senderCompanyName: newRFQ.buyerCompanyName,
+          senderRole: 'buyer',
+          recipientCompanyId: sup.id,
+          recipientCompanyName: sup.name,
+          messageText: `[Category RFQ Dispatch] ${newRFQ.buyerCompanyName} submitted RFQ #${newRFQ.rfqNumber} for "${newRFQ.title}" in your registered category (${newRFQ.category}). Please review and submit your quotation within 24 hours.`,
+          createdAt: new Date().toISOString(),
+          isRead: false,
+        };
+        setMessages((prev) => [...prev, supMsg]);
+        supabaseService.sendMessage(supMsg).catch(console.error);
+      });
+    } else {
+      const sysMsg: Message = {
+        id: `msg-${Date.now()}-general`,
+        rfqId: newRFQ.id,
+        rfqNumber: newRFQ.rfqNumber,
+        senderId: 'system-dispatch',
+        senderName: 'SupplySouq Market Engine',
+        senderCompanyId: newRFQ.buyerCompanyId,
+        senderCompanyName: newRFQ.buyerCompanyName,
+        senderRole: 'buyer',
+        recipientCompanyId: newRFQ.buyerCompanyId,
+        recipientCompanyName: newRFQ.buyerCompanyName,
+        messageText: `RFQ #${newRFQ.rfqNumber} for "${newRFQ.title}" has been published. All registered UAE vendors in ${newRFQ.category} will receive this requirement directly on their sales desk.`,
+        createdAt: new Date().toISOString(),
+        isRead: false,
+      };
+      setMessages((prev) => [...prev, sysMsg]);
+    }
 
     // Persist to Supabase in background
     supabaseService.createRFQ(newRFQ).catch(console.error);
