@@ -189,122 +189,175 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
     return unlockedRFQIds.includes(rfqId);
   };
 
-  // Sync with Supabase on Initial Load
-  const initSupabase = useCallback(async () => {
-    setIsSyncing(true);
+  // Helper to merge local and remote entities, with newer timestamps winning
+  const mergeEntities = useCallback(<T extends { id: string; updatedAt?: string; createdAt?: string; submittedAt?: string }>(
+    localList: T[],
+    remoteList: T[]
+  ): T[] => {
+    const map = new Map<string, T>();
+    localList.forEach(item => map.set(item.id, item));
+    remoteList.forEach(remoteItem => {
+      const existing = map.get(remoteItem.id);
+      if (!existing) {
+        map.set(remoteItem.id, remoteItem);
+      } else {
+        const existingTs = new Date(existing.updatedAt || existing.submittedAt || existing.createdAt || 0).getTime();
+        const remoteTs = new Date(remoteItem.updatedAt || remoteItem.submittedAt || remoteItem.createdAt || 0).getTime();
+        if (remoteTs >= existingTs) {
+          map.set(remoteItem.id, remoteItem);
+        }
+      }
+    });
+    return Array.from(map.values());
+  }, []);
+
+  // Broadcast sync trigger to update all open tabs instantly
+  const broadcastSync = useCallback(() => {
+    try {
+      if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
+        const bc = new BroadcastChannel('supplysouq_realtime_sync');
+        bc.postMessage({ type: 'SYNC_NOW', timestamp: Date.now() });
+        bc.close();
+      }
+    } catch (e) {}
+  }, []);
+
+  // Real-time synchronization with Supabase cloud
+  const initSupabase = useCallback(async (isInitial = false) => {
+    if (isInitial) setIsSyncing(true);
     try {
       const result = await supabaseService.fetchAll();
       if (!result.error) {
         setIsSupabaseConnected(true);
 
-        // Merge companies: preserve existing local plus cloud
+        // 1. Merge Companies
         if (result.companies && result.companies.length > 0) {
-          setCompanies((prev) => {
-            const map = new Map<string, Company>();
-            prev.forEach(c => map.set(c.id, c));
-            result.companies.forEach(c => map.set(c.id, c));
-            return Array.from(map.values());
-          });
+          setCompanies((prev) => mergeEntities(prev, result.companies));
         }
 
-        // Merge RFQs: preserve any locally created RFQs and union with cloud
+        // 2. Merge RFQs
         if (result.rfqs && result.rfqs.length > 0) {
-          setRfqs((prev) => {
-            const map = new Map<string, RFQ>();
-            result.rfqs.forEach(r => map.set(r.id, r));
-            prev.forEach(r => map.set(r.id, r));
-            return Array.from(map.values());
-          });
+          setRfqs((prev) => mergeEntities(prev, result.rfqs));
         }
 
-        // Merge Quotations
+        // 3. Merge Quotations
         if (result.quotations && result.quotations.length > 0) {
-          setQuotations((prev) => {
-            const map = new Map<string, Quotation>();
-            result.quotations.forEach(q => map.set(q.id, q));
-            prev.forEach(q => map.set(q.id, q));
-            return Array.from(map.values());
-          });
+          setQuotations((prev) => mergeEntities(prev, result.quotations));
         }
 
-        // Merge Purchase Orders
+        // 4. Merge Purchase Orders
         if (result.purchaseOrders && result.purchaseOrders.length > 0) {
-          setPurchaseOrders((prev) => {
-            const map = new Map<string, PurchaseOrder>();
-            result.purchaseOrders.forEach(p => map.set(p.id, p));
-            prev.forEach(p => map.set(p.id, p));
-            return Array.from(map.values());
-          });
+          setPurchaseOrders((prev) => mergeEntities(prev, result.purchaseOrders));
         }
 
-        // Merge Messages
+        // 5. Merge Messages
         if (result.messages && result.messages.length > 0) {
-          setMessages((prev) => {
-            const map = new Map<string, Message>();
-            result.messages.forEach(m => map.set(m.id, m));
-            prev.forEach(m => map.set(m.id, m));
-            return Array.from(map.values());
-          });
+          setMessages((prev) => mergeEntities(prev, result.messages));
         }
 
-        // Merge Verifications
+        // 6. Merge Verifications
         if (result.verifications && result.verifications.length > 0) {
-          setVerifications((prev) => {
-            const map = new Map<string, VerificationRequest>();
-            result.verifications.forEach(v => map.set(v.id, v));
-            prev.forEach(v => map.set(v.id, v));
-            return Array.from(map.values());
-          });
+          setVerifications((prev) => mergeEntities(prev, result.verifications));
         }
-      } else {
-        console.warn('Supabase fetch issue, using local storage cache:', result.error);
       }
     } catch (err) {
-      console.error('Failed connecting to Supabase, running in local cached mode:', err);
+      console.warn('Realtime sync heartbeat check:', err);
     } finally {
-      setIsSyncing(false);
+      if (isInitial) setIsSyncing(false);
     }
-  }, []);
+  }, [mergeEntities]);
 
+  // Initial load and Realtime Listeners across browser tabs and devices
   useEffect(() => {
-    initSupabase();
+    initSupabase(true);
+
+    // 1. BroadcastChannel listener for instant cross-tab zero-latency updates
+    let bc: BroadcastChannel | null = null;
+    try {
+      if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
+        bc = new BroadcastChannel('supplysouq_realtime_sync');
+        bc.onmessage = () => {
+          initSupabase(false);
+        };
+      }
+    } catch (e) {}
+
+    // 2. Storage event listener (fires when other tabs update localStorage)
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key && e.key.startsWith(STORAGE_KEY)) {
+        initSupabase(false);
+      }
+    };
+    window.addEventListener('storage', handleStorage);
+
+    // 3. Window focus and visibility listeners (instant sync when user switches tabs)
+    const handleFocus = () => initSupabase(false);
+    window.addEventListener('focus', handleFocus);
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        initSupabase(false);
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+
+    // 4. Smooth 3-second background heartbeat polling
+    const heartbeat = setInterval(() => {
+      initSupabase(false);
+    }, 3000);
+
+    return () => {
+      if (bc) bc.close();
+      window.removeEventListener('storage', handleStorage);
+      window.removeEventListener('focus', handleFocus);
+      document.removeEventListener('visibilitychange', handleVisibility);
+      clearInterval(heartbeat);
+    };
   }, [initSupabase]);
 
-  // Supabase Realtime Subscriptions
+  // Supabase Realtime Subscriptions via WebSockets
   useEffect(() => {
     const channel = supabase
-      .channel('supplysouq_realtime')
+      .channel('supplysouq_realtime_channel')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'rfqs' }, (payload) => {
-        if (payload.eventType === 'INSERT') {
+        if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
           const newRfq = mapRFQFromDB(payload.new);
-          setRfqs((prev) => (prev.some((r) => r.id === newRfq.id) ? prev : [newRfq, ...prev]));
-        } else if (payload.eventType === 'UPDATE') {
-          const updated = mapRFQFromDB(payload.new);
-          setRfqs((prev) => prev.map((r) => (r.id === updated.id ? updated : r)));
+          setRfqs((prev) => [newRfq, ...prev.filter((r) => r.id !== newRfq.id)]);
+        } else if (payload.eventType === 'DELETE') {
+          setRfqs((prev) => prev.filter((r) => r.id !== payload.old.id));
         }
       })
       .on('postgres_changes', { event: '*', schema: 'public', table: 'quotations' }, (payload) => {
-        if (payload.eventType === 'INSERT') {
+        if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
           const newQuote = mapQuotationFromDB(payload.new);
-          setQuotations((prev) => (prev.some((q) => q.id === newQuote.id) ? prev : [newQuote, ...prev]));
-        } else if (payload.eventType === 'UPDATE') {
-          const updated = mapQuotationFromDB(payload.new);
-          setQuotations((prev) => prev.map((q) => (q.id === updated.id ? updated : q)));
+          setQuotations((prev) => [newQuote, ...prev.filter((q) => q.id !== newQuote.id)]);
+          // Also update the parent RFQ in memory
+          setRfqs((prev) =>
+            prev.map((r) => {
+              if (r.id === newQuote.rfqId || r.rfqNumber === newQuote.rfqNumber) {
+                return {
+                  ...r,
+                  quotesCount: (r.quotesCount || 0) + 1,
+                  status: 'receiving_quotes',
+                  updatedAt: new Date().toISOString()
+                };
+              }
+              return r;
+            })
+          );
+        } else if (payload.eventType === 'DELETE') {
+          setQuotations((prev) => prev.filter((q) => q.id !== payload.old.id));
         }
       })
       .on('postgres_changes', { event: '*', schema: 'public', table: 'purchase_orders' }, (payload) => {
-        if (payload.eventType === 'INSERT') {
+        if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
           const newPo = mapPOFromDB(payload.new);
-          setPurchaseOrders((prev) => (prev.some((p) => p.id === newPo.id) ? prev : [newPo, ...prev]));
-        } else if (payload.eventType === 'UPDATE') {
-          const updated = mapPOFromDB(payload.new);
-          setPurchaseOrders((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
+          setPurchaseOrders((prev) => [newPo, ...prev.filter((p) => p.id !== newPo.id)]);
         }
       })
       .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, (payload) => {
         if (payload.eventType === 'INSERT') {
           const newMsg = mapMessageFromDB(payload.new);
-          setMessages((prev) => (prev.some((m) => m.id === newMsg.id) ? prev : [...prev, newMsg]));
+          setMessages((prev) => [...prev.filter((m) => m.id !== newMsg.id), newMsg]);
         }
       })
       .subscribe();
@@ -440,6 +493,7 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
     // Persist to Supabase in background
     supabaseService.createRFQ(newRFQ).catch(console.error);
+    broadcastSync();
 
     return newRFQ;
   };
@@ -451,6 +505,7 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
     // Persist to Supabase
     supabaseService.updateRFQStatus(rfqId, status).catch(console.error);
+    broadcastSync();
   };
 
   const getRFQById = (rfqId: string) => {
@@ -510,6 +565,7 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
     // Persist to Supabase
     supabaseService.submitQuotation(newQuote).catch(console.error);
+    broadcastSync();
 
     return newQuote;
   };
@@ -583,6 +639,7 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
     // Persist to Supabase
     supabaseService.createPurchaseOrder(newPO).catch(console.error);
     supabaseService.updateRFQStatus(targetRFQ.id, 'awarded').catch(console.error);
+    broadcastSync();
 
     return newPO;
   };
@@ -603,6 +660,7 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
     // Persist to Supabase
     supabaseService.updateOrderStatus(orderId, status, trackingNotes).catch(console.error);
+    broadcastSync();
   };
 
   const getOrderById = (orderId: string) => {
@@ -620,6 +678,7 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
     // Persist to Supabase
     supabaseService.sendMessage(newMsg).catch(console.error);
+    broadcastSync();
 
     return newMsg;
   };
