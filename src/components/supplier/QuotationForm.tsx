@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { RFQ } from '../../types';
 import { Card, CardHeader, CardContent } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -88,6 +88,8 @@ export const QuotationForm: React.FC<QuotationFormProps> = ({
       rfqId: rfq.id,
       rfqNumber: rfq.rfqNumber,
       rfqTitle: rfq.title,
+      buyerCompanyId: rfq.buyerCompanyId,
+      buyerCompanyName: rfq.buyerCompanyName,
       supplierCompanyId: supplierCompany.id,
       supplierCompanyName: supplierCompany.name,
       supplierEmirate: supplierCompany.emirate,

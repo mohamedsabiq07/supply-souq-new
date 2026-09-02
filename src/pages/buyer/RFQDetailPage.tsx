@@ -27,8 +27,20 @@ interface RFQDetailPageProps {
 export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate }) => {
   const { rfqs, quotations } = useAppData();
 
-  const rfq = rfqs.find(r => r.id === rfqId || r.rfqNumber === rfqId) || rfqs[0];
-  const rfqQuotes = quotations.filter(q => q.rfqId === rfq.id || q.rfqNumber === rfq.rfqNumber).slice(0, 5);
+  const rfq = rfqs.find(r => r.id === rfqId || r.rfqNumber === rfqId);
+
+  if (!rfq) {
+    return (
+      <div className="text-center py-16 bg-white rounded-2xl border border-slate-200">
+        <p className="text-base font-bold text-slate-900">RFQ Not Found</p>
+        <Button variant="primary" className="mt-4" onClick={() => onNavigate('buyer-rfqs')}>
+          Back to RFQs
+        </Button>
+      </div>
+    );
+  }
+
+  const rfqQuotes = quotations.filter(q => q.rfqId === rfq.id || q.rfqNumber === rfq.rfqNumber);
 
   return (
     <div className="space-y-6">

@@ -476,6 +476,8 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
         isRead: false,
       };
       setMessages((prev) => [...prev, quoteMsg]);
+      supabaseService.sendMessage(quoteMsg).catch(console.error);
+      supabaseService.updateRFQStatus(targetRFQ.id, 'receiving_quotes').catch(console.error);
     }
 
     // Persist to Supabase
