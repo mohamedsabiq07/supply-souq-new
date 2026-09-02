@@ -129,7 +129,11 @@ export const RFQCard: React.FC<RFQCardProps> = ({
           </Button>
 
           {isSupplierView ? (
-            isDeclined ? (
+            rfq.status === 'cancelled' ? (
+              <span className="text-xs font-bold text-rose-600 bg-rose-50 px-3 py-1.5 rounded-lg border border-rose-200">
+                RFQ Cancelled by Buyer
+              </span>
+            ) : isDeclined ? (
               <span className="text-xs font-bold text-rose-600 bg-rose-50 px-3 py-1.5 rounded-lg border border-rose-200">
                 Declined by You
               </span>

@@ -29,6 +29,25 @@ export const SubmitQuotePage: React.FC<SubmitQuotePageProps> = ({ rfqId, onNavig
     );
   }
 
+  if (targetRFQ.status === 'cancelled') {
+    return (
+      <div className="text-center py-16 bg-white rounded-2xl border border-rose-200 p-8 space-y-4 max-w-xl mx-auto shadow-sm my-12">
+        <div className="w-12 h-12 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mx-auto font-bold text-lg">
+          <XCircle className="w-6 h-6 text-rose-600" />
+        </div>
+        <div className="space-y-1">
+          <h2 className="text-lg font-bold text-slate-900">RFQ Cancelled by Contractor</h2>
+          <p className="text-xs text-slate-500">
+            RFQ #{targetRFQ.rfqNumber} ("{targetRFQ.title}") has been cancelled by the buyer and is closed for new quotation submissions.
+          </p>
+        </div>
+        <Button variant="primary" onClick={() => onNavigate('supplier-inbox')}>
+          Return to Live Inbox
+        </Button>
+      </div>
+    );
+  }
+
   const handleSubmit = (quoteData: any) => {
     submitQuotation(quoteData);
     onNavigate('supplier-quotes');

@@ -18,7 +18,7 @@ export const SupplierInboxPage: React.FC<SupplierInboxPageProps> = ({ onNavigate
   const [activeTab, setActiveTab] = useState<'all' | 'direct' | 'cables' | 'switchgear' | 'containment' | 'lighting' | 'earthing' | 'solar' | 'declined'>('all');
   const [targetDecliningRFQ, setTargetDecliningRFQ] = useState<RFQ | null>(null);
 
-  const openRFQs = rfqs.filter(r => r.status !== 'draft');
+  const openRFQs = rfqs.filter(r => r.status !== 'draft' && r.status !== 'cancelled');
   const myDeclinedRecords = declinedRFQs.filter(d => d.supplierCompanyId === currentCompany.id);
 
   const directCount = openRFQs.filter(r => 
