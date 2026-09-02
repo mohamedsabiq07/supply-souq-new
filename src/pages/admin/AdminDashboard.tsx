@@ -342,7 +342,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
                         <div className="text-[11px] text-slate-400">{u.address || 'Address on file'}</div>
                       </td>
                       <td className="p-3.5">
-                        <div className="font-semibold text-slate-900">{u.fullName}</div>
+                        <div className="font-semibold text-slate-900 flex items-center gap-1.5">
+                          <span>{u.fullName}</span>
+                          {u.username && (
+                            <span className="text-[10px] font-mono font-bold bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded border border-slate-200">
+                              @{u.username}
+                            </span>
+                          )}
+                        </div>
                         <div className="text-[11px] text-slate-500">{u.jobTitle || (u.role === 'buyer' ? 'Procurement Engineer' : 'Sales Rep')}</div>
                       </td>
                       <td className="p-3.5 space-y-0.5">

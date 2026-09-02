@@ -14,7 +14,8 @@ import {
   Lock,
   Phone,
   Mail,
-  MapPin
+  MapPin,
+  User
 } from 'lucide-react';
 
 interface RegisterPageProps {
@@ -43,6 +44,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
   // Buyer Form States
   const [buyerCompany, setBuyerCompany] = useState('');
   const [procurementEngineer, setProcurementEngineer] = useState('');
+  const [buyerUsername, setBuyerUsername] = useState('');
   const [buyerPhone, setBuyerPhone] = useState('+971 50 ');
   const [buyerEmail, setBuyerEmail] = useState('');
   const [buyerAddress, setBuyerAddress] = useState('');
@@ -52,6 +54,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
   // Supplier Form States
   const [supplierCompany, setSupplierCompany] = useState('');
   const [supplierLegalName, setSupplierLegalName] = useState('');
+  const [supplierUsername, setSupplierUsername] = useState('');
   const [tradeLicenseNumber, setTradeLicenseNumber] = useState('');
   const [tradeLicenseFileName, setTradeLicenseFileName] = useState('');
   const [contactPerson, setContactPerson] = useState('');
@@ -80,12 +83,22 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
 
   const handleSubmitBuyer = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!buyerUsername.trim()) {
+      setErrorMsg('Please choose a username for your account.');
+      return;
+    }
+    if (!buyerPassword || buyerPassword.length < 6) {
+      setErrorMsg('Please enter a password with at least 6 characters.');
+      return;
+    }
+
     setLoading(true);
     setErrorMsg('');
 
     const res = await signUpBuyer({
       companyName: buyerCompany,
       procurementEngineerName: procurementEngineer,
+      username: buyerUsername.trim().toLowerCase(),
       phone: buyerPhone,
       email: buyerEmail,
       address: buyerAddress,
@@ -103,8 +116,16 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
 
   const handleSubmitSupplier = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!supplierUsername.trim()) {
+      setErrorMsg('Please choose a username for your sales desk.');
+      return;
+    }
     if (!tradeLicenseNumber) {
       setErrorMsg('Trade License Number is mandatory for supplier safety and verification.');
+      return;
+    }
+    if (!supplierPassword || supplierPassword.length < 6) {
+      setErrorMsg('Please enter a password with at least 6 characters.');
       return;
     }
     if (selectedCategories.length === 0) {
@@ -118,6 +139,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
     const res = await signUpSupplier({
       companyName: supplierCompany,
       legalName: supplierLegalName || supplierCompany,
+      username: supplierUsername.trim().toLowerCase(),
       tradeLicenseNumber: tradeLicenseNumber,
       tradeLicenseDocUrl: tradeLicenseFileName ? `/docs/${tradeLicenseFileName}` : '/docs/trade-license.pdf',
       contactPersonName: contactPerson,
@@ -288,18 +310,36 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
               </div>
             </div>
 
-            <div>
-              <label className="font-bold text-slate-700 block mb-1 flex items-center gap-1">
-                <Lock className="w-3.5 h-3.5 text-slate-400" /> Password *
-              </label>
-              <input
-                type="password"
-                required
-                placeholder="••••••••••••"
-                value={buyerPassword}
-                onChange={(e) => setBuyerPassword(e.target.value)}
-                className="w-full p-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 font-medium"
-              />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="font-bold text-slate-700 block mb-1 flex items-center gap-1">
+                  <User className="w-3.5 h-3.5 text-brand-600" /> Username for Login *
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. sabiq or sabiq07"
+                  value={buyerUsername}
+                  onChange={(e) => setBuyerUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_.-]/g, ''))}
+                  className="w-full p-2.5 rounded-lg border-2 border-brand-300 focus:ring-2 focus:ring-brand-500 font-bold text-slate-900 bg-brand-50/20"
+                />
+                <p className="text-[10px] text-slate-500 mt-0.5">Choose a unique username to easily login.</p>
+              </div>
+
+              <div>
+                <label className="font-bold text-slate-700 block mb-1 flex items-center gap-1">
+                  <Lock className="w-3.5 h-3.5 text-slate-400" /> Account Password *
+                </label>
+                <input
+                  type="password"
+                  required
+                  placeholder="••••••••••••"
+                  value={buyerPassword}
+                  onChange={(e) => setBuyerPassword(e.target.value)}
+                  className="w-full p-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 font-medium"
+                />
+                <p className="text-[10px] text-slate-500 mt-0.5">Use this same password for your portal login.</p>
+              </div>
             </div>
 
             <Button
@@ -487,18 +527,36 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
               </div>
             </div>
 
-            <div>
-              <label className="font-bold text-slate-700 block mb-1 flex items-center gap-1">
-                <Lock className="w-3.5 h-3.5 text-slate-400" /> Password *
-              </label>
-              <input
-                type="password"
-                required
-                placeholder="••••••••••••"
-                value={supplierPassword}
-                onChange={(e) => setSupplierPassword(e.target.value)}
-                className="w-full p-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-amber-500 font-medium"
-              />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="font-bold text-slate-700 block mb-1 flex items-center gap-1">
+                  <User className="w-3.5 h-3.5 text-amber-600" /> Username for Sales Desk Login *
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. alnoor_sales or sabiq"
+                  value={supplierUsername}
+                  onChange={(e) => setSupplierUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_.-]/g, ''))}
+                  className="w-full p-2.5 rounded-lg border-2 border-amber-300 focus:ring-2 focus:ring-amber-500 font-bold text-slate-900 bg-amber-50/30"
+                />
+                <p className="text-[10px] text-slate-500 mt-0.5">Choose a unique username for easy login.</p>
+              </div>
+
+              <div>
+                <label className="font-bold text-slate-700 block mb-1 flex items-center gap-1">
+                  <Lock className="w-3.5 h-3.5 text-slate-400" /> Account Password *
+                </label>
+                <input
+                  type="password"
+                  required
+                  placeholder="••••••••••••"
+                  value={supplierPassword}
+                  onChange={(e) => setSupplierPassword(e.target.value)}
+                  className="w-full p-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-amber-500 font-medium"
+                />
+                <p className="text-[10px] text-slate-500 mt-0.5">Use this same password for your portal login.</p>
+              </div>
             </div>
 
             <Button

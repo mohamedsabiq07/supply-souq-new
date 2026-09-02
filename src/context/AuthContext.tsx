@@ -6,6 +6,7 @@ import { supabaseService } from '../services/supabaseService';
 export interface BuyerSignupData {
   companyName: string;
   procurementEngineerName: string;
+  username: string;
   phone: string;
   email: string;
   address: string;
@@ -16,6 +17,7 @@ export interface BuyerSignupData {
 export interface SupplierSignupData {
   companyName: string;
   legalName?: string;
+  username: string;
   tradeLicenseNumber: string;
   tradeLicenseDocUrl?: string;
   contactPersonName: string;
@@ -35,6 +37,7 @@ export const guestUser: UserProfile = {
   companyId: '',
   companyName: '',
   fullName: '',
+  username: '',
   email: '',
   phone: '',
   role: 'buyer',
@@ -77,7 +80,7 @@ interface AuthContextType {
   registeredUsers: UserProfile[];
   switchDemoUser: (role: UserRole) => void;
   login: (email: string, role: UserRole) => void;
-  signIn: (email: string, password?: string) => Promise<{ success: boolean; error?: string }>;
+  signIn: (identifier: string, password?: string) => Promise<{ success: boolean; error?: string }>;
   adminLogin: (password: string) => boolean;
   signUpBuyer: (data: BuyerSignupData) => Promise<{ success: boolean; user?: UserProfile; error?: string }>;
   signUpSupplier: (data: SupplierSignupData) => Promise<{ success: boolean; user?: UserProfile; error?: string }>;
@@ -89,8 +92,10 @@ export const mockBuyerUser: UserProfile = {
   companyId: 'comp-buyer-1',
   companyName: 'Apex MEP & General Contracting LLC',
   fullName: 'Eng. Tariq Mansour',
+  username: 'tariq',
   email: 'procurement@apexcontracting.ae',
   phone: '+971 50 492 8812',
+  password: 'password123',
   role: 'buyer',
   jobTitle: 'Head of Procurement',
   emirate: 'Dubai',
@@ -105,8 +110,10 @@ export const mockSupplierUser: UserProfile = {
   companyId: 'comp-supp-1',
   companyName: 'Al Noor Electrical Trading LLC',
   fullName: 'Rajesh Kumar',
+  username: 'rajesh',
   email: 'sales@alnoorelectrical.ae',
   phone: '+971 50 882 1190',
+  password: 'password123',
   role: 'supplier',
   jobTitle: 'Senior Commercial Estimator',
   tradeLicenseNumber: 'TL-551029',
@@ -123,8 +130,10 @@ export const mockAdminUser: UserProfile = {
   companyId: 'comp-admin-1',
   companyName: 'SupplySouq Operations Desk',
   fullName: 'SupplySouq Operator',
+  username: 'admin',
   email: 'admin@supplysouq.ae',
   phone: '+971 4 200 9900',
+  password: 'admin123',
   role: 'admin',
   jobTitle: 'Marketplace Operations Lead',
   emirate: 'Dubai',
@@ -303,9 +312,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const signIn = async (email: string, _password?: string): Promise<{ success: boolean; error?: string }> => {
-    const found = registeredUsers.find((u) => u.email.toLowerCase() === email.toLowerCase());
+  const signIn = async (identifier: string, password?: string): Promise<{ success: boolean; error?: string }> => {
+    const cleanId = (identifier || '').trim().toLowerCase();
+    if (!cleanId) {
+      return { success: false, error: 'Please enter your username or corporate email.' };
+    }
+
+    const found = registeredUsers.find(
+      (u) =>
+        u.email?.toLowerCase() === cleanId ||
+        u.username?.toLowerCase() === cleanId
+    );
+
     if (found) {
+      if (found.password && password && found.password !== password) {
+        return { success: false, error: 'Incorrect password. Please verify your credentials and try again.' };
+      }
+
       setCurrentUser(found);
       setRoleState(found.role);
       setIsAuthenticated(true);
@@ -335,20 +358,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     // Check default mock accounts
-    if (email.toLowerCase() === 'procurement@apexcontracting.ae') {
+    if (cleanId === 'tariq' || cleanId === 'procurement@apexcontracting.ae') {
       switchDemoUser('buyer');
       return { success: true };
     }
-    if (email.toLowerCase() === 'sales@alnoorelectrical.ae') {
+    if (cleanId === 'rajesh' || cleanId === 'sales@alnoorelectrical.ae') {
       switchDemoUser('supplier');
       return { success: true };
     }
-    if (email.toLowerCase() === 'admin@supplysouq.ae') {
+    if (cleanId === 'admin' || cleanId === 'admin@supplysouq.ae') {
       switchDemoUser('admin');
       return { success: true };
     }
 
-    return { success: false, error: 'No account found with this email. Please check your credentials or create an account.' };
+    return { success: false, error: 'No account found with this username or email. Please check your credentials or sign up.' };
   };
 
   const adminLogin = (password: string): boolean => {
@@ -362,6 +385,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Buyer Signup
   const signUpBuyer = async (data: BuyerSignupData): Promise<{ success: boolean; user?: UserProfile; error?: string }> => {
     try {
+      const cleanUsername = (data.username || '').trim().toLowerCase();
+      if (!cleanUsername) {
+        return { success: false, error: 'Please enter a username.' };
+      }
+
+      // Check if username is already taken
+      const isDuplicateUsername = registeredUsers.some(
+        (u) => u.username?.toLowerCase() === cleanUsername
+      );
+      if (isDuplicateUsername) {
+        return {
+          success: false,
+          error: `The username "${data.username.trim()}" is already taken. Please choose a different username.`
+        };
+      }
+
       const companyId = `comp-buyer-${Date.now()}`;
       const userId = `user-buyer-${Date.now()}`;
 
@@ -392,8 +431,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         companyId: companyId,
         companyName: data.companyName,
         fullName: data.procurementEngineerName,
+        username: cleanUsername,
         email: data.email,
         phone: data.phone,
+        password: data.password || 'password123',
         role: 'buyer',
         jobTitle: 'Procurement Engineer',
         emirate: data.emirate,
@@ -407,6 +448,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setCurrentUser(newUser);
       setCurrentCompany(newCompany);
       setRoleState('buyer');
+      setIsAuthenticated(true);
 
       // 2. Persist to Supabase
       await supabaseService.registerUser({
@@ -424,6 +466,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Supplier Signup
   const signUpSupplier = async (data: SupplierSignupData): Promise<{ success: boolean; user?: UserProfile; error?: string }> => {
     try {
+      const cleanUsername = (data.username || '').trim().toLowerCase();
+      if (!cleanUsername) {
+        return { success: false, error: 'Please enter a username.' };
+      }
+
+      // Check if username is already taken
+      const isDuplicateUsername = registeredUsers.some(
+        (u) => u.username?.toLowerCase() === cleanUsername
+      );
+      if (isDuplicateUsername) {
+        return {
+          success: false,
+          error: `The username "${data.username.trim()}" is already taken. Please choose a different username.`
+        };
+      }
+
       const companyId = `comp-supp-${Date.now()}`;
       const userId = `user-supp-${Date.now()}`;
       const verifId = `verif-${Date.now()}`;
@@ -458,8 +516,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         companyId: companyId,
         companyName: data.companyName,
         fullName: data.contactPersonName,
+        username: cleanUsername,
         email: data.email,
         phone: data.phone,
+        password: data.password || 'password123',
         role: 'supplier',
         jobTitle: 'Sales Representative',
         tradeLicenseNumber: data.tradeLicenseNumber,
@@ -489,6 +549,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setCurrentUser(newUser);
       setCurrentCompany(newCompany);
       setRoleState('supplier');
+      setIsAuthenticated(true);
 
       // 2. Persist to Supabase
       await supabaseService.registerUser({

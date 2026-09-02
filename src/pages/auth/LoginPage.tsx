@@ -3,7 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
 import { UserRole } from '../../types';
-import { Layers, Lock, Mail, AlertCircle, Building2, Store } from 'lucide-react';
+import { Layers, Lock, User, AlertCircle, Building2, Store } from 'lucide-react';
 
 interface LoginPageProps {
   onSuccess: () => void;
@@ -14,10 +14,10 @@ interface LoginPageProps {
 export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToRegister, isAdminMode = false }) => {
   const { signIn, adminLogin } = useAuth();
   const [role, setRole] = useState<UserRole>(isAdminMode ? 'admin' : 'buyer');
-  const [email, setEmail] = useState(
-    isAdminMode ? 'admin@supplysouq.ae' : 'procurement@apexcontracting.ae'
+  const [identifier, setIdentifier] = useState(
+    isAdminMode ? 'admin' : ''
   );
-  const [password, setPassword] = useState('password123');
+  const [password, setPassword] = useState('');
   const [adminPassword, setAdminPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
@@ -38,12 +38,12 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
       return;
     }
 
-    const res = await signIn(email, password);
+    const res = await signIn(identifier, password);
     setLoading(false);
     if (res.success) {
       onSuccess();
     } else {
-      setErrorMsg(res.error || 'Invalid email or password');
+      setErrorMsg(res.error || 'Invalid username, email, or password');
     }
   };
 
@@ -60,7 +60,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
           <p className="text-xs text-slate-500">
             {isAdminMode
               ? 'Authorized UAE marketplace operator clearance'
-              : 'Access your dedicated UAE B2B procurement workspace'}
+              : 'Enter your unique username or email to access your workspace'}
           </p>
         </div>
 
@@ -71,7 +71,6 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
               type="button"
               onClick={() => {
                 setRole('buyer');
-                setEmail('procurement@apexcontracting.ae');
                 setErrorMsg('');
               }}
               className={`py-2.5 rounded-lg transition-all flex items-center justify-center gap-1.5 ${
@@ -87,7 +86,6 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
               type="button"
               onClick={() => {
                 setRole('supplier');
-                setEmail('sales@alnoorelectrical.ae');
                 setErrorMsg('');
               }}
               className={`py-2.5 rounded-lg transition-all flex items-center justify-center gap-1.5 ${
@@ -114,21 +112,21 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
             <>
               <div>
                 <label className="font-bold text-slate-700 block mb-1 flex items-center gap-1">
-                  <Mail className="w-3.5 h-3.5 text-slate-400" /> Corporate Email
+                  <User className="w-3.5 h-3.5 text-slate-400" /> Username or Corporate Email *
                 </label>
                 <input
-                  type="email"
+                  type="text"
                   required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="name@company.ae"
+                  value={identifier}
+                  onChange={(e) => setIdentifier(e.target.value)}
+                  placeholder="e.g. sabiq or name@company.ae"
                   className="w-full p-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 font-medium"
                 />
               </div>
 
               <div>
                 <label className="font-bold text-slate-700 block mb-1 flex items-center gap-1">
-                  <Lock className="w-3.5 h-3.5 text-slate-400" /> Password
+                  <Lock className="w-3.5 h-3.5 text-slate-400" /> Password *
                 </label>
                 <input
                   type="password"

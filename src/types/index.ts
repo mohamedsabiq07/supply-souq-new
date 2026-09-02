@@ -49,8 +49,10 @@ export interface UserProfile {
   companyId: string;
   companyName: string;
   fullName: string;
+  username?: string;
   email: string;
   phone: string;
+  password?: string;
   role: UserRole;
   jobTitle: string;
   tradeLicenseNumber?: string;
