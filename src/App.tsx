@@ -109,10 +109,16 @@ const AppContent: React.FC = () => {
             />
           )}
           {currentView === 'login' && (
-            <LoginPage onSuccess={() => handleNavigate(role === 'supplier' ? 'supplier-dashboard' : role === 'admin' ? 'admin-dashboard' : 'buyer-dashboard')} />
+            <LoginPage 
+              onSuccess={() => handleNavigate(role === 'supplier' ? 'supplier-dashboard' : role === 'admin' ? 'admin-dashboard' : 'buyer-dashboard')} 
+              onNavigateToRegister={() => handleNavigate('register')}
+            />
           )}
           {currentView === 'register' && (
-            <RegisterPage onSuccess={() => handleNavigate(role === 'supplier' ? 'supplier-dashboard' : 'buyer-dashboard')} />
+            <RegisterPage 
+              onSuccess={() => handleNavigate(role === 'supplier' ? 'supplier-dashboard' : 'buyer-dashboard')} 
+              onNavigateToLogin={() => handleNavigate('login')}
+            />
           )}
           <Footer setCurrentView={handleNavigate} />
         </main>

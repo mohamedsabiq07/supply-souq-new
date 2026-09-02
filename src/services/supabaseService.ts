@@ -6,6 +6,7 @@ import {
   Company, 
   Message, 
   VerificationRequest,
+  UserProfile,
   RFQStatus,
   OrderStatus,
   VerificationStatus
@@ -282,18 +283,57 @@ export const mapVerificationToDB = (v: VerificationRequest) => ({
   notes: v.notes
 });
 
+export const mapUserFromDB = (row: any): UserProfile => ({
+  id: row.id,
+  companyId: row.company_id,
+  companyName: row.company_name,
+  fullName: row.full_name,
+  email: row.email,
+  phone: row.phone,
+  role: row.role as any,
+  jobTitle: row.job_title || (row.role === 'buyer' ? 'Procurement Engineer' : 'Sales Representative'),
+  tradeLicenseNumber: row.trade_license_number,
+  tradeLicenseDocUrl: row.trade_license_doc_url,
+  emirate: row.emirate || 'Dubai',
+  address: row.address,
+  industrialZone: row.industrial_zone,
+  verificationStatus: row.verification_status || 'verified',
+  avatarUrl: row.avatar_url,
+  createdAt: row.created_at || new Date().toISOString()
+});
+
+export const mapUserToDB = (u: UserProfile) => ({
+  id: u.id,
+  company_id: u.companyId,
+  company_name: u.companyName,
+  full_name: u.fullName,
+  email: u.email,
+  phone: u.phone,
+  role: u.role,
+  job_title: u.jobTitle,
+  trade_license_number: u.tradeLicenseNumber,
+  trade_license_doc_url: u.tradeLicenseDocUrl,
+  emirate: u.emirate,
+  address: u.address,
+  industrial_zone: u.industrialZone,
+  verification_status: u.verificationStatus,
+  avatar_url: u.avatarUrl,
+  created_at: u.createdAt
+});
+
 // Database Operations
 export const supabaseService = {
   // Fetch All
   async fetchAll() {
     try {
-      const [companiesRes, rfqsRes, quotesRes, posRes, messagesRes, verificationsRes] = await Promise.all([
+      const [companiesRes, rfqsRes, quotesRes, posRes, messagesRes, verificationsRes, usersRes] = await Promise.all([
         supabase.from('companies').select('*'),
         supabase.from('rfqs').select('*'),
         supabase.from('quotations').select('*'),
         supabase.from('purchase_orders').select('*'),
         supabase.from('messages').select('*'),
-        supabase.from('verifications').select('*')
+        supabase.from('verifications').select('*'),
+        supabase.from('users').select('*')
       ]);
 
       return {
@@ -303,6 +343,7 @@ export const supabaseService = {
         purchaseOrders: (posRes.data || []).map(mapPOFromDB),
         messages: (messagesRes.data || []).map(mapMessageFromDB),
         verifications: (verificationsRes.data || []).map(mapVerificationFromDB),
+        users: (usersRes.data || []).map(mapUserFromDB),
         error: companiesRes.error || rfqsRes.error || quotesRes.error
       };
     } catch (err) {
@@ -420,6 +461,43 @@ export const supabaseService = {
       await supabase.from('companies').update({ verification_status: status, verification_notes: notes }).eq('id', companyId);
     } catch (e) {
       console.error(e);
+    }
+  },
+
+  // Register New User & Company
+  async registerUser(userData: {
+    user: UserProfile;
+    company: Company;
+    verification?: VerificationRequest;
+  }) {
+    try {
+      // 1. Insert Company
+      await supabase.from('companies').upsert([mapCompanyToDB(userData.company)]);
+      
+      // 2. Insert User
+      await supabase.from('users').upsert([mapUserToDB(userData.user)]);
+
+      // 3. If supplier, insert Verification Request
+      if (userData.verification) {
+        await supabase.from('verifications').upsert([mapVerificationToDB(userData.verification)]);
+      }
+
+      return { success: true };
+    } catch (e) {
+      console.error('Failed to register user to Supabase:', e);
+      return { success: false, error: e };
+    }
+  },
+
+  // Fetch Users
+  async fetchUsers(): Promise<UserProfile[]> {
+    try {
+      const { data, error } = await supabase.from('users').select('*');
+      if (error) throw error;
+      return (data || []).map(mapUserFromDB);
+    } catch (e) {
+      console.error('Error fetching users from Supabase:', e);
+      return [];
     }
   }
 };

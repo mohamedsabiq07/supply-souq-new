@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Layers, ShieldCheck, MapPin, Phone, Mail, CheckCircle2 } from 'lucide-react';
 
 interface FooterProps {
@@ -119,13 +119,18 @@ export const Footer: React.FC<FooterProps> = ({ setCurrentView }) => {
         </div>
 
         <div className="pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <p>© 2026 SupplySouq FZCO. All rights reserved. UAE B2B Procurement Technology.</p>
+          <p>© 2026 SupplySouq FZCO. All rights reserved. Dubai • Sharjah • Ajman B2B Procurement Technology.</p>
           <div className="flex items-center gap-4">
             <span className="hover:text-slate-400 cursor-pointer">Terms of Procurement</span>
             <span>•</span>
             <span className="hover:text-slate-400 cursor-pointer">Supplier Code of Conduct</span>
             <span>•</span>
-            <span className="hover:text-slate-400 cursor-pointer">Privacy Policy</span>
+            <button
+              onClick={() => setCurrentView('login')}
+              className="text-slate-500 hover:text-emerald-400 transition-colors flex items-center gap-1 font-semibold"
+            >
+              <span>🔒 Operator Portal</span>
+            </button>
           </div>
         </div>
       </div>

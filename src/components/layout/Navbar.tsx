@@ -108,7 +108,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
           </div>
 
           {/* Right Action Buttons */}
-          <div className="hidden sm:flex items-center gap-3">
+          <div className="hidden sm:flex items-center gap-2.5">
             {role === 'buyer' && (
               <Button
                 variant="primary"
@@ -139,31 +139,42 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
                 size="sm"
                 onClick={() => setCurrentView('admin-dashboard')}
                 leftIcon={<ShieldCheck className="w-4 h-4 text-emerald-600" />}
-                className="font-bold border-slate-300"
+                className="font-bold border-emerald-300 bg-emerald-50/50 text-emerald-800"
               >
-                Operations Desk
+                Admin Operations
               </Button>
             )}
 
             {isPublic ? (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => {
-                  if (role === 'buyer') setCurrentView('buyer-dashboard');
-                  else if (role === 'supplier') setCurrentView('supplier-dashboard');
-                  else setCurrentView('admin-dashboard');
-                }}
-              >
-                Open Workspace
-              </Button>
+              <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
+                <button
+                  onClick={() => setCurrentView('login')}
+                  className="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-700 hover:text-brand-600 hover:bg-slate-100 transition-colors"
+                >
+                  Sign In
+                </button>
+                <button
+                  onClick={() => setCurrentView('register')}
+                  className="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-900 text-white hover:bg-slate-800 transition-colors shadow-sm"
+                >
+                  Sign Up
+                </button>
+              </div>
             ) : (
-              <button
-                onClick={() => setCurrentView('home')}
-                className="text-xs font-semibold text-slate-500 hover:text-slate-800 px-2 py-1"
-              >
-                Public Site
-              </button>
+              <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
+                <button
+                  onClick={() => setCurrentView('home')}
+                  className="text-xs font-semibold text-slate-500 hover:text-slate-800 px-2 py-1"
+                >
+                  Public Site
+                </button>
+                <button
+                  onClick={() => setCurrentView('login')}
+                  className="px-2.5 py-1 text-xs font-bold text-red-600 hover:bg-red-50 rounded"
+                >
+                  Logout
+                </button>
+              </div>
             )}
           </div>
 

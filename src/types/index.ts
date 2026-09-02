@@ -53,7 +53,14 @@ export interface UserProfile {
   phone: string;
   role: UserRole;
   jobTitle: string;
+  tradeLicenseNumber?: string;
+  tradeLicenseDocUrl?: string;
+  emirate?: Emirate;
+  address?: string;
+  industrialZone?: string;
+  verificationStatus?: VerificationStatus;
   avatarUrl?: string;
+  createdAt?: string;
 }
 
 export interface Category {
