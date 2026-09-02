@@ -38,12 +38,8 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
               onClick={() => setCurrentView('home')}
               className="flex items-center gap-2.5 text-left focus:outline-none group"
             >
-              <div className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-700/60 flex items-center justify-center text-white shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform overflow-hidden shrink-0">
-                <img
-                  src="/brand-assets/logo-primary-dark.jpg"
-                  alt="SupplySouq"
-                  className="w-full h-full object-cover"
-                />
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-600 to-navy-900 flex items-center justify-center text-white shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
+                <Layers className="w-5 h-5 text-amber-400" />
               </div>
               <div>
                 <div className="flex items-center gap-1.5">
