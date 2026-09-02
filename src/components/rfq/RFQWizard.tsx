@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useAppData } from '../../context/AppDataContext';
 import { RFQItem, RFQDocument, Emirate, QuickBundle } from '../../types';
 import { initialQuickBundles } from '../../data/seedData';
 import { Card, CardHeader, CardContent, CardFooter } from '../ui/Card';
@@ -17,7 +18,9 @@ import {
   Layers,
   MapPin,
   Clock,
-  ShieldCheck
+  ShieldCheck,
+  Building2,
+  X
 } from 'lucide-react';
 
 interface RFQWizardProps {
@@ -30,6 +33,8 @@ interface RFQWizardProps {
     emirate: Emirate;
   };
   initialBundle?: QuickBundle | null;
+  targetSupplier?: any;
+  initialCategory?: string;
   onPublish: (rfqData: any) => void;
   onCancel: () => void;
 }
@@ -37,21 +42,40 @@ interface RFQWizardProps {
 export const RFQWizard: React.FC<RFQWizardProps> = ({ 
   buyerCompany, 
   initialBundle,
+  targetSupplier,
+  initialCategory,
   onPublish, 
   onCancel 
 }) => {
-  const [wizardMode, setWizardMode] = useState<'photo_upload' | 'detailed_boq'>(
-    initialBundle ? 'detailed_boq' : 'detailed_boq'
-  );
+  const { companies } = useAppData();
+  const verifiedSuppliers = companies.filter(c => c.companyType === 'supplier');
 
+  const [wizardMode, setWizardMode] = useState<'photo_upload' | 'detailed_boq'>('detailed_boq');
   const [step, setStep] = useState(1);
 
+  // Target Supplier State
+  const [selectedTargetSupplier, setSelectedTargetSupplier] = useState<any>(targetSupplier || null);
+
   // Step 1: Details
-  const [title, setTitle] = useState(initialBundle ? initialBundle.title : 'LV Copper Power Cables & Switchgear Requirement');
+  const [title, setTitle] = useState(
+    initialBundle 
+      ? initialBundle.title 
+      : targetSupplier 
+        ? `Material Requirement for ${targetSupplier.name}`
+        : 'LV Copper Power Cables & Switchgear Requirement'
+  );
   const [projectName, setProjectName] = useState('Commercial Fit-Out Project');
   const [deliveryEmirate, setDeliveryEmirate] = useState<Emirate>('Dubai');
   const [deliveryAddress, setDeliveryAddress] = useState('Al Quoz Industrial Loading Bay 3, Dubai');
-  const [category, setCategory] = useState(initialBundle ? initialBundle.category : 'LV & MV Power Cables & Wires');
+  const [category, setCategory] = useState(
+    initialBundle 
+      ? initialBundle.category 
+      : initialCategory 
+        ? initialCategory 
+        : targetSupplier && targetSupplier.categories?.length > 0 
+          ? targetSupplier.categories[0] 
+          : 'LV & MV Power Cables & Wires'
+  );
   const [requiredDeliveryDate, setRequiredDeliveryDate] = useState('2026-08-30');
   const [closingDate, setClosingDate] = useState('2026-08-26');
   const [priority, setPriority] = useState<'low' | 'normal' | 'urgent'>('normal');
@@ -185,6 +209,8 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
       closingDate,
       priority,
       targetSupplierScope: targetScope,
+      targetSupplierId: selectedTargetSupplier?.id,
+      targetSupplierName: selectedTargetSupplier?.name,
       notes: notes + (photoPreview ? ' [Includes photo attachment]' : ''),
       photoUploadUrl: photoPreview || undefined,
       isQuickTemplate: false,
@@ -345,11 +371,67 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                   onChange={(e) => setCategory(e.target.value)}
                   className="w-full p-2.5 rounded-lg border border-slate-200 text-xs font-semibold focus:ring-2 focus:ring-brand-500"
                 >
-                  <option value="FM & Cleaning Chemicals">FM & Cleaning Chemicals</option>
-                  <option value="Hygiene & Washroom Disposables">Hygiene & Washroom Disposables</option>
-                  <option value="Safety PPE & Site Consumables">Safety PPE & Site Consumables</option>
-                  <option value="Electrical & Lighting Maintenance">Electrical & Lighting Maintenance</option>
+                  <option value="LV & MV Power Cables & Wires">⚡ LV & MV Power Cables & Wires</option>
+                  <option value="Switchgear, Breakers & DBs">⚡ Switchgear, Breakers & DBs</option>
+                  <option value="Lighting & LED Fixtures">💡 Lighting & LED Fixtures</option>
+                  <option value="PPR, UPVC Pipes & Drainage">🚿 PPR, UPVC Pipes & Drainage</option>
+                  <option value="HVAC Ducting & Mechanical">❄️ HVAC Ducting & Mechanical</option>
+                  <option value="FM & Cleaning Chemicals">🧪 FM & Cleaning Chemicals</option>
+                  <option value="Hygiene & Washroom Disposables">🧻 Hygiene & Washroom Disposables</option>
+                  <option value="Safety PPE & Site Consumables">🦺 Safety PPE & Site Consumables</option>
                 </select>
+              </div>
+            </div>
+
+            {/* Target Supplier Recipient / Optional Selection */}
+            <div className="p-3.5 bg-amber-50/70 rounded-xl border border-amber-200">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-amber-500 text-slate-950 font-bold flex items-center justify-center shrink-0">
+                    <Building2 className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-bold text-amber-800 uppercase tracking-wider block">
+                      Target Supplier Recipient:
+                    </span>
+                    <strong className="text-slate-900 text-xs">
+                      {selectedTargetSupplier 
+                        ? `${selectedTargetSupplier.name} (${selectedTargetSupplier.industrialZone || selectedTargetSupplier.emirate})`
+                        : 'Broadcast to Top 5 Verified UAE Stockists'}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <select
+                    value={selectedTargetSupplier?.id || ''}
+                    onChange={(e) => {
+                      const found = verifiedSuppliers.find(s => s.id === e.target.value);
+                      setSelectedTargetSupplier(found || null);
+                      if (found && found.categories && found.categories.length > 0) {
+                        setCategory(found.categories[0]);
+                      }
+                    }}
+                    className="p-1.5 rounded-lg border border-amber-300 bg-white text-xs font-semibold text-slate-800"
+                  >
+                    <option value="">-- Auto-Match 5 Best Stockists --</option>
+                    {verifiedSuppliers.map((sup) => (
+                      <option key={sup.id} value={sup.id}>
+                        {sup.name} ({sup.emirate})
+                      </option>
+                    ))}
+                  </select>
+                  {selectedTargetSupplier && (
+                    <button
+                      type="button"
+                      onClick={() => setSelectedTargetSupplier(null)}
+                      className="text-slate-400 hover:text-slate-600 p-1"
+                      title="Clear targeted supplier"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -503,14 +585,16 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
             <div className="p-4 bg-emerald-50 rounded-2xl border border-emerald-200 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center font-extrabold text-base shrink-0">
-                  7
+                  5
                 </div>
                 <div>
                   <h4 className="font-bold text-emerald-950 text-sm">
-                    7 Verified UAE Suppliers Ready to Bid
+                    {selectedTargetSupplier 
+                      ? `Delivering Directly to ${selectedTargetSupplier.name} + 4 Matched Stockists`
+                      : `5 Verified UAE Suppliers Ready to Bid`}
                   </h4>
                   <p className="text-emerald-700 text-xs">
-                    Stockists in Al Quoz, Sharjah Industrial & Mussafah will receive your RFQ immediately.
+                    Stockists in {deliveryEmirate} & Sharjah Industrial will receive your RFQ immediately on their sales desk.
                   </p>
                 </div>
               </div>
@@ -529,8 +613,10 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                 <strong className="text-slate-900">{deliveryAddress} ({deliveryEmirate})</strong>
               </div>
               <div>
-                <span className="text-slate-400 block font-medium">Required On-Site:</span>
-                <span className="font-bold text-slate-800">{requiredDeliveryDate}</span>
+                <span className="text-slate-400 block font-medium">Target Supplier:</span>
+                <strong className="text-brand-700 font-bold">
+                  {selectedTargetSupplier ? selectedTargetSupplier.name : 'Top 5 Auto-Matched Stockists'}
+                </strong>
               </div>
               <div>
                 <span className="text-slate-400 block font-medium">Target Category:</span>

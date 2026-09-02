@@ -13,7 +13,7 @@ import {
   Filter,
 } from 'lucide-react';
 
-export const SuppliersPage: React.FC<{ onRequestQuote: (category?: string) => void }> = ({ onRequestQuote }) => {
+export const SuppliersPage: React.FC<{ onRequestQuote: (supplier?: any, category?: string) => void }> = ({ onRequestQuote }) => {
   const { companies } = useAppData();
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [emirateFilter, setEmirateFilter] = useState<string>('All');
@@ -60,7 +60,7 @@ export const SuppliersPage: React.FC<{ onRequestQuote: (category?: string) => vo
 
         <Button
           variant="primary"
-          onClick={() => onRequestQuote(selectedCategory !== 'All' ? selectedCategory : undefined)}
+          onClick={() => onRequestQuote(undefined, selectedCategory !== 'All' ? selectedCategory : undefined)}
           leftIcon={<Zap className="w-4 h-4 text-amber-300" />}
           className="font-bold whitespace-nowrap self-start md:self-auto"
         >
@@ -149,7 +149,7 @@ export const SuppliersPage: React.FC<{ onRequestQuote: (category?: string) => vo
             <SupplierCard
               key={supplier.id}
               supplier={supplier}
-              onRequestQuote={() => onRequestQuote(selectedCategory !== 'All' ? selectedCategory : undefined)}
+              onRequestQuote={(s) => onRequestQuote(s, s.categories[0])}
             />
           ))}
         </div>

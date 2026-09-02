@@ -6,11 +6,18 @@ import { QuickBundle } from '../../types';
 
 interface CreateRFQPageProps {
   initialBundle?: QuickBundle | null;
+  targetSupplier?: any;
+  initialCategory?: string;
   onNavigate: (view: string, params?: any) => void;
 }
 
-export const CreateRFQPage: React.FC<CreateRFQPageProps> = ({ initialBundle, onNavigate }) => {
-  const { currentCompany } = useAuth();
+export const CreateRFQPage: React.FC<CreateRFQPageProps> = ({ 
+  initialBundle, 
+  targetSupplier,
+  initialCategory,
+  onNavigate 
+}) => {
+  const { currentCompany, currentUser } = useAuth();
   const { createRFQ } = useAppData();
 
   const handlePublish = (rfqData: any) => {
@@ -31,12 +38,14 @@ export const CreateRFQPage: React.FC<CreateRFQPageProps> = ({ initialBundle, onN
         buyerCompany={{
           id: currentCompany.id,
           name: currentCompany.name,
-          contactName: 'Tariq Mansour',
+          contactName: currentUser?.fullName || currentCompany.name || 'Purchasing Department',
           phone: currentCompany.phone,
           email: currentCompany.email,
           emirate: currentCompany.emirate,
         }}
         initialBundle={initialBundle}
+        targetSupplier={targetSupplier}
+        initialCategory={initialCategory}
         onPublish={handlePublish}
         onCancel={() => onNavigate('buyer-dashboard')}
       />

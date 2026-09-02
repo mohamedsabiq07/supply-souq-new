@@ -125,10 +125,22 @@ const AppContent: React.FC = () => {
             />
           )}
           {currentView === 'categories' && (
-            <SuppliersPage onRequestQuote={() => handleNavigate(isAuthenticated ? 'create-rfq' : 'login')} />
+            <SuppliersPage onRequestQuote={(targetSupplier, category) => {
+              if (!isAuthenticated) {
+                handleNavigate('login', { targetSupplier, category });
+              } else {
+                handleNavigate('create-rfq', { targetSupplier, category });
+              }
+            }} />
           )}
           {currentView === 'suppliers' && (
-            <SuppliersPage onRequestQuote={() => handleNavigate(isAuthenticated ? 'create-rfq' : 'login')} />
+            <SuppliersPage onRequestQuote={(targetSupplier, category) => {
+              if (!isAuthenticated) {
+                handleNavigate('login', { targetSupplier, category });
+              } else {
+                handleNavigate('create-rfq', { targetSupplier, category });
+              }
+            }} />
           )}
           {currentView === 'how-it-works' && (
             <HowItWorksPage onStartRFQ={() => handleNavigate(isAuthenticated ? 'create-rfq' : 'login')} />
@@ -190,6 +202,8 @@ const AppContent: React.FC = () => {
             {currentView === 'create-rfq' && (
               <CreateRFQPage 
                 initialBundle={viewParams.bundle} 
+                targetSupplier={viewParams.targetSupplier}
+                initialCategory={viewParams.category}
                 onNavigate={handleNavigate} 
               />
             )}

@@ -295,8 +295,16 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const categoryQuery = (newRFQData.category || '').toLowerCase();
     const itemQuery = (newRFQData.items || []).map(i => (i.description || '').toLowerCase()).join(' ');
 
+    // Check if buyer targeted a specific supplier
+    const targetSupplier = newRFQData.targetSupplierId 
+      ? supplierPool.find(s => s.id === newRFQData.targetSupplierId || s.name.toLowerCase() === newRFQData.targetSupplierName?.toLowerCase())
+      : null;
+
     const scoredSuppliers = supplierPool.map((supplier) => {
       let score = 0;
+      if (targetSupplier && supplier.id === targetSupplier.id) {
+        score += 1000; // Guaranteed top priority
+      }
       const supplierCats = (supplier.categories || []).map(c => c.toLowerCase());
       
       if (supplierCats.some(c => categoryQuery.includes(c) || c.includes(categoryQuery))) {
@@ -326,6 +334,8 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
       ...newRFQData,
       id: `rfq-${Date.now()}`,
       rfqNumber: `SS-${randomNum}`,
+      targetSupplierId: targetSupplier?.id || newRFQData.targetSupplierId,
+      targetSupplierName: targetSupplier?.name || newRFQData.targetSupplierName,
       status: 'published',
       invitedCount: final5.length || 5,
       quotesCount: 0,
@@ -348,9 +358,11 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
       senderCompanyId: newRFQ.buyerCompanyId,
       senderCompanyName: newRFQ.buyerCompanyName,
       senderRole: 'buyer',
-      recipientCompanyId: 'all-matched-suppliers',
-      recipientCompanyName: '5 Matched Verified UAE Stockists',
-      messageText: `[Automated Matchmaking Dispatch] RFQ #${newRFQ.rfqNumber} for "${newRFQ.title}" has been delivered to 5 verified stockists: ${matchedSupplierNames.join(', ')}. Quotation SLA: 24 Hours.`,
+      recipientCompanyId: targetSupplier ? targetSupplier.id : 'all-matched-suppliers',
+      recipientCompanyName: targetSupplier ? targetSupplier.name : '5 Matched Verified UAE Stockists',
+      messageText: targetSupplier 
+        ? `[Direct RFQ Request] ${newRFQ.buyerCompanyName} has sent a direct material requirement for "${newRFQ.title}" specifically to your sales desk. Quotation SLA: 24 Hours.`
+        : `[Automated Matchmaking Dispatch] RFQ #${newRFQ.rfqNumber} for "${newRFQ.title}" has been delivered to 5 verified stockists: ${matchedSupplierNames.join(', ')}. Quotation SLA: 24 Hours.`,
       createdAt: new Date().toISOString(),
       isRead: false,
     };

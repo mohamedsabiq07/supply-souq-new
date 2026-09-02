@@ -150,6 +150,8 @@ export interface RFQ {
   documents: RFQDocument[];
   invitedCount: number;
   quotesCount: number;
+  targetSupplierId?: string;
+  targetSupplierName?: string;
   matchedSupplierCompanyIds?: string[];
   matchedSupplierNames?: string[];
   deadline24h?: string;
