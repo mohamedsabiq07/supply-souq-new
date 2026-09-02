@@ -24,30 +24,39 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView }) => {
   const { role, currentUser, currentCompany, logout } = useAuth();
-  const { rfqs, quotations, purchaseOrders, verifications } = useAppData();
+  const { rfqs, quotations, purchaseOrders, messages, verifications } = useAppData();
 
   const companyId = currentCompany?.id || '';
-  const buyerRFQs = rfqs.filter(r => r.buyerCompanyId === companyId || role === 'admin');
-  const evaluatingRFQs = rfqs.filter(r => r.status === 'evaluating' || r.quotesCount > 0);
-  const activeOrders = purchaseOrders.length;
   const pendingVerifications = verifications.filter(v => v.status === 'pending').length;
+  
+  // Buyer accurate counts
+  const buyerRFQs = rfqs.filter(r => r.buyerCompanyId === companyId);
+  const comparingRFQs = buyerRFQs.filter(r => (r.quotesCount && r.quotesCount > 0) || r.status === 'evaluating' || r.status === 'receiving_quotes');
+  const buyerOrders = purchaseOrders.filter(p => p.buyerCompanyId === companyId);
+  const buyerUnreadMessages = messages.filter(m => m.recipientCompanyId === companyId && !m.isRead).length;
 
   const buyerLinks = [
     { id: 'buyer-dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'buyer-rfqs', label: 'My RFQs', icon: FileText, count: buyerRFQs.length },
-    { id: 'buyer-compare-quick', label: 'Quotation Comparison', icon: GitCompare, count: evaluatingRFQs.length, highlight: true },
+    { id: 'buyer-compare-quick', label: 'Compare Quotes', icon: GitCompare, count: comparingRFQs.length, highlight: true },
     { id: 'invoice-audit', label: 'Invoice Cost Audit', icon: TrendingUp },
-    { id: 'buyer-orders', label: 'Purchase Orders', icon: Package, count: activeOrders },
-    { id: 'buyer-messages', label: 'Messages', icon: MessageSquare },
+    { id: 'buyer-orders', label: 'Purchase Orders', icon: Package, count: buyerOrders.length },
+    { id: 'buyer-messages', label: 'Messages', icon: MessageSquare, count: buyerUnreadMessages },
   ];
+
+  // Supplier accurate counts
+  const supplierLiveRFQs = rfqs.filter(r => r.status !== 'draft');
+  const supplierQuotes = quotations.filter(q => q.supplierCompanyId === companyId);
+  const supplierOrders = purchaseOrders.filter(p => p.supplierCompanyId === companyId);
+  const supplierUnreadMessages = messages.filter(m => m.recipientCompanyId === companyId && !m.isRead).length;
 
   const supplierLinks = [
     { id: 'supplier-dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'supplier-inbox', label: 'RFQ Inbox (Live)', icon: FileText, count: rfqs.filter(r => r.status !== 'draft').length, highlight: true },
-    { id: 'supplier-quotes', label: 'My Quotations', icon: GitCompare, count: quotations.filter(q => q.supplierCompanyId === companyId).length },
-    { id: 'supplier-orders', label: 'Orders & POs', icon: Package, count: purchaseOrders.filter(p => p.supplierCompanyId === companyId).length },
-    { id: 'supplier-profile', label: 'Company & Trade License', icon: Building2 },
-    { id: 'supplier-messages', label: 'Messages', icon: MessageSquare },
+    { id: 'supplier-inbox', label: 'RFQ Inbox (Live)', icon: FileText, count: supplierLiveRFQs.length, highlight: true },
+    { id: 'supplier-quotes', label: 'My Quotations', icon: GitCompare, count: supplierQuotes.length },
+    { id: 'supplier-orders', label: 'Orders & POs', icon: Package, count: supplierOrders.length },
+    { id: 'supplier-profile', label: 'Company & License', icon: Building2 },
+    { id: 'supplier-messages', label: 'Messages', icon: MessageSquare, count: supplierUnreadMessages },
   ];
 
   const adminLinks = [
@@ -105,24 +114,24 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView })
               <button
                 key={link.id}
                 onClick={() => setCurrentView(link.id)}
-                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                className={`w-full flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl text-xs transition-all group ${
                   isActive
-                    ? 'bg-slate-900 text-white font-semibold shadow-sm'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/80'
+                    ? 'bg-slate-900 text-white font-bold shadow-sm'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 font-medium'
                 }`}
               >
-                <div className="flex items-center gap-3">
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-brand-400' : 'text-slate-400'}`} />
-                  <span>{link.label}</span>
+                <div className="flex items-center gap-2.5 min-w-0 flex-1 text-left">
+                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-brand-400' : 'text-slate-400 group-hover:text-slate-600'}`} />
+                  <span className="truncate whitespace-nowrap">{link.label}</span>
                 </div>
                 {link.count !== undefined && link.count > 0 && (
                   <span
-                    className={`px-2 py-0.5 text-xs rounded-full font-bold ${
+                    className={`shrink-0 min-w-[20px] h-5 px-1.5 flex items-center justify-center text-[10px] font-extrabold rounded-full ${
                       isActive
                         ? 'bg-brand-500 text-white'
                         : link.highlight
-                        ? 'bg-amber-500 text-slate-950 animate-pulse'
-                        : 'bg-slate-100 text-slate-700'
+                        ? 'bg-amber-400 text-slate-950 shadow-xs'
+                        : 'bg-slate-100 text-slate-700 border border-slate-200/60'
                     }`}
                   >
                     {link.count}
