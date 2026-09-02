@@ -25,7 +25,7 @@ interface RFQDetailPageProps {
 }
 
 export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate }) => {
-  const { rfqs, quotations } = useAppData();
+  const { rfqs, quotations, isRFQExtendedUnlocked } = useAppData();
 
   const rfq = rfqs.find(r => r.id === rfqId || r.rfqNumber === rfqId);
 
@@ -41,6 +41,9 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
   }
 
   const rfqQuotes = quotations.filter(q => q.rfqId === rfq.id || q.rfqNumber === rfq.rfqNumber);
+  const isUnlocked = isRFQExtendedUnlocked(rfq.id);
+  const visibleQuotes = isUnlocked ? rfqQuotes : rfqQuotes.slice(0, 5);
+  const lockedCount = isUnlocked ? 0 : Math.max(0, rfqQuotes.length - 5);
 
   return (
     <div className="space-y-6">
@@ -56,37 +59,41 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
             Back to RFQs
           </Button>
           <div>
-            <div className="flex items-center gap-2">
-              <span className="font-mono font-bold text-xs bg-brand-50 text-brand-700 px-2 py-0.5 rounded border border-brand-200">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-xs font-mono font-bold text-brand-600 bg-brand-50 px-2 py-0.5 rounded border border-brand-100">
                 {rfq.rfqNumber}
               </span>
               <StatusBadge status={rfq.status} />
-              <span className="text-[11px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                5 Free Quotations Active
+              <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 flex items-center gap-1">
+                <Clock className="w-3.5 h-3.5" /> 24-Hour Stockist SLA
               </span>
             </div>
-            <h1 className="text-xl sm:text-2xl font-bold text-slate-900 mt-1">{rfq.title}</h1>
+            <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900">
+              {rfq.title}
+            </h1>
           </div>
         </div>
 
-        {rfqQuotes.length > 0 && (
-          <Button
-            variant="primary"
-            onClick={() => onNavigate('buyer-compare', { rfqId: rfq.id })}
-            leftIcon={<GitCompare className="w-4 h-4" />}
-            className="bg-brand-600 hover:bg-brand-700 font-bold"
-          >
-            Compare All 5 Quotations
-          </Button>
-        )}
+        <div className="flex items-center gap-2">
+          {rfqQuotes.length > 0 && (
+            <Button
+              variant="primary"
+              onClick={() => onNavigate('buyer-compare', { rfqId: rfq.id })}
+              leftIcon={<GitCompare className="w-4 h-4" />}
+              className="font-bold shadow-sm"
+            >
+              Compare {visibleQuotes.length} Quotations in Matrix
+            </Button>
+          )}
+        </div>
       </div>
 
-      {/* Overview Specs Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+      {/* RFQ Meta Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <Card className="p-4">
-          <span className="text-slate-400 text-xs font-medium block">Project Name</span>
+          <span className="text-slate-400 text-xs font-medium block">Project</span>
           <strong className="text-sm text-slate-900 font-bold">{rfq.projectName}</strong>
-          <span className="text-[11px] text-slate-500 block mt-0.5">{rfq.projectLocation}</span>
+          <span className="text-[11px] text-slate-500 block mt-0.5">Category: {rfq.category}</span>
         </Card>
 
         <Card className="p-4">
@@ -103,9 +110,11 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
 
         <Card className="p-4">
           <span className="text-slate-400 text-xs font-medium block">Suppliers Quoting</span>
-          <strong className="text-sm text-slate-900 font-bold">{rfq.invitedCount || 5} Matched Stockists</strong>
+          <strong className="text-sm text-slate-900 font-bold">5 Matched Stockists</strong>
           <span className="text-[11px] text-emerald-600 font-semibold block mt-0.5">
-            {rfqQuotes.length > 0 ? `${rfqQuotes.length} Quotes Received` : '24-Hour SLA Active'}
+            {rfqQuotes.length > 0 
+              ? isUnlocked ? `${rfqQuotes.length} Quotes (Unlocked)` : `${Math.min(rfqQuotes.length, 5)} / 5 Quotes In`
+              : '24-Hour SLA Active'}
           </span>
         </Card>
       </div>
@@ -118,8 +127,15 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
               <div className="flex items-center gap-2">
                 <span className="text-xs font-extrabold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full border border-emerald-200 flex items-center gap-1">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>{rfqQuotes.length} Quotation{rfqQuotes.length > 1 ? 's' : ''} Collected</span>
+                  <span>
+                    {isUnlocked ? `${rfqQuotes.length} Quotations (Unlocked)` : `${Math.min(rfqQuotes.length, 5)} / 5 Free Quotations`}
+                  </span>
                 </span>
+                {lockedCount > 0 && (
+                  <span className="text-xs font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                    +{lockedCount} More Locked (AED 49)
+                  </span>
+                )}
                 <h3 className="text-base font-bold text-slate-900">
                   Received Supplier Quotations
                 </h3>
@@ -135,12 +151,12 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
               leftIcon={<GitCompare className="w-4 h-4 text-amber-300" />}
               className="font-bold shadow-sm"
             >
-              Compare All {rfqQuotes.length} Quotation{rfqQuotes.length > 1 ? 's' : ''} in Matrix
+              Compare {visibleQuotes.length} Quotation{visibleQuotes.length > 1 ? 's' : ''} in Matrix
             </Button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
-            {rfqQuotes.map((quote, idx) => (
+            {visibleQuotes.map((quote, idx) => (
               <div
                 key={quote.id}
                 className="bg-white p-4 rounded-xl border border-slate-200 hover:border-brand-500 shadow-subtle flex flex-col justify-between space-y-3"
@@ -149,7 +165,7 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
                   <div className="flex items-center justify-between text-[10px] text-slate-400 mb-1">
                     <span className="font-mono font-bold text-slate-700">{quote.quotationNumber}</span>
                     <span className="font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
-                      Offer {idx + 1} of {rfqQuotes.length}
+                      Offer {idx + 1} of {visibleQuotes.length}
                     </span>
                   </div>
                   <h4 className="text-xs font-bold text-slate-900 line-clamp-1">{quote.supplierCompanyName}</h4>
@@ -182,6 +198,37 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
                 </Button>
               </div>
             ))}
+
+            {lockedCount > 0 && (
+              <div
+                onClick={() => onNavigate('buyer-compare', { rfqId: rfq.id })}
+                className="p-4 rounded-xl border-2 border-dashed border-amber-300 bg-amber-50/40 hover:bg-amber-50 transition-all space-y-3 flex flex-col justify-between cursor-pointer"
+              >
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold bg-amber-200 text-amber-900 px-2 py-0.5 rounded">
+                      +5 Extended Pack
+                    </span>
+                    <span className="text-xs font-bold text-amber-800 font-mono">AED 49.00</span>
+                  </div>
+                  <div>
+                    <h5 className="font-bold text-slate-900 text-xs">+{lockedCount} More Supplier Quotations</h5>
+                    <p className="text-[11px] text-slate-500">Tier-2 factory importers & regional stockist bids</p>
+                  </div>
+                  <p className="text-[11px] text-amber-800 bg-white/80 p-2 rounded border border-amber-200 leading-snug">
+                    Pay AED 49 to unlock 5 additional supplier quotations for this RFQ.
+                  </p>
+                </div>
+                <Button
+                  variant="amber"
+                  size="sm"
+                  onClick={() => onNavigate('buyer-compare', { rfqId: rfq.id })}
+                  className="w-full text-xs font-bold shadow-xs"
+                >
+                  Unlock 5 More Quotes
+                </Button>
+              </div>
+            )}
           </div>
         </Card>
       ) : (

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { RFQ, Quotation } from '../../types';
+import { useAppData } from '../../context/AppDataContext';
 import { Card, CardHeader, CardContent } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge, HighlightBadge } from '../ui/Badge';
@@ -40,10 +41,14 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
   quotations,
   onAward,
 }) => {
+  const { isRFQExtendedUnlocked, unlockExtendedQuotes } = useAppData();
   const [sortBy, setSortBy] = useState<'price_asc' | 'delivery_asc' | 'rating_desc' | 'recommended'>('recommended');
   const [expandedQuoteId, setExpandedQuoteId] = useState<string | null>(null);
   const [selectedAwardQuote, setSelectedAwardQuote] = useState<Quotation | null>(null);
   const [isAwardModalOpen, setIsAwardModalOpen] = useState(false);
+  const [isUnlockModalOpen, setIsUnlockModalOpen] = useState(false);
+
+  const isUnlocked = isRFQExtendedUnlocked(rfq.id);
 
   if (quotations.length === 0) {
     return (
@@ -53,27 +58,28 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
         </div>
         <h4 className="text-base font-bold text-slate-900">Waiting for Quotations</h4>
         <p className="text-xs text-slate-500 max-w-md mx-auto mt-1">
-          Your RFQ #{rfq.rfqNumber} has been distributed to {rfq.invitedCount} verified suppliers in {rfq.deliveryEmirate}. As quotations arrive, they will appear here side-by-side.
+          Your RFQ #{rfq.rfqNumber} has been distributed to 5 verified suppliers in {rfq.deliveryEmirate}. As quotations arrive, they will appear here side-by-side.
         </p>
       </div>
     );
   }
 
-  // Pool of all real quotations received for this specific RFQ
-  const activeQuotationsPool = quotations;
 
-  // Find Best values for badges across active pool
-  const minPrice = Math.min(...activeQuotationsPool.map(q => q.grandTotalAED));
-  const minLeadTime = Math.min(...activeQuotationsPool.map(q => q.leadTimeDays));
-  const maxRating = Math.max(...activeQuotationsPool.map(q => q.supplierRating));
-
-  // Sort logic
-  const sortedQuotes = [...activeQuotationsPool].sort((a, b) => {
+  // Sort logic across pool
+  const sortedQuotes = [...quotations].sort((a, b) => {
     if (sortBy === 'price_asc') return a.grandTotalAED - b.grandTotalAED;
     if (sortBy === 'delivery_asc') return a.leadTimeDays - b.leadTimeDays;
     if (sortBy === 'rating_desc') return b.supplierRating - a.supplierRating;
     return a.grandTotalAED - b.grandTotalAED;
   });
+
+  // Free limit is strictly 5 quotations; paying AED 49 unlocks 5 more (up to 10)
+  const visibleQuotes = isUnlocked ? sortedQuotes : sortedQuotes.slice(0, 5);
+
+  // Find Best values for badges across visible pool
+  const minPrice = visibleQuotes.length > 0 ? Math.min(...visibleQuotes.map(q => q.grandTotalAED)) : 0;
+  const minLeadTime = visibleQuotes.length > 0 ? Math.min(...visibleQuotes.map(q => q.leadTimeDays)) : 0;
+  const maxRating = visibleQuotes.length > 0 ? Math.max(...visibleQuotes.map(q => q.supplierRating)) : 5;
 
   const handleOpenAwardModal = (quote: Quotation) => {
     setSelectedAwardQuote(quote);
@@ -101,6 +107,11 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
               <span className="bg-emerald-500/20 text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded border border-emerald-400/30">
                 100% Verified Commercial Offers
               </span>
+              {isUnlocked && (
+                <span className="bg-amber-400 text-slate-950 text-[10px] font-extrabold px-2 py-0.5 rounded">
+                  Extended Pack Active (10 Quotes)
+                </span>
+              )}
             </div>
             <p className="text-slate-300 mt-0.5">
               Award this order via SupplySouq to get <strong>10% Off delivery fees</strong>, <strong>DEWA / Batch Test Certificate Guarantee</strong>, and consolidated tax invoicing.
@@ -110,7 +121,9 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
 
         <span className="inline-flex items-center gap-1.5 bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 px-3 py-1.5 rounded-xl font-bold whitespace-nowrap">
           <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-          <span>{quotations.length} Quotation{quotations.length > 1 ? 's' : ''} Collected</span>
+          <span>
+            {isUnlocked ? `${quotations.length} Quotations Unlocked` : `${Math.min(quotations.length, 5)} of 5 Free Quotations`}
+          </span>
         </span>
       </div>
 
@@ -123,7 +136,7 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
             </h3>
             <span className="text-xs font-extrabold bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-0.5 rounded-full flex items-center gap-1">
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-              <span>{quotations.length} Live Supplier Bids</span>
+              <span>{visibleQuotes.length} Quotes Displayed {isUnlocked ? '(Unlocked Pack)' : '(Free Limit: 5)'}</span>
             </span>
           </div>
           <p className="text-xs text-slate-500 mt-0.5">
@@ -177,7 +190,7 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
 
       {/* Side-by-Side Comparison Cards Grid (5+ Cards) */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {sortedQuotes.map((quote, index) => {
+        {visibleQuotes.map((quote, index) => {
           const isBestPrice = quote.grandTotalAED === minPrice;
           const isFastest = quote.leadTimeDays === minLeadTime;
           const isTopRated = quote.supplierRating === maxRating;
@@ -208,7 +221,7 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
                         {quote.quotationNumber}
                       </span>
                       <span className="text-[10px] font-bold bg-emerald-50 text-emerald-800 px-1.5 py-0.5 rounded border border-emerald-200">
-                        Quote {index + 1} of {sortedQuotes.length}
+                        Quote {index + 1} of {visibleQuotes.length}
                       </span>
                     </div>
 
@@ -227,102 +240,83 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
                   <h4 className="text-base font-bold text-slate-900">
                     {quote.supplierCompanyName}
                   </h4>
-                  <div className="flex items-center gap-2 mt-1 text-xs text-slate-500">
-                    <span className="flex items-center gap-1 text-emerald-700 font-semibold">
-                      <ShieldCheck className="w-3.5 h-3.5" /> Verified
+                  <p className="text-xs text-slate-500 flex items-center gap-1.5 mt-0.5">
+                    <Building2 className="w-3.5 h-3.5 text-slate-400" />
+                    <span>{quote.supplierZone || quote.supplierEmirate || 'Verified Stockist'}</span>
+                    <span className="text-slate-300">•</span>
+                    <span className="text-amber-600 font-semibold flex items-center gap-0.5">
+                      ★ {quote.supplierRating?.toFixed(1) || '4.9'}
                     </span>
-                    <span>•</span>
-                    <span>{quote.supplierZone}, {quote.supplierEmirate}</span>
-                    <span>•</span>
-                    <span className="font-bold text-amber-600">★ {quote.supplierRating}</span>
-                  </div>
+                  </p>
                 </div>
 
-                {/* Main Offer Specs */}
-                <div className="p-5 space-y-4">
-                  {/* Price Display */}
-                  <div className="p-3.5 bg-slate-900 text-white rounded-xl flex items-baseline justify-between">
+                {/* Price & Commercial Highlights */}
+                <div className="p-4 space-y-3">
+                  <div className="bg-slate-900 text-white p-3.5 rounded-xl flex items-center justify-between">
                     <div>
-                      <span className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold block">
-                        Total Incl. 5% UAE VAT
+                      <span className="text-[10px] text-slate-400 block font-medium uppercase tracking-wider">
+                        Total Amount (5% VAT Incl.)
                       </span>
-                      <span className="text-2xl font-extrabold tracking-tight text-white">
+                      <span className="text-xl font-extrabold tracking-tight font-mono">
                         {formatAED(quote.grandTotalAED)}
                       </span>
                     </div>
-                    <div className="text-right text-[11px] text-slate-300">
-                      <p>Subtotal: {formatAED(quote.subtotalAED - quote.discountAED)}</p>
-                      <p className="text-slate-400">VAT (5%): {formatAED(quote.vatAED)}</p>
-                    </div>
+                    {/* Assuming quote object has vatAmountAED, otherwise 0 */}
+                    <span className="text-[10px] text-slate-400 bg-slate-800 px-2 py-1 rounded border border-slate-700">
+                      VAT {formatAED(quote.vatAED || 0)}
+                    </span>
                   </div>
 
-                  {/* Attributes Matrix */}
-                  <div className="space-y-2 text-xs">
-                    <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50">
-                      <span className="text-slate-500 flex items-center gap-1.5 font-medium">
-                        <Truck className="w-3.5 h-3.5 text-slate-400" /> Lead Time:
+                  {/* Operational Metrics Grid */}
+                  <div className="grid grid-cols-2 gap-2 text-xs">
+                    <div className="bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+                      <span className="text-slate-400 text-[10px] block font-medium flex items-center gap-1">
+                        <Truck className="w-3 h-3 text-slate-400" /> Lead Time
                       </span>
-                      <strong className={`font-bold ${isFastest ? 'text-sky-700 font-extrabold' : 'text-slate-800'}`}>
-                        {quote.leadTimeDisplay || quote.leadTimeDays + ' Days'}
+                      <strong className="text-slate-900 font-bold block mt-0.5">
+                        {quote.leadTimeDisplay || `${quote.leadTimeDays} Days`}
                       </strong>
                     </div>
 
-                    <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50">
-                      <span className="text-slate-500 flex items-center gap-1.5 font-medium">
-                        <Award className="w-3.5 h-3.5 text-slate-400" /> Warranty:
+                    <div className="bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+                      <span className="text-slate-400 text-[10px] block font-medium flex items-center gap-1">
+                        <CreditCard className="w-3 h-3 text-slate-400" /> Payment Terms
                       </span>
-                      <strong className="text-slate-800">{quote.warrantyPeriod}</strong>
-                    </div>
-
-                    <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50">
-                      <span className="text-slate-500 font-medium">Payment Terms:</span>
-                      <strong className="text-slate-800">{quote.paymentTerms}</strong>
-                    </div>
-
-                    <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50">
-                      <span className="text-slate-500 font-medium">Validity:</span>
-                      <span className="text-slate-700 font-semibold">{formatDate(quote.validityDate)}</span>
+                      <strong className="text-slate-900 font-bold block mt-0.5 truncate">
+                        {quote.paymentTerms || '30 Days PDC'}
+                      </strong>
                     </div>
                   </div>
 
-                  {/* Supplier Notes */}
-                  {quote.notes && (
-                    <div className="p-2.5 bg-brand-50/60 rounded-lg border border-brand-100/80 text-[11px] text-slate-700 leading-relaxed">
-                      <strong className="text-brand-900 block mb-0.5">Supplier Remarks:</strong>
-                      {quote.notes}
-                    </div>
-                  )}
-
-                  {/* Itemized Breakdown Toggle */}
-                  <div>
+                  {/* Itemized Material Rates Summary */}
+                  <div className="space-y-1 pt-1">
                     <button
+                      type="button"
                       onClick={() => setExpandedQuoteId(isExpanded ? null : quote.id)}
-                      className="w-full flex items-center justify-between py-1.5 text-xs text-brand-700 font-semibold hover:text-brand-800"
+                      className="w-full flex items-center justify-between text-xs font-bold text-slate-700 hover:text-brand-600 py-1.5 px-2 bg-slate-50 rounded-lg border border-slate-100 transition-colors"
                     >
-                      <span>Itemized Pricing Breakdown ({quote.items?.length || rfq.items.length} items)</span>
-                      {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                      <span>Item Breakdown ({quote.items?.length || 0} items)</span>
+                      {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
                     </button>
 
                     {isExpanded && (
-                      <div className="mt-2 space-y-2 border-t border-slate-100 pt-2 animate-in fade-in duration-150">
-                        {quote.items && quote.items.length > 0 ? (
-                          quote.items.map((item, idx) => (
-                            <div key={item.id || idx} className="text-[11px] p-2 bg-slate-50 rounded border border-slate-100 space-y-0.5">
-                              <div className="flex justify-between font-semibold text-slate-800">
-                                <span className="truncate max-w-[180px]">{item.itemDescription}</span>
-                                <span>{formatAED(item.totalPriceAED)}</span>
-                              </div>
-                              <div className="flex justify-between text-slate-500 text-[10px]">
-                                <span>Brand: <strong className="text-slate-700">{item.offeredBrand}</strong></span>
-                                <span>{formatAED(item.unitPriceAED, true)} / {item.unit}</span>
-                              </div>
+                      <div className="space-y-1.5 pt-1 text-xs">
+                        {quote.items?.map((item, i) => (
+                          <div
+                            key={item.id || i}
+                            className="bg-white p-2 rounded-lg border border-slate-100 flex items-center justify-between text-[11px]"
+                          >
+                            <div className="truncate pr-2">
+                              <span className="font-semibold text-slate-800 block truncate">{item.itemDescription}</span>
+                              <span className="text-slate-400 text-[10px]">
+                                {item.quantity} {item.unit} @ {formatAED(item.unitPriceAED)}/ea
+                              </span>
                             </div>
-                          ))
-                        ) : (
-                          <div className="text-[11px] text-slate-500 italic p-2 bg-slate-50 rounded">
-                            Standard package pricing matching all DEWA approved cable and switchgear specifications.
+                            <span className="font-mono font-bold text-slate-900 shrink-0">
+                              {formatAED(item.totalPriceAED)}
+                            </span>
                           </div>
-                        )}
+                        ))}
                       </div>
                     )}
                   </div>
@@ -350,7 +344,127 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
           );
         })}
 
+        {/* LOCKED 5 MORE QUOTES CARD IF NOT UNLOCKED */}
+        {!isUnlocked && (
+          <div className="bg-gradient-to-br from-slate-900 via-slate-900 to-navy-950 text-white rounded-2xl border-2 border-dashed border-amber-400/60 p-6 flex flex-col justify-between shadow-lg">
+            <div className="space-y-4">
+              <div className="w-12 h-12 rounded-2xl bg-amber-400/20 border border-amber-400/40 text-amber-300 flex items-center justify-center font-bold">
+                <Lock className="w-6 h-6" />
+              </div>
+
+              <div className="space-y-1.5">
+                <div className="inline-flex items-center gap-1.5 bg-amber-400/20 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded border border-amber-400/30">
+                  <Flame className="w-3.5 h-3.5 text-amber-400" />
+                  <span>5 Additional Stockist Bids Available</span>
+                </div>
+                <h4 className="text-lg font-extrabold text-white">
+                  Unlock Extended Market Pack (+5 Quotes)
+                </h4>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Unlock bids from <strong>JAFZA Factory Importers</strong>, <strong>Dubai Industrial City Stockists</strong>, and <strong>Northern Emirates Direct Yards</strong> with bulk volume discounts.
+                </p>
+              </div>
+
+              <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 space-y-1.5 text-xs">
+                <div className="flex items-center gap-2 text-emerald-400 font-semibold">
+                  <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+                  <span>Reveals 5 additional verified supplier quotations</span>
+                </div>
+                <div className="flex items-center gap-2 text-slate-300">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                  <span>Includes 45-day extended corporate credit terms</span>
+                </div>
+                <div className="flex items-center gap-2 text-slate-300">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-sky-400 shrink-0" />
+                  <span>Same-day express site dispatch options</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-6 space-y-2">
+              <div className="flex items-center justify-between text-xs pb-1">
+                <span className="text-slate-400">One-Time RFQ Unlock Fee:</span>
+                <span className="text-base font-extrabold text-amber-300 font-mono">AED 49.00</span>
+              </div>
+
+              <Button
+                variant="amber"
+                className="w-full font-bold shadow-lg"
+                onClick={() => setIsUnlockModalOpen(true)}
+                leftIcon={<Unlock className="w-4 h-4" />}
+              >
+                Pay AED 49 & Unlock 5 More Quotes
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
+
+      {/* UNLOCK 5 MORE QUOTES MODAL */}
+      <Modal
+        isOpen={isUnlockModalOpen}
+        onClose={() => setIsUnlockModalOpen(false)}
+        title="Unlock Extended Market Quotation Pack (+5 Bids)"
+        subtitle={'Deep Liquidity Sourcing for RFQ #' + rfq.rfqNumber}
+        maxWidth="md"
+      >
+        <div className="space-y-4 text-xs">
+          <div className="p-4 bg-amber-50 rounded-xl border border-amber-200 space-y-2 text-amber-950">
+            <div className="flex items-center gap-2 font-bold text-sm text-amber-900">
+              <Sparkles className="w-4 h-4 text-amber-700" />
+              <span>5 Additional Verified Stockist Bids Waiting</span>
+            </div>
+            <p className="text-[11px] leading-relaxed text-amber-800">
+              Expanding this RFQ reveals 5 tier-2 factory importers and regional stockists across JAFZA, Dubai Industrial City, and Sharjah with special wholesale pricing.
+            </p>
+          </div>
+
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2.5">
+            <h5 className="font-bold text-slate-900">Included in this Extended Pack:</h5>
+            <ul className="space-y-2 text-slate-600">
+              <li className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span><strong>5 Additional Commercial Quotations:</strong> Full itemized price breakdown.</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span><strong>Flexible Credit Terms:</strong> Extended 30 to 45-day PDC payment options.</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span><strong>Complete 10-Way Comparison Matrix:</strong> Compare all offers side-by-side.</span>
+              </li>
+            </ul>
+          </div>
+
+          <div className="p-3 bg-slate-900 text-white rounded-xl flex items-center justify-between">
+            <div>
+              <span className="text-[10px] text-slate-400 block font-semibold">One-Time RFQ Unlock Fee</span>
+              <span className="text-lg font-extrabold text-amber-300 font-mono">AED 49.00</span>
+            </div>
+            <span className="text-[10px] text-emerald-400 bg-slate-800 px-2.5 py-1 rounded border border-slate-700 font-bold">
+              Instant Activation
+            </span>
+          </div>
+
+          <div className="flex items-center justify-end gap-3 pt-3">
+            <Button variant="outline" onClick={() => setIsUnlockModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              variant="amber"
+              onClick={() => {
+                unlockExtendedQuotes(rfq.id);
+                setIsUnlockModalOpen(false);
+              }}
+              leftIcon={<CreditCard className="w-4 h-4" />}
+              className="font-bold"
+            >
+              Confirm & Unlock 5 More Quotes
+            </Button>
+          </div>
+        </div>
+      </Modal>
 
       {/* Award Confirmation Modal with 10% Platform Hook */}
       <Modal

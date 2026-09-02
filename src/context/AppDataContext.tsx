@@ -67,6 +67,11 @@ interface AppDataContextType {
   
   // Admin Verification
   updateVerificationStatus: (companyId: string, status: VerificationStatus, notes?: string) => void;
+
+  // Extended Quotations Paywall (5 quotes limit + 5 more for AED 49)
+  unlockedRFQIds: string[];
+  unlockExtendedQuotes: (rfqId: string) => void;
+  isRFQExtendedUnlocked: (rfqId: string) => boolean;
   
   // Reset
   resetToDefaults: () => void;
@@ -151,12 +156,38 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const [verifications, setVerifications] = useState<VerificationRequest[]>(() => {
     try {
-      const saved = localStorage.getItem(`${STORAGE_KEY}_verifs`);
+      const saved = localStorage.getItem(`${STORAGE_KEY}_verifications`);
       return saved ? JSON.parse(saved) : initialVerifications;
     } catch (e) {
       return initialVerifications;
     }
   });
+
+  const [unlockedRFQIds, setUnlockedRFQIds] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem(`${STORAGE_KEY}_unlocked_rfqs`);
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) {
+      return [];
+    }
+  });
+
+  const unlockExtendedQuotes = (rfqId: string) => {
+    setUnlockedRFQIds((prev) => {
+      if (prev.includes(rfqId)) return prev;
+      const next = [...prev, rfqId];
+      try {
+        localStorage.setItem(`${STORAGE_KEY}_unlocked_rfqs`, JSON.stringify(next));
+      } catch (e) {
+        console.error(e);
+      }
+      return next;
+    });
+  };
+
+  const isRFQExtendedUnlocked = (rfqId: string) => {
+    return unlockedRFQIds.includes(rfqId);
+  };
 
   // Sync with Supabase on Initial Load
   const initSupabase = useCallback(async () => {
@@ -356,7 +387,7 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
       targetSupplierId: targetSupplier?.id || newRFQData.targetSupplierId,
       targetSupplierName: targetSupplier?.name || newRFQData.targetSupplierName,
       status: 'published',
-      invitedCount: allRecipients.length,
+      invitedCount: Math.min(5, allRecipients.length) || 5,
       quotesCount: 0,
       matchedSupplierCompanyIds,
       matchedSupplierNames,
@@ -442,21 +473,18 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
     setQuotations((prev) => [newQuote, ...prev]);
 
-    // Update quote count and status on RFQ
-    setRfqs((prev) =>
-      prev.map((r) => {
-        if (r.id === quoteData.rfqId) {
-          const newCount = (r.quotesCount || 0) + 1;
-          return {
-            ...r,
-            quotesCount: newCount,
-            status: 'receiving_quotes',
-            updatedAt: new Date().toISOString(),
-          };
-        }
-        return r;
-      })
-    );
+    // Update quote count and status on RFQ, and move RFQ to the absolute top of the list!
+    setRfqs((prev) => {
+      const target = prev.find((r) => r.id === quoteData.rfqId || r.rfqNumber === quoteData.rfqId);
+      if (!target) return prev;
+      const updatedRFQ: RFQ = {
+        ...target,
+        quotesCount: (target.quotesCount || 0) + 1,
+        status: 'receiving_quotes',
+        updatedAt: new Date().toISOString(),
+      };
+      return [updatedRFQ, ...prev.filter(r => r.id !== target.id)];
+    });
 
     // Send direct notification message from Supplier to the specific Buyer
     if (targetRFQ) {
@@ -670,6 +698,9 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
         getMessagesForRFQ,
         submitReview,
         updateVerificationStatus,
+        unlockedRFQIds,
+        unlockExtendedQuotes,
+        isRFQExtendedUnlocked,
         resetToDefaults,
       }}
     >

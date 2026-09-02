@@ -13,9 +13,11 @@ interface CompareQuotesPageProps {
 
 export const CompareQuotesPage: React.FC<CompareQuotesPageProps> = ({ rfqId, onNavigate }) => {
   const { currentCompany } = useAuth();
-  const { rfqs, quotations, awardQuotation } = useAppData();
+  const { rfqs, quotations, awardQuotation, isRFQExtendedUnlocked } = useAppData();
 
-  const myRFQs = rfqs.filter(r => r.buyerCompanyId === currentCompany.id);
+  const myRFQs = rfqs
+    .filter(r => r.buyerCompanyId === currentCompany.id)
+    .sort((a, b) => new Date(b.updatedAt || b.createdAt).getTime() - new Date(a.updatedAt || a.createdAt).getTime());
   
   const [selectedRFQId, setSelectedRFQId] = useState<string>(() => {
     if (rfqId) return rfqId;
@@ -100,10 +102,12 @@ export const CompareQuotesPage: React.FC<CompareQuotesPageProps> = ({ rfqId, onN
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 pt-1">
           {myRFQs.map((rfq) => {
             const isSelected = rfq.id === targetRFQ.id;
+            const isUnlocked = isRFQExtendedUnlocked(rfq.id);
             const quotesCount = quotations.filter(q => q.rfqId === rfq.id || q.rfqNumber === rfq.rfqNumber).length;
             const rfqQuotesPool = quotations.filter(q => q.rfqId === rfq.id || q.rfqNumber === rfq.rfqNumber);
-            const lowestPrice = rfqQuotesPool.length > 0 
-              ? Math.min(...rfqQuotesPool.map(q => q.grandTotalAED)) 
+            const visibleQuotes = isUnlocked ? rfqQuotesPool : rfqQuotesPool.slice(0, 5);
+            const lowestPrice = visibleQuotes.length > 0 
+              ? Math.min(...visibleQuotes.map(q => q.grandTotalAED)) 
               : null;
 
             return (
@@ -150,7 +154,11 @@ export const CompareQuotesPage: React.FC<CompareQuotesPageProps> = ({ rfqId, onN
                   {quotesCount > 0 ? (
                     <span className="font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 flex items-center gap-1">
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                      <span>{quotesCount} Quotation{quotesCount > 1 ? 's' : ''} Received</span>
+                      <span>
+                        {isUnlocked 
+                          ? `${quotesCount} Quotes (Unlocked)` 
+                          : `${Math.min(quotesCount, 5)} / 5 Quotes${quotesCount > 5 ? ` (+${quotesCount - 5} Locked)` : ''}`}
+                      </span>
                     </span>
                   ) : (
                     <span className="text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 text-[11px] flex items-center gap-1">

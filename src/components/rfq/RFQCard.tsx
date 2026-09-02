@@ -55,7 +55,7 @@ export const RFQCard: React.FC<RFQCardProps> = ({
             <div className="inline-flex sm:flex-col items-center sm:items-end gap-1.5 bg-slate-50 sm:bg-transparent p-2 sm:p-0 rounded-lg">
               <span className="text-xs text-slate-500 font-medium">5-Stockist Response</span>
               <span className="text-lg font-extrabold text-slate-900 bg-brand-50 text-brand-700 px-2.5 py-0.5 rounded-md border border-brand-200">
-                {rfq.quotesCount} / {rfq.invitedCount || 5} Quotes
+                {Math.min(rfq.quotesCount, 5)} / 5 Quotes
               </span>
             </div>
           </div>
@@ -127,7 +127,7 @@ export const RFQCard: React.FC<RFQCardProps> = ({
                 leftIcon={<GitCompare className="w-4 h-4" />}
                 className="bg-brand-600 hover:bg-brand-700"
               >
-                Compare {rfq.quotesCount} Quotations
+                Compare {Math.min(rfq.quotesCount, 5)} Quotation{rfq.quotesCount > 1 ? 's' : ''}
               </Button>
             ) : (
               <span className="text-xs text-slate-400 italic">Waiting for supplier bids...</span>

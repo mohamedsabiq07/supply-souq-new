@@ -27,15 +27,19 @@ interface BuyerDashboardProps {
 
 export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) => {
   const { currentCompany } = useAuth();
-  const { rfqs, quotations, purchaseOrders } = useAppData();
+  const { rfqs, quotations, purchaseOrders, isRFQExtendedUnlocked } = useAppData();
 
-  const myRFQs = rfqs.filter(r => r.buyerCompanyId === currentCompany.id);
+  const myRFQs = rfqs
+    .filter(r => r.buyerCompanyId === currentCompany.id)
+    .sort((a, b) => new Date(b.updatedAt || b.createdAt).getTime() - new Date(a.updatedAt || a.createdAt).getTime());
   const myRFQIds = myRFQs.map(r => r.id);
-  const myQuotes = quotations.filter(q => 
-    (q.buyerCompanyId && q.buyerCompanyId === currentCompany.id) || 
-    myRFQIds.includes(q.rfqId) ||
-    myRFQs.some(r => r.rfqNumber === q.rfqNumber)
-  );
+  const myQuotes = quotations
+    .filter(q => 
+      (q.buyerCompanyId && q.buyerCompanyId === currentCompany.id) || 
+      myRFQIds.includes(q.rfqId) ||
+      myRFQs.some(r => r.rfqNumber === q.rfqNumber)
+    )
+    .sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime());
   const evaluatingRFQs = myRFQs.filter(r => r.quotesCount > 0 && r.status !== 'closed' && r.status !== 'awarded');
   const activeOrders = purchaseOrders.filter(p => p.buyerCompanyId === currentCompany.id);
 
@@ -149,8 +153,11 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
           <div className="space-y-5">
             {myRFQs.filter(rfq => myQuotes.some(q => q.rfqId === rfq.id || q.rfqNumber === rfq.rfqNumber)).map((rfq) => {
               const quotesForThisRFQ = myQuotes.filter(q => q.rfqId === rfq.id || q.rfqNumber === rfq.rfqNumber);
-              const lowestQuote = quotesForThisRFQ.length > 0 
-                ? [...quotesForThisRFQ].sort((a, b) => a.grandTotalAED - b.grandTotalAED)[0]
+              const isUnlocked = isRFQExtendedUnlocked(rfq.id);
+              const visibleQuotes = isUnlocked ? quotesForThisRFQ : quotesForThisRFQ.slice(0, 5);
+              const lockedCount = isUnlocked ? 0 : Math.max(0, quotesForThisRFQ.length - 5);
+              const lowestQuote = visibleQuotes.length > 0 
+                ? [...visibleQuotes].sort((a, b) => a.grandTotalAED - b.grandTotalAED)[0]
                 : null;
 
               return (
@@ -164,8 +171,15 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
                         </span>
                         <span className="text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 flex items-center gap-1">
                           <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                          <span>{quotesForThisRFQ.length} Quotation{quotesForThisRFQ.length > 1 ? 's' : ''} Collected</span>
+                          <span>
+                            {isUnlocked ? `${quotesForThisRFQ.length} Quotations (Unlocked)` : `${Math.min(quotesForThisRFQ.length, 5)} / 5 Free Quotations`}
+                          </span>
                         </span>
+                        {lockedCount > 0 && (
+                          <span className="text-xs font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                            +{lockedCount} More Locked (AED 49)
+                          </span>
+                        )}
                         <span className="text-xs text-slate-500 hidden sm:inline">
                           • {rfq.category}
                         </span>
@@ -182,13 +196,13 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
                       leftIcon={<GitCompare className="w-4 h-4 text-amber-300" />}
                       className="font-bold shrink-0 shadow-sm"
                     >
-                      Compare {quotesForThisRFQ.length} Quotation{quotesForThisRFQ.length > 1 ? 's' : ''} in Matrix
+                      Compare {visibleQuotes.length} Quotation{visibleQuotes.length > 1 ? 's' : ''} in Matrix
                     </Button>
                   </div>
 
                   {/* List of Collected Quotations for this Specific RFQ */}
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
-                    {quotesForThisRFQ.map((quote) => {
+                    {visibleQuotes.map((quote) => {
                       const isLowest = lowestQuote && quote.id === lowestQuote.id;
                       return (
                         <div
@@ -251,6 +265,37 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
                         </div>
                       );
                     })}
+
+                    {lockedCount > 0 && (
+                      <div
+                        onClick={() => onNavigate('buyer-compare', { rfqId: rfq.id })}
+                        className="p-4 rounded-xl border-2 border-dashed border-amber-300 bg-amber-50/40 hover:bg-amber-50 transition-all space-y-3 flex flex-col justify-between cursor-pointer"
+                      >
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[10px] font-bold bg-amber-200 text-amber-900 px-2 py-0.5 rounded">
+                              +5 Extended Pack
+                            </span>
+                            <span className="text-xs font-bold text-amber-800 font-mono">AED 49.00</span>
+                          </div>
+                          <div>
+                            <h5 className="font-bold text-slate-900 text-xs">+{lockedCount} More Supplier Quotations</h5>
+                            <p className="text-[11px] text-slate-500">Tier-2 factory importers & regional stockist bids</p>
+                          </div>
+                          <p className="text-[11px] text-amber-800 bg-white/80 p-2 rounded border border-amber-200 leading-snug">
+                            Pay AED 49 to unlock 5 additional supplier quotations for this RFQ.
+                          </p>
+                        </div>
+                        <Button
+                          variant="amber"
+                          size="sm"
+                          onClick={() => onNavigate('buyer-compare', { rfqId: rfq.id })}
+                          className="w-full text-xs font-bold shadow-xs"
+                        >
+                          Unlock 5 More Quotes
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 </div>
               );
