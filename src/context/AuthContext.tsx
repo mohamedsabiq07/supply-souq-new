@@ -28,6 +28,45 @@ export interface SupplierSignupData {
   password?: string;
 }
 
+export interface GuestProfile extends UserProfile {}
+
+export const guestUser: UserProfile = {
+  id: '',
+  companyId: '',
+  companyName: '',
+  fullName: '',
+  email: '',
+  phone: '',
+  role: 'buyer',
+  jobTitle: '',
+  emirate: 'Dubai',
+  address: '',
+  verificationStatus: 'verified',
+  createdAt: ''
+};
+
+export const guestCompany: Company = {
+  id: '',
+  name: '',
+  legalName: '',
+  tradeLicenseNumber: '',
+  companyType: 'buyer',
+  emirate: 'Dubai',
+  industrialZone: '',
+  address: '',
+  phone: '',
+  email: '',
+  categories: [],
+  serviceEmirates: ['Dubai', 'Sharjah', 'Ajman'],
+  verificationStatus: 'verified',
+  rating: 5,
+  reviewCount: 0,
+  responseRatePercent: 100,
+  averageResponseHours: 1,
+  yearsInBusiness: 1,
+  createdAt: ''
+};
+
 interface AuthContextType {
   role: UserRole;
   setRole: (role: UserRole) => void;
@@ -49,7 +88,7 @@ export const mockBuyerUser: UserProfile = {
   id: 'user-buyer-1',
   companyId: 'comp-buyer-1',
   companyName: 'Apex MEP & General Contracting LLC',
-  fullName: 'Tariq Mansour',
+  fullName: 'Eng. Tariq Mansour',
   email: 'procurement@apexcontracting.ae',
   phone: '+971 50 492 8812',
   role: 'buyer',
@@ -83,7 +122,7 @@ export const mockAdminUser: UserProfile = {
   id: 'user-admin-1',
   companyId: 'comp-admin-1',
   companyName: 'SupplySouq Operations Desk',
-  fullName: 'Faisal Al Zaabi',
+  fullName: 'SupplySouq Operator',
   email: 'admin@supplysouq.ae',
   phone: '+971 4 200 9900',
   role: 'admin',
@@ -97,12 +136,21 @@ export const mockAdminUser: UserProfile = {
 
 const defaultUsers: UserProfile[] = [mockBuyerUser, mockSupplierUser, mockAdminUser];
 
-const AUTH_STORAGE_KEY = 'supplysouq_auth_session_v8';
-const USERS_STORAGE_KEY = 'supplysouq_registered_users_v8';
+const AUTH_STORAGE_KEY = 'supplysouq_auth_session_v10';
+const USERS_STORAGE_KEY = 'supplysouq_registered_users_v10';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    try {
+      const savedAuth = localStorage.getItem(`${AUTH_STORAGE_KEY}_is_auth`);
+      return savedAuth === 'true';
+    } catch (e) {
+      return false;
+    }
+  });
+
   const [role, setRoleState] = useState<UserRole>(() => {
     try {
       const saved = localStorage.getItem(`${AUTH_STORAGE_KEY}_role`);
@@ -113,18 +161,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const [currentUser, setCurrentUser] = useState<UserProfile>(() => {
     try {
+      const savedAuth = localStorage.getItem(`${AUTH_STORAGE_KEY}_is_auth`);
       const saved = localStorage.getItem(`${AUTH_STORAGE_KEY}_user`);
-      if (saved) return JSON.parse(saved);
+      if (savedAuth === 'true' && saved) return JSON.parse(saved);
     } catch (e) {}
-    return mockBuyerUser;
+    return guestUser;
   });
 
   const [currentCompany, setCurrentCompany] = useState<Company>(() => {
     try {
+      const savedAuth = localStorage.getItem(`${AUTH_STORAGE_KEY}_is_auth`);
       const saved = localStorage.getItem(`${AUTH_STORAGE_KEY}_company`);
-      if (saved) return JSON.parse(saved);
+      if (savedAuth === 'true' && saved) return JSON.parse(saved);
     } catch (e) {}
-    return initialCompanies[0];
+    return guestCompany;
   });
 
   const [registeredUsers, setRegisteredUsers] = useState<UserProfile[]>(() => {
@@ -155,14 +205,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }).catch(console.error);
   }, []);
 
-  // Persist session changes
+  // Persist or clear session
   useEffect(() => {
     try {
-      localStorage.setItem(`${AUTH_STORAGE_KEY}_role`, role);
-      localStorage.setItem(`${AUTH_STORAGE_KEY}_user`, JSON.stringify(currentUser));
-      localStorage.setItem(`${AUTH_STORAGE_KEY}_company`, JSON.stringify(currentCompany));
+      if (isAuthenticated && currentUser.id && currentCompany.id) {
+        localStorage.setItem(`${AUTH_STORAGE_KEY}_is_auth`, 'true');
+        localStorage.setItem(`${AUTH_STORAGE_KEY}_role`, role);
+        localStorage.setItem(`${AUTH_STORAGE_KEY}_user`, JSON.stringify(currentUser));
+        localStorage.setItem(`${AUTH_STORAGE_KEY}_company`, JSON.stringify(currentCompany));
+      } else {
+        localStorage.removeItem(`${AUTH_STORAGE_KEY}_is_auth`);
+        localStorage.removeItem(`${AUTH_STORAGE_KEY}_role`);
+        localStorage.removeItem(`${AUTH_STORAGE_KEY}_user`);
+        localStorage.removeItem(`${AUTH_STORAGE_KEY}_company`);
+      }
     } catch (e) {}
-  }, [role, currentUser, currentCompany]);
+  }, [isAuthenticated, role, currentUser, currentCompany]);
 
   useEffect(() => {
     try {
@@ -172,6 +230,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const switchDemoUser = (newRole: UserRole) => {
     setRoleState(newRole);
+    setIsAuthenticated(true);
     if (newRole === 'buyer') {
       setCurrentUser(mockBuyerUser);
       const comp = initialCompanies.find((c) => c.id === 'comp-buyer-1') || initialCompanies[0];
@@ -216,6 +275,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (found) {
       setCurrentUser(found);
       setRoleState(found.role);
+      setIsAuthenticated(true);
+      const comp = initialCompanies.find((c) => c.id === found.companyId) || {
+        id: found.companyId,
+        name: found.companyName,
+        legalName: found.companyName,
+        tradeLicenseNumber: found.tradeLicenseNumber || 'TL-PENDING',
+        companyType: found.role === 'supplier' ? 'supplier' : 'buyer',
+        emirate: found.emirate || 'Dubai',
+        industrialZone: found.industrialZone || 'Al Quoz Industrial Area',
+        address: found.address || 'Dubai, UAE',
+        phone: found.phone,
+        email: found.email,
+        categories: ['LV & MV Power Cables & Wires', 'Switchgear, MCBs & Distribution Boards'],
+        serviceEmirates: ['Dubai', 'Sharjah', 'Ajman'],
+        verificationStatus: found.verificationStatus || 'verified',
+        rating: 5.0,
+        reviewCount: 1,
+        responseRatePercent: 100,
+        averageResponseHours: 1.0,
+        yearsInBusiness: 2,
+        createdAt: found.createdAt || new Date().toISOString(),
+      };
+      setCurrentCompany(comp);
     } else {
       switchDemoUser(targetRole);
     }
@@ -226,6 +308,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (found) {
       setCurrentUser(found);
       setRoleState(found.role);
+      setIsAuthenticated(true);
       const comp = initialCompanies.find((c) => c.id === found.companyId) || {
         id: found.companyId,
         name: found.companyName,
@@ -251,7 +334,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return { success: true };
     }
 
-    // Check if it's the admin default
+    // Check default mock accounts
+    if (email.toLowerCase() === 'procurement@apexcontracting.ae') {
+      switchDemoUser('buyer');
+      return { success: true };
+    }
+    if (email.toLowerCase() === 'sales@alnoorelectrical.ae') {
+      switchDemoUser('supplier');
+      return { success: true };
+    }
     if (email.toLowerCase() === 'admin@supplysouq.ae') {
       switchDemoUser('admin');
       return { success: true };
@@ -414,7 +505,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const logout = () => {
-    switchDemoUser('buyer');
+    setIsAuthenticated(false);
+    setCurrentUser(guestUser);
+    setCurrentCompany(guestCompany);
+    setRoleState('buyer');
+    try {
+      localStorage.removeItem(`${AUTH_STORAGE_KEY}_is_auth`);
+      localStorage.removeItem(`${AUTH_STORAGE_KEY}_role`);
+      localStorage.removeItem(`${AUTH_STORAGE_KEY}_user`);
+      localStorage.removeItem(`${AUTH_STORAGE_KEY}_company`);
+    } catch (e) {}
   };
 
   return (
@@ -424,7 +524,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setRole,
         currentUser,
         currentCompany,
-        isAuthenticated: true,
+        isAuthenticated: !!isAuthenticated && !!currentUser?.id,
         isAdmin: role === 'admin',
         registeredUsers,
         switchDemoUser,

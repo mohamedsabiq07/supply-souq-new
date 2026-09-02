@@ -23,9 +23,10 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView }) => {
   const { role, currentUser, currentCompany } = useAuth();
-  const { rfqs, quotations, purchaseOrders, messages, verifications } = useAppData();
+  const { rfqs, quotations, purchaseOrders, verifications } = useAppData();
 
-  const buyerRFQs = rfqs.filter(r => r.buyerCompanyId === currentCompany.id || role === 'admin');
+  const companyId = currentCompany?.id || '';
+  const buyerRFQs = rfqs.filter(r => r.buyerCompanyId === companyId || role === 'admin');
   const evaluatingRFQs = rfqs.filter(r => r.status === 'evaluating' || r.quotesCount > 0);
   const activeOrders = purchaseOrders.length;
   const pendingVerifications = verifications.filter(v => v.status === 'pending').length;
@@ -42,8 +43,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView })
   const supplierLinks = [
     { id: 'supplier-dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'supplier-inbox', label: 'RFQ Inbox (Live)', icon: FileText, count: rfqs.filter(r => r.status !== 'draft').length, highlight: true },
-    { id: 'supplier-quotes', label: 'My Quotations', icon: GitCompare, count: quotations.filter(q => q.supplierCompanyId === currentCompany.id).length },
-    { id: 'supplier-orders', label: 'Orders & POs', icon: Package, count: purchaseOrders.filter(p => p.supplierCompanyId === currentCompany.id).length },
+    { id: 'supplier-quotes', label: 'My Quotations', icon: GitCompare, count: quotations.filter(q => q.supplierCompanyId === companyId).length },
+    { id: 'supplier-orders', label: 'Orders & POs', icon: Package, count: purchaseOrders.filter(p => p.supplierCompanyId === companyId).length },
     { id: 'supplier-profile', label: 'Company & Trade License', icon: Building2 },
     { id: 'supplier-messages', label: 'Messages', icon: MessageSquare },
   ];
@@ -55,6 +56,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView })
   ];
 
   const links = role === 'buyer' ? buyerLinks : role === 'supplier' ? supplierLinks : adminLinks;
+
+  if (!currentUser || !currentCompany) {
+    return null;
+  }
 
   return (
     <aside className="w-64 bg-white border-r border-slate-200 shrink-0 hidden md:flex flex-col justify-between p-4 min-h-[calc(100vh-6.5rem)]">

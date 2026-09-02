@@ -40,7 +40,7 @@ import { LoginPage } from './pages/auth/LoginPage';
 import { RegisterPage } from './pages/auth/RegisterPage';
 
 const AppContent: React.FC = () => {
-  const { role, setRole } = useAuth();
+  const { role, setRole, isAuthenticated } = useAuth();
   const [currentView, setCurrentView] = useState<string>('home');
   const [viewParams, setViewParams] = useState<any>({});
 
@@ -62,9 +62,26 @@ const AppContent: React.FC = () => {
     'register'
   ].includes(currentView);
 
+  // If user is logged out and tries to access private workspace, redirect to public login
+  if (!isAuthenticated && !isPublicPage) {
+    return (
+      <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-brand-500 selection:text-white">
+        <DemoRoleBar onNavigate={handleNavigate} />
+        <Navbar currentView={currentView} setCurrentView={handleNavigate} />
+        <main className="flex-1">
+          <LoginPage 
+            onSuccess={() => handleNavigate(role === 'supplier' ? 'supplier-dashboard' : role === 'admin' ? 'admin-dashboard' : 'buyer-dashboard')} 
+            onNavigateToRegister={() => handleNavigate('register')}
+          />
+        </main>
+        <Footer setCurrentView={handleNavigate} />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-brand-500 selection:text-white">
-      {/* Top Role Session & Database Bar */}
+      {/* Top Role Session & Database Bar (Only visible when logged in) */}
       <DemoRoleBar onNavigate={handleNavigate} />
 
       {/* Main Navbar */}

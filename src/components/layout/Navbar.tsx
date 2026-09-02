@@ -23,7 +23,7 @@ interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) => {
-  const { role, currentCompany, currentUser } = useAuth();
+  const { role, currentCompany, currentUser, isAuthenticated, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const isPublic = ['home', 'categories', 'suppliers', 'how-it-works', 'onboarding-guide', 'login', 'register'].includes(currentView);
@@ -97,7 +97,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
 
           {/* Right Action Buttons */}
           <div className="hidden sm:flex items-center gap-2.5">
-            {role === 'buyer' && (
+            {isAuthenticated && role === 'buyer' && (
               <Button
                 variant="primary"
                 size="sm"
@@ -109,7 +109,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
               </Button>
             )}
 
-            {role === 'supplier' && (
+            {isAuthenticated && role === 'supplier' && (
               <Button
                 variant="amber"
                 size="sm"
@@ -121,7 +121,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
               </Button>
             )}
 
-            {role === 'admin' && (
+            {isAuthenticated && role === 'admin' && (
               <Button
                 variant="outline"
                 size="sm"
@@ -133,17 +133,17 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
               </Button>
             )}
 
-            {isPublic ? (
+            {!isAuthenticated ? (
               <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
                 <button
                   onClick={() => setCurrentView('login')}
-                  className="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-700 hover:text-brand-600 hover:bg-slate-100 transition-colors"
+                  className="px-3.5 py-2 rounded-lg text-xs font-bold text-slate-700 hover:text-brand-600 hover:bg-slate-100 transition-colors"
                 >
                   Sign In
                 </button>
                 <button
                   onClick={() => setCurrentView('register')}
-                  className="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-900 text-white hover:bg-slate-800 transition-colors shadow-sm"
+                  className="px-4 py-2 rounded-lg text-xs font-bold bg-slate-900 text-white hover:bg-slate-800 transition-colors shadow-sm"
                 >
                   Sign Up
                 </button>
@@ -151,16 +151,23 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
             ) : (
               <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
                 <button
-                  onClick={() => setCurrentView('home')}
-                  className="text-xs font-semibold text-slate-500 hover:text-slate-800 px-2 py-1"
+                  onClick={() => {
+                    if (role === 'buyer') setCurrentView('buyer-dashboard');
+                    else if (role === 'supplier') setCurrentView('supplier-dashboard');
+                    else setCurrentView('admin-dashboard');
+                  }}
+                  className="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-800 transition-colors"
                 >
-                  Public Site
+                  My Workspace
                 </button>
                 <button
-                  onClick={() => setCurrentView('login')}
+                  onClick={() => {
+                    logout();
+                    setCurrentView('home');
+                  }}
                   className="px-2.5 py-1 text-xs font-bold text-red-600 hover:bg-red-50 rounded"
                 >
-                  Logout
+                  Sign Out
                 </button>
               </div>
             )}
@@ -221,16 +228,56 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
           </div>
 
           <div className="pt-2 border-t border-slate-100 flex flex-col gap-2">
-            <Button
-              variant="primary"
-              onClick={() => {
-                setCurrentView('create-rfq');
-                setMobileMenuOpen(false);
-              }}
-              leftIcon={<PlusCircle className="w-4 h-4" />}
-            >
-              Post an RFQ
-            </Button>
+            {!isAuthenticated ? (
+              <>
+                <Button
+                  variant="primary"
+                  onClick={() => {
+                    setCurrentView('login');
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full justify-center"
+                >
+                  Sign In to Account
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setCurrentView('register');
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full justify-center"
+                >
+                  Register New Account
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  variant="primary"
+                  onClick={() => {
+                    if (role === 'buyer') setCurrentView('buyer-dashboard');
+                    else if (role === 'supplier') setCurrentView('supplier-dashboard');
+                    else setCurrentView('admin-dashboard');
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full justify-center"
+                >
+                  Go to Workspace
+                </Button>
+                <Button
+                  variant="ghost"
+                  onClick={() => {
+                    logout();
+                    setCurrentView('home');
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full justify-center text-red-600 hover:bg-red-50"
+                >
+                  Sign Out
+                </Button>
+              </>
+            )}
           </div>
         </div>
       )}
