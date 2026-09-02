@@ -110,69 +110,75 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
         </Card>
       </div>
 
-      {/* 5 Received Supplier Quotations Showcase Cards or Dispatch Waiting State */}
+      {/* Received Supplier Quotations Showcase Cards */}
       {rfqQuotes.length > 0 ? (
-        <Card className="p-5 border-brand-200 bg-gradient-to-b from-brand-50/30 to-white">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+        <Card className="p-5 border-brand-200 bg-gradient-to-b from-brand-50/30 to-white space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-brand-100/60 pb-3.5">
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-extrabold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">
-                  {rfqQuotes.length === 5 ? '5/5 Complete Benchmark' : `${rfqQuotes.length} of 5 Quotes In`}
+                <span className="text-xs font-extrabold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full border border-emerald-200 flex items-center gap-1">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>{rfqQuotes.length} Quotation{rfqQuotes.length > 1 ? 's' : ''} Collected</span>
                 </span>
                 <h3 className="text-base font-bold text-slate-900">
-                  Received Supplier Quotations ({rfqQuotes.length})
+                  Received Supplier Quotations
                 </h3>
               </div>
-              <p className="text-xs text-slate-500">
-                Direct binding commercial offers from verified UAE stockists for your evaluation.
+              <p className="text-xs text-slate-500 mt-0.5">
+                Direct binding commercial offers from verified UAE stockists collected for RFQ #{rfq.rfqNumber}.
               </p>
             </div>
 
             <Button
               variant="primary"
-              size="sm"
               onClick={() => onNavigate('buyer-compare', { rfqId: rfq.id })}
-              rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
-              className="font-bold"
+              leftIcon={<GitCompare className="w-4 h-4 text-amber-300" />}
+              className="font-bold shadow-sm"
             >
-              Open Comparison Matrix
+              Compare All {rfqQuotes.length} Quotation{rfqQuotes.length > 1 ? 's' : ''} in Matrix
             </Button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
             {rfqQuotes.map((quote, idx) => (
               <div
                 key={quote.id}
-                className="bg-white p-3.5 rounded-xl border border-slate-200 hover:border-brand-500 shadow-subtle flex flex-col justify-between"
+                className="bg-white p-4 rounded-xl border border-slate-200 hover:border-brand-500 shadow-subtle flex flex-col justify-between space-y-3"
               >
                 <div>
                   <div className="flex items-center justify-between text-[10px] text-slate-400 mb-1">
-                    <span className="font-mono">{quote.quotationNumber}</span>
-                    <span className="font-bold text-emerald-700 bg-emerald-50 px-1 rounded">
-                      Quote {idx + 1} of {rfqQuotes.length}
+                    <span className="font-mono font-bold text-slate-700">{quote.quotationNumber}</span>
+                    <span className="font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
+                      Offer {idx + 1} of {rfqQuotes.length}
                     </span>
                   </div>
                   <h4 className="text-xs font-bold text-slate-900 line-clamp-1">{quote.supplierCompanyName}</h4>
                   <span className="text-[10px] text-slate-500 block">{quote.supplierZone || quote.supplierEmirate}</span>
 
-                  <div className="my-2 p-2 bg-slate-900 text-white rounded-lg">
-                    <span className="text-[9px] text-slate-400 block uppercase">Total (Incl. VAT)</span>
-                    <span className="text-sm font-extrabold">{formatAED(quote.grandTotalAED)}</span>
+                  <div className="my-2.5 p-2.5 bg-slate-900 text-white rounded-lg">
+                    <span className="text-[9px] text-slate-400 block uppercase font-medium">Quoted Total (5% VAT Incl.)</span>
+                    <span className="text-base font-extrabold font-mono">{formatAED(quote.grandTotalAED)}</span>
                   </div>
 
-                  <div className="text-[10px] text-slate-600 space-y-0.5">
-                    <p>Lead Time: <strong className="text-slate-800">{quote.leadTimeDisplay || quote.leadTimeDays + ' Day'}</strong></p>
-                    <p>Terms: <strong className="text-slate-800">{quote.paymentTerms}</strong></p>
+                  <div className="text-[11px] text-slate-600 space-y-1 bg-slate-50 p-2 rounded-lg border border-slate-100">
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Lead Time:</span>
+                      <strong className="text-slate-800">{quote.leadTimeDisplay || `${quote.leadTimeDays} Days`}</strong>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Payment:</span>
+                      <strong className="text-slate-800 truncate">{quote.paymentTerms || '30 Days'}</strong>
+                    </div>
                   </div>
                 </div>
 
                 <Button
-                  variant="outline"
+                  variant="primary"
                   size="sm"
-                  className="w-full mt-3 text-xs font-semibold"
+                  className="w-full text-xs font-bold"
                   onClick={() => onNavigate('buyer-compare', { rfqId: rfq.id })}
                 >
-                  Review Quote
+                  Compare in Matrix
                 </Button>
               </div>
             ))}

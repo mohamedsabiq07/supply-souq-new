@@ -127,9 +127,9 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
         />
       </div>
 
-      {/* Live Received Quotations Feed */}
+      {/* Grouped Quotations by Specific RFQ */}
       {myQuotes.length > 0 && (
-        <div className="space-y-4">
+        <div className="space-y-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
@@ -137,103 +137,120 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
               </div>
               <div>
                 <h3 className="text-lg font-bold text-slate-900">
-                  Live Quotations Received from Suppliers ({myQuotes.length})
+                  Quotations Collected by RFQ ({myQuotes.length} Total Offers)
                 </h3>
                 <p className="text-xs text-slate-500">
-                  Direct commercial proposals submitted by verified UAE stockists with full price breakdown and lead times.
+                  Supplier quotations are collected under each respective material RFQ for multi-vendor comparison and PO awarding.
                 </p>
               </div>
             </div>
-            {evaluatingRFQs.length > 0 && (
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={() => onNavigate('buyer-compare', { rfqId: evaluatingRFQs[0].id })}
-                leftIcon={<GitCompare className="w-4 h-4" />}
-                className="font-bold"
-              >
-                Compare Quotes Matrix
-              </Button>
-            )}
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {myQuotes.map((quote) => {
-              const matchedRFQ = myRFQs.find(r => r.id === quote.rfqId || r.rfqNumber === quote.rfqNumber);
+          <div className="space-y-5">
+            {myRFQs.filter(rfq => myQuotes.some(q => q.rfqId === rfq.id || q.rfqNumber === rfq.rfqNumber)).map((rfq) => {
+              const quotesForThisRFQ = myQuotes.filter(q => q.rfqId === rfq.id || q.rfqNumber === rfq.rfqNumber);
+              const lowestQuote = quotesForThisRFQ.length > 0 
+                ? [...quotesForThisRFQ].sort((a, b) => a.grandTotalAED - b.grandTotalAED)[0]
+                : null;
+
               return (
-                <div
-                  key={quote.id}
-                  className="bg-white rounded-2xl border border-slate-200 p-5 shadow-subtle hover:border-brand-500 transition-all space-y-4"
-                >
-                  <div className="flex items-start justify-between gap-3">
+                <div key={rfq.id} className="bg-white rounded-2xl border border-slate-200 p-5 shadow-subtle space-y-4">
+                  {/* RFQ Group Header */}
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3.5">
                     <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-mono font-bold bg-amber-50 text-amber-800 px-2 py-0.5 rounded border border-amber-200">
-                          {quote.quotationNumber}
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="font-mono font-bold text-xs bg-brand-50 text-brand-700 px-2.5 py-0.5 rounded border border-brand-200">
+                          RFQ #{rfq.rfqNumber}
                         </span>
-                        <span className="text-xs font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 flex items-center gap-1">
-                          <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                          <span>Submitted</span>
+                        <span className="text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 flex items-center gap-1">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                          <span>{quotesForThisRFQ.length} Quotation{quotesForThisRFQ.length > 1 ? 's' : ''} Collected</span>
                         </span>
-                        {matchedRFQ && (
-                          <span className="text-xs font-mono text-slate-500">
-                            for {matchedRFQ.rfqNumber}
-                          </span>
-                        )}
+                        <span className="text-xs text-slate-500 hidden sm:inline">
+                          • {rfq.category}
+                        </span>
                       </div>
-                      <h4 className="font-extrabold text-slate-900 text-sm">{quote.supplierCompanyName}</h4>
+                      <h4 className="text-base font-extrabold text-slate-900">{rfq.title}</h4>
                       <p className="text-xs text-slate-500">
-                        {quote.supplierZone || quote.supplierEmirate || 'UAE Verified Stockist'}
+                        Project: <strong className="text-slate-700">{rfq.projectName}</strong> • Delivery: <strong>{rfq.deliveryEmirate}</strong>
                       </p>
                     </div>
 
-                    <div className="text-right">
-                      <span className="text-[10px] text-slate-400 block font-medium">Quoted Total (Incl. 5% VAT)</span>
-                      <span className="text-lg sm:text-xl font-extrabold text-slate-900 font-mono">
-                        {formatAED(quote.grandTotalAED)}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-2 bg-slate-50 p-3 rounded-xl text-xs border border-slate-100">
-                    <div>
-                      <span className="text-slate-400 block text-[10px]">Lead Time</span>
-                      <strong className="text-slate-800 font-bold">{quote.leadTimeDisplay || `${quote.leadTimeDays} Days`}</strong>
-                    </div>
-                    <div>
-                      <span className="text-slate-400 block text-[10px]">Payment Terms</span>
-                      <strong className="text-slate-800 font-bold truncate block">{quote.paymentTerms || '30 Days'}</strong>
-                    </div>
-                    <div>
-                      <span className="text-slate-400 block text-[10px]">Materials</span>
-                      <strong className="text-slate-800 font-bold">{quote.items?.length || 0} items quoted</strong>
-                    </div>
-                  </div>
-
-                  {quote.notes && (
-                    <p className="text-xs text-slate-600 bg-amber-50/50 p-2.5 rounded-lg border border-amber-100 italic">
-                      "{quote.notes}"
-                    </p>
-                  )}
-
-                  <div className="flex items-center justify-between gap-2 pt-1">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => onNavigate('rfq-detail', { rfqId: quote.rfqId })}
-                      className="text-xs font-semibold"
-                    >
-                      View Full Details
-                    </Button>
                     <Button
                       variant="primary"
-                      size="sm"
-                      onClick={() => onNavigate('buyer-compare', { rfqId: quote.rfqId })}
-                      leftIcon={<Zap className="w-3.5 h-3.5 text-amber-300" />}
-                      className="text-xs font-bold"
+                      onClick={() => onNavigate('buyer-compare', { rfqId: rfq.id })}
+                      leftIcon={<GitCompare className="w-4 h-4 text-amber-300" />}
+                      className="font-bold shrink-0 shadow-sm"
                     >
-                      Award Purchase Order
+                      Compare {quotesForThisRFQ.length} Quotation{quotesForThisRFQ.length > 1 ? 's' : ''} in Matrix
                     </Button>
+                  </div>
+
+                  {/* List of Collected Quotations for this Specific RFQ */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
+                    {quotesForThisRFQ.map((quote) => {
+                      const isLowest = lowestQuote && quote.id === lowestQuote.id;
+                      return (
+                        <div
+                          key={quote.id}
+                          className={`p-4 rounded-xl border transition-all space-y-3 flex flex-col justify-between ${
+                            isLowest 
+                              ? 'bg-gradient-to-b from-emerald-50/50 to-white border-emerald-300 shadow-xs' 
+                              : 'bg-slate-50/50 border-slate-200 hover:border-slate-300'
+                          }`}
+                        >
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between gap-1">
+                              <span className="font-mono text-xs font-bold text-slate-600">{quote.quotationNumber}</span>
+                              {isLowest && (
+                                <span className="bg-emerald-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full">
+                                  Lowest Price
+                                </span>
+                              )}
+                            </div>
+                            <div>
+                              <h5 className="font-bold text-slate-900 text-xs truncate">{quote.supplierCompanyName}</h5>
+                              <p className="text-[11px] text-slate-500">{quote.supplierZone || quote.supplierEmirate || 'Verified Stockist'}</p>
+                            </div>
+                            <div className="pt-2 border-t border-slate-200/60">
+                              <span className="text-[10px] text-slate-400 block font-medium">Quoted Total (5% VAT Incl.)</span>
+                              <div className="text-base font-extrabold text-slate-900 font-mono">
+                                {formatAED(quote.grandTotalAED)}
+                              </div>
+                            </div>
+                            <div className="text-[11px] space-y-1 text-slate-600 pt-1">
+                              <div className="flex justify-between">
+                                <span className="text-slate-400">Lead Time:</span>
+                                <strong className="text-slate-800">{quote.leadTimeDisplay || `${quote.leadTimeDays} Days`}</strong>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-slate-400">Payment:</span>
+                                <strong className="text-slate-800 truncate">{quote.paymentTerms || '30 Days'}</strong>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2 pt-2 border-t border-slate-200/60">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => onNavigate('rfq-detail', { rfqId: rfq.id })}
+                              className="text-xs py-1 px-2 flex-1"
+                            >
+                              Details
+                            </Button>
+                            <Button
+                              variant="primary"
+                              size="sm"
+                              onClick={() => onNavigate('buyer-compare', { rfqId: rfq.id })}
+                              className="text-xs py-1 px-2 flex-1 font-bold"
+                            >
+                              Compare
+                            </Button>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               );
