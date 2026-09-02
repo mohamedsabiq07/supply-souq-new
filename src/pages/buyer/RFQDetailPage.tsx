@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAppData } from '../../context/AppDataContext';
 import { StatusBadge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
+import { BuyerCancelRFQModal } from '../../components/rfq/BuyerCancelRFQModal';
 import { Card, CardHeader, CardContent } from '../../components/ui/Card';
 import { formatDate, formatAED } from '../../lib/utils';
 import {
@@ -16,7 +17,8 @@ import {
   ShieldCheck,
   CheckCircle2,
   Store,
-  ArrowRight
+  ArrowRight,
+  Trash2
 } from 'lucide-react';
 
 interface RFQDetailPageProps {
@@ -25,7 +27,8 @@ interface RFQDetailPageProps {
 }
 
 export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate }) => {
-  const { rfqs, quotations, isRFQExtendedUnlocked } = useAppData();
+  const { rfqs, quotations, isRFQExtendedUnlocked, cancelRFQByBuyer } = useAppData();
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
 
   const rfq = rfqs.find(r => r.id === rfqId || r.rfqNumber === rfqId);
 
@@ -44,6 +47,11 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
   const isUnlocked = isRFQExtendedUnlocked(rfq.id);
   const visibleQuotes = isUnlocked ? rfqQuotes : rfqQuotes.slice(0, 5);
   const lockedCount = isUnlocked ? 0 : Math.max(0, rfqQuotes.length - 5);
+
+  const handleConfirmCancel = (rfqIdToCancel: string, reason: string, notes?: string) => {
+    cancelRFQByBuyer(rfqIdToCancel, reason, notes);
+    onNavigate('buyer-rfqs');
+  };
 
   return (
     <div className="space-y-6">
@@ -75,7 +83,19 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
         </div>
 
         <div className="flex items-center gap-2">
-          {rfqQuotes.length > 0 && (
+          {rfq.status !== 'cancelled' && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsCancelModalOpen(true)}
+              className="text-slate-600 hover:text-rose-600 hover:border-rose-300 hover:bg-rose-50/60"
+              leftIcon={<Trash2 className="w-4 h-4 text-rose-500" />}
+            >
+              Cancel / Remove RFQ
+            </Button>
+          )}
+
+          {rfqQuotes.length > 0 && rfq.status !== 'cancelled' && (
             <Button
               variant="primary"
               onClick={() => onNavigate('buyer-compare', { rfqId: rfq.id })}
@@ -293,6 +313,14 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
           </table>
         </CardContent>
       </Card>
+
+      {/* Buyer Cancel RFQ Modal */}
+      <BuyerCancelRFQModal
+        isOpen={isCancelModalOpen}
+        onClose={() => setIsCancelModalOpen(false)}
+        rfq={rfq}
+        onConfirmCancel={handleConfirmCancel}
+      />
     </div>
   );
 };

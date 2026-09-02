@@ -49,6 +49,8 @@ interface AppDataContextType {
   createRFQ: (newRFQ: Omit<RFQ, 'id' | 'rfqNumber' | 'createdAt' | 'updatedAt' | 'quotesCount' | 'invitedCount'>) => RFQ;
   updateRFQStatus: (rfqId: string, status: RFQStatus) => void;
   getRFQById: (rfqId: string) => RFQ | undefined;
+  cancelRFQByBuyer: (rfqId: string, reason: string, notes?: string) => void;
+  deleteRFQ: (rfqId: string) => void;
   declineRFQ: (rfqId: string, supplierCompanyId: string, supplierCompanyName: string, reason: string, notes?: string) => void;
   isRFQDeclinedBySupplier: (rfqId: string, supplierCompanyId: string) => boolean;
   
@@ -575,6 +577,54 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
     broadcastSync();
   };
 
+  const cancelRFQByBuyer = (rfqId: string, reason: string, notes?: string) => {
+    const targetRFQ = rfqs.find((r) => r.id === rfqId || r.rfqNumber === rfqId);
+    if (!targetRFQ) return;
+
+    setRfqs((prev) =>
+      prev.map((r) =>
+        r.id === targetRFQ.id
+          ? { ...r, status: 'cancelled' as RFQStatus, updatedAt: new Date().toISOString() }
+          : r
+      )
+    );
+
+    // Notify all quoting or targeted suppliers
+    const relatedQuotes = quotations.filter((q) => q.rfqId === targetRFQ.id || q.rfqNumber === targetRFQ.rfqNumber);
+    const notifiedCompanyIds = new Set<string>();
+
+    relatedQuotes.forEach((quote) => {
+      if (!notifiedCompanyIds.has(quote.supplierCompanyId)) {
+        notifiedCompanyIds.add(quote.supplierCompanyId);
+        const cancelAlertMsg: Message = {
+          id: `msg-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+          rfqId: targetRFQ.id,
+          rfqNumber: targetRFQ.rfqNumber,
+          senderId: targetRFQ.buyerCompanyId,
+          senderName: targetRFQ.buyerCompanyName,
+          senderCompanyId: targetRFQ.buyerCompanyId,
+          senderCompanyName: targetRFQ.buyerCompanyName,
+          senderRole: 'buyer',
+          recipientCompanyId: quote.supplierCompanyId,
+          recipientCompanyName: quote.supplierCompanyName,
+          messageText: `[RFQ Cancelled by Contractor] RFQ #${targetRFQ.rfqNumber} ("${targetRFQ.title}") has been cancelled by the buyer. Reason: ${reason}${notes ? ` - "${notes}"` : ''}`,
+          createdAt: new Date().toISOString(),
+          isRead: false,
+        };
+        setMessages((prev) => [cancelAlertMsg, ...prev]);
+      }
+    });
+
+    supabaseService.updateRFQStatus(targetRFQ.id, 'cancelled').catch(console.error);
+    broadcastSync();
+  };
+
+  const deleteRFQ = (rfqId: string) => {
+    setRfqs((prev) => prev.filter((r) => r.id !== rfqId && r.rfqNumber !== rfqId));
+    setQuotations((prev) => prev.filter((q) => q.rfqId !== rfqId && q.rfqNumber !== rfqId));
+    broadcastSync();
+  };
+
   const submitQuotation = (quoteData: Omit<Quotation, 'id' | 'quotationNumber' | 'submittedAt' | 'status'>): Quotation => {
     const randomNum = Math.floor(10000 + Math.random() * 90000);
     const targetRFQ = rfqs.find((r) => r.id === quoteData.rfqId || r.rfqNumber === quoteData.rfqId);
@@ -811,6 +861,8 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
         createRFQ,
         updateRFQStatus,
         getRFQById,
+        cancelRFQByBuyer,
+        deleteRFQ,
         declineRFQ,
         isRFQDeclinedBySupplier,
         submitQuotation,

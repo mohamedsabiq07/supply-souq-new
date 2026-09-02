@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useAppData } from '../../context/AppDataContext';
 import { StatWidget } from '../../components/ui/StatWidget';
 import { RFQCard } from '../../components/rfq/RFQCard';
+import { DeclineRFQModal } from '../../components/rfq/DeclineRFQModal';
 import { Button } from '../../components/ui/Button';
 import { Card, CardHeader, CardContent } from '../../components/ui/Card';
 import { StatusBadge } from '../../components/ui/Badge';
 import { formatAED, formatDate } from '../../lib/utils';
+import { RFQ } from '../../types';
 import {
   Store,
   FileText,
@@ -25,9 +27,13 @@ interface SupplierDashboardProps {
 
 export const SupplierDashboard: React.FC<SupplierDashboardProps> = ({ onNavigate }) => {
   const { currentCompany } = useAuth();
-  const { rfqs, quotations, purchaseOrders } = useAppData();
+  const { rfqs, quotations, purchaseOrders, isRFQDeclinedBySupplier, declineRFQ } = useAppData();
+  const [targetDecliningRFQ, setTargetDecliningRFQ] = useState<RFQ | null>(null);
 
-  const matchingRFQs = rfqs.filter(r => r.status === 'published' || r.status === 'receiving_quotes');
+  const matchingRFQs = rfqs.filter(r => 
+    (r.status === 'published' || r.status === 'receiving_quotes') &&
+    !isRFQDeclinedBySupplier(r.id, currentCompany.id)
+  );
   const myQuotations = quotations.filter(q => q.supplierCompanyId === currentCompany.id);
   const myOrders = purchaseOrders.filter(p => p.supplierCompanyId === currentCompany.id);
   const isPending = currentCompany.verificationStatus === 'pending';
@@ -140,10 +146,21 @@ export const SupplierDashboard: React.FC<SupplierDashboardProps> = ({ onNavigate
               isSupplierView={true}
               onView={(r) => onNavigate('rfq-detail', { rfqId: r.id })}
               onQuote={(r) => onNavigate('submit-quote', { rfqId: r.id })}
+              onDecline={(r) => setTargetDecliningRFQ(r)}
             />
           ))}
         </div>
       </div>
+
+      {/* Decline RFQ Modal */}
+      <DeclineRFQModal
+        isOpen={!!targetDecliningRFQ}
+        onClose={() => setTargetDecliningRFQ(null)}
+        rfq={targetDecliningRFQ}
+        onConfirmDecline={(rfqId, reason, notes) => {
+          declineRFQ(rfqId, currentCompany.id, currentCompany.name, reason, notes);
+        }}
+      />
 
       {/* Orders to Fulfill */}
       <Card>

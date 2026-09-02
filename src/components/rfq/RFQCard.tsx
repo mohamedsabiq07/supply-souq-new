@@ -12,6 +12,7 @@ interface RFQCardProps {
   onCompare?: (rfq: RFQ) => void;
   onQuote?: (rfq: RFQ) => void;
   onDecline?: (rfq: RFQ) => void;
+  onCancelRFQ?: (rfq: RFQ) => void;
   isDeclined?: boolean;
   declineReason?: string;
   isSupplierView?: boolean;
@@ -23,6 +24,7 @@ export const RFQCard: React.FC<RFQCardProps> = ({
   onCompare,
   onQuote,
   onDecline,
+  onCancelRFQ,
   isDeclined = false,
   declineReason,
   isSupplierView = false,
@@ -152,19 +154,35 @@ export const RFQCard: React.FC<RFQCardProps> = ({
               </div>
             )
           ) : (
-            rfq.quotesCount > 0 ? (
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={() => onCompare && onCompare(rfq)}
-                leftIcon={<GitCompare className="w-4 h-4" />}
-                className="bg-brand-600 hover:bg-brand-700"
-              >
-                Compare {Math.min(rfq.quotesCount, 5)} Quotation{rfq.quotesCount > 1 ? 's' : ''}
-              </Button>
-            ) : (
-              <span className="text-xs text-slate-400 italic">Waiting for supplier bids...</span>
-            )
+            <div className="flex items-center gap-2">
+              {rfq.status !== 'cancelled' && onCancelRFQ && (
+                <button
+                  type="button"
+                  onClick={() => onCancelRFQ(rfq)}
+                  className="text-xs text-slate-400 hover:text-rose-600 transition-colors px-2 py-1"
+                  title="Cancel this RFQ"
+                >
+                  Cancel
+                </button>
+              )}
+              {rfq.quotesCount > 0 && rfq.status !== 'cancelled' ? (
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={() => onCompare && onCompare(rfq)}
+                  leftIcon={<GitCompare className="w-4 h-4" />}
+                  className="bg-brand-600 hover:bg-brand-700"
+                >
+                  Compare {Math.min(rfq.quotesCount, 5)} Quotation{rfq.quotesCount > 1 ? 's' : ''}
+                </Button>
+              ) : rfq.status === 'cancelled' ? (
+                <span className="text-xs font-bold text-rose-600 bg-rose-50 px-2.5 py-1 rounded border border-rose-200">
+                  Cancelled
+                </span>
+              ) : (
+                <span className="text-xs text-slate-400 italic">Waiting for bids...</span>
+              )}
+            </div>
           )}
         </div>
       </CardContent>

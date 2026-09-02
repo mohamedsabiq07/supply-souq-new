@@ -3,88 +3,81 @@ import { RFQ } from '../../types';
 import { Modal } from '../ui/Modal';
 import { Button } from '../ui/Button';
 import { 
-  XCircle, 
-  AlertCircle, 
-  PackageX, 
-  Clock, 
-  MapPin, 
-  BadgeDollarSign, 
-  ShieldAlert, 
-  FileQuestion, 
-  TrendingDown
+  Trash2, 
+  AlertTriangle, 
+  Building, 
+  Layers, 
+  DollarSign, 
+  CopyX, 
+  HelpCircle,
+  FileEdit
 } from 'lucide-react';
 
-interface DeclineRFQModalProps {
+interface BuyerCancelRFQModalProps {
   isOpen: boolean;
   onClose: () => void;
   rfq: RFQ | null;
-  onConfirmDecline: (rfqId: string, reason: string, notes?: string) => void;
+  onConfirmCancel: (rfqId: string, reason: string, notes?: string) => void;
 }
 
-export const DECLINE_REASONS = [
+export const BUYER_CANCEL_REASONS = [
   {
-    id: 'out_of_stock',
-    label: 'Out of Stock / Inventory Depleted in UAE Warehouse',
-    description: 'Requested cable sizes, breakers, or containment items are currently not in local stock.',
-    icon: PackageX,
+    id: 'project_postponed',
+    label: 'Project Postponed or Cancelled by Client / Consultant',
+    description: 'The overall site project timeline has been pushed back or put on hold.',
+    icon: Building,
   },
   {
-    id: 'brand_unavailable',
-    label: 'Brand / Spec Not Stocked (e.g. Ducab, Schneider, Furse)',
-    description: 'We do not distribute the consultant-approved brand specified in this RFQ.',
-    icon: ShieldAlert,
+    id: 'procured_offline',
+    label: 'Procured Directly / Offline from Existing Stockist',
+    description: 'Material requirement was fulfilled via existing credit account or direct warehouse pickup.',
+    icon: DollarSign,
   },
   {
-    id: 'lead_time',
-    label: 'Delivery Lead Time Too Tight / Urgent Schedule',
-    description: 'Cannot manufacture or deliver to job site within the required delivery date.',
-    icon: Clock,
+    id: 'spec_changed',
+    label: 'Material Specifications or BOQ Changed (Reissuing RFQ)',
+    description: 'Cable sizes, breaker ratings, or quantities changed. A revised RFQ will be created.',
+    icon: FileEdit,
   },
   {
-    id: 'location_limit',
-    label: 'Delivery Site Outside Standard Logistics Area',
-    description: 'Project location is outside our standard Dubai, Sharjah, or Northern Emirates transport routes.',
-    icon: MapPin,
+    id: 'budget_reallocated',
+    label: 'Budget / Project Funding Reallocated',
+    description: 'Procurement budget for this package has been adjusted or cancelled.',
+    icon: Layers,
   },
   {
-    id: 'below_mov',
-    label: 'Order Quantity Below Minimum Order Value (MOV)',
-    description: 'Total volume is below our wholesale dispatch threshold.',
-    icon: TrendingDown,
+    id: 'duplicate_mistake',
+    label: 'Duplicate RFQ Created by Mistake',
+    description: 'Accidentally submitted duplicate requirement.',
+    icon: CopyX,
   },
   {
-    id: 'payment_terms',
-    label: 'Requested Credit / Payment Terms Incompatible',
-    description: 'Unable to support requested 30/60 days credit or milestone structure.',
-    icon: BadgeDollarSign,
-  },
-  {
-    id: 'price_volatility',
-    label: 'Copper / Raw Material Price Volatility',
-    description: 'Rapid LME copper/metal fluctuations prevent holding fixed prices at this time.',
-    icon: AlertCircle,
+    id: 'pricing_high',
+    label: 'Quotation Prices Exceeded Target Project Budget',
+    description: 'Received quotes were above the commercial target cost.',
+    icon: AlertTriangle,
   },
   {
     id: 'other',
-    label: 'Other Commercial or Technical Reason',
-    description: 'Specific reason detailed in remarks below.',
-    icon: FileQuestion,
+    label: 'Other Reason',
+    description: 'Specify your custom reason in the text box below.',
+    icon: HelpCircle,
   },
 ];
 
-export const DeclineRFQModal: React.FC<DeclineRFQModalProps> = ({
+export const BuyerCancelRFQModal: React.FC<BuyerCancelRFQModalProps> = ({
   isOpen,
   onClose,
   rfq,
-  onConfirmDecline,
+  onConfirmCancel,
 }) => {
-  const [selectedReason, setSelectedReason] = useState<string>(DECLINE_REASONS[0].label);
+  const [selectedReason, setSelectedReason] = useState<string>(BUYER_CANCEL_REASONS[0].label);
   const [customNotes, setCustomNotes] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   if (!rfq) return null;
 
-  const isOther = selectedReason === 'Other Commercial or Technical Reason' || selectedReason.startsWith('Other');
+  const isOther = selectedReason === 'Other Reason' || selectedReason.startsWith('Other');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -94,7 +87,7 @@ export const DeclineRFQModal: React.FC<DeclineRFQModalProps> = ({
     setIsSubmitting(true);
     setTimeout(() => {
       const finalReason = isOther ? `Other: ${customNotes.trim()}` : selectedReason;
-      onConfirmDecline(rfq.id, finalReason, customNotes.trim() || undefined);
+      onConfirmCancel(rfq.id, finalReason, customNotes.trim() || undefined);
       setIsSubmitting(false);
       onClose();
     }, 200);
@@ -104,29 +97,29 @@ export const DeclineRFQModal: React.FC<DeclineRFQModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Decline RFQ / Pass on Quoting"
+      title="Cancel & Remove RFQ"
       maxWidth="lg"
     >
       <form onSubmit={handleSubmit} className="space-y-5">
-        <div className="p-3.5 bg-amber-50 rounded-xl border border-amber-200 space-y-1">
+        <div className="p-3.5 bg-rose-50 rounded-xl border border-rose-200 space-y-1">
           <div className="flex items-center justify-between text-xs">
-            <span className="font-mono font-bold text-amber-900 bg-amber-100/80 px-2 py-0.5 rounded border border-amber-300">
+            <span className="font-mono font-bold text-rose-900 bg-rose-100/80 px-2 py-0.5 rounded border border-rose-300">
               {rfq.rfqNumber}
             </span>
-            <span className="text-amber-800 font-semibold">{rfq.deliveryEmirate}</span>
+            <span className="text-rose-800 font-semibold">{rfq.deliveryEmirate}</span>
           </div>
           <h4 className="text-sm font-bold text-slate-900">{rfq.title}</h4>
           <p className="text-xs text-slate-600">
-            Project: <strong className="text-slate-800">{rfq.projectName}</strong> • {rfq.items?.length || 0} Material Items
+            Project: <strong className="text-slate-800">{rfq.projectName}</strong> • {rfq.items?.length || 0} Material Items • {rfq.quotesCount} Received Quotes
           </p>
         </div>
 
         <div className="space-y-2">
           <label className="text-xs font-bold text-slate-900 block">
-            Select Reason for Declining this RFQ:
+            Why do you want to cancel / remove this RFQ?
           </label>
           <div className="grid grid-cols-1 gap-2 max-h-[300px] overflow-y-auto pr-1">
-            {DECLINE_REASONS.map((opt) => {
+            {BUYER_CANCEL_REASONS.map((opt) => {
               const Icon = opt.icon;
               const isSelected = selectedReason === opt.label;
               return (
@@ -141,7 +134,7 @@ export const DeclineRFQModal: React.FC<DeclineRFQModalProps> = ({
                 >
                   <input
                     type="radio"
-                    name="declineReason"
+                    name="buyerCancelReason"
                     checked={isSelected}
                     onChange={() => setSelectedReason(opt.label)}
                     className="mt-1 text-rose-600 focus:ring-rose-500 shrink-0"
@@ -161,17 +154,17 @@ export const DeclineRFQModal: React.FC<DeclineRFQModalProps> = ({
           </div>
         </div>
 
-        {/* Additional Optional Note */}
+        {/* Custom text for 'Other' or additional remarks */}
         <div className="space-y-1">
           <label className="text-xs font-semibold text-slate-700 block">
-            {isOther ? 'Please specify your custom reason *' : 'Additional Remarks / Notes for Buyer (Optional):'}
+            {isOther ? 'Please explain your reason *' : 'Additional Notes (Optional):'}
           </label>
           <textarea
             rows={2}
             required={isOther}
             value={customNotes}
             onChange={(e) => setCustomNotes(e.target.value)}
-            placeholder={isOther ? 'Type your specific reason here...' : 'e.g. We can supply alternative 4Cx25mm² Oman Cables from stock if acceptable to consultant...'}
+            placeholder={isOther ? 'Type your specific cancellation reason here...' : 'Optional details or notes...'}
             className="w-full p-2.5 rounded-lg border border-slate-200 text-xs focus:ring-2 focus:ring-rose-500 focus:outline-none"
           />
         </div>
@@ -184,7 +177,7 @@ export const DeclineRFQModal: React.FC<DeclineRFQModalProps> = ({
             size="sm"
             onClick={onClose}
           >
-            Cancel & Keep in Inbox
+            Keep RFQ Active
           </Button>
 
           <Button
@@ -193,9 +186,9 @@ export const DeclineRFQModal: React.FC<DeclineRFQModalProps> = ({
             size="sm"
             disabled={isSubmitting || (isOther && !customNotes.trim())}
             className="bg-rose-600 hover:bg-rose-700 text-white font-bold border-rose-600 shadow-sm"
-            leftIcon={<XCircle className="w-4 h-4" />}
+            leftIcon={<Trash2 className="w-4 h-4" />}
           >
-            {isSubmitting ? 'Declining...' : 'Confirm & Decline RFQ'}
+            {isSubmitting ? 'Cancelling...' : 'Confirm & Cancel RFQ'}
           </Button>
         </div>
       </form>

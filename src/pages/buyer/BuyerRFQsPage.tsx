@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useAppData } from '../../context/AppDataContext';
 import { RFQCard } from '../../components/rfq/RFQCard';
+import { BuyerCancelRFQModal } from '../../components/rfq/BuyerCancelRFQModal';
 import { Button } from '../../components/ui/Button';
 import { PlusCircle, Search } from 'lucide-react';
+import { RFQ } from '../../types';
 
 interface BuyerRFQsPageProps {
   onNavigate: (view: string, params?: any) => void;
@@ -11,9 +13,10 @@ interface BuyerRFQsPageProps {
 
 export const BuyerRFQsPage: React.FC<BuyerRFQsPageProps> = ({ onNavigate }) => {
   const { currentCompany } = useAuth();
-  const { rfqs } = useAppData();
+  const { rfqs, cancelRFQByBuyer } = useAppData();
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [targetCancellingRFQ, setTargetCancellingRFQ] = useState<RFQ | null>(null);
 
   const myRFQs = rfqs.filter(r => r.buyerCompanyId === currentCompany.id);
 
@@ -54,13 +57,13 @@ export const BuyerRFQsPage: React.FC<BuyerRFQsPageProps> = ({ onNavigate }) => {
         </div>
 
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 text-xs">
-          {['all', 'published', 'receiving_quotes', 'evaluating', 'awarded'].map((status) => (
+          {['all', 'published', 'receiving_quotes', 'evaluating', 'awarded', 'cancelled'].map((status) => (
             <button
               key={status}
               onClick={() => setStatusFilter(status)}
               className={`px-3 py-1.5 rounded-lg font-semibold transition-all whitespace-nowrap capitalize ${
                 statusFilter === status
-                  ? 'bg-slate-900 text-white'
+                  ? 'bg-slate-900 text-white font-bold'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
@@ -78,6 +81,7 @@ export const BuyerRFQsPage: React.FC<BuyerRFQsPageProps> = ({ onNavigate }) => {
               rfq={rfq}
               onView={(r) => onNavigate('rfq-detail', { rfqId: r.id })}
               onCompare={(r) => onNavigate('buyer-compare', { rfqId: r.id })}
+              onCancelRFQ={(r) => setTargetCancellingRFQ(r)}
             />
           ))}
         </div>
@@ -87,6 +91,16 @@ export const BuyerRFQsPage: React.FC<BuyerRFQsPageProps> = ({ onNavigate }) => {
           <p className="text-xs text-slate-500 mt-1">Try adjusting your search or create your first material requirement.</p>
         </div>
       )}
+
+      {/* Buyer Cancel RFQ Modal */}
+      <BuyerCancelRFQModal
+        isOpen={!!targetCancellingRFQ}
+        onClose={() => setTargetCancellingRFQ(null)}
+        rfq={targetCancellingRFQ}
+        onConfirmCancel={(rfqId, reason, notes) => {
+          cancelRFQByBuyer(rfqId, reason, notes);
+        }}
+      />
     </div>
   );
 };
