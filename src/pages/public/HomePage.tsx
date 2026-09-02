@@ -74,14 +74,14 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             </div>
 
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
-              Source Electrical & MEP Supplies.<br />
+              Source UAE Electrical Materials.<br />
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-400 via-amber-200 to-sky-300">
                 Post Requirements. Compare 5 Quotes. Save 18%.
               </span>
             </h1>
 
             <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
-              Connect directly with verified material stockists. Upload your material list or bill in 30 seconds to receive competitive wholesale quotations for cables, switchgear, LED lighting, plumbing, and HVAC in 24 hours.
+              Connect directly with verified electrical stockists. Upload your material list or bill in 30 seconds to receive competitive wholesale quotations for LV/MV cables, switchgear, LED lighting, containment, and earthing in 24 hours.
             </p>
 
             {/* Main Action CTAs */}

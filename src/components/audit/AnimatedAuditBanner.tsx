@@ -59,14 +59,6 @@ export const auditPrompts: AuditPrompt[] = [
   },
   {
     id: 5,
-    pill: 'Plumbing & Drainage Audit',
-    savingsText: 'Average Plumbing Savings: 17.8%',
-    headline: 'Paying too much for Aquatherm PPR pipes or Terrain UPVC drainage fittings?',
-    description: 'Scan your last plumbing and sanitary materials invoice. We compare your fitting and valve costs with direct master distributors in Dubai and Ajman.',
-    categoryIcon: Droplets
-  },
-  {
-    id: 6,
     pill: 'Containment Price Check',
     savingsText: 'Average Containment Savings: 21.0%',
     headline: 'Are your galvanized GI cable trays and Decoduct PVC conduits costing you extra margin?',
@@ -74,36 +66,28 @@ export const auditPrompts: AuditPrompt[] = [
     categoryIcon: ShieldCheck
   },
   {
+    id: 6,
+    pill: 'Fire-Resistant Cable Audit',
+    savingsText: 'Average FP200 Savings: 23.5%',
+    headline: 'Overpaying on Civil Defense Approved FP200 Gold & CWZ fire-rated cables?',
+    description: 'Upload your fire alarm & emergency wiring bill. We benchmark your 2C x 1.5mm² and 4C x 2.5mm² fire-resistant cables against direct factory importers in UAE.',
+    categoryIcon: Zap
+  },
+  {
     id: 7,
-    pill: 'HVAC Materials Scanner',
-    savingsText: 'Average HVAC Savings: 19.1%',
-    headline: 'Getting billed excessive rates on GI duct sheets and R410a refrigerant gases?',
-    description: 'Upload your HVAC contractor material invoice. We benchmark your seamless copper coils and galvanized sheet metal against Ras Al Khor wholesale yards.',
-    categoryIcon: Wind
+    pill: 'Earthing & Lightning Audit',
+    savingsText: 'Average Earthing Savings: 20.8%',
+    headline: 'Are your copperbonded earth rods and bare copper tape marked up excessively?',
+    description: 'Drop in your earthing and lightning protection invoice. We compare your Furse / Wallis copper rods and Cadweld molds against master electrical stockists.',
+    categoryIcon: Zap
   },
   {
     id: 8,
-    pill: 'Construction Chemicals Audit',
-    savingsText: 'Average Chemical Savings: 16.5%',
-    headline: 'Wondering if you are overpaying for Sika, Fosroc, or Bostik construction sealants?',
-    description: 'Drop in your chemical and waterproofing material receipts. We check your SikaTop-107 and PU sausage rates against bulk stockists in Al Quoz 4.',
-    categoryIcon: FlaskConical
-  },
-  {
-    id: 9,
-    pill: 'Site Consumables Audit',
-    savingsText: 'Average Consumables Savings: 25.0%',
-    headline: 'Buying site PPE, drill fasteners & unistruts at high retail hardware store prices?',
-    description: 'Audit your site consumable invoices for safety boots, helmets, anchor bolts, and unistrut channels against bulk Deira & Mussafah wholesale trade houses.',
-    categoryIcon: HardHat
-  },
-  {
-    id: 10,
-    pill: '360° MEP BOQ Audit',
-    savingsText: 'Total Project Savings: AED 14,200+',
-    headline: 'Want a complete 360° cost audit of your MEP subcontractor material bill?',
-    description: 'Upload your complete Excel or PDF material schedule. We verify all electrical, mechanical, plumbing, and containment line items within 30 seconds for free.',
-    categoryIcon: FileSpreadsheet
+    pill: 'Solar & Inverter Price Scan',
+    savingsText: 'Average Solar Savings: 17.6%',
+    headline: 'Wondering if your solar PV DC cables and 3-phase string inverters are fairly priced?',
+    description: 'Scan your solar electrical equipment receipt. We check TÜV certified 4mm²/6mm² DC solar cables and surge arresters against regional distributor pricing.',
+    categoryIcon: Zap
   }
 ];
 

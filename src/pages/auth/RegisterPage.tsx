@@ -24,15 +24,16 @@ interface RegisterPageProps {
 }
 
 const CATEGORY_OPTIONS = [
-  'LV & MV Power Cables & Wires',
-  'Switchgear, MCBs & Distribution Boards',
-  'Commercial LED Lighting & Fixtures',
+  'LV Power Cables & Building Wires',
+  'MV & HV Power Cables (11kV - 132kV)',
+  'Switchgear, DBs & Circuit Breakers',
   'Conduits, Trays & Cable Containment',
-  'PPR, PEX & Copper Piping & Fittings',
-  'Drainage, PVC Pipes & Sanitary Fixtures',
-  'HVAC Ducting, Split Units & Diffusers',
-  'Construction Chemicals, Sealants & Sika',
-  'Safety Helmets, Boots & Fasteners'
+  'Fire-Resistant, LSZH & Instrument Cables',
+  'Earthing & Lightning Protection Systems',
+  'Commercial, Industrial & Emergency Lighting',
+  'Wiring Accessories, Sockets & Industrial Plugs',
+  'Transformers, Substations & RMU Units',
+  'Solar PV Equipment, Inverters & UPS Power'
 ];
 
 export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigateToLogin }) => {

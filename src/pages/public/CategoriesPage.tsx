@@ -8,7 +8,15 @@ export const CategoriesPage: React.FC<{ onPostRFQ: () => void }> = ({ onPostRFQ 
   const { categories } = useAppData();
   const [selectedVertical, setSelectedVertical] = useState('All');
 
-  const verticals = ['All', 'Construction', 'Safety & Tools', 'Facility Management'];
+  const verticals = [
+    'All',
+    'Power & Cables',
+    'Switchgear & DBs',
+    'Containment & Conduits',
+    'Lighting & Controls',
+    'Earthing & Lightning',
+    'Power Equipment'
+  ];
 
   const filteredCategories = selectedVertical === 'All'
     ? categories
@@ -18,14 +26,14 @@ export const CategoriesPage: React.FC<{ onPostRFQ: () => void }> = ({ onPostRFQ 
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <span className="text-xs font-bold text-brand-600 uppercase tracking-wider">UAE Procurement Directory</span>
-          <h1 className="text-3xl font-extrabold text-slate-900 mt-1">Material Categories & Verticals</h1>
+          <span className="text-xs font-bold text-brand-600 uppercase tracking-wider">UAE Electrical Materials Directory</span>
+          <h1 className="text-3xl font-extrabold text-slate-900 mt-1">Electrical Materials & Cable Categories</h1>
           <p className="text-sm text-slate-500 mt-1">
-            Browse structured material categories available for instant multi-vendor RFQ distribution.
+            Browse structured electrical material categories and subcategories for multi-stockist RFQ distribution.
           </p>
         </div>
         <Button variant="primary" onClick={onPostRFQ} leftIcon={<Zap className="w-4 h-4 text-amber-300" />}>
-          Post RFQ in Category
+          Post Electrical RFQ
         </Button>
       </div>
 

@@ -67,7 +67,7 @@ export interface UserProfile {
 
 export interface Category {
   id: string;
-  vertical: 'Facility Management' | 'Construction' | 'Hygiene & Cleaning' | 'Safety & Tools';
+  vertical: 'Power & Cables' | 'Switchgear & DBs' | 'Containment & Conduits' | 'Lighting & Controls' | 'Earthing & Lightning' | 'Power Equipment';
   name: string;
   slug: string;
   description: string;

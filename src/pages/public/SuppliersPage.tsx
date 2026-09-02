@@ -22,18 +22,19 @@ export const SuppliersPage: React.FC<{ onRequestQuote: (supplier?: any, category
   const allSuppliers = companies.filter(c => c.companyType === 'supplier');
 
   const categories = [
-    { id: 'All', label: 'All Categories', count: allSuppliers.length },
-    { id: 'Electrical', label: '⚡ Electrical', count: allSuppliers.filter(s => s.categories.includes('Electrical')).length, desc: 'Ducab LV/MV cables, Schneider MCBs, 60x60 LED panels, GI cable containment' },
-    { id: 'Plumbing', label: '🚿 Plumbing & Sanitary', count: allSuppliers.filter(s => s.categories.includes('Plumbing')).length, desc: 'PPR PN20 water pipes, UPVC drainage, valves, pumps & sanitary fittings' },
-    { id: 'HVAC', label: '❄️ HVAC & Mechanical', count: allSuppliers.filter(s => s.categories.includes('HVAC')).length, desc: 'Galvanized ductwork, VRF copper piping, R410a refrigerants, thermal insulation' },
-    { id: 'Chemicals', label: '🧪 Chemicals & Adhesives', count: allSuppliers.filter(s => s.categories.includes('Chemicals')).length, desc: 'PU sealants, waterproofing slurries, epoxy screeds & industrial cleaning chemicals' },
-    { id: 'Safety & PPE', label: '🦺 Safety, PPE & Other', count: allSuppliers.filter(s => s.categories.includes('Safety & PPE') || s.categories.includes('Other')).length, desc: 'Site PPE, safety helmets, power tools, fasteners & consumables' },
+    { id: 'All', label: 'All Electrical', count: allSuppliers.length },
+    { id: 'LV Power Cables & Building Wires', label: '⚡ LV & MV Cables', count: allSuppliers.filter(s => s.categories.some(c => c.toLowerCase().includes('cable') || c.toLowerCase().includes('wire'))).length, desc: 'Ducab/Oman 0.6/1kV armoured cables, building wires, flexible rubber cords' },
+    { id: 'Switchgear, DBs & Circuit Breakers', label: '🔌 Switchgear & DBs', count: allSuppliers.filter(s => s.categories.some(c => c.toLowerCase().includes('switchgear') || c.toLowerCase().includes('mcb') || c.toLowerCase().includes('db'))).length, desc: 'MDB, SMDB, 3-phase DBs, Schneider & ABB MCBs, MCCBs, ACBs & isolators' },
+    { id: 'Conduits, Trays & Cable Containment', label: '🛡️ Trays & Conduits', count: allSuppliers.filter(s => s.categories.some(c => c.toLowerCase().includes('containment') || c.toLowerCase().includes('tray') || c.toLowerCase().includes('conduit'))).length, desc: 'HDG perforated cable trays, cable ladders, Decoduct PVC & GI conduits' },
+    { id: 'Commercial, Industrial & Emergency Lighting', label: '💡 LED Lighting', count: allSuppliers.filter(s => s.categories.some(c => c.toLowerCase().includes('lighting') || c.toLowerCase().includes('led'))).length, desc: '60x60 LED panels, downlights, UFO high bays, Civil Defense exit lights' },
+    { id: 'Earthing & Lightning Protection Systems', label: '⚡ Earthing & Lightning', count: allSuppliers.filter(s => s.categories.some(c => c.toLowerCase().includes('earth') || c.toLowerCase().includes('lightning'))).length, desc: 'Copperbonded earth rods, pure copper tape, inspection pits, Cadweld' },
+    { id: 'Solar PV Equipment, Inverters & UPS Power', label: '☀️ Solar & Power Backup', count: allSuppliers.filter(s => s.categories.some(c => c.toLowerCase().includes('solar') || c.toLowerCase().includes('ups') || c.toLowerCase().includes('generator'))).length, desc: 'Solar DC cables, PV inverters, combiner boxes, industrial UPS & generators' },
   ];
 
   const emirates = ['All', 'Dubai', 'Sharjah', 'Ajman'];
 
   const filteredSuppliers = allSuppliers.filter(s => {
-    const matchesCategory = selectedCategory === 'All' || s.categories.includes(selectedCategory) || (selectedCategory === 'Safety & PPE' && s.categories.includes('Other'));
+    const matchesCategory = selectedCategory === 'All' || s.categories.includes(selectedCategory) || s.categories.some(c => c.toLowerCase().includes(selectedCategory.toLowerCase()));
     const matchesEmirate = emirateFilter === 'All' || s.emirate === emirateFilter;
     const matchesSearch = s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       s.categories.some(c => c.toLowerCase().includes(searchTerm.toLowerCase())) ||
@@ -52,9 +53,9 @@ export const SuppliersPage: React.FC<{ onRequestQuote: (supplier?: any, category
           <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200 w-fit mb-2">
             <ShieldCheck className="w-4 h-4 text-emerald-600" /> 100% UAE DET Commercial Trade License Verified
           </div>
-          <h1 className="text-3xl font-extrabold text-slate-900">Verified UAE Suppliers Directory</h1>
+          <h1 className="text-3xl font-extrabold text-slate-900">Verified UAE Electrical Suppliers & Stockists</h1>
           <p className="text-sm text-slate-500 mt-1">
-            Search verified stockists, factory importers, and distributors across Electrical, Plumbing, HVAC, Chemicals, and Site Supplies.
+            Search authorized stockists, factory importers, and distributors for LV/MV cables, switchgear, containment, LED lighting, and earthing.
           </p>
         </div>
 

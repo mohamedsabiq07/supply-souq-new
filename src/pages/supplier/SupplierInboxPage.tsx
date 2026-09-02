@@ -13,7 +13,7 @@ export const SupplierInboxPage: React.FC<SupplierInboxPageProps> = ({ onNavigate
   const { currentCompany } = useAuth();
   const { rfqs } = useAppData();
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeTab, setActiveTab] = useState<'all' | 'direct' | 'electrical' | 'plumbing' | 'hvac' | 'chemicals' | 'safety'>('all');
+  const [activeTab, setActiveTab] = useState<'all' | 'direct' | 'cables' | 'switchgear' | 'containment' | 'lighting' | 'earthing' | 'solar'>('all');
 
   const openRFQs = rfqs.filter(r => r.status !== 'draft');
 
@@ -27,30 +27,30 @@ export const SupplierInboxPage: React.FC<SupplierInboxPageProps> = ({ onNavigate
     if (activeTab === 'direct') {
       const isDirect = r.targetSupplierId === currentCompany.id || (r.matchedSupplierCompanyIds && r.matchedSupplierCompanyIds.includes(currentCompany.id));
       if (!isDirect) return false;
-    } else if (activeTab === 'electrical') {
-      const isElec = (r.category && r.category.toLowerCase().includes('cable')) || 
-                     (r.category && r.category.toLowerCase().includes('electric')) ||
-                     (r.title && r.title.toLowerCase().includes('cable'));
-      if (!isElec) return false;
-    } else if (activeTab === 'plumbing') {
-      const isPlumb = (r.category && r.category.toLowerCase().includes('plumb')) || 
-                      (r.category && r.category.toLowerCase().includes('pipe')) ||
-                      (r.title && r.title.toLowerCase().includes('pipe'));
-      if (!isPlumb) return false;
-    } else if (activeTab === 'hvac') {
-      const isHVAC = (r.category && r.category.toLowerCase().includes('hvac')) || 
-                     (r.category && r.category.toLowerCase().includes('duct')) ||
-                     (r.title && r.title.toLowerCase().includes('ac'));
-      if (!isHVAC) return false;
-    } else if (activeTab === 'chemicals') {
-      const isChem = (r.category && r.category.toLowerCase().includes('chem')) || 
-                     (r.category && r.category.toLowerCase().includes('clean')) ||
-                     (r.title && r.title.toLowerCase().includes('clean'));
-      if (!isChem) return false;
-    } else if (activeTab === 'safety') {
-      const isSafety = (r.category && r.category.toLowerCase().includes('safety')) || 
-                       (r.category && r.category.toLowerCase().includes('ppe'));
-      if (!isSafety) return false;
+    } else if (activeTab === 'cables') {
+      const isCables = (r.category && (r.category.toLowerCase().includes('cable') || r.category.toLowerCase().includes('wire'))) ||
+                       (r.title && (r.title.toLowerCase().includes('cable') || r.title.toLowerCase().includes('wire')));
+      if (!isCables) return false;
+    } else if (activeTab === 'switchgear') {
+      const isSwitchgear = (r.category && (r.category.toLowerCase().includes('switchgear') || r.category.toLowerCase().includes('mcb') || r.category.toLowerCase().includes('db') || r.category.toLowerCase().includes('breaker'))) ||
+                           (r.title && (r.title.toLowerCase().includes('switchgear') || r.title.toLowerCase().includes('panel') || r.title.toLowerCase().includes('db')));
+      if (!isSwitchgear) return false;
+    } else if (activeTab === 'containment') {
+      const isContainment = (r.category && (r.category.toLowerCase().includes('containment') || r.category.toLowerCase().includes('tray') || r.category.toLowerCase().includes('conduit') || r.category.toLowerCase().includes('ladder'))) ||
+                            (r.title && (r.title.toLowerCase().includes('tray') || r.title.toLowerCase().includes('conduit') || r.title.toLowerCase().includes('trunking')));
+      if (!isContainment) return false;
+    } else if (activeTab === 'lighting') {
+      const isLighting = (r.category && (r.category.toLowerCase().includes('lighting') || r.category.toLowerCase().includes('led') || r.category.toLowerCase().includes('fixture'))) ||
+                         (r.title && (r.title.toLowerCase().includes('light') || r.title.toLowerCase().includes('led') || r.title.toLowerCase().includes('panel')));
+      if (!isLighting) return false;
+    } else if (activeTab === 'earthing') {
+      const isEarthing = (r.category && (r.category.toLowerCase().includes('earth') || r.category.toLowerCase().includes('lightning') || r.category.toLowerCase().includes('rod'))) ||
+                         (r.title && (r.title.toLowerCase().includes('earth') || r.title.toLowerCase().includes('rod') || r.title.toLowerCase().includes('tape')));
+      if (!isEarthing) return false;
+    } else if (activeTab === 'solar') {
+      const isSolar = (r.category && (r.category.toLowerCase().includes('solar') || r.category.toLowerCase().includes('ups') || r.category.toLowerCase().includes('generator') || r.category.toLowerCase().includes('transformer'))) ||
+                      (r.title && (r.title.toLowerCase().includes('solar') || r.title.toLowerCase().includes('inverter') || r.title.toLowerCase().includes('generator')));
+      if (!isSolar) return false;
     }
 
     // Search query
@@ -69,9 +69,9 @@ export const SupplierInboxPage: React.FC<SupplierInboxPageProps> = ({ onNavigate
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-slate-900">Live Contractor RFQ Inbox</h1>
+          <h1 className="text-2xl font-extrabold text-slate-900">Live Contractor Electrical RFQ Inbox</h1>
           <p className="text-xs text-slate-500 mt-0.5">
-            Direct material requirements from verified UAE contractors ready for competitive quoting.
+            Direct electrical material requirements from verified UAE contractors ready for competitive quoting.
           </p>
         </div>
         <div className="flex items-center gap-2 text-xs font-bold text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200">
@@ -87,7 +87,7 @@ export const SupplierInboxPage: React.FC<SupplierInboxPageProps> = ({ onNavigate
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search by cable, breakers, project location, RFQ #..."
+            placeholder="Search by cable sizes, switchgear, LED panels, RFQ #..."
             className="w-full pl-9 pr-3 py-1.5 rounded-lg border border-slate-200 text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none"
           />
         </div>
@@ -115,44 +115,64 @@ export const SupplierInboxPage: React.FC<SupplierInboxPageProps> = ({ onNavigate
             <span>Matched to You ({directCount})</span>
           </button>
           <button
-            onClick={() => setActiveTab('electrical')}
+            onClick={() => setActiveTab('cables')}
             className={`px-3 py-1.5 rounded-lg font-semibold transition-all whitespace-nowrap ${
-              activeTab === 'electrical'
+              activeTab === 'cables'
                 ? 'bg-slate-900 text-white font-bold'
                 : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
             }`}
           >
-            ⚡ Electrical
+            ⚡ Cables & Wires
           </button>
           <button
-            onClick={() => setActiveTab('plumbing')}
+            onClick={() => setActiveTab('switchgear')}
             className={`px-3 py-1.5 rounded-lg font-semibold transition-all whitespace-nowrap ${
-              activeTab === 'plumbing'
+              activeTab === 'switchgear'
                 ? 'bg-slate-900 text-white font-bold'
                 : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
             }`}
           >
-            🚿 Plumbing
+            🔌 Switchgear & DBs
           </button>
           <button
-            onClick={() => setActiveTab('hvac')}
+            onClick={() => setActiveTab('containment')}
             className={`px-3 py-1.5 rounded-lg font-semibold transition-all whitespace-nowrap ${
-              activeTab === 'hvac'
+              activeTab === 'containment'
                 ? 'bg-slate-900 text-white font-bold'
                 : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
             }`}
           >
-            ❄️ HVAC
+            🛡️ Trays & Conduits
           </button>
           <button
-            onClick={() => setActiveTab('chemicals')}
+            onClick={() => setActiveTab('lighting')}
             className={`px-3 py-1.5 rounded-lg font-semibold transition-all whitespace-nowrap ${
-              activeTab === 'chemicals'
+              activeTab === 'lighting'
                 ? 'bg-slate-900 text-white font-bold'
                 : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
             }`}
           >
-            🧪 Chemicals
+            💡 LED Lighting
+          </button>
+          <button
+            onClick={() => setActiveTab('earthing')}
+            className={`px-3 py-1.5 rounded-lg font-semibold transition-all whitespace-nowrap ${
+              activeTab === 'earthing'
+                ? 'bg-slate-900 text-white font-bold'
+                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+            }`}
+          >
+            ⚡ Earthing & Lightning
+          </button>
+          <button
+            onClick={() => setActiveTab('solar')}
+            className={`px-3 py-1.5 rounded-lg font-semibold transition-all whitespace-nowrap ${
+              activeTab === 'solar'
+                ? 'bg-slate-900 text-white font-bold'
+                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+            }`}
+          >
+            ☀️ Solar & Power
           </button>
         </div>
       </div>

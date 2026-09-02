@@ -30,35 +30,40 @@ export const Footer: React.FC<FooterProps> = ({ setCurrentView }) => {
             </div>
           </div>
 
-          {/* Col 2: Verticals */}
+          {/* Col 2: Electrical Disciplines */}
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-white mb-3">
-              Procurement Verticals
+              Electrical Categories
             </h4>
             <ul className="space-y-2 text-xs text-slate-400">
               <li>
                 <button onClick={() => setCurrentView('categories')} className="hover:text-white transition-colors">
-                  Electrical & Lighting
+                  LV & MV Power Cables
                 </button>
               </li>
               <li>
                 <button onClick={() => setCurrentView('categories')} className="hover:text-white transition-colors">
-                  HVAC & Mechanical
+                  Switchgear, MCBs & DBs
                 </button>
               </li>
               <li>
                 <button onClick={() => setCurrentView('categories')} className="hover:text-white transition-colors">
-                  Plumbing & Piping
+                  Cable Trays & Conduits
                 </button>
               </li>
               <li>
                 <button onClick={() => setCurrentView('categories')} className="hover:text-white transition-colors">
-                  General Building Materials
+                  Commercial LED Lighting
                 </button>
               </li>
               <li>
                 <button onClick={() => setCurrentView('categories')} className="hover:text-white transition-colors">
-                  Power Tools & Site Safety
+                  Earthing & Lightning
+                </button>
+              </li>
+              <li>
+                <button onClick={() => setCurrentView('categories')} className="hover:text-white transition-colors">
+                  Solar Equipment & UPS
                 </button>
               </li>
             </ul>

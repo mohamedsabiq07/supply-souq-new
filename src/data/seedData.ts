@@ -1,75 +1,179 @@
-﻿import { Company, Category, RFQ, Quotation, PurchaseOrder, Message, Review, VerificationRequest, QuickBundle } from '../types';
+import { Company, Category, RFQ, Quotation, PurchaseOrder, Message, Review, VerificationRequest, QuickBundle } from '../types';
 
 export const initialCategories: Category[] = [
   {
-    id: 'cat-cables',
-    vertical: 'Construction',
-    name: 'LV & MV Power Cables & Wires',
-    slug: 'power-cables-wires',
-    description: 'Armoured XLPE/SWA/PVC copper cables, single core building wires (2.5mm²-16mm²), flexible rubber cables & fire-rated FP200 cables',
+    id: 'cat-lv-cables',
+    vertical: 'Power & Cables',
+    name: 'LV Power Cables & Building Wires',
+    slug: 'lv-cables-wires',
+    description: '0.6/1kV Copper Armoured XLPE/SWA/PVC cables, Single Core PVC building wires (1.5mm²-16mm²), and flexible rubber cables',
     icon: 'Zap',
-    itemCount: 240,
+    itemCount: 280,
     isBeachhead: true,
     subcategories: [
       '4-Core Copper Armoured XLPE/SWA/PVC (16mm² - 300mm²)',
-      'Single Core PVC Building Wires (1.5mm², 2.5mm², 4mm², 6mm², 10mm²)',
-      'Fire-Resistant & LSZH FP200 Certified Cables',
-      'Flexible Rubber Submersible & H07RN-F Cables',
-      'Control, Screened & Instrumentation Cables',
-      'Solar DC PV Cables (4mm² / 6mm² TÜV Certified)'
+      'Single Core PVC Building Wires (1.5mm², 2.5mm², 4mm², 6mm², 10mm², 16mm²)',
+      'Single Core XLPE / High-Temperature Flexible Copper Wires',
+      'Flexible Rubber Submersible & H07RN-F Heavy Duty Cables',
+      'Multi-Core Flexible Unarmoured Control Cables (YY / CY / SY)',
+      'Ducab / Oman Cables / Riyadh Cables Certified Drums'
+    ]
+  },
+  {
+    id: 'cat-mv-hv-cables',
+    vertical: 'Power & Cables',
+    name: 'MV & HV Power Cables (11kV - 132kV)',
+    slug: 'mv-hv-power-cables',
+    description: '11kV, 22kV, 33kV & 132kV Medium & High Voltage underground XLPE armoured power cables, joint kits & terminations',
+    icon: 'Zap',
+    itemCount: 145,
+    isBeachhead: true,
+    subcategories: [
+      '11kV & 33kV 3-Core Copper XLPE/SWA/PVC Armoured MV Cables',
+      '11kV & 33kV Single Core XLPE/AWA/PVC Armoured Cables',
+      '132kV Extra High Voltage (EHV) Lead Sheathed Power Cables',
+      'MV Heat Shrink & Cold Shrink Straight Joints & Terminations (Raychem / 3M)',
+      'DEWA / SEWA / FEWA Approved Medium Voltage Cable Drums'
     ]
   },
   {
     id: 'cat-switchgear',
-    vertical: 'Construction',
-    name: 'Switchgear, MCBs & Distribution Boards',
+    vertical: 'Switchgear & DBs',
+    name: 'Switchgear, DBs & Circuit Breakers',
     slug: 'switchgear-mcb-db',
-    description: 'Miniature circuit breakers (10kA), MCCBs, ELCBs, isolator switches, 3-phase final DB panels, and main sub-distribution panels (SMDB)',
+    description: 'MDB, SMDB, 3-Phase Final Distribution Boards, ACBs, MCCBs, MCBs (10kA), RCCBs, Contactors & IP65 Isolators',
     icon: 'Layers',
-    itemCount: 185,
+    itemCount: 320,
     isBeachhead: true,
     subcategories: [
-      '1-Pole, 2-Pole & 3-Pole MCBs (6A - 63A, 10kA Type C)',
-      'Molded Case Circuit Breakers (MCCB 100A - 800A)',
-      'Residual Current Circuit Breakers (RCCB / ELCB 30mA/100mA/300mA)',
-      'Surface & Flush Mounted 3-Phase Distribution Boards (4-way to 24-way)',
-      'Rotary Weatherproof Isolators (20A, 32A, 45A, 63A IP65)',
-      'Magnetic Contactors & Motor Starter Overload Relays'
-    ]
-  },
-  {
-    id: 'cat-lighting',
-    vertical: 'Facility Management',
-    name: 'Commercial LED Lighting & Fixtures',
-    slug: 'commercial-led-lighting',
-    description: '60x60 recessed LED panels, LED downlights, high-bay warehouse lights, waterproof battens, and Civil Defense exit lights',
-    icon: 'Sparkles',
-    itemCount: 160,
-    isBeachhead: true,
-    subcategories: [
-      '60x60 & 30x120 Recessed LED Panels (40W / 4000K & 6500K)',
-      'Commercial LED Downlights (10W - 30W IP44/IP54)',
-      'IP65 Waterproof LED Tri-Proof Battens (4ft & 5ft)',
-      'UFO LED High Bay Warehouse Fixtures (100W, 150W, 200W)',
-      'Civil Defense Approved Self-Contained Emergency Exit Luminaires',
-      'Exterior LED Floodlights & Architectural Facade Washers'
+      'Main Distribution Boards (MDB) & Sub-Main Panels (SMDB)',
+      '3-Phase Flush & Surface Final Distribution Boards (4-Way to 24-Way)',
+      'Air Circuit Breakers (ACB 800A - 4000A Fixed & Drawout)',
+      'Molded Case Circuit Breakers (MCCB 16A - 800A 36kA/50kA/70kA)',
+      'Miniature Circuit Breakers (MCB 1P/2P/3P 6A - 63A 10kA Type C/D)',
+      'Residual Current Devices (RCCB / ELCB / RCBO 30mA, 100mA, 300mA)',
+      'Rotary Weatherproof IP65/IP66 Isolators & Changeover Switches',
+      'Magnetic Contactors, Thermal Overload Relays & Motor Starters'
     ]
   },
   {
     id: 'cat-containment',
-    vertical: 'Construction',
+    vertical: 'Containment & Conduits',
     name: 'Conduits, Trays & Cable Containment',
     slug: 'conduits-trays-containment',
-    description: 'GI perforated cable trays, cable ladders, Decoduct PVC conduits, flexible liquid-tight metallic conduits & unistrut channels',
+    description: 'Hot-dip galvanized perforated cable trays, cable ladders, Decoduct PVC conduits, GI conduits & unistrut channels',
     icon: 'ShieldCheck',
-    itemCount: 195,
+    itemCount: 260,
+    isBeachhead: true,
     subcategories: [
-      'Hot-Dip Galvanized (HDG) & Pre-Galvanized Cable Trays (50mm - 600mm)',
-      'Heavy Duty Return Flange GI Cable Ladders',
-      'Decoduct High Impact Rigid PVC Conduits (20mm, 25mm, 32mm)',
-      'Flexible PVC Coated Metallic Conduits & Brass Adaptors',
-      'Slotted Steel Unistrut Channels & 8mm/10mm Threaded Rods',
-      'Galvanized GI Adaptable Junction Boxes & Conduit Accessories'
+      'Hot-Dip Galvanized (HDG) & Pre-Galvanized Cable Trays (50mm - 900mm)',
+      'Heavy Duty Return Flange GI Cable Ladders & Unistrut Channels',
+      'Stainless Steel (SS316 / SS304) Wire Mesh Cable Trays',
+      'Decoduct / EGA High Impact Rigid PVC Conduits (20mm, 25mm, 32mm, 50mm)',
+      'Galvanized Steel GI Class 4 Heavy Gauge Rigid Conduits & Fittings',
+      'Flexible Liquid-Tight PVC-Coated Metallic Conduits & Brass Glands',
+      'Galvanized Adaptable Junction Boxes, Couplers, Bends & Reducers'
+    ]
+  },
+  {
+    id: 'cat-fire-special-cables',
+    vertical: 'Power & Cables',
+    name: 'Fire-Resistant, LSZH & Instrument Cables',
+    slug: 'fire-resistant-instrument-cables',
+    description: 'Fire-Resistant FP200/CWZ cables, Low Smoke Zero Halogen (LSZH) alarm cables, BMS signal, RS485 & Cat6 data cables',
+    icon: 'Zap',
+    itemCount: 190,
+    subcategories: [
+      'Fire-Resistant FP200 Gold / CWZ Category C-W-Z Cables (BS 6387 / PH120)',
+      'Low Smoke Zero Halogen (LSZH) Fire Survival Power & Alarm Cables',
+      'Screened Instrumentation & Twisted Pair BMS Signal Cables',
+      'RS485 Modbus, KNX, BacNet & Industrial Automation Cables',
+      'Cat6 / Cat6A UTP/STP Structured Data Cabling & Patch Panels',
+      'Coaxial RG6 / RG11 & Belden Equivalent Shielded Cables'
+    ]
+  },
+  {
+    id: 'cat-earthing-lightning',
+    vertical: 'Earthing & Lightning',
+    name: 'Earthing & Lightning Protection Systems',
+    slug: 'earthing-lightning-protection',
+    description: 'Pure copperbonded earth rods, bare copper tape, earth inspection pits, exothermic welding & lightning air terminals',
+    icon: 'Zap',
+    itemCount: 175,
+    subcategories: [
+      'Pure Electrolytic Copperbonded Earth Rods (5/8" & 3/4" x 8ft / 10ft)',
+      'High-Conductivity Bare Annealed Copper Tape & Stranded Conductors',
+      'Heavy-Duty Concrete & Polypropylene Earth Inspection Pits',
+      'Exothermic Welding Molds, Weld Metal Powders & Igniters (Cadweld / Furse)',
+      'Early Streamer Emission (ESE) Lightning Air Terminals & Surge Arresters (SPD)',
+      'Earth Clamps, Rod-to-Tape Couplers, Test Clamps & Earth Bars'
+    ]
+  },
+  {
+    id: 'cat-lighting',
+    vertical: 'Lighting & Controls',
+    name: 'Commercial, Industrial & Emergency Lighting',
+    slug: 'commercial-industrial-lighting',
+    description: '60x60 recessed LED panels, LED downlights, high-bay warehouse fixtures, waterproof battens & Civil Defense exit lights',
+    icon: 'Sparkles',
+    itemCount: 230,
+    subcategories: [
+      '60x60 & 30x120 Recessed LED Panels (40W / 4000K & 6500K UGR<19)',
+      'Commercial Architectural Recessed LED Downlights & Track Spotlights',
+      'IP65 / IP66 Waterproof LED Tri-Proof Battens (4ft & 5ft Corrosive Proof)',
+      'UFO LED High-Bay Warehouse & Factory Luminaires (100W, 150W, 200W)',
+      'Civil Defense Approved Self-Contained Emergency Exit Luminaires',
+      'Exterior Heavy-Duty LED Floodlights & Architectural Facade Luminaires'
+    ]
+  },
+  {
+    id: 'cat-wiring-accessories',
+    vertical: 'Lighting & Controls',
+    name: 'Wiring Accessories, Sockets & Industrial Plugs',
+    slug: 'wiring-accessories-sockets',
+    description: '13A UK switched sockets, light switches, IP66 weatherproof industrial plugs, metal back boxes & floor pop-up boxes',
+    icon: 'Layers',
+    itemCount: 210,
+    subcategories: [
+      '13A 1-Gang & 2-Gang Switched Sockets (BS 1363 UK Standard - White / Metal Clad)',
+      '10AX 1-Way, 2-Way, Intermediate & Grid Light Switches',
+      'IP66 / IP67 Weatherproof Industrial Plugs, Sockets & Interlocked Outlets',
+      '20A & 45A DP Water Heater & AC Switches with Neon Indicator',
+      'Galvanized Steel GI Flush Back Boxes (1-Gang, 2-Gang 35mm / 47mm Deep)',
+      'Floor Pop-Up Boxes, Power Grommets & Desktop Socket Modules'
+    ]
+  },
+  {
+    id: 'cat-transformers-substations',
+    vertical: 'Power Equipment',
+    name: 'Transformers, Substations & RMU Units',
+    slug: 'transformers-substations-rmu',
+    description: 'Oil-immersed & cast resin dry-type transformers (500kVA-2500kVA), 11kV/33kV Ring Main Units (RMU) & packaged substations',
+    icon: 'Zap',
+    itemCount: 85,
+    subcategories: [
+      'Oil-Immersed Distribution Transformers (500kVA, 1000kVA, 1500kVA, 2000kVA)',
+      'Cast Resin Dry-Type Fire-Safe Transformers (Class F/H Insulation)',
+      '11kV & 33kV SF6 / Vacuum Ring Main Units (RMU 3-Way, 4-Way Extensible)',
+      'Packaged Unit Substation Enclosures (DEWA / SEWA Spec Compliant)',
+      'Automatic Voltage Regulators (AVR) & Power Factor Correction (PFC) Panels'
+    ]
+  },
+  {
+    id: 'cat-solar-backup',
+    vertical: 'Power Equipment',
+    name: 'Solar PV Equipment, Inverters & UPS Power',
+    slug: 'solar-pv-inverters-ups',
+    description: 'TÜV certified 1500V solar DC cables, on-grid/hybrid solar inverters, DC combiner boxes, industrial UPS & diesel generators',
+    icon: 'Zap',
+    itemCount: 130,
+    subcategories: [
+      'TÜV / IEC Certified 4mm² & 6mm² Solar DC Cables (1500V UV Resistant)',
+      'On-Grid & Hybrid Solar Inverters (5kW to 100kW 3-Phase String Inverters)',
+      'DC Solar Combiner Boxes with 1000V/1500V DC Fuses & DC Isolators',
+      'Type 1 + Type 2 DC & AC Surge Protection Devices (SPD)',
+      'True Online Double-Conversion Industrial UPS Systems (10kVA - 500kVA)',
+      'Silent Diesel Generator Sets (20kVA to 1500kVA Cummins / Perkins / Volvo)'
     ]
   }
 ];
