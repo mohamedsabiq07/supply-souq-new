@@ -74,7 +74,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
         ? initialCategory 
         : targetSupplier && targetSupplier.categories?.length > 0 
           ? targetSupplier.categories[0] 
-          : 'LV & MV Power Cables & Wires'
+          : 'LV Power Cables & Building Wires'
   );
   const [requiredDeliveryDate, setRequiredDeliveryDate] = useState('2026-08-30');
   const [closingDate, setClosingDate] = useState('2026-08-26');
@@ -369,16 +369,18 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="w-full p-2.5 rounded-lg border border-slate-200 text-xs font-semibold focus:ring-2 focus:ring-brand-500"
+                  className="w-full p-2.5 rounded-lg border border-slate-200 text-xs font-semibold focus:ring-2 focus:ring-brand-500 bg-white"
                 >
-                  <option value="LV & MV Power Cables & Wires">⚡ LV & MV Power Cables & Wires</option>
-                  <option value="Switchgear, Breakers & DBs">⚡ Switchgear, Breakers & DBs</option>
-                  <option value="Lighting & LED Fixtures">💡 Lighting & LED Fixtures</option>
-                  <option value="PPR, UPVC Pipes & Drainage">🚿 PPR, UPVC Pipes & Drainage</option>
-                  <option value="HVAC Ducting & Mechanical">❄️ HVAC Ducting & Mechanical</option>
-                  <option value="FM & Cleaning Chemicals">🧪 FM & Cleaning Chemicals</option>
-                  <option value="Hygiene & Washroom Disposables">🧻 Hygiene & Washroom Disposables</option>
-                  <option value="Safety PPE & Site Consumables">🦺 Safety PPE & Site Consumables</option>
+                  <option value="LV Power Cables & Building Wires">⚡ LV Power Cables & Building Wires</option>
+                  <option value="MV & HV Power Cables (11kV - 132kV)">⚡ MV & HV Power Cables (11kV - 132kV)</option>
+                  <option value="Switchgear, DBs & Circuit Breakers">🔌 Switchgear, DBs & Circuit Breakers</option>
+                  <option value="Conduits, Trays & Cable Containment">🛡️ Conduits, Trays & Cable Containment</option>
+                  <option value="Fire-Resistant, LSZH & Instrument Cables">🔥 Fire-Resistant, LSZH & Instrument Cables</option>
+                  <option value="Earthing & Lightning Protection Systems">⚡ Earthing & Lightning Protection Systems</option>
+                  <option value="Commercial, Industrial & Emergency Lighting">💡 Commercial, Industrial & Emergency Lighting</option>
+                  <option value="Wiring Accessories, Sockets & Industrial Plugs">🔌 Wiring Accessories, Sockets & Industrial Plugs</option>
+                  <option value="Transformers, Substations & RMU Units">⚡ Transformers, Substations & RMU Units</option>
+                  <option value="Solar PV Equipment, Inverters & UPS Power">☀️ Solar PV Equipment, Inverters & UPS Power</option>
                 </select>
               </div>
             </div>
