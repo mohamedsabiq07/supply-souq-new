@@ -93,6 +93,9 @@ export const mapRFQFromDB = (row: any): RFQ => ({
   documents: Array.isArray(row.documents) ? row.documents : [],
   quotesCount: Number(row.quotes_count) || 0,
   invitedCount: Number(row.invited_count) || 0,
+  matchedSupplierCompanyIds: Array.isArray(row.matched_supplier_company_ids) ? row.matched_supplier_company_ids : [],
+  matchedSupplierNames: Array.isArray(row.matched_supplier_names) ? row.matched_supplier_names : [],
+  deadline24h: row.deadline_24h,
   awardedQuotationId: row.awarded_quotation_id,
   createdAt: row.created_at || new Date().toISOString(),
   updatedAt: row.updated_at || new Date().toISOString()
@@ -124,6 +127,9 @@ export const mapRFQToDB = (r: RFQ) => ({
   documents: r.documents,
   quotes_count: r.quotesCount,
   invited_count: r.invitedCount,
+  matched_supplier_company_ids: r.matchedSupplierCompanyIds,
+  matched_supplier_names: r.matchedSupplierNames,
+  deadline_24h: r.deadline24h,
   created_at: r.createdAt,
   updated_at: r.updatedAt
 });
@@ -134,6 +140,8 @@ export const mapQuotationFromDB = (row: any): Quotation => ({
   rfqId: row.rfq_id,
   rfqNumber: row.rfq_number,
   rfqTitle: row.rfq_title || '',
+  buyerCompanyId: row.buyer_company_id,
+  buyerCompanyName: row.buyer_company_name,
   supplierCompanyId: row.supplier_company_id,
   supplierCompanyName: row.supplier_company_name,
   supplierEmirate: row.supplier_emirate || 'Dubai',
@@ -161,6 +169,8 @@ export const mapQuotationToDB = (q: Quotation) => ({
   id: q.id,
   rfq_id: q.rfqId,
   rfq_number: q.rfqNumber,
+  buyer_company_id: q.buyerCompanyId,
+  buyer_company_name: q.buyerCompanyName,
   supplier_company_id: q.supplierCompanyId,
   supplier_company_name: q.supplierCompanyName,
   supplier_emirate: q.supplierEmirate,

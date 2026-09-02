@@ -289,18 +289,72 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const createRFQ = (newRFQData: Omit<RFQ, 'id' | 'rfqNumber' | 'createdAt' | 'updatedAt' | 'quotesCount' | 'invitedCount'>): RFQ => {
     const randomNum = Math.floor(10000 + Math.random() * 90000);
+    
+    // Intelligent 5-Supplier Matchmaking Engine based on Category & Industrial Zone
+    const supplierPool = companies.filter((c) => c.companyType === 'supplier');
+    const categoryQuery = (newRFQData.category || '').toLowerCase();
+    const itemQuery = (newRFQData.items || []).map(i => (i.description || '').toLowerCase()).join(' ');
+
+    const scoredSuppliers = supplierPool.map((supplier) => {
+      let score = 0;
+      const supplierCats = (supplier.categories || []).map(c => c.toLowerCase());
+      
+      if (supplierCats.some(c => categoryQuery.includes(c) || c.includes(categoryQuery))) {
+        score += 10;
+      }
+      if (supplierCats.some(c => itemQuery.includes(c) || c.includes(itemQuery))) {
+        score += 5;
+      }
+      if (supplier.emirate === newRFQData.deliveryEmirate) {
+        score += 3;
+      }
+      if (supplier.verificationStatus === 'verified') {
+        score += 2;
+      }
+      return { supplier, score };
+    });
+
+    scoredSuppliers.sort((a, b) => b.score - a.score);
+    const top5 = (scoredSuppliers.length >= 5 ? scoredSuppliers.slice(0, 5) : scoredSuppliers).map(s => s.supplier);
+    const final5 = top5.length > 0 ? top5 : supplierPool.slice(0, 5);
+
+    const matchedSupplierCompanyIds = final5.map(s => s.id);
+    const matchedSupplierNames = final5.map(s => s.name);
+    const deadline24h = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+
     const newRFQ: RFQ = {
       ...newRFQData,
       id: `rfq-${Date.now()}`,
       rfqNumber: `SS-${randomNum}`,
       status: 'published',
-      invitedCount: 8,
+      invitedCount: final5.length || 5,
       quotesCount: 0,
+      matchedSupplierCompanyIds,
+      matchedSupplierNames,
+      deadline24h,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
 
     setRfqs((prev) => [newRFQ, ...prev]);
+
+    // Create automated dispatch message/notification for the 5 matched stockists
+    const newMsg: Message = {
+      id: `msg-${Date.now()}`,
+      rfqId: newRFQ.id,
+      rfqNumber: newRFQ.rfqNumber,
+      senderId: 'system-matchmaker',
+      senderName: 'SupplySouq Dispatch Engine',
+      senderCompanyId: newRFQ.buyerCompanyId,
+      senderCompanyName: newRFQ.buyerCompanyName,
+      senderRole: 'buyer',
+      recipientCompanyId: 'all-matched-suppliers',
+      recipientCompanyName: '5 Matched Verified UAE Stockists',
+      messageText: `[Automated Matchmaking Dispatch] RFQ #${newRFQ.rfqNumber} for "${newRFQ.title}" has been delivered to 5 verified stockists: ${matchedSupplierNames.join(', ')}. Quotation SLA: 24 Hours.`,
+      createdAt: new Date().toISOString(),
+      isRead: false,
+    };
+    setMessages((prev) => [...prev, newMsg]);
 
     // Persist to Supabase in background
     supabaseService.createRFQ(newRFQ).catch(console.error);
@@ -323,10 +377,14 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const submitQuotation = (quoteData: Omit<Quotation, 'id' | 'quotationNumber' | 'submittedAt' | 'status'>): Quotation => {
     const randomNum = Math.floor(10000 + Math.random() * 90000);
+    const targetRFQ = rfqs.find((r) => r.id === quoteData.rfqId || r.rfqNumber === quoteData.rfqId);
+
     const newQuote: Quotation = {
       ...quoteData,
       id: `quote-${Date.now()}`,
       quotationNumber: `QT-${randomNum}`,
+      buyerCompanyId: targetRFQ?.buyerCompanyId || (quoteData as any).buyerCompanyId,
+      buyerCompanyName: targetRFQ?.buyerCompanyName || (quoteData as any).buyerCompanyName,
       status: 'submitted',
       submittedAt: new Date().toISOString(),
     };
@@ -348,6 +406,26 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
         return r;
       })
     );
+
+    // Send direct notification message from Supplier to the specific Buyer
+    if (targetRFQ) {
+      const quoteMsg: Message = {
+        id: `msg-${Date.now()}`,
+        rfqId: targetRFQ.id,
+        rfqNumber: targetRFQ.rfqNumber,
+        senderId: quoteData.supplierCompanyId,
+        senderName: quoteData.supplierCompanyName,
+        senderCompanyId: quoteData.supplierCompanyId,
+        senderCompanyName: quoteData.supplierCompanyName,
+        senderRole: 'supplier',
+        recipientCompanyId: targetRFQ.buyerCompanyId,
+        recipientCompanyName: targetRFQ.buyerCompanyName,
+        messageText: `Commercial Quotation ${newQuote.quotationNumber} submitted for AED ${newQuote.grandTotalAED.toLocaleString()} (Lead Time: ${newQuote.leadTimeDisplay || newQuote.leadTimeDays + ' Days'}).`,
+        createdAt: new Date().toISOString(),
+        isRead: false,
+      };
+      setMessages((prev) => [...prev, quoteMsg]);
+    }
 
     // Persist to Supabase
     supabaseService.submitQuotation(newQuote).catch(console.error);

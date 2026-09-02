@@ -445,9 +445,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
                   <th className="p-3">Buyer Company</th>
                   <th className="p-3">Requirement Title</th>
                   <th className="p-3">Category</th>
-                  <th className="p-3">Emirate / Site</th>
-                  <th className="p-3">Items</th>
-                  <th className="p-3">Bids</th>
+                  <th className="p-3">5 Matched Stockists (24h SLA)</th>
+                  <th className="p-3">Quote Response</th>
                   <th className="p-3">Status</th>
                   <th className="p-3 text-right">Date</th>
                 </tr>
@@ -456,12 +455,34 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
                 {rfqs.map((r) => (
                   <tr key={r.id} className="hover:bg-slate-50/80">
                     <td className="p-3 font-mono font-bold text-brand-700">{r.rfqNumber}</td>
-                    <td className="p-3 font-bold text-slate-900">{r.buyerCompanyName}</td>
-                    <td className="p-3 text-slate-800">{r.title}</td>
-                    <td className="p-3 text-slate-600">{r.category}</td>
-                    <td className="p-3 font-semibold text-slate-700">{r.deliveryEmirate}</td>
-                    <td className="p-3 font-bold text-slate-800">{r.items?.length || 0} line items</td>
-                    <td className="p-3 font-bold text-brand-700">{r.quotesCount || 0} quotes</td>
+                    <td className="p-3 font-bold text-slate-900">
+                      {r.buyerCompanyName}
+                      <span className="text-[10px] text-slate-400 block">{r.buyerContactName} ({r.buyerPhone})</span>
+                    </td>
+                    <td className="p-3">
+                      <p className="font-semibold text-slate-900">{r.title}</p>
+                      <span className="text-[10px] text-slate-500">{r.items?.length || 0} line items • {r.deliveryEmirate}</span>
+                    </td>
+                    <td className="p-3 text-slate-600 font-medium">{r.category}</td>
+                    <td className="p-3">
+                      {r.matchedSupplierNames && r.matchedSupplierNames.length > 0 ? (
+                        <div className="space-y-0.5">
+                          <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
+                            ⏱ 24h SLA Active (5 Stockists)
+                          </span>
+                          <p className="text-[11px] text-slate-600 truncate max-w-xs font-medium">
+                            {r.matchedSupplierNames.join(', ')}
+                          </p>
+                        </div>
+                      ) : (
+                        <span className="text-slate-400 italic">5 UAE Verified Stockists</span>
+                      )}
+                    </td>
+                    <td className="p-3">
+                      <span className="font-mono font-extrabold text-brand-700 bg-brand-50 px-2 py-0.5 rounded border border-brand-200 text-xs">
+                        {r.quotesCount || 0} / {r.invitedCount || 5} Bids
+                      </span>
+                    </td>
                     <td className="p-3">
                       <StatusBadge status={r.status} />
                     </td>

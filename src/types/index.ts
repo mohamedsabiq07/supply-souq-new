@@ -150,6 +150,9 @@ export interface RFQ {
   documents: RFQDocument[];
   invitedCount: number;
   quotesCount: number;
+  matchedSupplierCompanyIds?: string[];
+  matchedSupplierNames?: string[];
+  deadline24h?: string;
   awardedQuotationId?: string;
   createdAt: string;
   updatedAt: string;
@@ -176,6 +179,8 @@ export interface Quotation {
   rfqId: string;
   rfqNumber: string;
   rfqTitle: string;
+  buyerCompanyId?: string;
+  buyerCompanyName?: string;
   supplierCompanyId: string;
   supplierCompanyName: string;
   supplierEmirate: Emirate;

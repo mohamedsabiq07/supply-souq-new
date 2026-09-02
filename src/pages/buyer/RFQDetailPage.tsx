@@ -91,28 +91,28 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
 
         <Card className="p-4">
           <span className="text-slate-400 text-xs font-medium block">Suppliers Quoting</span>
-          <strong className="text-sm text-slate-900 font-bold">5 Verified Stockists</strong>
+          <strong className="text-sm text-slate-900 font-bold">{rfq.invitedCount || 5} Matched Stockists</strong>
           <span className="text-[11px] text-emerald-600 font-semibold block mt-0.5">
-            5 Quotes Ready to Review
+            {rfqQuotes.length > 0 ? `${rfqQuotes.length} Quotes Received` : '24-Hour SLA Active'}
           </span>
         </Card>
       </div>
 
-      {/* 5 Received Supplier Quotations Showcase Cards */}
-      {rfqQuotes.length > 0 && (
+      {/* 5 Received Supplier Quotations Showcase Cards or Dispatch Waiting State */}
+      {rfqQuotes.length > 0 ? (
         <Card className="p-5 border-brand-200 bg-gradient-to-b from-brand-50/30 to-white">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-xs font-extrabold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">
-                  Free Package Active
+                  {rfqQuotes.length === 5 ? '5/5 Complete Benchmark' : `${rfqQuotes.length} of 5 Quotes In`}
                 </span>
                 <h3 className="text-base font-bold text-slate-900">
-                  5 Received Supplier Quotations
+                  Received Supplier Quotations ({rfqQuotes.length})
                 </h3>
               </div>
               <p className="text-xs text-slate-500">
-                5 verified UAE electrical stockists have submitted binding offers for this RFQ.
+                Direct binding commercial offers from verified UAE stockists for your evaluation.
               </p>
             </div>
 
@@ -137,11 +137,11 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
                   <div className="flex items-center justify-between text-[10px] text-slate-400 mb-1">
                     <span className="font-mono">{quote.quotationNumber}</span>
                     <span className="font-bold text-emerald-700 bg-emerald-50 px-1 rounded">
-                      Quote {idx + 1} of 5
+                      Quote {idx + 1} of {rfqQuotes.length}
                     </span>
                   </div>
                   <h4 className="text-xs font-bold text-slate-900 line-clamp-1">{quote.supplierCompanyName}</h4>
-                  <span className="text-[10px] text-slate-500 block">{quote.supplierZone}</span>
+                  <span className="text-[10px] text-slate-500 block">{quote.supplierZone || quote.supplierEmirate}</span>
 
                   <div className="my-2 p-2 bg-slate-900 text-white rounded-lg">
                     <span className="text-[9px] text-slate-400 block uppercase">Total (Incl. VAT)</span>
@@ -164,6 +164,27 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
                 </Button>
               </div>
             ))}
+          </div>
+        </Card>
+      ) : (
+        <Card className="p-8 text-center space-y-3 border-dashed border-2 border-emerald-200 bg-emerald-50/30">
+          <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center mx-auto font-bold">
+            <Clock className="w-6 h-6 animate-pulse text-emerald-700" />
+          </div>
+          <div className="space-y-1 max-w-md mx-auto">
+            <h4 className="text-base font-bold text-slate-900">RFQ Dispatched to 5 Verified Stockists</h4>
+            <p className="text-xs text-slate-600">
+              Your material requirement has been delivered to 5 matching stockists. Stockists are submitting commercial quotations within our 24-hour SLA.
+            </p>
+            {rfq.matchedSupplierNames && rfq.matchedSupplierNames.length > 0 && (
+              <div className="pt-2 flex flex-wrap justify-center gap-1.5 text-[11px]">
+                {rfq.matchedSupplierNames.map((name, i) => (
+                  <span key={i} className="bg-white border border-slate-200 px-2.5 py-1 rounded-full text-slate-700 font-semibold shadow-xs">
+                    ✓ {name}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         </Card>
       )}

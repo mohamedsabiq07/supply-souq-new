@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { RFQ } from '../../types';
 import { Card, CardContent } from '../ui/Card';
 import { StatusBadge } from '../ui/Badge';
@@ -26,11 +26,14 @@ export const RFQCard: React.FC<RFQCardProps> = ({
       <CardContent className="p-5">
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-3">
           <div>
-            <div className="flex items-center gap-2 mb-1.5">
+            <div className="flex items-center gap-2 mb-1.5 flex-wrap">
               <span className="text-xs font-mono font-bold text-brand-600 bg-brand-50 px-2 py-0.5 rounded border border-brand-100">
                 {rfq.rfqNumber}
               </span>
               <StatusBadge status={rfq.status} />
+              <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 inline-flex items-center gap-1">
+                <Clock className="w-3 h-3 text-emerald-600" /> 24-Hour SLA
+              </span>
               {rfq.priority === 'urgent' && (
                 <span className="inline-flex items-center gap-1 text-[11px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">
                   <AlertTriangle className="w-3 h-3" /> URGENT
@@ -42,14 +45,17 @@ export const RFQCard: React.FC<RFQCardProps> = ({
             </h3>
             <p className="text-xs text-slate-500 mt-0.5 font-medium">
               Project: <span className="text-slate-700 font-semibold">{rfq.projectName}</span>
+              {rfq.category && (
+                <span className="ml-2 text-slate-400">• Category: <strong className="text-slate-600">{rfq.category}</strong></span>
+              )}
             </p>
           </div>
 
           <div className="sm:text-right shrink-0">
             <div className="inline-flex sm:flex-col items-center sm:items-end gap-1.5 bg-slate-50 sm:bg-transparent p-2 sm:p-0 rounded-lg">
-              <span className="text-xs text-slate-500 font-medium">Quotes Received</span>
+              <span className="text-xs text-slate-500 font-medium">5-Stockist Response</span>
               <span className="text-lg font-extrabold text-slate-900 bg-brand-50 text-brand-700 px-2.5 py-0.5 rounded-md border border-brand-200">
-                {rfq.quotesCount} / {rfq.invitedCount}
+                {rfq.quotesCount} / {rfq.invitedCount || 5} Quotes
               </span>
             </div>
           </div>
