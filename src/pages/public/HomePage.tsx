@@ -63,18 +63,18 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView, onOpenCompar
             
             <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-400/30 text-amber-300 px-3 py-1.5 rounded-full text-xs font-semibold">
               <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-              <span>UAE B2B Procurement • Serving Dubai, Sharjah & Ajman</span>
+              <span>UAE B2B Material Procurement Network</span>
             </div>
 
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
-              Source Electrical Supplies in the UAE.<br />
+              Source Electrical & MEP Supplies.<br />
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-400 via-amber-200 to-sky-300">
                 Post Requirements. Compare 5 Quotes. Save 18%.
               </span>
             </h1>
 
             <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
-              Connect directly with verified stockists across Dubai, Sharjah, and Ajman. Upload your material list in 30 seconds to receive competitive quotations for cables, switchgear, LED lighting, and containment in 24 hours.
+              Connect directly with verified material stockists. Upload your material list or bill in 30 seconds to receive competitive wholesale quotations for cables, switchgear, LED lighting, plumbing, and HVAC in 24 hours.
             </p>
 
             {/* Main Action CTAs */}
@@ -98,128 +98,106 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView, onOpenCompar
               >
                 Free Cable Invoice Audit (Save 15%+)
               </Button>
-
-              <Button
-                variant="outline"
-                size="lg"
-                onClick={handleQuickPhotoUpload}
-                leftIcon={<Camera className="w-5 h-5 text-emerald-400" />}
-                className="w-full sm:w-auto text-sm py-3 px-6 font-bold bg-slate-800/80 border-slate-700 text-white hover:bg-slate-700"
-              >
-                📸 Snap Photo of Cable Schedule
-              </Button>
             </div>
 
-            {/* Quick Badges */}
-            <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 pt-3 text-xs text-slate-400">
-              <span className="flex items-center gap-1.5 text-emerald-300 font-semibold">
-                <Sparkles className="w-4 h-4 text-emerald-400" /> Free Subscription: 5 Quotes Included
-              </span>
-              <span>•</span>
+            {/* Micro Highlights */}
+            <div className="flex flex-wrap items-center justify-center gap-6 pt-4 text-xs text-slate-400">
               <span className="flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-emerald-400" /> DEWA / SEWA Certified Stockists
+                <CheckCircle2 className="w-4 h-4 text-emerald-400" /> 100% UAE Trade License Verified Stockists
               </span>
-              <span>•</span>
               <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-amber-400" /> Al Quoz & Sharjah Electrical Yards
+                <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Standard 5% UAE VAT Compliant
               </span>
-              <span>•</span>
               <span className="flex items-center gap-1.5">
-                <Clock className="w-4 h-4 text-sky-400" /> 24-Hour Quote Delivery
+                <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Average 18.4% Material Cost Savings
               </span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* COST AUDIT ANIMATED BANNER (10 DYNAMIC ROTATING HOOKS) */}
+      {/* DYNAMIC PRICE AUDIT CALLOUT BANNER */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <AnimatedAuditBanner onLaunchAudit={() => setCurrentView('invoice-audit')} />
       </section>
 
-      {/* SIGNATURE COMPARISON SHOWCASE: 5 VERIFIED ELECTRICAL QUOTES */}
+      {/* INTERACTIVE 5-VENDOR QUOTE COMPARISON DEMO */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-gradient-to-tr from-brand-950 via-slate-900 to-slate-900 text-white rounded-3xl p-6 sm:p-10 border border-brand-800/40 shadow-2xl relative overflow-hidden">
+        <div className="bg-slate-900 rounded-3xl p-6 sm:p-10 border border-slate-800 text-white space-y-8 shadow-2xl">
           
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-800 pb-6">
             <div>
-              <div className="inline-flex items-center gap-2 bg-amber-500/20 text-amber-300 px-3 py-1 rounded-full text-xs font-bold border border-amber-400/30 mb-2">
-                <Zap className="w-3.5 h-3.5" /> High-Value Electrical Procurement Showcase
+              <div className="inline-flex items-center gap-2 bg-amber-500/20 text-amber-300 text-xs font-bold px-3 py-1 rounded-full border border-amber-500/30 mb-2">
+                <GitCompare className="w-3.5 h-3.5" />
+                <span>Live Multi-Vendor Quotation Benchmark</span>
               </div>
-              <h2 className="text-xl sm:text-2xl font-extrabold text-white">
-                Live Quotation Comparison: 5 Verified Supplier Offers
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
+                How Contractors Compare 5 Live Stockist Quotes
               </h2>
-              <p className="text-xs sm:text-sm text-slate-300 mt-1">
-                Comparing 5 verified UAE stockist quotations for RFQ #{featuredRFQ.rfqNumber} ({featuredRFQ.title}).
+              <p className="text-xs sm:text-sm text-slate-400 mt-1">
+                Real example: Eng. Tariq from Apex Contracting requested Ducab CU/XLPE/PVC Cables & Schneider MCBs.
               </p>
             </div>
 
             <Button
-              variant="primary"
-              size="sm"
-              onClick={() => {
-                setRole('buyer');
-                setCurrentView('buyer-compare', { rfqId: featuredRFQ.id });
-              }}
-              leftIcon={<GitCompare className="w-4 h-4" />}
-              className="bg-brand-500 hover:bg-brand-600 self-start md:self-auto font-bold"
+              variant="amber"
+              onClick={onOpenCompareDemo}
+              rightIcon={<ArrowRight className="w-4 h-4" />}
+              className="font-bold text-xs"
             >
-              Open Full Comparison Matrix
+              Open Interactive Quote Matrix
             </Button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+          {/* 5 Real Stockist Comparison Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
             {demoQuotes.map((quote, idx) => (
               <div
                 key={quote.id}
-                className="bg-slate-900/90 rounded-2xl p-4 border border-slate-700/80 hover:border-amber-400 transition-all flex flex-col justify-between"
+                className={`p-4 rounded-2xl border transition-all flex flex-col justify-between ${
+                  idx === 0
+                    ? 'bg-gradient-to-b from-emerald-950/60 to-slate-900 border-emerald-500 shadow-lg shadow-emerald-500/10'
+                    : 'bg-slate-800/60 border-slate-700/80 hover:border-slate-600'
+                }`}
               >
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-[10px] font-mono text-slate-400">{quote.quotationNumber}</span>
-                    <span className="text-[10px] font-bold bg-emerald-500/20 text-emerald-300 px-1.5 py-0.2 rounded border border-emerald-400/30">
-                      Quote {idx + 1} of 5
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono font-bold text-slate-400">
+                      Quote #{quote.quotationNumber.slice(-4)}
                     </span>
+                    {idx === 0 && (
+                      <span className="bg-emerald-500 text-slate-950 font-extrabold text-[10px] px-2 py-0.5 rounded-full">
+                        Lowest Price
+                      </span>
+                    )}
                   </div>
-                  <h4 className="text-xs font-bold text-white line-clamp-1">{quote.supplierCompanyName}</h4>
-                  <p className="text-[10px] text-slate-400 mt-0.5">{quote.supplierZone}</p>
 
-                  <div className="my-2.5 p-2.5 bg-slate-950 rounded-xl border border-slate-800 flex items-baseline justify-between">
-                    <div>
-                      <span className="text-[9px] text-slate-500 block uppercase font-semibold">Total (Incl. VAT)</span>
-                      <span className="text-base font-extrabold text-white">{formatAED(quote.grandTotalAED)}</span>
+                  <div>
+                    <h4 className="font-bold text-white text-xs truncate">{quote.supplierCompanyName}</h4>
+                    <p className="text-[11px] text-slate-400">{quote.supplierZone}</p>
+                  </div>
+
+                  <div className="pt-2 border-t border-slate-700/50">
+                    <span className="text-[10px] text-slate-400 block">Total (Incl. 5% VAT)</span>
+                    <div className="text-lg font-extrabold text-white font-mono">
+                      {formatAED(quote.grandTotalAED)}
                     </div>
-                    <span className="text-[10px] text-amber-400 font-bold">★ {quote.supplierRating}</span>
                   </div>
 
-                  <div className="space-y-1 text-[11px] text-slate-300">
+                  <div className="text-[11px] space-y-1 pt-2 border-t border-slate-700/50">
                     <div className="flex justify-between py-0.5 border-b border-slate-800">
                       <span className="text-slate-400">Lead Time:</span>
-                      <strong className="text-white">{quote.leadTimeDisplay || quote.leadTimeDays + ' Day'}</strong>
+                      <strong className="text-white">{quote.leadTimeDisplay || '2 Days'}</strong>
+                    </div>
+                    <div className="flex justify-between py-0.5 border-b border-slate-800">
+                      <span className="text-slate-400">Brand:</span>
+                      <strong className="text-white">Ducab / Schneider</strong>
                     </div>
                     <div className="flex justify-between py-0.5 border-b border-slate-800">
                       <span className="text-slate-400">Payment:</span>
                       <strong className="text-white">{quote.paymentTerms}</strong>
                     </div>
-                    <div className="flex justify-between py-0.5">
-                      <span className="text-slate-400">Spec:</span>
-                      <span className="text-emerald-400 font-medium text-[10px]">DEWA Certified</span>
-                    </div>
                   </div>
-                </div>
-
-                <div className="pt-3 mt-1">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full text-slate-900 bg-white hover:bg-slate-100 font-bold text-xs py-1.5"
-                    onClick={() => {
-                      setRole('buyer');
-                      setCurrentView('buyer-compare', { rfqId: featuredRFQ.id });
-                    }}
-                  >
-                    Select Offer
-                  </Button>
                 </div>
               </div>
             ))}
@@ -227,93 +205,63 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView, onOpenCompar
         </div>
       </section>
 
-      {/* VERIFIED SUPPLIERS BY CATEGORY DIRECTORY */}
+      {/* HOW IT WORKS 4-STEP OVERVIEW */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
-          <div>
-            <div className="inline-flex items-center gap-1 text-xs font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded border border-emerald-300 mb-1">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-700" />
-              <span>UAE Verified Material Verticals</span>
-            </div>
-            <h2 className="text-2xl font-extrabold text-slate-900">
-              Browse Verified Stockists by Category
-            </h2>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Electrical cables & switchgear, plumbing & sanitary, HVAC ducting, chemicals, and site safety.
-            </p>
-          </div>
-          <button
-            onClick={() => setCurrentView('suppliers')}
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-600 hover:text-brand-700"
-          >
-            <span>Explore All Verified Suppliers</span>
-            <ChevronRight className="w-4 h-4" />
-          </button>
+        <div className="text-center space-y-2 mb-8">
+          <span className="inline-flex items-center gap-1 text-xs font-bold text-brand-700 bg-brand-50 px-3 py-1 rounded-full border border-brand-200">
+            <Sparkles className="w-3.5 h-3.5" /> Transparent B2B Procurement Workflow
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
+            How SupplySouq Works in 4 Easy Steps
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-500 max-w-xl mx-auto">
+            From posting your material requirements to direct site delivery with 5% VAT compliant invoicing.
+          </p>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[
-            { name: 'Electrical Supplies', icon: Zap, count: '6 Stockists', desc: 'Ducab cables, Schneider MCBs, 60x60 LED, GI trays' },
-            { name: 'Plumbing & Sanitary', icon: Layers, count: '3 Stockists', desc: 'PPR PN20 pipes, UPVC drainage, valves & pumps' },
-            { name: 'HVAC & Mechanical', icon: Sparkles, count: '3 Stockists', desc: 'GI ductwork, copper tubing, R410a, insulation' },
-            { name: 'Chemicals & Adhesives', icon: ShieldCheck, count: '2 Stockists', desc: 'PU sealants, waterproofing, epoxies & solvents' },
-            { name: 'Safety & PPE Tools', icon: PackageCheck, count: '2 Stockists', desc: 'Helmets, safety boots, power tools & fasteners' }
-          ].map((cat, idx) => {
-            const Icon = cat.icon;
+            {
+              step: '01',
+              title: 'Create Corporate Account',
+              desc: 'Sign up as a Contractor or Material Stockist in 30 seconds. Suppliers undergo quick Trade License verification.',
+              icon: Building2
+            },
+            {
+              step: '02',
+              title: 'Post Material RFQ / BOQ',
+              desc: 'Enter line items, brand preferences (Ducab, Schneider), or upload an Excel BOQ / photo of your material note.',
+              icon: FileSpreadsheet
+            },
+            {
+              step: '03',
+              title: 'Compare 5 Live Quotations',
+              desc: 'Verified stockists submit prices within 24 hours. Compare side-by-side by price, brand, lead time & ratings.',
+              icon: GitCompare
+            },
+            {
+              step: '04',
+              title: 'Issue PO & Site Delivery',
+              desc: '1-Click award to generate an official digital PO. Track dispatch and receive direct delivery at your project site.',
+              icon: PackageCheck
+            }
+          ].map((item, idx) => {
+            const Icon = item.icon;
             return (
-              <Card
-                key={idx}
-                className="hover:border-amber-400 hover:shadow-card transition-all cursor-pointer group p-4 bg-white"
-                onClick={() => setCurrentView('suppliers')}
-              >
-                <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center mb-3 group-hover:scale-105 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all font-bold">
-                  <Icon className="w-5 h-5" />
+              <Card key={idx} className="p-6 border-slate-200 hover:border-brand-400 transition-all space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-xs font-extrabold text-brand-600 bg-brand-50 px-2.5 py-1 rounded-lg">
+                    Step {item.step}
+                  </span>
+                  <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-700">
+                    <Icon className="w-4 h-4" />
+                  </div>
                 </div>
-                <h3 className="text-sm font-bold text-slate-900 group-hover:text-amber-700 transition-colors">
-                  {cat.name}
-                </h3>
-                <span className="text-[11px] font-bold text-brand-600 block mt-0.5">{cat.count}</span>
-                <p className="text-[11px] text-slate-500 mt-1 line-clamp-2 leading-relaxed">
-                  {cat.desc}
-                </p>
-                <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-brand-600">
-                  <span>View Verified</span>
-                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                </div>
+                <h3 className="text-base font-bold text-slate-900">{item.title}</h3>
+                <p className="text-xs text-slate-500 leading-relaxed">{item.desc}</p>
               </Card>
             );
           })}
-        </div>
-      </section>
-
-      {/* VERIFIED ELECTRICAL STOCKISTS DIRECTORY */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
-          <div>
-            <h2 className="text-2xl font-extrabold text-slate-900">
-              Verified UAE Electrical Stockists
-            </h2>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Authorized cable distributors and switchgear stockists with active UAE DET Trade Licenses.
-            </p>
-          </div>
-          <button
-            onClick={() => setCurrentView('suppliers')}
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-600 hover:text-brand-700"
-          >
-            <span>Explore All Stockists</span>
-            <ChevronRight className="w-4 h-4" />
-          </button>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {verifiedSuppliers.slice(0, 3).map((supp) => (
-            <SupplierCard
-              key={supp.id}
-              supplier={supp}
-              onRequestQuote={() => handleStartBuyer()}
-            />
-          ))}
         </div>
       </section>
 
@@ -322,13 +270,13 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView, onOpenCompar
         <div className="bg-slate-900 rounded-3xl p-6 sm:p-10 text-white border border-slate-800 relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="space-y-2 max-w-xl">
             <span className="inline-flex items-center gap-1 text-amber-400 text-xs font-bold uppercase tracking-wider">
-              <ShieldCheck className="w-4 h-4 text-emerald-400" /> Seamless UAE Electrical Onboarding Procedure
+              <ShieldCheck className="w-4 h-4 text-emerald-400" /> Standard Operating Procedures (SOP)
             </span>
             <h3 className="text-xl sm:text-2xl font-bold text-white">
-              Are you an MEP Contractor or Electrical Stockist?
+              Learn the Complete Procurement & Stockist Workflow
             </h3>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-              Read our step-by-step onboarding guide, compliance requirements, and DET trade license verification procedure.
+              Read our comprehensive onboarding guide, compliance requirements, and trade license verification procedure.
             </p>
           </div>
 
@@ -339,7 +287,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView, onOpenCompar
             rightIcon={<ArrowRight className="w-4 h-4" />}
             className="bg-brand-500 hover:bg-brand-600 font-bold whitespace-nowrap"
           >
-            View Onboarding Guide
+            View Onboarding SOP
           </Button>
         </div>
       </section>

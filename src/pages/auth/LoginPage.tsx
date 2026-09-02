@@ -3,17 +3,20 @@ import { useAuth } from '../../context/AuthContext';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
 import { UserRole } from '../../types';
-import { Layers, Lock, Mail, AlertCircle, ShieldAlert, Building2, Store } from 'lucide-react';
+import { Layers, Lock, Mail, AlertCircle, Building2, Store } from 'lucide-react';
 
 interface LoginPageProps {
   onSuccess: () => void;
   onNavigateToRegister?: () => void;
+  isAdminMode?: boolean;
 }
 
-export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToRegister }) => {
-  const { signIn, adminLogin, switchDemoUser } = useAuth();
-  const [role, setRole] = useState<UserRole>('buyer');
-  const [email, setEmail] = useState('procurement@apexcontracting.ae');
+export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToRegister, isAdminMode = false }) => {
+  const { signIn, adminLogin } = useAuth();
+  const [role, setRole] = useState<UserRole>(isAdminMode ? 'admin' : 'buyer');
+  const [email, setEmail] = useState(
+    isAdminMode ? 'admin@supplysouq.ae' : 'procurement@apexcontracting.ae'
+  );
   const [password, setPassword] = useState('password123');
   const [adminPassword, setAdminPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
@@ -24,13 +27,13 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
     setErrorMsg('');
     setLoading(true);
 
-    if (role === 'admin') {
-      const ok = adminLogin(adminPassword);
+    if (role === 'admin' || isAdminMode) {
+      const ok = adminLogin(adminPassword || password);
       setLoading(false);
       if (ok) {
         onSuccess();
       } else {
-        setErrorMsg('Invalid Master Admin Key. Only authorized SupplySouq operators may access the Admin Desk.');
+        setErrorMsg('Invalid Master Admin Key. Only authorized operators may access the Admin Desk.');
       }
       return;
     }
@@ -40,7 +43,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
     if (res.success) {
       onSuccess();
     } else {
-      setErrorMsg(res.error || 'Invalid credentials');
+      setErrorMsg(res.error || 'Invalid email or password');
     }
   };
 
@@ -51,54 +54,53 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-600 to-navy-900 flex items-center justify-center text-white mx-auto shadow-md shadow-brand-500/20">
             <Layers className="w-6 h-6 text-amber-400" />
           </div>
-          <h2 className="text-2xl font-extrabold text-slate-900">Sign in to SupplySouq</h2>
-          <p className="text-xs text-slate-500">Access your UAE B2B procurement workspace</p>
+          <h2 className="text-2xl font-extrabold text-slate-900">
+            {isAdminMode ? 'Operations Desk Sign In' : 'Sign in to SupplySouq'}
+          </h2>
+          <p className="text-xs text-slate-500">
+            {isAdminMode
+              ? 'Authorized UAE marketplace operator clearance'
+              : 'Access your dedicated UAE B2B procurement workspace'}
+          </p>
         </div>
 
-        {/* Portal Type Switcher */}
-        <div className="grid grid-cols-3 gap-1 bg-slate-100 p-1 rounded-xl text-xs font-bold">
-          <button
-            type="button"
-            onClick={() => {
-              setRole('buyer');
-              setEmail('procurement@apexcontracting.ae');
-              setErrorMsg('');
-            }}
-            className={`py-2 rounded-lg transition-all flex items-center justify-center gap-1 ${
-              role === 'buyer' ? 'bg-white shadow-sm font-extrabold text-brand-700' : 'text-slate-600'
-            }`}
-          >
-            <Building2 className="w-3.5 h-3.5" />
-            <span>Buyer</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setRole('supplier');
-              setEmail('sales@alnoorelectrical.ae');
-              setErrorMsg('');
-            }}
-            className={`py-2 rounded-lg transition-all flex items-center justify-center gap-1 ${
-              role === 'supplier' ? 'bg-white shadow-sm font-extrabold text-amber-900' : 'text-slate-600'
-            }`}
-          >
-            <Store className="w-3.5 h-3.5" />
-            <span>Supplier</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setRole('admin');
-              setErrorMsg('');
-            }}
-            className={`py-2 rounded-lg transition-all flex items-center justify-center gap-1 ${
-              role === 'admin' ? 'bg-white shadow-sm font-extrabold text-emerald-800' : 'text-slate-600'
-            }`}
-          >
-            <ShieldAlert className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Admin Desk</span>
-          </button>
-        </div>
+        {/* Portal Type Switcher - ONLY BUYER & SUPPLIER (No Admin) */}
+        {!isAdminMode && (
+          <div className="grid grid-cols-2 gap-2 bg-slate-100 p-1 rounded-xl text-xs font-bold">
+            <button
+              type="button"
+              onClick={() => {
+                setRole('buyer');
+                setEmail('procurement@apexcontracting.ae');
+                setErrorMsg('');
+              }}
+              className={`py-2.5 rounded-lg transition-all flex items-center justify-center gap-1.5 ${
+                role === 'buyer'
+                  ? 'bg-white shadow-sm font-extrabold text-brand-700 border border-slate-200'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Building2 className="w-4 h-4 text-brand-600" />
+              <span>Contractor / Buyer</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setRole('supplier');
+                setEmail('sales@alnoorelectrical.ae');
+                setErrorMsg('');
+              }}
+              className={`py-2.5 rounded-lg transition-all flex items-center justify-center gap-1.5 ${
+                role === 'supplier'
+                  ? 'bg-white shadow-sm font-extrabold text-amber-900 border border-amber-300'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Store className="w-4 h-4 text-amber-600" />
+              <span>Verified Supplier</span>
+            </button>
+          </div>
+        )}
 
         {errorMsg && (
           <div className="p-3 bg-red-50 border border-red-200 rounded-xl flex items-center gap-2 text-xs text-red-700">
@@ -108,7 +110,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4 text-xs">
-          {role !== 'admin' ? (
+          {!isAdminMode ? (
             <>
               <div>
                 <label className="font-bold text-slate-700 block mb-1 flex items-center gap-1">
@@ -142,20 +144,15 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
                 type="submit"
                 variant={role === 'supplier' ? 'amber' : 'primary'}
                 disabled={loading}
-                className="w-full py-2.5 font-bold shadow-md"
+                className="w-full py-3 font-extrabold shadow-md text-sm"
               >
-                {loading ? 'Authenticating...' : `Sign In as ${role === 'buyer' ? 'Contractor / Buyer' : 'Verified Supplier'}`}
+                {loading
+                  ? 'Authenticating...'
+                  : `Sign In to ${role === 'buyer' ? 'Contractor Portal' : 'Supplier Portal'}`}
               </Button>
             </>
           ) : (
             <>
-              <div className="bg-emerald-50 p-3 rounded-xl border border-emerald-200 text-emerald-900 text-xs">
-                <p className="font-bold">🔒 Restricted Platform Operations Desk</p>
-                <p className="text-[11px] text-emerald-800 mt-0.5">
-                  Only authorized marketplace administrators have clearance to view all registered customers, pricing matrices & verification documents.
-                </p>
-              </div>
-
               <div>
                 <label className="font-bold text-slate-700 block mb-1 flex items-center gap-1">
                   <Lock className="w-3.5 h-3.5 text-slate-400" /> Master Admin Passkey
@@ -165,8 +162,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
                   required
                   value={adminPassword}
                   onChange={(e) => setAdminPassword(e.target.value)}
-                  placeholder="Enter administrator passkey"
-                  className="w-full p-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 font-medium"
+                  placeholder="Enter administrator passkey (admin123)"
+                  className="w-full p-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 font-bold text-slate-900"
                 />
               </div>
 
@@ -174,7 +171,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
                 type="submit"
                 variant="primary"
                 disabled={loading}
-                className="w-full py-2.5 font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-emerald-600/20"
+                className="w-full py-3 font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-md"
               >
                 {loading ? 'Verifying clearance...' : 'Unlock Admin Operations Desk'}
               </Button>
@@ -182,16 +179,18 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
           )}
         </form>
 
-        <div className="text-center pt-2 border-t border-slate-100 text-xs text-slate-500">
-          New to SupplySouq?{' '}
-          <button
-            type="button"
-            onClick={onNavigateToRegister || onSuccess}
-            className="text-brand-600 font-bold hover:underline"
-          >
-            Create an Account
-          </button>
-        </div>
+        {!isAdminMode && (
+          <div className="text-center pt-2 border-t border-slate-100 text-xs text-slate-500">
+            Don't have an account yet?{' '}
+            <button
+              type="button"
+              onClick={onNavigateToRegister || onSuccess}
+              className="text-brand-600 font-bold hover:underline"
+            >
+              Sign Up as Contractor or Supplier
+            </button>
+          </div>
+        )}
       </Card>
     </div>
   );

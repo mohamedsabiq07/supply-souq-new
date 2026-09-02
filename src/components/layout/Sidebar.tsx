@@ -36,7 +36,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView })
     { id: 'buyer-compare-quick', label: 'Quotation Comparison', icon: GitCompare, count: evaluatingRFQs.length, highlight: true },
     { id: 'invoice-audit', label: 'Invoice Cost Audit', icon: TrendingUp },
     { id: 'buyer-orders', label: 'Purchase Orders', icon: Package, count: activeOrders },
-    { id: 'suppliers', label: 'UAE Suppliers Directory', icon: Store },
     { id: 'buyer-messages', label: 'Messages', icon: MessageSquare },
   ];
 
@@ -53,7 +52,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView })
     { id: 'admin-dashboard', label: 'Command Center', icon: LayoutDashboard },
     { id: 'admin-verifications', label: 'Trade License Verification', icon: ShieldCheck, count: pendingVerifications, highlight: true },
     { id: 'admin-rfqs', label: 'Global RFQs Monitor', icon: FileText, count: rfqs.length },
-    { id: 'suppliers', label: 'Suppliers Directory', icon: Store },
   ];
 
   const links = role === 'buyer' ? buyerLinks : role === 'supplier' ? supplierLinks : adminLinks;

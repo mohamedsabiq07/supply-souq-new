@@ -46,12 +46,9 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
                   <span className="font-extrabold text-lg text-slate-900 tracking-tight">
                     Supply<span className="text-brand-600">Souq</span>
                   </span>
-                  <span className="text-[10px] font-bold text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded border border-amber-300">
-                    DXB • SHJ • AJM
-                  </span>
                 </div>
                 <span className="text-[10px] text-slate-400 font-semibold block leading-none">
-                  Dubai • Sharjah • Ajman B2B Marketplace
+                  B2B Procurement Marketplace
                 </span>
               </div>
             </button>
@@ -84,15 +81,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
               >
                 <BookOpen className="w-3.5 h-3.5 text-emerald-600" />
                 <span>Onboarding SOP</span>
-              </button>
-
-              <button
-                onClick={() => setCurrentView('suppliers')}
-                className={`px-3 py-2 rounded-lg transition-colors ${
-                  currentView === 'suppliers' ? 'bg-slate-100 text-brand-600 font-bold' : 'hover:bg-slate-50 hover:text-slate-900'
-                }`}
-              >
-                Verified Suppliers
               </button>
 
               <button
@@ -220,15 +208,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
               className="p-2 text-left text-emerald-800 bg-emerald-50 font-bold rounded-lg"
             >
               Onboarding SOP
-            </button>
-            <button
-              onClick={() => {
-                setCurrentView('suppliers');
-                setMobileMenuOpen(false);
-              }}
-              className="p-2 text-left hover:bg-slate-50 rounded-lg"
-            >
-              Verified Suppliers
             </button>
             <button
               onClick={() => {

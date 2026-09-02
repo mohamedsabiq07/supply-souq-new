@@ -64,8 +64,8 @@ const AppContent: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-brand-500 selection:text-white">
-      {/* Top Interactive Role Switcher */}
-      <DemoRoleBar />
+      {/* Top Role Session & Database Bar */}
+      <DemoRoleBar onNavigate={handleNavigate} />
 
       {/* Main Navbar */}
       <Navbar currentView={currentView} setCurrentView={handleNavigate} />

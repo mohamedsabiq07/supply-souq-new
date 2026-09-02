@@ -101,8 +101,8 @@ export const Footer: React.FC<FooterProps> = ({ setCurrentView }) => {
                 </button>
               </li>
               <li>
-                <button onClick={() => setCurrentView('suppliers')} className="hover:text-white transition-colors">
-                  Supplier Directory
+                <button onClick={() => setCurrentView('onboarding-guide')} className="hover:text-white transition-colors">
+                  Onboarding SOP Guide
                 </button>
               </li>
               <li>
@@ -119,7 +119,7 @@ export const Footer: React.FC<FooterProps> = ({ setCurrentView }) => {
         </div>
 
         <div className="pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <p>© 2026 SupplySouq FZCO. All rights reserved. Dubai • Sharjah • Ajman B2B Procurement Technology.</p>
+          <p>© 2026 SupplySouq FZCO. All rights reserved. UAE B2B Procurement Technology.</p>
           <div className="flex items-center gap-4">
             <span className="hover:text-slate-400 cursor-pointer">Terms of Procurement</span>
             <span>•</span>
