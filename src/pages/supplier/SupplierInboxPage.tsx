@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useAppData } from '../../context/AppDataContext';
 import { RFQCard } from '../../components/rfq/RFQCard';
+import { DeclineRFQModal } from '../../components/rfq/DeclineRFQModal';
 import { Card } from '../../components/ui/Card';
-import { Search, Zap, CheckCircle2, ShieldCheck, Filter } from 'lucide-react';
+import { Search, Zap, CheckCircle2, ShieldCheck, Filter, XCircle } from 'lucide-react';
+import { RFQ } from '../../types';
 
 interface SupplierInboxPageProps {
   onNavigate: (view: string, params?: any) => void;
@@ -11,18 +13,33 @@ interface SupplierInboxPageProps {
 
 export const SupplierInboxPage: React.FC<SupplierInboxPageProps> = ({ onNavigate }) => {
   const { currentCompany } = useAuth();
-  const { rfqs } = useAppData();
+  const { rfqs, declineRFQ, isRFQDeclinedBySupplier, declinedRFQs } = useAppData();
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeTab, setActiveTab] = useState<'all' | 'direct' | 'cables' | 'switchgear' | 'containment' | 'lighting' | 'earthing' | 'solar'>('all');
+  const [activeTab, setActiveTab] = useState<'all' | 'direct' | 'cables' | 'switchgear' | 'containment' | 'lighting' | 'earthing' | 'solar' | 'declined'>('all');
+  const [targetDecliningRFQ, setTargetDecliningRFQ] = useState<RFQ | null>(null);
 
   const openRFQs = rfqs.filter(r => r.status !== 'draft');
+  const myDeclinedRecords = declinedRFQs.filter(d => d.supplierCompanyId === currentCompany.id);
 
   const directCount = openRFQs.filter(r => 
-    r.targetSupplierId === currentCompany.id || 
-    (r.matchedSupplierCompanyIds && r.matchedSupplierCompanyIds.includes(currentCompany.id))
+    !isRFQDeclinedBySupplier(r.id, currentCompany.id) &&
+    (r.targetSupplierId === currentCompany.id || 
+    (r.matchedSupplierCompanyIds && r.matchedSupplierCompanyIds.includes(currentCompany.id)))
   ).length;
 
+  const activeRFQsCount = openRFQs.filter(r => !isRFQDeclinedBySupplier(r.id, currentCompany.id)).length;
+
   const filtered = openRFQs.filter(r => {
+    const isDeclined = isRFQDeclinedBySupplier(r.id, currentCompany.id);
+
+    // If declined tab is selected
+    if (activeTab === 'declined') {
+      if (!isDeclined) return false;
+    } else {
+      // Hide declined RFQs from active tabs
+      if (isDeclined) return false;
+    }
+
     // Tab filter
     if (activeTab === 'direct') {
       const isDirect = r.targetSupplierId === currentCompany.id || (r.matchedSupplierCompanyIds && r.matchedSupplierCompanyIds.includes(currentCompany.id));
@@ -101,7 +118,7 @@ export const SupplierInboxPage: React.FC<SupplierInboxPageProps> = ({ onNavigate
                 : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
             }`}
           >
-            All Live RFQs ({openRFQs.length})
+            All Live RFQs ({activeRFQsCount})
           </button>
           <button
             onClick={() => setActiveTab('direct')}
@@ -174,20 +191,40 @@ export const SupplierInboxPage: React.FC<SupplierInboxPageProps> = ({ onNavigate
           >
             ☀️ Solar & Power
           </button>
+          {myDeclinedRecords.length > 0 && (
+            <button
+              onClick={() => setActiveTab('declined')}
+              className={`px-3 py-1.5 rounded-lg font-semibold transition-all whitespace-nowrap flex items-center gap-1 ${
+                activeTab === 'declined'
+                  ? 'bg-rose-900 text-white font-bold shadow-xs'
+                  : 'bg-rose-50 text-rose-800 hover:bg-rose-100 border border-rose-200'
+              }`}
+            >
+              <XCircle className="w-3.5 h-3.5 text-rose-600" />
+              <span>Declined ({myDeclinedRecords.length})</span>
+            </button>
+          )}
         </div>
       </div>
 
       {filtered.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {filtered.map((rfq) => (
-            <RFQCard
-              key={rfq.id}
-              rfq={rfq}
-              isSupplierView={true}
-              onView={(r) => onNavigate('rfq-detail', { rfqId: r.id })}
-              onQuote={(r) => onNavigate('submit-quote', { rfqId: r.id })}
-            />
-          ))}
+          {filtered.map((rfq) => {
+            const isDeclined = isRFQDeclinedBySupplier(rfq.id, currentCompany.id);
+            const decRec = myDeclinedRecords.find(d => d.rfqId === rfq.id);
+            return (
+              <RFQCard
+                key={rfq.id}
+                rfq={rfq}
+                isSupplierView={true}
+                isDeclined={isDeclined}
+                declineReason={decRec?.reason}
+                onView={(r) => onNavigate('rfq-detail', { rfqId: r.id })}
+                onQuote={(r) => onNavigate('submit-quote', { rfqId: r.id })}
+                onDecline={(r) => setTargetDecliningRFQ(r)}
+              />
+            );
+          })}
         </div>
       ) : (
         <Card className="p-12 text-center space-y-4 border-dashed border-2 border-slate-200 bg-white">
@@ -195,10 +232,14 @@ export const SupplierInboxPage: React.FC<SupplierInboxPageProps> = ({ onNavigate
             <Zap className="w-6 h-6" />
           </div>
           <div className="space-y-1 max-w-sm mx-auto">
-            <h3 className="text-base font-bold text-slate-900">No RFQs Matching Filter</h3>
+            <h3 className="text-base font-bold text-slate-900">
+              {activeTab === 'declined' ? 'No Declined RFQs' : 'No RFQs Matching Filter'}
+            </h3>
             <p className="text-xs text-slate-500">
               {activeTab === 'direct' 
                 ? "No direct RFQs targeted to your company currently. Switch to 'All Live RFQs' to browse open contractor requirements across UAE." 
+                : activeTab === 'declined'
+                ? "You haven't declined any contractor RFQs yet. Declined RFQs will appear here for your records."
                 : "Try clearing your search or switching to another category tab."}
             </p>
           </div>
@@ -215,6 +256,16 @@ export const SupplierInboxPage: React.FC<SupplierInboxPageProps> = ({ onNavigate
           )}
         </Card>
       )}
+
+      {/* Decline RFQ Modal */}
+      <DeclineRFQModal
+        isOpen={!!targetDecliningRFQ}
+        onClose={() => setTargetDecliningRFQ(null)}
+        rfq={targetDecliningRFQ}
+        onConfirmDecline={(rfqId, reason, notes) => {
+          declineRFQ(rfqId, currentCompany.id, currentCompany.name, reason, notes);
+        }}
+      />
     </div>
   );
 };

@@ -11,6 +11,9 @@ interface RFQCardProps {
   onView: (rfq: RFQ) => void;
   onCompare?: (rfq: RFQ) => void;
   onQuote?: (rfq: RFQ) => void;
+  onDecline?: (rfq: RFQ) => void;
+  isDeclined?: boolean;
+  declineReason?: string;
   isSupplierView?: boolean;
 }
 
@@ -19,6 +22,9 @@ export const RFQCard: React.FC<RFQCardProps> = ({
   onView,
   onCompare,
   onQuote,
+  onDecline,
+  isDeclined = false,
+  declineReason,
   isSupplierView = false,
 }) => {
   return (
@@ -100,6 +106,17 @@ export const RFQCard: React.FC<RFQCardProps> = ({
           )}
         </div>
 
+        {isDeclined && (
+          <div className="p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-xs text-rose-800 flex items-center justify-between mb-3">
+            <span className="font-semibold">⚠️ You declined to quote on this RFQ</span>
+            {declineReason && (
+              <span className="text-[11px] text-rose-600 font-medium truncate max-w-[240px]">
+                Reason: {declineReason}
+              </span>
+            )}
+          </div>
+        )}
+
         <div className="flex items-center justify-between gap-2 pt-1">
           <Button
             variant="outline"
@@ -110,14 +127,30 @@ export const RFQCard: React.FC<RFQCardProps> = ({
           </Button>
 
           {isSupplierView ? (
-            <Button
-              variant="amber"
-              size="sm"
-              onClick={() => onQuote && onQuote(rfq)}
-              rightIcon={<ArrowRight className="w-4 h-4" />}
-            >
-              Submit Quotation
-            </Button>
+            isDeclined ? (
+              <span className="text-xs font-bold text-rose-600 bg-rose-50 px-3 py-1.5 rounded-lg border border-rose-200">
+                Declined by You
+              </span>
+            ) : (
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => onDecline && onDecline(rfq)}
+                  className="text-slate-600 hover:text-rose-600 hover:border-rose-300 hover:bg-rose-50/60 text-xs"
+                >
+                  Decline RFQ
+                </Button>
+                <Button
+                  variant="amber"
+                  size="sm"
+                  onClick={() => onQuote && onQuote(rfq)}
+                  rightIcon={<ArrowRight className="w-4 h-4" />}
+                >
+                  Submit Quotation
+                </Button>
+              </div>
+            )
           ) : (
             rfq.quotesCount > 0 ? (
               <Button

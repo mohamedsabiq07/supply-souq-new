@@ -294,3 +294,14 @@ export interface VerificationRequest {
   status: VerificationStatus;
   notes?: string;
 }
+
+export interface DeclineRFQRecord {
+  id: string;
+  rfqId: string;
+  rfqNumber: string;
+  supplierCompanyId: string;
+  supplierCompanyName: string;
+  reason: string;
+  notes?: string;
+  declinedAt: string;
+}

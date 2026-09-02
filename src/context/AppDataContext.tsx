@@ -8,6 +8,7 @@ import {
   Message,
   Review,
   VerificationRequest,
+  DeclineRFQRecord,
   RFQStatus,
   OrderStatus,
   VerificationStatus,
@@ -40,6 +41,7 @@ interface AppDataContextType {
   messages: Message[];
   reviews: Review[];
   verifications: VerificationRequest[];
+  declinedRFQs: DeclineRFQRecord[];
   isSupabaseConnected: boolean;
   isSyncing: boolean;
   
@@ -47,6 +49,8 @@ interface AppDataContextType {
   createRFQ: (newRFQ: Omit<RFQ, 'id' | 'rfqNumber' | 'createdAt' | 'updatedAt' | 'quotesCount' | 'invitedCount'>) => RFQ;
   updateRFQStatus: (rfqId: string, status: RFQStatus) => void;
   getRFQById: (rfqId: string) => RFQ | undefined;
+  declineRFQ: (rfqId: string, supplierCompanyId: string, supplierCompanyName: string, reason: string, notes?: string) => void;
+  isRFQDeclinedBySupplier: (rfqId: string, supplierCompanyId: string) => boolean;
   
   // Quotation Methods
   submitQuotation: (quoteData: Omit<Quotation, 'id' | 'quotationNumber' | 'submittedAt' | 'status'>) => Quotation;
@@ -163,6 +167,15 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }
   });
 
+  const [declinedRFQs, setDeclinedRFQs] = useState<DeclineRFQRecord[]>(() => {
+    try {
+      const saved = localStorage.getItem(`${STORAGE_KEY}_declined_rfqs`);
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) {
+      return [];
+    }
+  });
+
   const [unlockedRFQIds, setUnlockedRFQIds] = useState<string[]>(() => {
     try {
       const saved = localStorage.getItem(`${STORAGE_KEY}_unlocked_rfqs`);
@@ -187,6 +200,10 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const isRFQExtendedUnlocked = (rfqId: string) => {
     return unlockedRFQIds.includes(rfqId);
+  };
+
+  const isRFQDeclinedBySupplier = (rfqId: string, supplierCompanyId: string) => {
+    return declinedRFQs.some(d => d.rfqId === rfqId && d.supplierCompanyId === supplierCompanyId);
   };
 
   // Helper to merge local and remote entities, with newer timestamps winning
@@ -512,6 +529,52 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
     return rfqs.find((r) => r.id === rfqId || r.rfqNumber === rfqId);
   };
 
+  const declineRFQ = (rfqId: string, supplierCompanyId: string, supplierCompanyName: string, reason: string, notes?: string) => {
+    const targetRFQ = rfqs.find((r) => r.id === rfqId || r.rfqNumber === rfqId);
+    const newRecord: DeclineRFQRecord = {
+      id: `dec-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+      rfqId: targetRFQ?.id || rfqId,
+      rfqNumber: targetRFQ?.rfqNumber || rfqId,
+      supplierCompanyId,
+      supplierCompanyName,
+      reason,
+      notes,
+      declinedAt: new Date().toISOString(),
+    };
+
+    setDeclinedRFQs((prev) => {
+      const filtered = prev.filter((d) => !(d.rfqId === newRecord.rfqId && d.supplierCompanyId === supplierCompanyId));
+      const next = [newRecord, ...filtered];
+      try {
+        localStorage.setItem(`${STORAGE_KEY}_declined_rfqs`, JSON.stringify(next));
+      } catch (e) {}
+      return next;
+    });
+
+    // Send a real-time notification message to the Buyer
+    if (targetRFQ) {
+      const declineMsg: Message = {
+        id: `msg-${Date.now()}`,
+        rfqId: targetRFQ.id,
+        rfqNumber: targetRFQ.rfqNumber,
+        senderId: supplierCompanyId,
+        senderName: supplierCompanyName,
+        senderCompanyId: supplierCompanyId,
+        senderCompanyName: supplierCompanyName,
+        senderRole: 'supplier',
+        recipientCompanyId: targetRFQ.buyerCompanyId,
+        recipientCompanyName: targetRFQ.buyerCompanyName,
+        messageText: `[RFQ Declined] ${supplierCompanyName} passed on RFQ #${targetRFQ.rfqNumber}. Reason: ${reason}${notes ? ` - "${notes}"` : ''}`,
+        createdAt: new Date().toISOString(),
+        isRead: false,
+      };
+
+      setMessages((prev) => [declineMsg, ...prev]);
+    }
+
+    broadcastSync();
+  };
+
   const submitQuotation = (quoteData: Omit<Quotation, 'id' | 'quotationNumber' | 'submittedAt' | 'status'>): Quotation => {
     const randomNum = Math.floor(10000 + Math.random() * 90000);
     const targetRFQ = rfqs.find((r) => r.id === quoteData.rfqId || r.rfqNumber === quoteData.rfqId);
@@ -742,11 +805,14 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
         messages,
         reviews,
         verifications,
+        declinedRFQs,
         isSupabaseConnected,
         isSyncing,
         createRFQ,
         updateRFQStatus,
         getRFQById,
+        declineRFQ,
+        isRFQDeclinedBySupplier,
         submitQuotation,
         getQuotesForRFQ,
         getQuotationsForSupplier,
