@@ -55,7 +55,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
             <Layers className="w-6 h-6 text-amber-400" />
           </div>
           <h2 className="text-2xl font-extrabold text-slate-900">
-            {isAdminMode ? 'Operations Desk Sign In' : 'Sign in to SupplySouq'}
+            {isAdminMode ? 'Operations Desk Login' : 'Login to SupplySouq'}
           </h2>
           <p className="text-xs text-slate-500">
             {isAdminMode
@@ -148,7 +148,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
               >
                 {loading
                   ? 'Authenticating...'
-                  : `Sign In to ${role === 'buyer' ? 'Contractor Portal' : 'Supplier Portal'}`}
+                  : `Login to ${role === 'buyer' ? 'Contractor Portal' : 'Supplier Portal'}`}
               </Button>
             </>
           ) : (

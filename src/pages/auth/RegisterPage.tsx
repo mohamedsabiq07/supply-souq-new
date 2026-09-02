@@ -520,7 +520,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
             onClick={onNavigateToLogin || onSuccess}
             className="text-brand-600 font-bold hover:underline"
           >
-            Sign in to your portal
+            Login to your portal
           </button>
         </div>
       </Card>

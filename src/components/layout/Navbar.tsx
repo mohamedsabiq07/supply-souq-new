@@ -103,7 +103,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
                   onClick={() => setCurrentView('login')}
                   className="px-3.5 py-2 rounded-lg text-xs font-bold text-slate-700 hover:text-brand-600 hover:bg-slate-100 transition-colors"
                 >
-                  Sign In
+                  Login
                 </button>
                 <button
                   onClick={() => setCurrentView('register')}
@@ -120,18 +120,9 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
                     else if (role === 'supplier') setCurrentView('supplier-dashboard');
                     else setCurrentView('admin-dashboard');
                   }}
-                  className="px-3.5 py-2 rounded-lg text-xs font-bold bg-brand-50 border border-brand-200 text-brand-700 hover:bg-brand-100 transition-colors"
+                  className="px-4 py-2 rounded-lg text-xs font-bold bg-brand-600 text-white hover:bg-brand-700 shadow-sm transition-colors flex items-center gap-1.5"
                 >
-                  My Workspace
-                </button>
-                <button
-                  onClick={() => {
-                    logout();
-                    setCurrentView('home');
-                  }}
-                  className="px-3 py-2 text-xs font-bold text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                >
-                  Sign Out
+                  <span>My Workspace</span>
                 </button>
               </div>
             )}
@@ -200,9 +191,9 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
                     setCurrentView('login');
                     setMobileMenuOpen(false);
                   }}
-                  className="w-full justify-center"
+                  className="w-full justify-center font-bold"
                 >
-                  Sign In to Account
+                  Login to Account
                 </Button>
                 <Button
                   variant="outline"

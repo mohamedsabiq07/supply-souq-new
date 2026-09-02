@@ -13,7 +13,8 @@ import {
   Settings,
   Building2,
   TrendingUp,
-  Award
+  Award,
+  LogOut
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -22,7 +23,7 @@ interface SidebarProps {
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView }) => {
-  const { role, currentUser, currentCompany } = useAuth();
+  const { role, currentUser, currentCompany, logout } = useAuth();
   const { rfqs, quotations, purchaseOrders, verifications } = useAppData();
 
   const companyId = currentCompany?.id || '';
@@ -133,15 +134,32 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView })
         </nav>
       </div>
 
-      {/* UAE Procurement Advisory Box */}
-      <div className="p-3 bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-xl text-xs space-y-2 mt-6">
-        <div className="flex items-center gap-1.5 text-amber-400 font-bold">
-          <Award className="w-4 h-4" />
-          <span>UAE Compliance</span>
+      {/* Bottom Sign Out & Session Area */}
+      <div className="space-y-3 pt-4 border-t border-slate-200 mt-6">
+        <button
+          onClick={() => {
+            logout();
+            setCurrentView('home');
+          }}
+          className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold text-red-600 bg-red-50/60 hover:bg-red-100/80 hover:text-red-700 transition-colors border border-red-200/60 shadow-sm"
+        >
+          <div className="flex items-center gap-2.5">
+            <LogOut className="w-4 h-4 text-red-500" />
+            <span>Sign Out</span>
+          </div>
+          <span className="text-[10px] text-red-400 font-medium">End Session</span>
+        </button>
+
+        {/* UAE Compliance Note */}
+        <div className="p-2.5 bg-slate-50 border border-slate-100 rounded-xl text-[11px] text-slate-500 space-y-1">
+          <div className="flex items-center gap-1.5 text-slate-700 font-bold text-xs">
+            <Award className="w-3.5 h-3.5 text-amber-500" />
+            <span>UAE Verified Session</span>
+          </div>
+          <p className="leading-tight text-slate-500">
+            {currentCompany.name} ({currentCompany.emirate})
+          </p>
         </div>
-        <p className="text-[11px] text-slate-300 leading-relaxed">
-          All suppliers undergo valid UAE Department of Economy & Tourism (DET) Trade License verification.
-        </p>
       </div>
     </aside>
   );
