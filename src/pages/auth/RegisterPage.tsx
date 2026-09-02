@@ -45,7 +45,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
   const [buyerCompany, setBuyerCompany] = useState('');
   const [procurementEngineer, setProcurementEngineer] = useState('');
   const [buyerUsername, setBuyerUsername] = useState('');
-  const [buyerPhone, setBuyerPhone] = useState('+971 50 ');
+  const [buyerPhone, setBuyerPhone] = useState('+971 ');
   const [buyerEmail, setBuyerEmail] = useState('');
   const [buyerAddress, setBuyerAddress] = useState('');
   const [buyerEmirate, setBuyerEmirate] = useState<Emirate>('Dubai');
@@ -58,7 +58,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
   const [tradeLicenseNumber, setTradeLicenseNumber] = useState('');
   const [tradeLicenseFileName, setTradeLicenseFileName] = useState('');
   const [contactPerson, setContactPerson] = useState('');
-  const [supplierPhone, setSupplierPhone] = useState('+971 50 ');
+  const [supplierPhone, setSupplierPhone] = useState('+971 ');
   const [supplierEmail, setSupplierEmail] = useState('');
   const [supplierEmirate, setSupplierEmirate] = useState<Emirate>('Dubai');
   const [industrialZone, setIndustrialZone] = useState('Al Quoz Industrial Area 3');
@@ -259,7 +259,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
                 <input
                   type="tel"
                   required
-                  placeholder="+971 50 123 4567"
+                  placeholder="+971 5X XXX XXXX"
                   value={buyerPhone}
                   onChange={(e) => setBuyerPhone(e.target.value)}
                   className="w-full p-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 font-medium"
@@ -436,7 +436,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
                 <input
                   type="tel"
                   required
-                  placeholder="+971 50 882 1190"
+                  placeholder="+971 5X XXX XXXX"
                   value={supplierPhone}
                   onChange={(e) => setSupplierPhone(e.target.value)}
                   className="w-full p-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-amber-500 font-medium"
