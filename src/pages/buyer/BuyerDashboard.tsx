@@ -16,7 +16,9 @@ import {
   Clock,
   ArrowRight,
   ShieldCheck,
-  AlertCircle
+  AlertCircle,
+  Zap,
+  CheckCircle2
 } from 'lucide-react';
 
 interface BuyerDashboardProps {
@@ -29,7 +31,11 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
 
   const myRFQs = rfqs.filter(r => r.buyerCompanyId === currentCompany.id);
   const myRFQIds = myRFQs.map(r => r.id);
-  const myQuotes = quotations.filter(q => myRFQIds.includes(q.rfqId));
+  const myQuotes = quotations.filter(q => 
+    (q.buyerCompanyId && q.buyerCompanyId === currentCompany.id) || 
+    myRFQIds.includes(q.rfqId) ||
+    myRFQs.some(r => r.rfqNumber === q.rfqNumber)
+  );
   const evaluatingRFQs = myRFQs.filter(r => r.quotesCount > 0 && r.status !== 'closed' && r.status !== 'awarded');
   const activeOrders = purchaseOrders.filter(p => p.buyerCompanyId === currentCompany.id);
 
@@ -74,10 +80,10 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
             </div>
             <div>
               <h4 className="text-sm font-bold text-white">
-                {evaluatingRFQs[0].quotesCount} Quotations Ready for Evaluation ({evaluatingRFQs[0].rfqNumber})
+                {evaluatingRFQs[0].quotesCount} Quotation{evaluatingRFQs[0].quotesCount > 1 ? 's' : ''} Ready for Evaluation ({evaluatingRFQs[0].rfqNumber})
               </h4>
               <p className="text-xs text-slate-300">
-                Suppliers in Al Quoz & Sharjah have submitted offers for "{evaluatingRFQs[0].title}".
+                Suppliers have submitted official offers for "{evaluatingRFQs[0].title}".
               </p>
             </div>
           </div>
@@ -86,6 +92,7 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
             size="sm"
             onClick={() => onNavigate('buyer-compare', { rfqId: evaluatingRFQs[0].id })}
             rightIcon={<ArrowRight className="w-4 h-4" />}
+            className="font-bold"
           >
             Open Comparison Matrix
           </Button>
@@ -119,6 +126,121 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
           icon={<TrendingDown className="w-6 h-6 text-emerald-600" />}
         />
       </div>
+
+      {/* Live Received Quotations Feed */}
+      {myQuotes.length > 0 && (
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
+                <GitCompare className="w-4 h-4" />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-slate-900">
+                  Live Quotations Received from Suppliers ({myQuotes.length})
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Direct commercial proposals submitted by verified UAE stockists with full price breakdown and lead times.
+                </p>
+              </div>
+            </div>
+            {evaluatingRFQs.length > 0 && (
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => onNavigate('buyer-compare', { rfqId: evaluatingRFQs[0].id })}
+                leftIcon={<GitCompare className="w-4 h-4" />}
+                className="font-bold"
+              >
+                Compare Quotes Matrix
+              </Button>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {myQuotes.map((quote) => {
+              const matchedRFQ = myRFQs.find(r => r.id === quote.rfqId || r.rfqNumber === quote.rfqNumber);
+              return (
+                <div
+                  key={quote.id}
+                  className="bg-white rounded-2xl border border-slate-200 p-5 shadow-subtle hover:border-brand-500 transition-all space-y-4"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-mono font-bold bg-amber-50 text-amber-800 px-2 py-0.5 rounded border border-amber-200">
+                          {quote.quotationNumber}
+                        </span>
+                        <span className="text-xs font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 flex items-center gap-1">
+                          <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                          <span>Submitted</span>
+                        </span>
+                        {matchedRFQ && (
+                          <span className="text-xs font-mono text-slate-500">
+                            for {matchedRFQ.rfqNumber}
+                          </span>
+                        )}
+                      </div>
+                      <h4 className="font-extrabold text-slate-900 text-sm">{quote.supplierCompanyName}</h4>
+                      <p className="text-xs text-slate-500">
+                        {quote.supplierZone || quote.supplierEmirate || 'UAE Verified Stockist'}
+                      </p>
+                    </div>
+
+                    <div className="text-right">
+                      <span className="text-[10px] text-slate-400 block font-medium">Quoted Total (Incl. 5% VAT)</span>
+                      <span className="text-lg sm:text-xl font-extrabold text-slate-900 font-mono">
+                        {formatAED(quote.grandTotalAED)}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-2 bg-slate-50 p-3 rounded-xl text-xs border border-slate-100">
+                    <div>
+                      <span className="text-slate-400 block text-[10px]">Lead Time</span>
+                      <strong className="text-slate-800 font-bold">{quote.leadTimeDisplay || `${quote.leadTimeDays} Days`}</strong>
+                    </div>
+                    <div>
+                      <span className="text-slate-400 block text-[10px]">Payment Terms</span>
+                      <strong className="text-slate-800 font-bold truncate block">{quote.paymentTerms || '30 Days'}</strong>
+                    </div>
+                    <div>
+                      <span className="text-slate-400 block text-[10px]">Materials</span>
+                      <strong className="text-slate-800 font-bold">{quote.items?.length || 0} items quoted</strong>
+                    </div>
+                  </div>
+
+                  {quote.notes && (
+                    <p className="text-xs text-slate-600 bg-amber-50/50 p-2.5 rounded-lg border border-amber-100 italic">
+                      "{quote.notes}"
+                    </p>
+                  )}
+
+                  <div className="flex items-center justify-between gap-2 pt-1">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => onNavigate('rfq-detail', { rfqId: quote.rfqId })}
+                      className="text-xs font-semibold"
+                    >
+                      View Full Details
+                    </Button>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={() => onNavigate('buyer-compare', { rfqId: quote.rfqId })}
+                      leftIcon={<Zap className="w-3.5 h-3.5 text-amber-300" />}
+                      className="text-xs font-bold"
+                    >
+                      Award Purchase Order
+                    </Button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Active RFQs Section */}
       <div className="space-y-4">
