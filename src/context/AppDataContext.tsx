@@ -86,7 +86,7 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
       const saved = localStorage.getItem(`${STORAGE_KEY}_rfqs`);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.some((r: RFQ) => r.rfqNumber === 'SS-10284')) {
+        if (Array.isArray(parsed) && parsed.length > 0) {
           return parsed;
         }
       }
@@ -99,7 +99,7 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
       const saved = localStorage.getItem(`${STORAGE_KEY}_quotes`);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.filter((q: Quotation) => q.rfqNumber === 'SS-10284').length >= 5) {
+        if (Array.isArray(parsed) && parsed.length > 0) {
           return parsed;
         }
       }
@@ -121,7 +121,7 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
       const saved = localStorage.getItem(`${STORAGE_KEY}_companies`);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length >= 8) {
+        if (Array.isArray(parsed) && parsed.length > 0) {
           return parsed;
         }
       }
@@ -166,9 +166,14 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
       if (!result.error) {
         setIsSupabaseConnected(true);
 
-        // If companies exist in Supabase, sync them down
+        // Merge companies: preserve existing local plus cloud
         if (result.companies && result.companies.length > 0) {
-          setCompanies(result.companies);
+          setCompanies((prev) => {
+            const map = new Map<string, Company>();
+            prev.forEach(c => map.set(c.id, c));
+            result.companies.forEach(c => map.set(c.id, c));
+            return Array.from(map.values());
+          });
         } else {
           // If Supabase is empty, seed initial data to the database
           await supabaseService.seedInitialData({
@@ -181,24 +186,54 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
           });
         }
 
+        // Merge RFQs: preserve any locally created RFQs and union with cloud
         if (result.rfqs && result.rfqs.length > 0) {
-          setRfqs(result.rfqs);
+          setRfqs((prev) => {
+            const map = new Map<string, RFQ>();
+            result.rfqs.forEach(r => map.set(r.id, r));
+            prev.forEach(r => map.set(r.id, r));
+            return Array.from(map.values());
+          });
         }
 
+        // Merge Quotations
         if (result.quotations && result.quotations.length > 0) {
-          setQuotations(result.quotations);
+          setQuotations((prev) => {
+            const map = new Map<string, Quotation>();
+            result.quotations.forEach(q => map.set(q.id, q));
+            prev.forEach(q => map.set(q.id, q));
+            return Array.from(map.values());
+          });
         }
 
+        // Merge Purchase Orders
         if (result.purchaseOrders && result.purchaseOrders.length > 0) {
-          setPurchaseOrders(result.purchaseOrders);
+          setPurchaseOrders((prev) => {
+            const map = new Map<string, PurchaseOrder>();
+            result.purchaseOrders.forEach(p => map.set(p.id, p));
+            prev.forEach(p => map.set(p.id, p));
+            return Array.from(map.values());
+          });
         }
 
+        // Merge Messages
         if (result.messages && result.messages.length > 0) {
-          setMessages(result.messages);
+          setMessages((prev) => {
+            const map = new Map<string, Message>();
+            result.messages.forEach(m => map.set(m.id, m));
+            prev.forEach(m => map.set(m.id, m));
+            return Array.from(map.values());
+          });
         }
 
+        // Merge Verifications
         if (result.verifications && result.verifications.length > 0) {
-          setVerifications(result.verifications);
+          setVerifications((prev) => {
+            const map = new Map<string, VerificationRequest>();
+            result.verifications.forEach(v => map.set(v.id, v));
+            prev.forEach(v => map.set(v.id, v));
+            return Array.from(map.values());
+          });
         }
       } else {
         console.warn('Supabase fetch issue, using local storage cache:', result.error);

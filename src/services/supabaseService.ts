@@ -404,14 +404,15 @@ export const supabaseService = {
     }
   },
 
-  // Insert RFQ
+  // Insert or Upsert RFQ
   async createRFQ(rfq: RFQ) {
     try {
-      const { data, error } = await supabase.from('rfqs').insert([mapRFQToDB(rfq)]).select();
+      const { data, error } = await supabase.from('rfqs').upsert([mapRFQToDB(rfq)]).select();
       if (error) console.error('Error creating RFQ in Supabase:', error);
+      else console.log('Successfully persisted RFQ to Supabase:', rfq.id);
       return data;
     } catch (e) {
-      console.error(e);
+      console.error('Exception creating RFQ in Supabase:', e);
     }
   },
 
@@ -425,25 +426,27 @@ export const supabaseService = {
     }
   },
 
-  // Insert Quotation
+  // Insert or Upsert Quotation
   async submitQuotation(quote: Quotation) {
     try {
-      const { data, error } = await supabase.from('quotations').insert([mapQuotationToDB(quote)]).select();
+      const { data, error } = await supabase.from('quotations').upsert([mapQuotationToDB(quote)]).select();
       if (error) console.error('Error submitting quote in Supabase:', error);
+      else console.log('Successfully persisted quotation to Supabase:', quote.id);
       return data;
     } catch (e) {
-      console.error(e);
+      console.error('Exception submitting quote in Supabase:', e);
     }
   },
 
-  // Insert Purchase Order
+  // Insert or Upsert Purchase Order
   async createPurchaseOrder(po: PurchaseOrder) {
     try {
-      const { data, error } = await supabase.from('purchase_orders').insert([mapPOToDB(po)]).select();
+      const { data, error } = await supabase.from('purchase_orders').upsert([mapPOToDB(po)]).select();
       if (error) console.error('Error creating PO in Supabase:', error);
+      else console.log('Successfully persisted PO to Supabase:', po.id);
       return data;
     } catch (e) {
-      console.error(e);
+      console.error('Exception creating PO in Supabase:', e);
     }
   },
 
@@ -459,10 +462,10 @@ export const supabaseService = {
     }
   },
 
-  // Insert Message
+  // Insert or Upsert Message
   async sendMessage(msg: Message) {
     try {
-      const { data, error } = await supabase.from('messages').insert([mapMessageToDB(msg)]).select();
+      const { data, error } = await supabase.from('messages').upsert([mapMessageToDB(msg)]).select();
       if (error) console.error('Error sending message in Supabase:', error);
       return data;
     } catch (e) {
