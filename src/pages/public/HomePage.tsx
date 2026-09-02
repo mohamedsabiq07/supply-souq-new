@@ -28,15 +28,13 @@ import {
 
 interface HomePageProps {
   setCurrentView: (view: string, params?: any) => void;
-  onOpenCompareDemo: () => void;
+  onOpenCompareDemo?: () => void;
 }
 
-export const HomePage: React.FC<HomePageProps> = ({ setCurrentView, onOpenCompareDemo }) => {
+export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
   const { isAuthenticated } = useAuth();
-  const { categories, companies, rfqs, quotations } = useAppData();
+  const { categories, companies, rfqs } = useAppData();
 
-  const featuredRFQ = rfqs.find(r => r.rfqNumber === 'SS-10284') || rfqs[0];
-  const demoQuotes = quotations.filter(q => q.rfqId === featuredRFQ?.id || q.rfqNumber === featuredRFQ?.rfqNumber).slice(0, 5);
   const verifiedSuppliers = companies.filter(c => c.companyType === 'supplier');
 
   const handleStartBuyer = (bundle?: QuickBundle) => {
@@ -130,86 +128,75 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView, onOpenCompar
         <AnimatedAuditBanner onLaunchAudit={() => setCurrentView('invoice-audit')} />
       </section>
 
-      {/* INTERACTIVE 5-VENDOR QUOTE COMPARISON DEMO */}
+      {/* 4-PILLAR PROCUREMENT ARCHITECTURE */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-slate-900 rounded-3xl p-6 sm:p-10 border border-slate-800 text-white space-y-8 shadow-2xl">
           
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-800 pb-6">
             <div>
               <div className="inline-flex items-center gap-2 bg-amber-500/20 text-amber-300 text-xs font-bold px-3 py-1 rounded-full border border-amber-500/30 mb-2">
-                <GitCompare className="w-3.5 h-3.5" />
-                <span>Live Multi-Vendor Quotation Benchmark</span>
+                <ShieldCheck className="w-3.5 h-3.5" />
+                <span>Next-Generation B2B Material Exchange</span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
-                How Contractors Compare 5 Live Stockist Quotes
+                Built for UAE Contractors, Engineers & Material Stockists
               </h2>
               <p className="text-xs sm:text-sm text-slate-400 mt-1">
-                Real example: Eng. Tariq from Apex Contracting requested Ducab CU/XLPE/PVC Cables & Schneider MCBs.
+                A transparent, zero-commission marketplace connecting real UAE contractors with authorized distributors.
               </p>
             </div>
 
             <Button
               variant="amber"
-              onClick={onOpenCompareDemo}
+              onClick={() => handleStartBuyer()}
               rightIcon={<ArrowRight className="w-4 h-4" />}
               className="font-bold text-xs"
             >
-              Open Interactive Quote Matrix
+              Post Live RFQ
             </Button>
           </div>
 
-          {/* 5 Real Stockist Comparison Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
-            {demoQuotes.map((quote, idx) => (
-              <div
-                key={quote.id}
-                className={`p-4 rounded-2xl border transition-all flex flex-col justify-between ${
-                  idx === 0
-                    ? 'bg-gradient-to-b from-emerald-950/60 to-slate-900 border-emerald-500 shadow-lg shadow-emerald-500/10'
-                    : 'bg-slate-800/60 border-slate-700/80 hover:border-slate-600'
-                }`}
-              >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono font-bold text-slate-400">
-                      Quote #{quote.quotationNumber.slice(-4)}
-                    </span>
-                    {idx === 0 && (
-                      <span className="bg-emerald-500 text-slate-950 font-extrabold text-[10px] px-2 py-0.5 rounded-full">
-                        Lowest Price
-                      </span>
-                    )}
-                  </div>
-
-                  <div>
-                    <h4 className="font-bold text-white text-xs truncate">{quote.supplierCompanyName}</h4>
-                    <p className="text-[11px] text-slate-400">{quote.supplierZone}</p>
-                  </div>
-
-                  <div className="pt-2 border-t border-slate-700/50">
-                    <span className="text-[10px] text-slate-400 block">Total (Incl. 5% VAT)</span>
-                    <div className="text-lg font-extrabold text-white font-mono">
-                      {formatAED(quote.grandTotalAED)}
-                    </div>
-                  </div>
-
-                  <div className="text-[11px] space-y-1 pt-2 border-t border-slate-700/50">
-                    <div className="flex justify-between py-0.5 border-b border-slate-800">
-                      <span className="text-slate-400">Lead Time:</span>
-                      <strong className="text-white">{quote.leadTimeDisplay || '2 Days'}</strong>
-                    </div>
-                    <div className="flex justify-between py-0.5 border-b border-slate-800">
-                      <span className="text-slate-400">Brand:</span>
-                      <strong className="text-white">Ducab / Schneider</strong>
-                    </div>
-                    <div className="flex justify-between py-0.5 border-b border-slate-800">
-                      <span className="text-slate-400">Payment:</span>
-                      <strong className="text-white">{quote.paymentTerms}</strong>
-                    </div>
-                  </div>
-                </div>
+          {/* 4 Pillar Value Props */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="p-5 rounded-2xl bg-slate-800/60 border border-slate-700/80 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 font-bold flex items-center justify-center">
+                <Zap className="w-5 h-5" />
               </div>
-            ))}
+              <h4 className="font-bold text-white text-sm">Direct Multi-Vendor Bidding</h4>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Post your material BOQ once. All verified UAE stockists under your category receive it and submit itemized prices within 24 hours.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-slate-800/60 border border-slate-700/80 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 font-bold flex items-center justify-center">
+                <ShieldCheck className="w-5 h-5" />
+              </div>
+              <h4 className="font-bold text-white text-sm">DET Verified Suppliers</h4>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Every vendor is vetted with valid UAE Commercial Trade Licenses, ensuring genuine factory drums, test certificates, and warranties.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-slate-800/60 border border-slate-700/80 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-400 font-bold flex items-center justify-center">
+                <GitCompare className="w-5 h-5" />
+              </div>
+              <h4 className="font-bold text-white text-sm">Side-by-Side Matrix</h4>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Evaluate quotations side-by-side on price, delivery lead times, payment terms, and vendor track record before issuing Purchase Orders.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-slate-800/60 border border-slate-700/80 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 font-bold flex items-center justify-center">
+                <PackageCheck className="w-5 h-5" />
+              </div>
+              <h4 className="font-bold text-white text-sm">100% Tax Compliant</h4>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Full 5% UAE VAT invoices, structured milestone payments, and direct delivery to your job sites in Dubai, Sharjah, and across the UAE.
+              </p>
+            </div>
           </div>
         </div>
       </section>

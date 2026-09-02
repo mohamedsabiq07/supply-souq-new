@@ -119,10 +119,7 @@ const AppContent: React.FC = () => {
       {isPublicPage ? (
         <main className="flex-1">
           {currentView === 'home' && (
-            <HomePage
-              setCurrentView={handleNavigate}
-              onOpenCompareDemo={() => handleNavigate('buyer-compare', { rfqId: 'rfq-10292' })}
-            />
+            <HomePage setCurrentView={handleNavigate} />
           )}
           {currentView === 'categories' && (
             <SuppliersPage onRequestQuote={(targetSupplier, category) => {
