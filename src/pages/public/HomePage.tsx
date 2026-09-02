@@ -32,7 +32,7 @@ interface HomePageProps {
 }
 
 export const HomePage: React.FC<HomePageProps> = ({ setCurrentView, onOpenCompareDemo }) => {
-  const { setRole } = useAuth();
+  const { isAuthenticated } = useAuth();
   const { categories, companies, rfqs, quotations } = useAppData();
 
   const featuredRFQ = rfqs.find(r => r.rfqNumber === 'SS-10284') || rfqs[0];
@@ -40,17 +40,26 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView, onOpenCompar
   const verifiedSuppliers = companies.filter(c => c.companyType === 'supplier');
 
   const handleStartBuyer = (bundle?: QuickBundle) => {
-    setRole('buyer');
+    if (!isAuthenticated) {
+      setCurrentView('login', { redirect: 'create-rfq', bundle });
+      return;
+    }
     setCurrentView('create-rfq', { bundle });
   };
 
   const handleStartSupplier = () => {
-    setRole('supplier');
+    if (!isAuthenticated) {
+      setCurrentView('login', { redirect: 'supplier-inbox' });
+      return;
+    }
     setCurrentView('supplier-inbox');
   };
 
   const handleQuickPhotoUpload = () => {
-    setRole('buyer');
+    if (!isAuthenticated) {
+      setCurrentView('login', { redirect: 'create-rfq', mode: 'photo_upload' });
+      return;
+    }
     setCurrentView('create-rfq', { mode: 'photo_upload' });
   };
 

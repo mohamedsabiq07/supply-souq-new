@@ -46,7 +46,23 @@ const AppContent: React.FC = () => {
 
   const handleNavigate = (view: string, params: any = {}) => {
     setViewParams(params);
-    setCurrentView(view);
+
+    const publicViews = [
+      'home', 
+      'categories', 
+      'suppliers', 
+      'how-it-works', 
+      'onboarding-guide', 
+      'invoice-audit',
+      'login', 
+      'register'
+    ];
+
+    if (!isAuthenticated && !publicViews.includes(view)) {
+      setCurrentView('login');
+    } else {
+      setCurrentView(view);
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -97,31 +113,31 @@ const AppContent: React.FC = () => {
             />
           )}
           {currentView === 'categories' && (
-            <SuppliersPage onRequestQuote={() => handleNavigate('create-rfq')} />
+            <SuppliersPage onRequestQuote={() => handleNavigate(isAuthenticated ? 'create-rfq' : 'login')} />
           )}
           {currentView === 'suppliers' && (
-            <SuppliersPage onRequestQuote={() => handleNavigate('create-rfq')} />
+            <SuppliersPage onRequestQuote={() => handleNavigate(isAuthenticated ? 'create-rfq' : 'login')} />
           )}
           {currentView === 'how-it-works' && (
-            <HowItWorksPage onStartRFQ={() => handleNavigate('create-rfq')} />
+            <HowItWorksPage onStartRFQ={() => handleNavigate(isAuthenticated ? 'create-rfq' : 'login')} />
           )}
           {currentView === 'onboarding-guide' && (
             <OnboardingGuidePage
               onStartBuyer={() => {
-                setRole('buyer');
-                handleNavigate('create-rfq');
+                if (!isAuthenticated) handleNavigate('register');
+                else handleNavigate('create-rfq');
               }}
               onStartSupplier={() => {
-                setRole('supplier');
-                handleNavigate('supplier-inbox');
+                if (!isAuthenticated) handleNavigate('register');
+                else handleNavigate('supplier-inbox');
               }}
             />
           )}
           {currentView === 'invoice-audit' && (
             <InvoiceAuditPage
               onStartRFQWithAudit={(bundle) => {
-                setRole('buyer');
-                handleNavigate('create-rfq', { bundle });
+                if (!isAuthenticated) handleNavigate('login', { bundle });
+                else handleNavigate('create-rfq', { bundle });
               }}
             />
           )}

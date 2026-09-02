@@ -55,14 +55,6 @@ export const DemoRoleBar: React.FC<DemoRoleBarProps> = ({ onNavigate }) => {
         <span className="text-slate-400 text-[11px] hidden md:inline">
           Active User: <strong className="text-white">{currentUser.fullName}</strong>
         </span>
-
-        <button
-          onClick={handleLogout}
-          className="inline-flex items-center gap-1 bg-slate-800 hover:bg-red-950/50 text-slate-300 hover:text-red-300 px-2.5 py-1 rounded-md border border-slate-700 hover:border-red-800/50 transition-colors font-bold text-xs"
-        >
-          <LogOut className="w-3 h-3" />
-          <span>Sign Out</span>
-        </button>
       </div>
     </div>
   );

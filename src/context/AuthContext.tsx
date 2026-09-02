@@ -267,7 +267,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const setRole = (newRole: UserRole) => {
-    switchDemoUser(newRole);
+    setRoleState(newRole);
   };
 
   const login = (email: string, targetRole: UserRole) => {
