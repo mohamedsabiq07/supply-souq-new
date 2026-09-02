@@ -385,58 +385,6 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
               </div>
             </div>
 
-            {/* Target Supplier Recipient / Optional Selection */}
-            <div className="p-3.5 bg-amber-50/70 rounded-xl border border-amber-200">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-amber-500 text-slate-950 font-bold flex items-center justify-center shrink-0">
-                    <Building2 className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <span className="text-[10px] font-bold text-amber-800 uppercase tracking-wider block">
-                      Target Supplier Recipient:
-                    </span>
-                    <strong className="text-slate-900 text-xs">
-                      {selectedTargetSupplier 
-                        ? `${selectedTargetSupplier.name} (${selectedTargetSupplier.industrialZone || selectedTargetSupplier.emirate})`
-                        : 'Broadcast to Top 5 Verified UAE Stockists'}
-                    </strong>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <select
-                    value={selectedTargetSupplier?.id || ''}
-                    onChange={(e) => {
-                      const found = verifiedSuppliers.find(s => s.id === e.target.value);
-                      setSelectedTargetSupplier(found || null);
-                      if (found && found.categories && found.categories.length > 0) {
-                        setCategory(found.categories[0]);
-                      }
-                    }}
-                    className="p-1.5 rounded-lg border border-amber-300 bg-white text-xs font-semibold text-slate-800"
-                  >
-                    <option value="">-- Auto-Match 5 Best Stockists --</option>
-                    {verifiedSuppliers.map((sup) => (
-                      <option key={sup.id} value={sup.id}>
-                        {sup.name} ({sup.emirate})
-                      </option>
-                    ))}
-                  </select>
-                  {selectedTargetSupplier && (
-                    <button
-                      type="button"
-                      onClick={() => setSelectedTargetSupplier(null)}
-                      className="text-slate-400 hover:text-slate-600 p-1"
-                      title="Clear targeted supplier"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
-                  )}
-                </div>
-              </div>
-            </div>
-
             {/* Delivery Location & Emirate */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
