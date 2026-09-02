@@ -32,73 +32,87 @@ export const SupplierOrdersPage: React.FC = () => {
         <p className="text-xs text-slate-500 mt-0.5">Manage awarded orders, update dispatch statuses, and confirm deliveries.</p>
       </div>
 
-      <div className="space-y-4">
-        {myOrders.map((po) => (
-          <Card key={po.id} className="hover:border-slate-300 transition-all">
-            <CardContent className="p-6">
-              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-4 border-b border-slate-100">
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="font-mono font-bold text-xs bg-slate-900 text-white px-2 py-0.5 rounded">
-                      {po.poNumber}
-                    </span>
-                    <StatusBadge status={po.status} />
+      {myOrders.length > 0 ? (
+        <div className="space-y-4">
+          {myOrders.map((po) => (
+            <Card key={po.id} className="hover:border-slate-300 transition-all">
+              <CardContent className="p-6">
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-4 border-b border-slate-100">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="font-mono font-bold text-xs bg-slate-900 text-white px-2 py-0.5 rounded">
+                        {po.poNumber}
+                      </span>
+                      <StatusBadge status={po.status} />
+                    </div>
+                    <h3 className="text-base font-bold text-slate-900">{po.rfqTitle}</h3>
+                    <p className="text-xs text-slate-500 mt-0.5">
+                      Buyer: <strong className="text-slate-800">{po.buyerCompanyName}</strong> • {po.buyerContactName} ({po.buyerPhone})
+                    </p>
                   </div>
-                  <h3 className="text-base font-bold text-slate-900">{po.rfqTitle}</h3>
-                  <p className="text-xs text-slate-500 mt-0.5">
-                    Buyer: <strong className="text-slate-800">{po.buyerCompanyName}</strong> • {po.buyerContactName} ({po.buyerPhone})
-                  </p>
+
+                  <div className="sm:text-right">
+                    <span className="text-xs text-slate-400 block font-medium">Order Value</span>
+                    <span className="text-xl font-extrabold text-slate-900">{formatAED(po.totalAmountAED)}</span>
+                  </div>
                 </div>
 
-                <div className="sm:text-right">
-                  <span className="text-xs text-slate-400 block font-medium">Order Value</span>
-                  <span className="text-xl font-extrabold text-slate-900">{formatAED(po.totalAmountAED)}</span>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-slate-600 my-3">
+                  <div>
+                    <span className="text-slate-400 block">Deliver To:</span>
+                    <strong className="text-slate-800">{po.deliveryAddress}</strong>
+                  </div>
+                  <div>
+                    <span className="text-slate-400 block">Payment Terms:</span>
+                    <strong className="text-slate-800">{po.paymentTerms}</strong>
+                  </div>
+                  <div>
+                    <span className="text-slate-400 block">Expected Date:</span>
+                    <strong className="text-slate-800">{formatDate(po.expectedDeliveryDate)}</strong>
+                  </div>
                 </div>
-              </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-slate-600 my-3">
-                <div>
-                  <span className="text-slate-400 block">Deliver To:</span>
-                  <strong className="text-slate-800">{po.deliveryAddress}</strong>
-                </div>
-                <div>
-                  <span className="text-slate-400 block">Payment Terms:</span>
-                  <strong className="text-slate-800">{po.paymentTerms}</strong>
-                </div>
-                <div>
-                  <span className="text-slate-400 block">Expected Date:</span>
-                  <strong className="text-slate-800">{formatDate(po.expectedDeliveryDate)}</strong>
-                </div>
-              </div>
+                {po.trackingNotes && (
+                  <div className="p-2.5 bg-slate-50 rounded-lg text-xs text-slate-700 border border-slate-200">
+                    <strong className="text-slate-900 block mb-0.5">Dispatch & Tracking Log:</strong>
+                    {po.trackingNotes}
+                  </div>
+                )}
 
-              {po.trackingNotes && (
-                <div className="p-2.5 bg-slate-50 rounded-lg text-xs text-slate-700 border border-slate-200">
-                  <strong className="text-slate-900 block mb-0.5">Dispatch & Tracking Log:</strong>
-                  {po.trackingNotes}
+                <div className="flex items-center justify-between gap-3 pt-3 mt-2 border-t border-slate-100">
+                  <span className="text-xs text-slate-500">
+                    Current Status: <strong className="text-slate-800 capitalize">{po.status.replace('_', ' ')}</strong>
+                  </span>
+
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={() => {
+                      setActivePO(po);
+                      setNewStatus(po.status === 'po_created' ? 'accepted' : po.status === 'accepted' ? 'dispatched' : 'delivered');
+                    }}
+                    leftIcon={<Truck className="w-4 h-4" />}
+                  >
+                    Update Fulfillment Status
+                  </Button>
                 </div>
-              )}
-
-              <div className="flex items-center justify-between gap-3 pt-3 mt-2 border-t border-slate-100">
-                <span className="text-xs text-slate-500">
-                  Current Status: <strong className="text-slate-800 capitalize">{po.status.replace('_', ' ')}</strong>
-                </span>
-
-                <Button
-                  variant="primary"
-                  size="sm"
-                  onClick={() => {
-                    setActivePO(po);
-                    setNewStatus(po.status === 'po_created' ? 'accepted' : po.status === 'accepted' ? 'dispatched' : 'delivered');
-                  }}
-                  leftIcon={<Truck className="w-4 h-4" />}
-                >
-                  Update Fulfillment Status
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      ) : (
+        <Card className="p-12 text-center space-y-4 border-dashed border-2 border-slate-200 bg-slate-50/50">
+          <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center mx-auto font-bold">
+            <Truck className="w-6 h-6" />
+          </div>
+          <div className="space-y-1 max-w-sm mx-auto">
+            <h3 className="text-base font-bold text-slate-900">No Purchase Orders Awarded Yet</h3>
+            <p className="text-xs text-slate-500">
+              When a contractor accepts your quotation, the official digital PO with site location and delivery timeline will appear here.
+            </p>
+          </div>
+        </Card>
+      )}
 
       <Modal
         isOpen={!!activePO}

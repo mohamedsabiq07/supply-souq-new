@@ -59,9 +59,10 @@ export const BuyerOrdersPage: React.FC = () => {
         <p className="text-xs text-slate-500 mt-0.5">Track procurement fulfillment, digital POs, and rate verified suppliers upon delivery.</p>
       </div>
 
-      <div className="space-y-4">
-        {myOrders.map((po) => (
-          <Card key={po.id} className="hover:border-slate-300 transition-all">
+      {myOrders.length > 0 ? (
+        <div className="space-y-4">
+          {myOrders.map((po) => (
+            <Card key={po.id} className="hover:border-slate-300 transition-all">
             <CardContent className="p-6">
               <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-4 border-b border-slate-100">
                 <div>
@@ -149,6 +150,19 @@ export const BuyerOrdersPage: React.FC = () => {
           </Card>
         ))}
       </div>
+    ) : (
+      <Card className="p-12 text-center space-y-4 border-dashed border-2 border-slate-200 bg-slate-50/50">
+        <div className="w-12 h-12 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center mx-auto font-bold">
+          <Package className="w-6 h-6" />
+        </div>
+        <div className="space-y-1 max-w-sm mx-auto">
+          <h3 className="text-base font-bold text-slate-900">No Purchase Orders Issued Yet</h3>
+          <p className="text-xs text-slate-500">
+            When you evaluate quotations and award an order, your official digital PO with delivery tracking and supplier contact info will appear here.
+          </p>
+        </div>
+      </Card>
+    )}
 
       <Modal
         isOpen={!!selectedPO}

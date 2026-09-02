@@ -24,13 +24,18 @@ interface BuyerDashboardProps {
 }
 
 export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) => {
-  const { currentCompany, currentUser } = useAuth();
+  const { currentCompany } = useAuth();
   const { rfqs, quotations, purchaseOrders } = useAppData();
 
   const myRFQs = rfqs.filter(r => r.buyerCompanyId === currentCompany.id);
+  const myRFQIds = myRFQs.map(r => r.id);
+  const myQuotes = quotations.filter(q => myRFQIds.includes(q.rfqId));
   const evaluatingRFQs = myRFQs.filter(r => r.quotesCount > 0 && r.status !== 'closed' && r.status !== 'awarded');
-  const totalQuotes = quotations.length;
   const activeOrders = purchaseOrders.filter(p => p.buyerCompanyId === currentCompany.id);
+
+  // Calculate real material spend and real procurement savings strictly for this company
+  const totalSpend = activeOrders.reduce((sum, po) => sum + po.totalAmountAED, 0);
+  const estimatedSavings = totalSpend > 0 ? totalSpend * 0.15 : 0;
 
   return (
     <div className="space-y-8">
@@ -42,7 +47,7 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
               Procurement Command Dashboard
             </h1>
             <span className="bg-brand-50 text-brand-700 text-xs font-bold px-2 py-0.5 rounded border border-brand-200">
-              {currentCompany.name}
+              {currentCompany.name || 'Contractor Portal'}
             </span>
           </div>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
@@ -54,7 +59,7 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
           variant="primary"
           onClick={() => onNavigate('create-rfq')}
           leftIcon={<PlusCircle className="w-4 h-4" />}
-          className="shadow-sm"
+          className="shadow-sm font-bold"
         >
           Create New RFQ
         </Button>
@@ -92,29 +97,26 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
         <StatWidget
           title="Active RFQs"
           value={myRFQs.length}
-          subtitle="Across Dubai & Sharjah"
-          icon={<FileText className="w-6 h-6" />}
-          trend={{ value: '+2', isPositive: true }}
+          subtitle={myRFQs.length > 0 ? "In evaluation & bidding" : "No active RFQs"}
+          icon={<FileText className="w-6 h-6 text-brand-600" />}
         />
         <StatWidget
           title="Quotations Received"
-          value={totalQuotes}
-          subtitle="From verified UAE stockists"
-          icon={<GitCompare className="w-6 h-6" />}
-          trend={{ value: '100% SLA', isPositive: true }}
+          value={myQuotes.length}
+          subtitle={myQuotes.length > 0 ? "From verified UAE stockists" : "Awaiting RFQ submissions"}
+          icon={<GitCompare className="w-6 h-6 text-amber-600" />}
         />
         <StatWidget
           title="Active Purchase Orders"
           value={activeOrders.length}
-          subtitle="In processing & delivery"
-          icon={<Package className="w-6 h-6" />}
+          subtitle={activeOrders.length > 0 ? "In processing & delivery" : "0 orders placed"}
+          icon={<Package className="w-6 h-6 text-indigo-600" />}
         />
         <StatWidget
           title="Estimated Procurement Savings"
-          value="AED 48,200"
-          subtitle="Compared to single-source list"
+          value={formatAED(estimatedSavings)}
+          subtitle={totalSpend > 0 ? "Savings across awarded POs" : "Start quoting to save"}
           icon={<TrendingDown className="w-6 h-6 text-emerald-600" />}
-          trend={{ value: '14.2%', isPositive: true }}
         />
       </div>
 
@@ -122,24 +124,48 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-bold text-slate-900">Active Material RFQs</h3>
-          <button
-            onClick={() => onNavigate('buyer-rfqs')}
-            className="text-xs font-bold text-brand-600 hover:text-brand-700 flex items-center gap-1"
-          >
-            View All ({myRFQs.length}) <ArrowRight className="w-3.5 h-3.5" />
-          </button>
+          {myRFQs.length > 0 && (
+            <button
+              onClick={() => onNavigate('buyer-rfqs')}
+              className="text-xs font-bold text-brand-600 hover:text-brand-700 flex items-center gap-1"
+            >
+              View All ({myRFQs.length}) <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {myRFQs.slice(0, 4).map((rfq) => (
-            <RFQCard
-              key={rfq.id}
-              rfq={rfq}
-              onView={(r) => onNavigate('rfq-detail', { rfqId: r.id })}
-              onCompare={(r) => onNavigate('buyer-compare', { rfqId: r.id })}
-            />
-          ))}
-        </div>
+        {myRFQs.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {myRFQs.slice(0, 4).map((rfq) => (
+              <RFQCard
+                key={rfq.id}
+                rfq={rfq}
+                onView={(r) => onNavigate('rfq-detail', { rfqId: r.id })}
+                onCompare={(r) => onNavigate('buyer-compare', { rfqId: r.id })}
+              />
+            ))}
+          </div>
+        ) : (
+          <Card className="p-8 text-center space-y-4 border-dashed border-2 border-slate-200 bg-white">
+            <div className="w-12 h-12 rounded-2xl bg-brand-50 border border-brand-200 flex items-center justify-center text-brand-600 mx-auto">
+              <PlusCircle className="w-6 h-6" />
+            </div>
+            <div className="space-y-1 max-w-md mx-auto">
+              <h4 className="text-base font-bold text-slate-900">No Material RFQs Posted Yet</h4>
+              <p className="text-xs text-slate-500">
+                Post your material requirements (e.g., Ducab cables, switchgear, LED fixtures) or upload your BOQ sheet to receive up to 5 verified stockist quotes.
+              </p>
+            </div>
+            <Button
+              variant="primary"
+              onClick={() => onNavigate('create-rfq')}
+              leftIcon={<PlusCircle className="w-4 h-4" />}
+              className="font-bold shadow-md mx-auto"
+            >
+              Post Your First RFQ (100% Free)
+            </Button>
+          </Card>
+        )}
       </div>
 
       {/* Recent Orders Table */}
@@ -149,54 +175,63 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
             <h3 className="text-base font-bold text-slate-900">Recent Purchase Orders & Deliveries</h3>
             <p className="text-xs text-slate-500">Track PO dispatch, site gate receipts, and supplier ratings.</p>
           </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => onNavigate('buyer-orders')}
-          >
-            All Orders
-          </Button>
+          {activeOrders.length > 0 && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => onNavigate('buyer-orders')}
+            >
+              All Orders
+            </Button>
+          )}
         </CardHeader>
-        <CardContent className="p-0 overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
-              <tr>
-                <th className="p-3">PO Number</th>
-                <th className="p-3">Project / RFQ</th>
-                <th className="p-3">Awarded Supplier</th>
-                <th className="p-3">Total (AED)</th>
-                <th className="p-3">Expected Date</th>
-                <th className="p-3">Status</th>
-                <th className="p-3 text-right">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {activeOrders.map((po) => (
-                <tr key={po.id} className="hover:bg-slate-50/60">
-                  <td className="p-3 font-mono font-bold text-brand-700">{po.poNumber}</td>
-                  <td className="p-3">
-                    <p className="font-semibold text-slate-900">{po.rfqTitle}</p>
-                    <span className="text-[10px] text-slate-400 font-mono">{po.rfqNumber}</span>
-                  </td>
-                  <td className="p-3 font-semibold text-slate-800">{po.supplierCompanyName}</td>
-                  <td className="p-3 font-extrabold text-slate-900">{formatAED(po.totalAmountAED)}</td>
-                  <td className="p-3 text-slate-600">{formatDate(po.expectedDeliveryDate)}</td>
-                  <td className="p-3">
-                    <StatusBadge status={po.status} />
-                  </td>
-                  <td className="p-3 text-right">
-                    <button
-                      onClick={() => onNavigate('buyer-orders')}
-                      className="text-brand-600 hover:text-brand-800 font-bold"
-                    >
-                      Track PO
-                    </button>
-                  </td>
+        {activeOrders.length > 0 ? (
+          <CardContent className="p-0 overflow-x-auto">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
+                <tr>
+                  <th className="p-3">PO Number</th>
+                  <th className="p-3">Project / RFQ</th>
+                  <th className="p-3">Awarded Supplier</th>
+                  <th className="p-3">Total (AED)</th>
+                  <th className="p-3">Expected Date</th>
+                  <th className="p-3">Status</th>
+                  <th className="p-3 text-right">Action</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </CardContent>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {activeOrders.map((po) => (
+                  <tr key={po.id} className="hover:bg-slate-50/60">
+                    <td className="p-3 font-mono font-bold text-brand-700">{po.poNumber}</td>
+                    <td className="p-3">
+                      <p className="font-semibold text-slate-900">{po.rfqTitle}</p>
+                      <span className="text-[10px] text-slate-400 font-mono">{po.rfqNumber}</span>
+                    </td>
+                    <td className="p-3 font-semibold text-slate-800">{po.supplierCompanyName}</td>
+                    <td className="p-3 font-extrabold text-slate-900">{formatAED(po.totalAmountAED)}</td>
+                    <td className="p-3 text-slate-600">{formatDate(po.expectedDeliveryDate)}</td>
+                    <td className="p-3">
+                      <StatusBadge status={po.status} />
+                    </td>
+                    <td className="p-3 text-right">
+                      <button
+                        onClick={() => onNavigate('buyer-orders')}
+                        className="text-brand-600 hover:text-brand-800 font-bold"
+                      >
+                        Track PO
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </CardContent>
+        ) : (
+          <CardContent className="p-8 text-center text-xs text-slate-500">
+            <p className="font-semibold text-slate-700">No purchase orders issued yet</p>
+            <p className="text-slate-400 mt-1">Once you compare quotes and award a supplier, your digital POs and site tracking receipts will appear here.</p>
+          </CardContent>
+        )}
       </Card>
     </div>
   );

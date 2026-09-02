@@ -30,6 +30,7 @@ export const SupplierDashboard: React.FC<SupplierDashboardProps> = ({ onNavigate
   const matchingRFQs = rfqs.filter(r => r.status === 'published' || r.status === 'receiving_quotes');
   const myQuotations = quotations.filter(q => q.supplierCompanyId === currentCompany.id);
   const myOrders = purchaseOrders.filter(p => p.supplierCompanyId === currentCompany.id);
+  const isPending = currentCompany.verificationStatus === 'pending';
 
   return (
     <div className="space-y-8">
@@ -41,7 +42,7 @@ export const SupplierDashboard: React.FC<SupplierDashboardProps> = ({ onNavigate
               Supplier Sales Desk
             </h1>
             <span className="bg-amber-100 text-amber-900 text-xs font-bold px-2 py-0.5 rounded border border-amber-300">
-              {currentCompany.name}
+              {currentCompany.name || 'Supplier Portal'}
             </span>
           </div>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
@@ -53,26 +54,37 @@ export const SupplierDashboard: React.FC<SupplierDashboardProps> = ({ onNavigate
           variant="amber"
           onClick={() => onNavigate('supplier-inbox')}
           leftIcon={<Zap className="w-4 h-4" />}
+          className="font-bold shadow-md"
         >
           View Live RFQ Inbox ({matchingRFQs.length})
         </Button>
       </div>
 
       {/* Verification Badge Bar */}
-      <div className="p-4 bg-emerald-50 rounded-2xl border border-emerald-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+      <div className={`p-4 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs ${
+        isPending ? 'bg-amber-50 border-amber-200 text-amber-900' : 'bg-emerald-50 border-emerald-200 text-emerald-900'
+      }`}>
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold shrink-0">
+          <div className={`w-9 h-9 rounded-xl text-white flex items-center justify-center font-bold shrink-0 ${
+            isPending ? 'bg-amber-600' : 'bg-emerald-600'
+          }`}>
             <ShieldCheck className="w-5 h-5" />
           </div>
           <div>
-            <h4 className="font-bold text-emerald-900 text-sm">Verified UAE Commercial Trader</h4>
-            <p className="text-emerald-700">
-              Trade License: <strong className="font-mono">{currentCompany.tradeLicenseNumber}</strong> • Registered Hub: <strong>{currentCompany.industrialZone}</strong>
+            <h4 className="font-bold text-sm">
+              {isPending ? 'Trade License Verification In Progress' : 'Verified UAE Commercial Trader'}
+            </h4>
+            <p className={isPending ? 'text-amber-700' : 'text-emerald-700'}>
+              Trade License: <strong className="font-mono">{currentCompany.tradeLicenseNumber || 'TL-PENDING'}</strong> • Hub: <strong>{currentCompany.industrialZone || currentCompany.emirate}</strong>
             </p>
           </div>
         </div>
-        <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full border border-emerald-300 w-fit">
-          100% Verified Profile
+        <span className={`text-xs font-bold px-3 py-1 rounded-full border w-fit ${
+          isPending 
+            ? 'bg-amber-100 text-amber-900 border-amber-300' 
+            : 'bg-emerald-100 text-emerald-800 border-emerald-300'
+        }`}>
+          {isPending ? 'Verification Pending' : '100% Verified Profile'}
         </span>
       </div>
 
@@ -81,26 +93,26 @@ export const SupplierDashboard: React.FC<SupplierDashboardProps> = ({ onNavigate
         <StatWidget
           title="Matching Live RFQs"
           value={matchingRFQs.length}
-          subtitle="In your trading category"
+          subtitle="Ready for bidding"
           icon={<FileText className="w-6 h-6 text-amber-600" />}
           trend={{ value: 'Active', isPositive: true }}
         />
         <StatWidget
           title="Submitted Quotations"
           value={myQuotations.length}
-          subtitle="Total bids placed"
+          subtitle={myQuotations.length > 0 ? "Total bids placed" : "0 bids placed"}
           icon={<Zap className="w-6 h-6 text-brand-600" />}
         />
         <StatWidget
           title="Won Purchase Orders"
           value={myOrders.length}
-          subtitle="Orders awarded"
+          subtitle={myOrders.length > 0 ? "Orders awarded" : "0 orders won"}
           icon={<PackageCheck className="w-6 h-6 text-emerald-600" />}
         />
         <StatWidget
-          title="Average Quote Turnaround"
-          value="1.5 hrs"
-          subtitle="Top 5% fastest in UAE"
+          title="Response Rate"
+          value={myQuotations.length > 0 ? `${currentCompany.responseRatePercent || 100}%` : "100%"}
+          subtitle="Marketplace benchmark"
           icon={<Clock className="w-6 h-6 text-sky-600" />}
         />
       </div>
@@ -140,51 +152,60 @@ export const SupplierDashboard: React.FC<SupplierDashboardProps> = ({ onNavigate
             <h3 className="text-base font-bold text-slate-900">Active Purchase Orders to Fulfill</h3>
             <p className="text-xs text-slate-500">Track delivery deadlines and site gate receipt confirmations.</p>
           </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => onNavigate('supplier-orders')}
-          >
-            All Orders
-          </Button>
+          {myOrders.length > 0 && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => onNavigate('supplier-orders')}
+            >
+              All Orders
+            </Button>
+          )}
         </CardHeader>
-        <CardContent className="p-0 overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
-              <tr>
-                <th className="p-3">PO Number</th>
-                <th className="p-3">Contractor Buyer</th>
-                <th className="p-3">Project / Site</th>
-                <th className="p-3">Total Value (AED)</th>
-                <th className="p-3">Required Date</th>
-                <th className="p-3">Status</th>
-                <th className="p-3 text-right">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {myOrders.map((po) => (
-                <tr key={po.id} className="hover:bg-slate-50/60">
-                  <td className="p-3 font-mono font-bold text-brand-700">{po.poNumber}</td>
-                  <td className="p-3 font-semibold text-slate-900">{po.buyerCompanyName}</td>
-                  <td className="p-3 text-slate-600">{po.deliveryAddress}</td>
-                  <td className="p-3 font-extrabold text-slate-900">{formatAED(po.totalAmountAED)}</td>
-                  <td className="p-3 text-slate-600">{formatDate(po.expectedDeliveryDate)}</td>
-                  <td className="p-3">
-                    <StatusBadge status={po.status} />
-                  </td>
-                  <td className="p-3 text-right">
-                    <button
-                      onClick={() => onNavigate('supplier-orders')}
-                      className="text-brand-600 hover:text-brand-800 font-bold"
-                    >
-                      Update Dispatch
-                    </button>
-                  </td>
+        {myOrders.length > 0 ? (
+          <CardContent className="p-0 overflow-x-auto">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
+                <tr>
+                  <th className="p-3">PO Number</th>
+                  <th className="p-3">Contractor Buyer</th>
+                  <th className="p-3">Project / Site</th>
+                  <th className="p-3">Total Value (AED)</th>
+                  <th className="p-3">Required Date</th>
+                  <th className="p-3">Status</th>
+                  <th className="p-3 text-right">Action</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </CardContent>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {myOrders.map((po) => (
+                  <tr key={po.id} className="hover:bg-slate-50/60">
+                    <td className="p-3 font-mono font-bold text-brand-700">{po.poNumber}</td>
+                    <td className="p-3 font-semibold text-slate-900">{po.buyerCompanyName}</td>
+                    <td className="p-3 text-slate-600">{po.deliveryAddress}</td>
+                    <td className="p-3 font-extrabold text-slate-900">{formatAED(po.totalAmountAED)}</td>
+                    <td className="p-3 text-slate-600">{formatDate(po.expectedDeliveryDate)}</td>
+                    <td className="p-3">
+                      <StatusBadge status={po.status} />
+                    </td>
+                    <td className="p-3 text-right">
+                      <button
+                        onClick={() => onNavigate('supplier-orders')}
+                        className="text-brand-600 hover:text-brand-800 font-bold"
+                      >
+                        Update Dispatch
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </CardContent>
+        ) : (
+          <CardContent className="p-8 text-center text-xs text-slate-500">
+            <p className="font-semibold text-slate-700">No active purchase orders awarded yet</p>
+            <p className="text-slate-400 mt-1">Submit competitive quotations on contractor RFQs to win contracts and receive purchase orders.</p>
+          </CardContent>
+        )}
       </Card>
     </div>
   );
