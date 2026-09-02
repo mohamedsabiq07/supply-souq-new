@@ -16,11 +16,15 @@ export const DemoRoleBar: React.FC = () => {
     <div className="bg-slate-900 text-white text-xs border-b border-slate-800 px-4 py-2 flex flex-wrap items-center justify-between gap-3 sticky top-0 z-50 shadow-md">
       <div className="flex items-center gap-2">
         <span className="inline-flex items-center gap-1 bg-amber-500/20 text-amber-300 font-bold px-2 py-0.5 rounded border border-amber-500/30">
-          <Zap className="w-3 h-3 text-amber-400 fill-amber-400" /> DUBAI • SHARJAH • AJMAN B2B DEMO
+          <Zap className="w-3 h-3 text-amber-400 fill-amber-400" /> DUBAI • SHARJAH • AJMAN
+        </span>
+        <span className="inline-flex items-center gap-1.5 bg-emerald-500/20 text-emerald-300 font-bold px-2 py-0.5 rounded border border-emerald-500/30 text-[11px]">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <span>Supabase Connected</span>
         </span>
         <span className="hidden sm:inline text-slate-400">|</span>
         <span className="text-slate-300 hidden md:inline">
-          Active Workspace: <strong className="text-white">{currentCompany.name}</strong> ({currentCompany.emirate})
+          Workspace: <strong className="text-white">{currentCompany.name}</strong> ({currentCompany.emirate})
         </span>
       </div>
 

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import {
   RFQ,
   Quotation,
@@ -22,7 +22,14 @@ import {
   initialReviews,
   initialVerifications,
 } from '../data/seedData';
-import { calculateUAEVAT } from '../lib/utils';
+import { supabase } from '../lib/supabase';
+import { 
+  supabaseService, 
+  mapRFQFromDB, 
+  mapQuotationFromDB, 
+  mapPOFromDB, 
+  mapMessageFromDB 
+} from '../services/supabaseService';
 
 interface AppDataContextType {
   rfqs: RFQ[];
@@ -33,6 +40,8 @@ interface AppDataContextType {
   messages: Message[];
   reviews: Review[];
   verifications: VerificationRequest[];
+  isSupabaseConnected: boolean;
+  isSyncing: boolean;
   
   // RFQ Methods
   createRFQ: (newRFQ: Omit<RFQ, 'id' | 'rfqNumber' | 'createdAt' | 'updatedAt' | 'quotesCount' | 'invitedCount'>) => RFQ;
@@ -65,22 +74,13 @@ interface AppDataContextType {
 
 const AppDataContext = createContext<AppDataContextType | undefined>(undefined);
 
-const STORAGE_KEY = 'supplysouq_multi_category_v7';
+const STORAGE_KEY = 'supplysouq_supabase_live_v8';
 
 export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Wipe out legacy cache keys if present
-  useEffect(() => {
-    try {
-      ['supplysouq_app_data_v1', 'supplysouq_app_data_v2', 'supplysouq_electrical_v1', 'supplysouq_electrical_v6_5quotes'].forEach(prefix => {
-        Object.keys(localStorage).forEach(key => {
-          if (key.startsWith(prefix)) {
-            localStorage.removeItem(key);
-          }
-        });
-      });
-    } catch (e) {}
-  }, []);
+  const [isSupabaseConnected, setIsSupabaseConnected] = useState(true);
+  const [isSyncing, setIsSyncing] = useState(false);
 
+  // Initialize from LocalStorage or seed data
   const [rfqs, setRfqs] = useState<RFQ[]>(() => {
     try {
       const saved = localStorage.getItem(`${STORAGE_KEY}_rfqs`);
@@ -158,7 +158,107 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }
   });
 
-  // Sync to LocalStorage for persistence across tab switches
+  // Sync with Supabase on Initial Load
+  const initSupabase = useCallback(async () => {
+    setIsSyncing(true);
+    try {
+      const result = await supabaseService.fetchAll();
+      if (!result.error) {
+        setIsSupabaseConnected(true);
+
+        // If companies exist in Supabase, sync them down
+        if (result.companies && result.companies.length > 0) {
+          setCompanies(result.companies);
+        } else {
+          // If Supabase is empty, seed initial data to the database
+          await supabaseService.seedInitialData({
+            companies: initialCompanies,
+            rfqs: initialRFQs,
+            quotations: initialQuotations,
+            purchaseOrders: initialPurchaseOrders,
+            messages: initialMessages,
+            verifications: initialVerifications,
+          });
+        }
+
+        if (result.rfqs && result.rfqs.length > 0) {
+          setRfqs(result.rfqs);
+        }
+
+        if (result.quotations && result.quotations.length > 0) {
+          setQuotations(result.quotations);
+        }
+
+        if (result.purchaseOrders && result.purchaseOrders.length > 0) {
+          setPurchaseOrders(result.purchaseOrders);
+        }
+
+        if (result.messages && result.messages.length > 0) {
+          setMessages(result.messages);
+        }
+
+        if (result.verifications && result.verifications.length > 0) {
+          setVerifications(result.verifications);
+        }
+      } else {
+        console.warn('Supabase fetch issue, using local storage cache:', result.error);
+      }
+    } catch (err) {
+      console.error('Failed connecting to Supabase, running in local cached mode:', err);
+    } finally {
+      setIsSyncing(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    initSupabase();
+  }, [initSupabase]);
+
+  // Supabase Realtime Subscriptions
+  useEffect(() => {
+    const channel = supabase
+      .channel('supplysouq_realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'rfqs' }, (payload) => {
+        if (payload.eventType === 'INSERT') {
+          const newRfq = mapRFQFromDB(payload.new);
+          setRfqs((prev) => (prev.some((r) => r.id === newRfq.id) ? prev : [newRfq, ...prev]));
+        } else if (payload.eventType === 'UPDATE') {
+          const updated = mapRFQFromDB(payload.new);
+          setRfqs((prev) => prev.map((r) => (r.id === updated.id ? updated : r)));
+        }
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'quotations' }, (payload) => {
+        if (payload.eventType === 'INSERT') {
+          const newQuote = mapQuotationFromDB(payload.new);
+          setQuotations((prev) => (prev.some((q) => q.id === newQuote.id) ? prev : [newQuote, ...prev]));
+        } else if (payload.eventType === 'UPDATE') {
+          const updated = mapQuotationFromDB(payload.new);
+          setQuotations((prev) => prev.map((q) => (q.id === updated.id ? updated : q)));
+        }
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'purchase_orders' }, (payload) => {
+        if (payload.eventType === 'INSERT') {
+          const newPo = mapPOFromDB(payload.new);
+          setPurchaseOrders((prev) => (prev.some((p) => p.id === newPo.id) ? prev : [newPo, ...prev]));
+        } else if (payload.eventType === 'UPDATE') {
+          const updated = mapPOFromDB(payload.new);
+          setPurchaseOrders((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
+        }
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, (payload) => {
+        if (payload.eventType === 'INSERT') {
+          const newMsg = mapMessageFromDB(payload.new);
+          setMessages((prev) => (prev.some((m) => m.id === newMsg.id) ? prev : [...prev, newMsg]));
+        }
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  // Save to LocalStorage for instant offline persistence
   useEffect(() => {
     localStorage.setItem(`${STORAGE_KEY}_rfqs`, JSON.stringify(rfqs));
   }, [rfqs]);
@@ -194,24 +294,31 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
       id: `rfq-${Date.now()}`,
       rfqNumber: `SS-${randomNum}`,
       status: 'published',
-      invitedCount: 8, // simulated matched verified suppliers
+      invitedCount: 8,
       quotesCount: 0,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
 
-    setRfqs(prev => [newRFQ, ...prev]);
+    setRfqs((prev) => [newRFQ, ...prev]);
+
+    // Persist to Supabase in background
+    supabaseService.createRFQ(newRFQ).catch(console.error);
+
     return newRFQ;
   };
 
   const updateRFQStatus = (rfqId: string, status: RFQStatus) => {
-    setRfqs(prev =>
-      prev.map(r => (r.id === rfqId ? { ...r, status, updatedAt: new Date().toISOString() } : r))
+    setRfqs((prev) =>
+      prev.map((r) => (r.id === rfqId ? { ...r, status, updatedAt: new Date().toISOString() } : r))
     );
+
+    // Persist to Supabase
+    supabaseService.updateRFQStatus(rfqId, status).catch(console.error);
   };
 
   const getRFQById = (rfqId: string) => {
-    return rfqs.find(r => r.id === rfqId || r.rfqNumber === rfqId);
+    return rfqs.find((r) => r.id === rfqId || r.rfqNumber === rfqId);
   };
 
   const submitQuotation = (quoteData: Omit<Quotation, 'id' | 'quotationNumber' | 'submittedAt' | 'status'>): Quotation => {
@@ -224,17 +331,17 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
       submittedAt: new Date().toISOString(),
     };
 
-    setQuotations(prev => [newQuote, ...prev]);
+    setQuotations((prev) => [newQuote, ...prev]);
 
     // Update quote count and status on RFQ
-    setRfqs(prev =>
-      prev.map(r => {
+    setRfqs((prev) =>
+      prev.map((r) => {
         if (r.id === quoteData.rfqId) {
           const newCount = (r.quotesCount || 0) + 1;
           return {
             ...r,
             quotesCount: newCount,
-            status: r.status === 'published' ? 'receiving_quotes' : r.status,
+            status: 'receiving_quotes',
             updatedAt: new Date().toISOString(),
           };
         }
@@ -242,20 +349,23 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
       })
     );
 
+    // Persist to Supabase
+    supabaseService.submitQuotation(newQuote).catch(console.error);
+
     return newQuote;
   };
 
   const getQuotesForRFQ = (rfqId: string) => {
-    return quotations.filter(q => q.rfqId === rfqId || q.rfqNumber === rfqId);
+    return quotations.filter((q) => q.rfqId === rfqId || q.rfqNumber === rfqId);
   };
 
   const getQuotationsForSupplier = (supplierCompanyId: string) => {
-    return quotations.filter(q => q.supplierCompanyId === supplierCompanyId);
+    return quotations.filter((q) => q.supplierCompanyId === supplierCompanyId);
   };
 
   const awardQuotation = (rfqId: string, quotationId: string): PurchaseOrder => {
-    const targetRFQ = rfqs.find(r => r.id === rfqId || r.rfqNumber === rfqId);
-    const targetQuote = quotations.find(q => q.id === quotationId || q.quotationNumber === quotationId);
+    const targetRFQ = rfqs.find((r) => r.id === rfqId || r.rfqNumber === rfqId);
+    const targetQuote = quotations.find((q) => q.id === quotationId || q.quotationNumber === quotationId);
 
     if (!targetRFQ || !targetQuote) {
       throw new Error('RFQ or Quotation not found');
@@ -294,16 +404,16 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
     };
 
     // Update PO list
-    setPurchaseOrders(prev => [newPO, ...prev]);
+    setPurchaseOrders((prev) => [newPO, ...prev]);
 
     // Mark RFQ as awarded
-    setRfqs(prev =>
-      prev.map(r => (r.id === targetRFQ.id ? { ...r, status: 'awarded', awardedQuotationId: targetQuote.id } : r))
+    setRfqs((prev) =>
+      prev.map((r) => (r.id === targetRFQ.id ? { ...r, status: 'awarded', awardedQuotationId: targetQuote.id } : r))
     );
 
     // Update Quotation statuses
-    setQuotations(prev =>
-      prev.map(q => {
+    setQuotations((prev) =>
+      prev.map((q) => {
         if (q.rfqId === targetRFQ.id) {
           return q.id === targetQuote.id ? { ...q, status: 'awarded' } : { ...q, status: 'declined' };
         }
@@ -311,28 +421,33 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
       })
     );
 
+    // Persist to Supabase
+    supabaseService.createPurchaseOrder(newPO).catch(console.error);
+    supabaseService.updateRFQStatus(targetRFQ.id, 'awarded').catch(console.error);
+
     return newPO;
   };
 
   const updateOrderStatus = (orderId: string, status: OrderStatus, trackingNotes?: string) => {
-    setPurchaseOrders(prev =>
-      prev.map(po => {
+    setPurchaseOrders((prev) =>
+      prev.map((po) => {
         if (po.id === orderId || po.poNumber === orderId) {
           return {
             ...po,
             status,
             trackingNotes: trackingNotes || po.trackingNotes,
-            actualDeliveryDate: status === 'delivered' || status === 'completed' ? new Date().toISOString().split('T')[0] : po.actualDeliveryDate,
-            updatedAt: new Date().toISOString(),
           };
         }
         return po;
       })
     );
+
+    // Persist to Supabase
+    supabaseService.updateOrderStatus(orderId, status, trackingNotes).catch(console.error);
   };
 
   const getOrderById = (orderId: string) => {
-    return purchaseOrders.find(po => po.id === orderId || po.poNumber === orderId);
+    return purchaseOrders.find((po) => po.id === orderId || po.poNumber === orderId);
   };
 
   const sendMessage = (msg: Omit<Message, 'id' | 'createdAt' | 'isRead'>): Message => {
@@ -342,12 +457,16 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
       createdAt: new Date().toISOString(),
       isRead: false,
     };
-    setMessages(prev => [...prev, newMsg]);
+    setMessages((prev) => [...prev, newMsg]);
+
+    // Persist to Supabase
+    supabaseService.sendMessage(newMsg).catch(console.error);
+
     return newMsg;
   };
 
   const getMessagesForRFQ = (rfqId: string) => {
-    return messages.filter(m => m.rfqId === rfqId || m.rfqNumber === rfqId);
+    return messages.filter((m) => m.rfqId === rfqId);
   };
 
   const submitReview = (reviewData: Omit<Review, 'id' | 'createdAt'>) => {
@@ -356,16 +475,11 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
       id: `rev-${Date.now()}`,
       createdAt: new Date().toISOString(),
     };
-    setReviews(prev => [newReview, ...prev]);
-
-    // Mark PO as reviewed
-    setPurchaseOrders(prev =>
-      prev.map(po => (po.id === reviewData.purchaseOrderId ? { ...po, reviewedByBuyer: true } : po))
-    );
+    setReviews((prev) => [newReview, ...prev]);
 
     // Update supplier average rating & review count
-    setCompanies(prev =>
-      prev.map(comp => {
+    setCompanies((prev) =>
+      prev.map((comp) => {
         if (comp.id === reviewData.supplierCompanyId) {
           const newCount = comp.reviewCount + 1;
           const newRating = Number(((comp.rating * comp.reviewCount + reviewData.rating) / newCount).toFixed(1));
@@ -377,12 +491,15 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   const updateVerificationStatus = (companyId: string, status: VerificationStatus, notes?: string) => {
-    setCompanies(prev =>
-      prev.map(comp => (comp.id === companyId ? { ...comp, verificationStatus: status, verificationNotes: notes } : comp))
+    setCompanies((prev) =>
+      prev.map((comp) => (comp.id === companyId ? { ...comp, verificationStatus: status, verificationNotes: notes } : comp))
     );
-    setVerifications(prev =>
-      prev.map(v => (v.companyId === companyId ? { ...v, status, notes } : v))
+    setVerifications((prev) =>
+      prev.map((v) => (v.companyId === companyId ? { ...v, status, notes } : v))
     );
+
+    // Persist to Supabase
+    supabaseService.updateVerificationStatus(companyId, status, notes).catch(console.error);
   };
 
   const resetToDefaults = () => {
@@ -407,6 +524,8 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
         messages,
         reviews,
         verifications,
+        isSupabaseConnected,
+        isSyncing,
         createRFQ,
         updateRFQStatus,
         getRFQById,
