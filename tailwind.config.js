@@ -61,8 +61,8 @@ export default {
         'glow-brand': '0 0 25px -3px rgba(12, 143, 233, 0.4)',
       },
       animation: {
-        'marquee': 'marquee 25s linear infinite',
-        'marquee-reverse': 'marquee-reverse 25s linear infinite',
+        'marquee': 'marquee 70s linear infinite',
+        'marquee-reverse': 'marquee-reverse 70s linear infinite',
         'shimmer': 'shimmer 2.5s infinite linear',
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'float': 'float 4s ease-in-out infinite',

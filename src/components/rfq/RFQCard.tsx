@@ -49,7 +49,7 @@ export const RFQCard: React.FC<RFQCardProps> = ({
   const isCapacityFull = currentQuotesCount >= maxQuotes;
 
   return (
-    <Card className="hover:border-brand-300 transition-all">
+    <Card className="hover:border-brand-300 hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
       <CardContent className="p-5">
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-3">
           <div>

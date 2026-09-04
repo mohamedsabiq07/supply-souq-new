@@ -6,7 +6,7 @@ export const MarketTicker: React.FC = () => {
     {
       id: 1,
       label: 'LME COPPER SPOT',
-      value: ',245.50 / MT',
+      value: '$9,245.50 / MT',
       change: '+1.18%',
       isPositive: true,
       icon: TrendingUp,
@@ -54,7 +54,7 @@ export const MarketTicker: React.FC = () => {
   ];
 
   return (
-    <div className="bg-obsidian-950 border-b border-cyan-900/40 text-white overflow-hidden select-none py-1.5 px-3 relative z-30 font-mono text-[11px]">
+    <div className="bg-obsidian-950 border-b border-cyan-900/40 text-white overflow-hidden select-none py-1.5 px-3 relative z-30 font-sans text-[11px] font-medium tracking-wide">
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
         {/* Live Badge Indicator */}
         <div className="flex items-center gap-2 shrink-0 bg-cyan-950/80 text-cyan-300 px-2.5 py-0.5 rounded border border-cyan-500/30">

@@ -123,37 +123,51 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             </div>
 
             {/* Futuristic Live Telemetry Metric Cards */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 max-w-3xl mx-auto">
-              <div className="p-3.5 rounded-xl bg-obsidian-900/80 border border-slate-800/80 backdrop-blur-md text-left">
-                <span className="text-[10px] uppercase font-mono text-slate-400 block font-semibold">Avg Contractor Savings</span>
-                <span className="text-xl sm:text-2xl font-black text-cyan-400 font-mono">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 pt-6 max-w-4xl mx-auto font-sans">
+              <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800/80 backdrop-blur-xl hover:border-cyan-500/50 hover:shadow-glow-cyan transition-all duration-300 text-left group">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-[11px] uppercase tracking-wider font-bold text-slate-400">Avg Savings</span>
+                  <span className="w-2 h-2 rounded-full bg-cyan-400 group-hover:animate-ping" />
+                </div>
+                <div className="text-2xl sm:text-3xl font-black text-cyan-400 tracking-tight flex items-baseline">
                   <StatCounter target={18.4} decimals={1} suffix="%" />
-                </span>
-                <span className="text-[10px] text-slate-500 block mt-0.5">vs Deira retail prices</span>
+                </div>
+                <span className="text-[11px] text-slate-400 block mt-1 font-medium">vs Deira retail pricing</span>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-obsidian-900/80 border border-slate-800/80 backdrop-blur-md text-left">
-                <span className="text-[10px] uppercase font-mono text-slate-400 block font-semibold">Stockist Response SLA</span>
-                <span className="text-xl sm:text-2xl font-black text-amber-400 font-mono">
-                  <StatCounter target={24} suffix=" Hours" />
-                </span>
-                <span className="text-[10px] text-slate-500 block mt-0.5">Guaranteed turnaround</span>
+              <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800/80 backdrop-blur-xl hover:border-amber-500/50 hover:shadow-glow-amber transition-all duration-300 text-left group">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-[11px] uppercase tracking-wider font-bold text-slate-400">Response SLA</span>
+                  <span className="w-2 h-2 rounded-full bg-amber-400 group-hover:animate-ping" />
+                </div>
+                <div className="text-2xl sm:text-3xl font-black text-amber-400 tracking-tight flex items-baseline gap-1 whitespace-nowrap">
+                  <StatCounter target={24} />
+                  <span className="text-sm sm:text-base font-bold text-amber-200/80">Hours</span>
+                </div>
+                <span className="text-[11px] text-slate-400 block mt-1 font-medium">Guaranteed turnaround</span>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-obsidian-900/80 border border-slate-800/80 backdrop-blur-md text-left">
-                <span className="text-[10px] uppercase font-mono text-slate-400 block font-semibold">Fastest Bids Cap</span>
-                <span className="text-xl sm:text-2xl font-black text-emerald-400 font-mono">
-                  <StatCounter target={5} suffix=" Stockists" />
-                </span>
-                <span className="text-[10px] text-slate-500 block mt-0.5">First-to-quote priority</span>
+              <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800/80 backdrop-blur-xl hover:border-emerald-500/50 transition-all duration-300 text-left group">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-[11px] uppercase tracking-wider font-bold text-slate-400">Fastest Bids Cap</span>
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 group-hover:animate-ping" />
+                </div>
+                <div className="text-2xl sm:text-3xl font-black text-emerald-400 tracking-tight flex items-baseline gap-1 whitespace-nowrap">
+                  <StatCounter target={5} />
+                  <span className="text-sm sm:text-base font-bold text-emerald-200/80">Stockists</span>
+                </div>
+                <span className="text-[11px] text-slate-400 block mt-1 font-medium">First-to-quote priority</span>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-obsidian-900/80 border border-slate-800/80 backdrop-blur-md text-left">
-                <span className="text-[10px] uppercase font-mono text-slate-400 block font-semibold">Trade License Vetted</span>
-                <span className="text-xl sm:text-2xl font-black text-white font-mono">
+              <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800/80 backdrop-blur-xl hover:border-sky-500/50 transition-all duration-300 text-left group">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-[11px] uppercase tracking-wider font-bold text-slate-400">Trade License</span>
+                  <span className="w-2 h-2 rounded-full bg-sky-400 group-hover:animate-ping" />
+                </div>
+                <div className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-baseline">
                   <StatCounter target={100} suffix="%" />
-                </span>
-                <span className="text-[10px] text-slate-500 block mt-0.5">DET UAE verified</span>
+                </div>
+                <span className="text-[11px] text-slate-400 block mt-1 font-medium">DET UAE verified</span>
               </div>
             </div>
 
@@ -196,41 +210,41 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
 
           {/* 4 Pillar Value Props */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="p-5 rounded-2xl bg-slate-800/60 border border-slate-700/80 space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 font-bold flex items-center justify-center">
+            <div className="p-5 rounded-2xl bg-slate-800/60 border border-slate-700/80 space-y-3 hover:border-amber-500/40 hover:-translate-y-1.5 hover:bg-slate-800/90 hover:shadow-xl transition-all duration-300 group">
+              <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 font-bold flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                 <Zap className="w-5 h-5" />
               </div>
-              <h4 className="font-bold text-white text-sm">Direct Multi-Vendor Bidding</h4>
+              <h4 className="font-bold text-white text-sm group-hover:text-amber-300 transition-colors">Direct Multi-Vendor Bidding</h4>
               <p className="text-xs text-slate-400 leading-relaxed">
                 Post your material BOQ once. All verified UAE stockists under your category receive it and submit itemized prices within 24 hours.
               </p>
             </div>
 
-            <div className="p-5 rounded-2xl bg-slate-800/60 border border-slate-700/80 space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 font-bold flex items-center justify-center">
+            <div className="p-5 rounded-2xl bg-slate-800/60 border border-slate-700/80 space-y-3 hover:border-emerald-500/40 hover:-translate-y-1.5 hover:bg-slate-800/90 hover:shadow-xl transition-all duration-300 group">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 font-bold flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                 <ShieldCheck className="w-5 h-5" />
               </div>
-              <h4 className="font-bold text-white text-sm">DET Verified Suppliers</h4>
+              <h4 className="font-bold text-white text-sm group-hover:text-emerald-300 transition-colors">DET Verified Suppliers</h4>
               <p className="text-xs text-slate-400 leading-relaxed">
                 Every vendor is vetted with valid UAE Commercial Trade Licenses, ensuring genuine factory drums, test certificates, and warranties.
               </p>
             </div>
 
-            <div className="p-5 rounded-2xl bg-slate-800/60 border border-slate-700/80 space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-400 font-bold flex items-center justify-center">
+            <div className="p-5 rounded-2xl bg-slate-800/60 border border-slate-700/80 space-y-3 hover:border-sky-500/40 hover:-translate-y-1.5 hover:bg-slate-800/90 hover:shadow-xl transition-all duration-300 group">
+              <div className="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-400 font-bold flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                 <GitCompare className="w-5 h-5" />
               </div>
-              <h4 className="font-bold text-white text-sm">Side-by-Side Matrix</h4>
+              <h4 className="font-bold text-white text-sm group-hover:text-sky-300 transition-colors">Side-by-Side Matrix</h4>
               <p className="text-xs text-slate-400 leading-relaxed">
                 Evaluate quotations side-by-side on price, delivery lead times, payment terms, and vendor track record before issuing Purchase Orders.
               </p>
             </div>
 
-            <div className="p-5 rounded-2xl bg-slate-800/60 border border-slate-700/80 space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 font-bold flex items-center justify-center">
+            <div className="p-5 rounded-2xl bg-slate-800/60 border border-slate-700/80 space-y-3 hover:border-purple-500/40 hover:-translate-y-1.5 hover:bg-slate-800/90 hover:shadow-xl transition-all duration-300 group">
+              <div className="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 font-bold flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                 <PackageCheck className="w-5 h-5" />
               </div>
-              <h4 className="font-bold text-white text-sm">100% Tax Compliant</h4>
+              <h4 className="font-bold text-white text-sm group-hover:text-purple-300 transition-colors">100% Tax Compliant</h4>
               <p className="text-xs text-slate-400 leading-relaxed">
                 Full 5% UAE VAT invoices, structured milestone payments, and direct delivery to your job sites in Dubai, Sharjah, and across the UAE.
               </p>

@@ -15,7 +15,7 @@ export const KineticHeadline: React.FC = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % ELECTRICAL_CATEGORIES.length);
-    }, 3200);
+    }, 6500);
     return () => clearInterval(timer);
   }, []);
 
@@ -26,25 +26,25 @@ export const KineticHeadline: React.FC = () => {
       <AnimatePresence mode="wait">
         <motion.div
           key={currentItem.text}
-          initial={{ opacity: 0, y: 35, filter: 'blur(10px)', scale: 0.96 }}
+          initial={{ opacity: 0, y: 25, filter: 'blur(8px)', scale: 0.98 }}
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)', scale: 1 }}
-          exit={{ opacity: 0, y: -35, filter: 'blur(10px)', scale: 0.96 }}
-          transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+          exit={{ opacity: 0, y: -25, filter: 'blur(8px)', scale: 0.98 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="text-center"
         >
           <span
-            className={`block text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r ${currentItem.color} drop-shadow-[0_0_25px_rgba(56,189,248,0.25)]`}
+            className={`block text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight font-sans bg-clip-text text-transparent bg-gradient-to-r ${currentItem.color} drop-shadow-[0_0_30px_rgba(56,189,248,0.25)]`}
           >
             {currentItem.text}
           </span>
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
+            initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2, duration: 0.35 }}
-            className="inline-flex items-center gap-1.5 mt-2 bg-slate-800/80 border border-slate-700 text-slate-300 px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-mono font-semibold"
+            transition={{ delay: 0.25, duration: 0.4 }}
+            className="inline-flex items-center gap-2 mt-2.5 bg-slate-800/90 border border-slate-700/80 text-slate-300 px-3 py-0.5 rounded-full text-[11px] sm:text-xs font-sans font-medium"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-            <span>Standard: {currentItem.tag}</span>
+            <span>Standard: <strong className="text-white font-semibold">{currentItem.tag}</strong></span>
           </motion.div>
         </motion.div>
       </AnimatePresence>
