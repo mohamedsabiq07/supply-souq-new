@@ -3,7 +3,7 @@ import { RFQ } from '../../types';
 import { Card, CardHeader, CardContent } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { formatAED, calculateUAEVAT } from '../../lib/utils';
-import { Send, CheckCircle2 } from 'lucide-react';
+import { Send, CheckCircle2, Zap } from 'lucide-react';
 
 interface QuotationFormProps {
   rfq: RFQ;
@@ -140,6 +140,22 @@ export const QuotationForm: React.FC<QuotationFormProps> = ({
           <span className="text-slate-500">Quoting As:</span>
           <p className="font-bold text-slate-900">{supplierCompany.name}</p>
         </div>
+      </div>
+
+      {/* Fastest 5 Stockists Slot Indicator */}
+      <div className="bg-amber-50 border border-amber-200 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs">
+        <div className="flex items-center gap-2">
+          <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping shrink-0" />
+          <span className="font-bold text-amber-900">
+            ⚡ First-Come, First-Served 5-Quote Rule:
+          </span>
+          <span className="text-amber-800">
+            Only the first 5 stockists to submit will reach the contractor. Submit quickly to secure your proposal!
+          </span>
+        </div>
+        <span className="font-mono font-bold text-amber-900 bg-amber-100 px-2.5 py-1 rounded-md border border-amber-300 shrink-0 text-center">
+          Claiming Slot #{Math.min((rfq.quotesCount || 0) + 1, 5)} of 5
+        </span>
       </div>
 
       <Card>

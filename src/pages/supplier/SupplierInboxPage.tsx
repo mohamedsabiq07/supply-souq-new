@@ -13,7 +13,7 @@ interface SupplierInboxPageProps {
 
 export const SupplierInboxPage: React.FC<SupplierInboxPageProps> = ({ onNavigate }) => {
   const { currentCompany } = useAuth();
-  const { rfqs, declineRFQ, isRFQDeclinedBySupplier, declinedRFQs } = useAppData();
+  const { rfqs, declineRFQ, isRFQDeclinedBySupplier, declinedRFQs, hasSupplierQuoted, isRFQExtendedUnlocked } = useAppData();
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState<'all' | 'direct' | 'cables' | 'switchgear' | 'containment' | 'lighting' | 'earthing' | 'solar' | 'declined'>('all');
   const [targetDecliningRFQ, setTargetDecliningRFQ] = useState<RFQ | null>(null);
@@ -94,6 +94,24 @@ export const SupplierInboxPage: React.FC<SupplierInboxPageProps> = ({ onNavigate
         <div className="flex items-center gap-2 text-xs font-bold text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200">
           <ShieldCheck className="w-4 h-4 text-emerald-600" />
           <span>24-Hour SLA Quoting Active</span>
+        </div>
+      </div>
+
+      {/* 5-Bids Algorithm Rules Banner */}
+      <div className="bg-gradient-to-r from-amber-50 to-orange-50 p-3.5 rounded-xl border border-amber-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-lg bg-amber-500 text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
+            ⚡
+          </div>
+          <div>
+            <strong className="text-slate-900 font-bold">First 5 Suppliers Rule: </strong>
+            <span className="text-slate-600">Only the first 5 stockists to submit a quotation reach the contractor buyer. Once 5 bids are submitted, bidding closes automatically.</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <span className="font-bold text-amber-900 bg-amber-100/90 px-2.5 py-1 rounded-md border border-amber-300 text-[11px]">
+            Fastest Submissions Win
+          </span>
         </div>
       </div>
 
@@ -212,6 +230,8 @@ export const SupplierInboxPage: React.FC<SupplierInboxPageProps> = ({ onNavigate
           {filtered.map((rfq) => {
             const isDeclined = isRFQDeclinedBySupplier(rfq.id, currentCompany.id);
             const decRec = myDeclinedRecords.find(d => d.rfqId === rfq.id);
+            const supplierHasQuoted = hasSupplierQuoted(rfq.id, currentCompany.id);
+            const maxQuotes = isRFQExtendedUnlocked(rfq.id) ? 10 : 5;
             return (
               <RFQCard
                 key={rfq.id}
@@ -219,6 +239,8 @@ export const SupplierInboxPage: React.FC<SupplierInboxPageProps> = ({ onNavigate
                 isSupplierView={true}
                 isDeclined={isDeclined}
                 declineReason={decRec?.reason}
+                supplierHasQuoted={supplierHasQuoted}
+                maxQuotes={maxQuotes}
                 onView={(r) => onNavigate('rfq-detail', { rfqId: r.id })}
                 onQuote={(r) => onNavigate('submit-quote', { rfqId: r.id })}
                 onDecline={(r) => setTargetDecliningRFQ(r)}

@@ -2,9 +2,20 @@ import React from 'react';
 import { RFQ } from '../../types';
 import { Card, CardContent } from '../ui/Card';
 import { StatusBadge } from '../ui/Badge';
-import { Button } from '../ui/Button';
+import { Button } from '../../components/ui/Button';
 import { formatDate } from '../../lib/utils';
-import { MapPin, Calendar, Layers, GitCompare, ArrowRight, Clock, AlertTriangle } from 'lucide-react';
+import { 
+  MapPin, 
+  Calendar, 
+  Layers, 
+  GitCompare, 
+  ArrowRight, 
+  Clock, 
+  AlertTriangle, 
+  Lock, 
+  CheckCircle2, 
+  Zap 
+} from 'lucide-react';
 
 interface RFQCardProps {
   rfq: RFQ;
@@ -16,6 +27,8 @@ interface RFQCardProps {
   isDeclined?: boolean;
   declineReason?: string;
   isSupplierView?: boolean;
+  supplierHasQuoted?: boolean;
+  maxQuotes?: number;
 }
 
 export const RFQCard: React.FC<RFQCardProps> = ({
@@ -28,7 +41,13 @@ export const RFQCard: React.FC<RFQCardProps> = ({
   isDeclined = false,
   declineReason,
   isSupplierView = false,
+  supplierHasQuoted = false,
+  maxQuotes = 5,
 }) => {
+  const currentQuotesCount = rfq.quotesCount || 0;
+  const spotsLeft = Math.max(0, maxQuotes - currentQuotesCount);
+  const isCapacityFull = currentQuotesCount >= maxQuotes;
+
   return (
     <Card className="hover:border-brand-300 transition-all">
       <CardContent className="p-5">
@@ -61,10 +80,22 @@ export const RFQCard: React.FC<RFQCardProps> = ({
 
           <div className="sm:text-right shrink-0">
             <div className="inline-flex sm:flex-col items-center sm:items-end gap-1.5 bg-slate-50 sm:bg-transparent p-2 sm:p-0 rounded-lg">
-              <span className="text-xs text-slate-500 font-medium">5-Stockist Response</span>
-              <span className="text-lg font-extrabold text-slate-900 bg-brand-50 text-brand-700 px-2.5 py-0.5 rounded-md border border-brand-200">
-                {Math.min(rfq.quotesCount, 5)} / 5 Quotes
+              <span className="text-[11px] text-slate-500 font-semibold">
+                {isCapacityFull ? 'Capacity Reached' : 'Fastest 5 Bids Rule'}
               </span>
+              {isCapacityFull ? (
+                <span className="text-xs font-extrabold text-slate-600 bg-slate-200/80 px-2.5 py-1 rounded-md border border-slate-300 inline-flex items-center gap-1">
+                  <Lock className="w-3 h-3 text-slate-500" /> {maxQuotes} / {maxQuotes} Full
+                </span>
+              ) : currentQuotesCount === 0 ? (
+                <span className="text-xs font-extrabold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200 inline-flex items-center gap-1">
+                  <Zap className="w-3 h-3 text-emerald-600" /> 0 / {maxQuotes} Quotes (5 Open)
+                </span>
+              ) : (
+                <span className="text-xs font-extrabold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-md border border-amber-300 inline-flex items-center gap-1">
+                  <Zap className="w-3 h-3 text-amber-600 animate-pulse" /> {currentQuotesCount} / {maxQuotes} ({spotsLeft} Spot{spotsLeft > 1 ? 's' : ''} Left!)
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -137,6 +168,16 @@ export const RFQCard: React.FC<RFQCardProps> = ({
               <span className="text-xs font-bold text-rose-600 bg-rose-50 px-3 py-1.5 rounded-lg border border-rose-200">
                 Declined by You
               </span>
+            ) : supplierHasQuoted ? (
+              <span className="text-xs font-bold text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-300 inline-flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                Quote Submitted
+              </span>
+            ) : isCapacityFull ? (
+              <span className="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 inline-flex items-center gap-1.5">
+                <Lock className="w-3.5 h-3.5 text-slate-400" />
+                5/5 Slots Filled (Closed)
+              </span>
             ) : (
               <div className="flex items-center gap-2">
                 <Button
@@ -152,8 +193,9 @@ export const RFQCard: React.FC<RFQCardProps> = ({
                   size="sm"
                   onClick={() => onQuote && onQuote(rfq)}
                   rightIcon={<ArrowRight className="w-4 h-4" />}
+                  className="font-bold shadow-sm"
                 >
-                  Submit Quotation
+                  Submit Quotation ({spotsLeft} Spot{spotsLeft > 1 ? 's' : ''} Left)
                 </Button>
               </div>
             )
@@ -175,16 +217,16 @@ export const RFQCard: React.FC<RFQCardProps> = ({
                   size="sm"
                   onClick={() => onCompare && onCompare(rfq)}
                   leftIcon={<GitCompare className="w-4 h-4" />}
-                  className="bg-brand-600 hover:bg-brand-700"
+                  className="bg-brand-600 hover:bg-brand-700 font-bold"
                 >
-                  Compare {Math.min(rfq.quotesCount, 5)} Quotation{rfq.quotesCount > 1 ? 's' : ''}
+                  Compare {Math.min(rfq.quotesCount, maxQuotes)} Quotation{rfq.quotesCount > 1 ? 's' : ''}
                 </Button>
               ) : rfq.status === 'cancelled' ? (
                 <span className="text-xs font-bold text-rose-600 bg-rose-50 px-2.5 py-1 rounded border border-rose-200">
                   Cancelled
                 </span>
               ) : (
-                <span className="text-xs text-slate-400 italic">Waiting for bids...</span>
+                <span className="text-xs text-slate-400 italic">Waiting for first 5 bids...</span>
               )}
             </div>
           )}

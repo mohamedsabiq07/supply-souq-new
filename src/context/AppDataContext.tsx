@@ -58,6 +58,9 @@ interface AppDataContextType {
   submitQuotation: (quoteData: Omit<Quotation, 'id' | 'quotationNumber' | 'submittedAt' | 'status'>) => Quotation;
   getQuotesForRFQ: (rfqId: string) => Quotation[];
   getQuotationsForSupplier: (supplierCompanyId: string) => Quotation[];
+  getRFQQuoteCapacity: (rfqId: string) => { currentCount: number; maxAllowed: number; spotsLeft: number; isCapped: boolean };
+  canSupplierQuote: (rfqId: string, supplierCompanyId: string) => { canQuote: boolean; reason?: 'already_quoted' | 'capacity_full' | 'rfq_cancelled' | 'rfq_declined'; spotsLeft: number; maxAllowed: number; currentCount: number };
+  hasSupplierQuoted: (rfqId: string, supplierCompanyId: string) => boolean;
   
   // Awarding & Orders
   awardQuotation: (rfqId: string, quotationId: string) => PurchaseOrder;
@@ -625,16 +628,92 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
     broadcastSync();
   };
 
+  const getRFQQuoteCapacity = (rfqId: string) => {
+    const targetRFQ = rfqs.find((r) => r.id === rfqId || r.rfqNumber === rfqId);
+    const rfqQuotes = quotations.filter((q) => q.rfqId === (targetRFQ?.id || rfqId) || q.rfqNumber === (targetRFQ?.rfqNumber || rfqId));
+    const currentCount = Math.max(rfqQuotes.length, targetRFQ?.quotesCount || 0);
+    const maxAllowed = isRFQExtendedUnlocked(targetRFQ?.id || rfqId) ? 10 : 5;
+    const spotsLeft = Math.max(0, maxAllowed - currentCount);
+    const isCapped = currentCount >= maxAllowed;
+
+    return {
+      currentCount,
+      maxAllowed,
+      spotsLeft,
+      isCapped,
+    };
+  };
+
+  const hasSupplierQuoted = (rfqId: string, supplierCompanyId: string): boolean => {
+    const targetRFQ = rfqs.find((r) => r.id === rfqId || r.rfqNumber === rfqId);
+    return quotations.some(
+      (q) =>
+        (q.rfqId === (targetRFQ?.id || rfqId) || q.rfqNumber === (targetRFQ?.rfqNumber || rfqId)) &&
+        q.supplierCompanyId === supplierCompanyId
+    );
+  };
+
+  const canSupplierQuote = (
+    rfqId: string,
+    supplierCompanyId: string
+  ): {
+    canQuote: boolean;
+    reason?: 'already_quoted' | 'capacity_full' | 'rfq_cancelled' | 'rfq_declined';
+    spotsLeft: number;
+    maxAllowed: number;
+    currentCount: number;
+  } => {
+    const targetRFQ = rfqs.find((r) => r.id === rfqId || r.rfqNumber === rfqId);
+    const capacity = getRFQQuoteCapacity(rfqId);
+
+    if (!targetRFQ || targetRFQ.status === 'cancelled') {
+      return { canQuote: false, reason: 'rfq_cancelled', ...capacity };
+    }
+
+    if (isRFQDeclinedBySupplier(targetRFQ.id, supplierCompanyId)) {
+      return { canQuote: false, reason: 'rfq_declined', ...capacity };
+    }
+
+    if (hasSupplierQuoted(targetRFQ.id, supplierCompanyId)) {
+      return { canQuote: false, reason: 'already_quoted', ...capacity };
+    }
+
+    if (capacity.isCapped) {
+      return { canQuote: false, reason: 'capacity_full', ...capacity };
+    }
+
+    return { canQuote: true, ...capacity };
+  };
+
   const submitQuotation = (quoteData: Omit<Quotation, 'id' | 'quotationNumber' | 'submittedAt' | 'status'>): Quotation => {
     const randomNum = Math.floor(10000 + Math.random() * 90000);
     const targetRFQ = rfqs.find((r) => r.id === quoteData.rfqId || r.rfqNumber === quoteData.rfqId);
+
+    if (!targetRFQ) {
+      throw new Error('RFQ not found');
+    }
+
+    if (targetRFQ.status === 'cancelled') {
+      throw new Error('This RFQ has been cancelled by the buyer and is closed for quotations.');
+    }
+
+    // Enforce First 5 Suppliers Capacity Rule
+    const capacity = getRFQQuoteCapacity(targetRFQ.id);
+    const alreadyQuoted = hasSupplierQuoted(targetRFQ.id, quoteData.supplierCompanyId);
+
+    if (capacity.isCapped && !alreadyQuoted) {
+      throw new Error(`Quotation capacity full (${capacity.maxAllowed}/${capacity.maxAllowed} slots filled). Only the first ${capacity.maxAllowed} stockists can submit.`);
+    }
+
+    const currentQuoteCount = (targetRFQ.quotesCount || 0) + 1;
+    const isNowCapped = currentQuoteCount >= capacity.maxAllowed;
 
     const newQuote: Quotation = {
       ...quoteData,
       id: `quote-${Date.now()}`,
       quotationNumber: `QT-${randomNum}`,
-      buyerCompanyId: targetRFQ?.buyerCompanyId || (quoteData as any).buyerCompanyId,
-      buyerCompanyName: targetRFQ?.buyerCompanyName || (quoteData as any).buyerCompanyName,
+      buyerCompanyId: targetRFQ.buyerCompanyId || (quoteData as any).buyerCompanyId,
+      buyerCompanyName: targetRFQ.buyerCompanyName || (quoteData as any).buyerCompanyName,
       status: 'submitted',
       submittedAt: new Date().toISOString(),
     };
@@ -647,34 +726,32 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
       if (!target) return prev;
       const updatedRFQ: RFQ = {
         ...target,
-        quotesCount: (target.quotesCount || 0) + 1,
-        status: 'receiving_quotes',
+        quotesCount: currentQuoteCount,
+        status: isNowCapped ? 'evaluating' : 'receiving_quotes',
         updatedAt: new Date().toISOString(),
       };
       return [updatedRFQ, ...prev.filter(r => r.id !== target.id)];
     });
 
     // Send direct notification message from Supplier to the specific Buyer
-    if (targetRFQ) {
-      const quoteMsg: Message = {
-        id: `msg-${Date.now()}`,
-        rfqId: targetRFQ.id,
-        rfqNumber: targetRFQ.rfqNumber,
-        senderId: quoteData.supplierCompanyId,
-        senderName: quoteData.supplierCompanyName,
-        senderCompanyId: quoteData.supplierCompanyId,
-        senderCompanyName: quoteData.supplierCompanyName,
-        senderRole: 'supplier',
-        recipientCompanyId: targetRFQ.buyerCompanyId,
-        recipientCompanyName: targetRFQ.buyerCompanyName,
-        messageText: `Commercial Quotation ${newQuote.quotationNumber} submitted for AED ${newQuote.grandTotalAED.toLocaleString()} (Lead Time: ${newQuote.leadTimeDisplay || newQuote.leadTimeDays + ' Days'}).`,
-        createdAt: new Date().toISOString(),
-        isRead: false,
-      };
-      setMessages((prev) => [...prev, quoteMsg]);
-      supabaseService.sendMessage(quoteMsg).catch(console.error);
-      supabaseService.updateRFQStatus(targetRFQ.id, 'receiving_quotes').catch(console.error);
-    }
+    const quoteMsg: Message = {
+      id: `msg-${Date.now()}`,
+      rfqId: targetRFQ.id,
+      rfqNumber: targetRFQ.rfqNumber,
+      senderId: quoteData.supplierCompanyId,
+      senderName: quoteData.supplierCompanyName,
+      senderCompanyId: quoteData.supplierCompanyId,
+      senderCompanyName: quoteData.supplierCompanyName,
+      senderRole: 'supplier',
+      recipientCompanyId: targetRFQ.buyerCompanyId,
+      recipientCompanyName: targetRFQ.buyerCompanyName,
+      messageText: `[Slot #${currentQuoteCount}/${capacity.maxAllowed}] Commercial Quotation ${newQuote.quotationNumber} submitted for AED ${newQuote.grandTotalAED.toLocaleString()} (Lead Time: ${newQuote.leadTimeDisplay || newQuote.leadTimeDays + ' Days'}).`,
+      createdAt: new Date().toISOString(),
+      isRead: false,
+    };
+    setMessages((prev) => [...prev, quoteMsg]);
+    supabaseService.sendMessage(quoteMsg).catch(console.error);
+    supabaseService.updateRFQStatus(targetRFQ.id, isNowCapped ? 'evaluating' : 'receiving_quotes').catch(console.error);
 
     // Persist to Supabase
     supabaseService.submitQuotation(newQuote).catch(console.error);
@@ -868,6 +945,9 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
         submitQuotation,
         getQuotesForRFQ,
         getQuotationsForSupplier,
+        getRFQQuoteCapacity,
+        canSupplierQuote,
+        hasSupplierQuoted,
         awardQuotation,
         updateOrderStatus,
         getOrderById,

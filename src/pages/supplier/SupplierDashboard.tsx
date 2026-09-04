@@ -27,7 +27,7 @@ interface SupplierDashboardProps {
 
 export const SupplierDashboard: React.FC<SupplierDashboardProps> = ({ onNavigate }) => {
   const { currentCompany } = useAuth();
-  const { rfqs, quotations, purchaseOrders, isRFQDeclinedBySupplier, declineRFQ } = useAppData();
+  const { rfqs, quotations, purchaseOrders, isRFQDeclinedBySupplier, declineRFQ, hasSupplierQuoted, isRFQExtendedUnlocked } = useAppData();
   const [targetDecliningRFQ, setTargetDecliningRFQ] = useState<RFQ | null>(null);
 
   const matchingRFQs = rfqs.filter(r => 
@@ -139,16 +139,22 @@ export const SupplierDashboard: React.FC<SupplierDashboardProps> = ({ onNavigate
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {matchingRFQs.slice(0, 4).map((rfq) => (
-            <RFQCard
-              key={rfq.id}
-              rfq={rfq}
-              isSupplierView={true}
-              onView={(r) => onNavigate('rfq-detail', { rfqId: r.id })}
-              onQuote={(r) => onNavigate('submit-quote', { rfqId: r.id })}
-              onDecline={(r) => setTargetDecliningRFQ(r)}
-            />
-          ))}
+          {matchingRFQs.slice(0, 4).map((rfq) => {
+            const supplierHasQuoted = hasSupplierQuoted(rfq.id, currentCompany.id);
+            const maxQuotes = isRFQExtendedUnlocked(rfq.id) ? 10 : 5;
+            return (
+              <RFQCard
+                key={rfq.id}
+                rfq={rfq}
+                isSupplierView={true}
+                supplierHasQuoted={supplierHasQuoted}
+                maxQuotes={maxQuotes}
+                onView={(r) => onNavigate('rfq-detail', { rfqId: r.id })}
+                onQuote={(r) => onNavigate('submit-quote', { rfqId: r.id })}
+                onDecline={(r) => setTargetDecliningRFQ(r)}
+              />
+            );
+          })}
         </div>
       </div>
 
