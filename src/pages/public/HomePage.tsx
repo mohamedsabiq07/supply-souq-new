@@ -78,14 +78,14 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
           <div className="max-w-4xl mx-auto text-center space-y-6">
             
             {/* High-Tech Live Status Badge */}
-            <div className="inline-flex items-center gap-2 bg-cyan-950/80 border border-cyan-500/30 text-cyan-300 px-3.5 py-1.5 rounded-full text-xs font-mono font-semibold shadow-glow-cyan backdrop-blur-md">
+            <div className="inline-flex items-center gap-2 bg-cyan-950/80 border border-cyan-500/30 text-cyan-300 px-4 py-1.5 rounded-full text-xs font-sans font-bold tracking-wider uppercase shadow-glow-cyan backdrop-blur-md">
               <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-              <span className="tracking-wide">UAE B2B ELECTRICAL MATERIAL EXCHANGE • 24H SLA</span>
+              <span>UAE B2B ELECTRICAL MATERIAL EXCHANGE • 24H SLA</span>
             </div>
 
             {/* Static Pre-Title */}
             <div className="space-y-2">
-              <h2 className="text-sm sm:text-base uppercase tracking-[0.25em] font-mono text-slate-400 font-bold">
+              <h2 className="text-xs sm:text-sm uppercase tracking-[0.2em] font-sans text-cyan-400/90 font-extrabold">
                 Direct Wholesale Sourcing for Contractors & Stockists
               </h2>
               <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-tight">
@@ -96,7 +96,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             </div>
 
             <p className="text-xs sm:text-sm md:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed font-normal">
-              Connect directly with authorized UAE stockists in Al Quoz, Sharjah & Deira. Submit your material list to receive competitive wholesale bids under the <strong className="text-cyan-300 font-semibold">Fastest 5 Bids Rule</strong> in 24 hours.
+              Skip the endless calls to Deira &amp; Al Quoz. Upload your material schedule in 60 seconds — top verified UAE stockists compete with direct wholesale pricing under our guaranteed <strong className="text-cyan-300 font-semibold">Fastest 5 Bids Rule</strong> in 24 hours.
             </p>
 
             {/* Main Action CTAs */}
@@ -298,7 +298,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             return (
               <Card key={idx} className="p-6 border-slate-200 hover:border-brand-400 transition-all space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-xs font-extrabold text-brand-600 bg-brand-50 px-2.5 py-1 rounded-lg">
+                  <span className="font-sans text-xs font-black tracking-wider uppercase text-brand-600 bg-brand-50 px-2.5 py-1 rounded-lg">
                     Step {item.step}
                   </span>
                   <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-700">
