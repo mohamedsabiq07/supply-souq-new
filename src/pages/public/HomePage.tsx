@@ -6,6 +6,8 @@ import { HighlightBadge } from '../../components/ui/Badge';
 import { Card, CardContent } from '../../components/ui/Card';
 import { SupplierCard } from '../../components/supplier/SupplierCard';
 import { AnimatedAuditBanner } from '../../components/audit/AnimatedAuditBanner';
+import { KineticHeadline } from '../../components/ui/KineticText';
+import { StatCounter } from '../../components/ui/StatCounter';
 import { formatAED } from '../../lib/utils';
 import { QuickBundle } from '../../types';
 import {
@@ -63,37 +65,50 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
 
   return (
     <div className="space-y-16 pb-20">
-      {/* HERO SECTION - ELECTRICAL PROCUREMENT */}
-      <section className="relative overflow-hidden pt-10 pb-16 border-b border-slate-200 bg-gradient-to-b from-slate-900 via-slate-900 to-navy-950 text-white">
+      {/* HERO SECTION - FUTURISTIC ELECTRICAL PROCUREMENT EXCHANGE */}
+      <section className="relative overflow-hidden pt-12 pb-20 border-b border-cyan-900/30 bg-obsidian-950 text-white">
+        {/* Futuristic Cyber-Grid Background Layer */}
+        <div className="absolute inset-0 cyber-grid-cyan opacity-25 pointer-events-none" />
+        
+        {/* Ambient Radial Gradient Spotlights */}
+        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[750px] h-[380px] bg-gradient-to-b from-cyan-500/20 via-sky-600/10 to-transparent blur-3xl pointer-events-none" />
+        <div className="absolute top-1/3 -right-20 w-[350px] h-[350px] bg-amber-500/10 blur-3xl pointer-events-none" />
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-3xl mx-auto text-center space-y-5">
+          <div className="max-w-4xl mx-auto text-center space-y-6">
             
-            <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-400/30 text-amber-300 px-3 py-1.5 rounded-full text-xs font-semibold">
-              <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-              <span>UAE B2B Material Procurement Network</span>
+            {/* High-Tech Live Status Badge */}
+            <div className="inline-flex items-center gap-2 bg-cyan-950/80 border border-cyan-500/30 text-cyan-300 px-3.5 py-1.5 rounded-full text-xs font-mono font-semibold shadow-glow-cyan backdrop-blur-md">
+              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+              <span className="tracking-wide">UAE B2B ELECTRICAL MATERIAL EXCHANGE • 24H SLA</span>
             </div>
 
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
-              Source UAE Electrical Materials.<br />
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-400 via-amber-200 to-sky-300">
-                Post Requirements. Compare 5 Quotes. Save 18%.
-              </span>
-            </h1>
+            {/* Static Pre-Title */}
+            <div className="space-y-2">
+              <h2 className="text-sm sm:text-base uppercase tracking-[0.25em] font-mono text-slate-400 font-bold">
+                Direct Wholesale Sourcing for Contractors & Stockists
+              </h2>
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-tight">
+                Source Verified UAE Materials:<br />
+                {/* Dynamic Kinetic Text Rotator */}
+                <KineticHeadline />
+              </h1>
+            </div>
 
-            <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
-              Connect directly with verified electrical stockists. Upload your material list or bill in 30 seconds to receive competitive wholesale quotations for LV/MV cables, switchgear, LED lighting, containment, and earthing in 24 hours.
+            <p className="text-xs sm:text-sm md:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed font-normal">
+              Connect directly with authorized UAE stockists in Al Quoz, Sharjah & Deira. Submit your material list to receive competitive wholesale bids under the <strong className="text-cyan-300 font-semibold">Fastest 5 Bids Rule</strong> in 24 hours.
             </p>
 
             {/* Main Action CTAs */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-3">
               <Button
                 variant="primary"
                 size="lg"
                 onClick={() => handleStartBuyer()}
                 leftIcon={<Zap className="w-5 h-5 text-amber-300 fill-amber-300" />}
-                className="w-full sm:w-auto bg-brand-500 hover:bg-brand-600 shadow-lg shadow-brand-500/25 text-sm py-3 px-6 font-bold"
+                className="w-full sm:w-auto bg-gradient-to-r from-brand-500 to-cyan-500 hover:from-brand-600 hover:to-cyan-600 shadow-glow-brand text-sm py-3.5 px-7 font-extrabold border border-cyan-400/30 transition-all hover:scale-[1.02]"
               >
-                Post an RFQ (100% Free)
+                Post Live RFQ (100% Free)
               </Button>
 
               <Button
@@ -101,24 +116,47 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                 size="lg"
                 onClick={() => setCurrentView('invoice-audit')}
                 leftIcon={<Sparkles className="w-5 h-5" />}
-                className="w-full sm:w-auto text-sm py-3 px-6 font-bold"
+                className="w-full sm:w-auto text-sm py-3.5 px-7 font-extrabold shadow-glow-amber transition-all hover:scale-[1.02]"
               >
                 Free Cable Invoice Audit (Save 15%+)
               </Button>
             </div>
 
-            {/* Micro Highlights */}
-            <div className="flex flex-wrap items-center justify-center gap-6 pt-4 text-xs text-slate-400">
-              <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" /> 100% UAE Trade License Verified Stockists
-              </span>
-              <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Standard 5% UAE VAT Compliant
-              </span>
-              <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Average 18.4% Material Cost Savings
-              </span>
+            {/* Futuristic Live Telemetry Metric Cards */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 max-w-3xl mx-auto">
+              <div className="p-3.5 rounded-xl bg-obsidian-900/80 border border-slate-800/80 backdrop-blur-md text-left">
+                <span className="text-[10px] uppercase font-mono text-slate-400 block font-semibold">Avg Contractor Savings</span>
+                <span className="text-xl sm:text-2xl font-black text-cyan-400 font-mono">
+                  <StatCounter target={18.4} decimals={1} suffix="%" />
+                </span>
+                <span className="text-[10px] text-slate-500 block mt-0.5">vs Deira retail prices</span>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-obsidian-900/80 border border-slate-800/80 backdrop-blur-md text-left">
+                <span className="text-[10px] uppercase font-mono text-slate-400 block font-semibold">Stockist Response SLA</span>
+                <span className="text-xl sm:text-2xl font-black text-amber-400 font-mono">
+                  <StatCounter target={24} suffix=" Hours" />
+                </span>
+                <span className="text-[10px] text-slate-500 block mt-0.5">Guaranteed turnaround</span>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-obsidian-900/80 border border-slate-800/80 backdrop-blur-md text-left">
+                <span className="text-[10px] uppercase font-mono text-slate-400 block font-semibold">Fastest Bids Cap</span>
+                <span className="text-xl sm:text-2xl font-black text-emerald-400 font-mono">
+                  <StatCounter target={5} suffix=" Stockists" />
+                </span>
+                <span className="text-[10px] text-slate-500 block mt-0.5">First-to-quote priority</span>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-obsidian-900/80 border border-slate-800/80 backdrop-blur-md text-left">
+                <span className="text-[10px] uppercase font-mono text-slate-400 block font-semibold">Trade License Vetted</span>
+                <span className="text-xl sm:text-2xl font-black text-white font-mono">
+                  <StatCounter target={100} suffix="%" />
+                </span>
+                <span className="text-[10px] text-slate-500 block mt-0.5">DET UAE verified</span>
+              </div>
             </div>
+
           </div>
         </div>
       </section>

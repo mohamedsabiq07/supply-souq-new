@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { AppDataProvider } from './context/AppDataContext';
 import { DemoRoleBar } from './components/layout/DemoRoleBar';
+import { MarketTicker } from './components/ui/MarketTicker';
 import { Navbar } from './components/layout/Navbar';
 import { Sidebar } from './components/layout/Sidebar';
 import { Footer } from './components/layout/Footer';
@@ -91,6 +92,7 @@ const AppContent: React.FC = () => {
   if (!isAuthenticated && !isPublicPage) {
     return (
       <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-brand-500 selection:text-white">
+        <MarketTicker />
         <DemoRoleBar onNavigate={handleNavigate} />
         <Navbar currentView={currentView} setCurrentView={handleNavigate} />
         <main className="flex-1">
@@ -109,6 +111,9 @@ const AppContent: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-brand-500 selection:text-white">
+      {/* Live Market Telemetry Ticker */}
+      <MarketTicker />
+
       {/* Top Role Session & Database Bar (Only visible when logged in) */}
       <DemoRoleBar onNavigate={handleNavigate} />
 
