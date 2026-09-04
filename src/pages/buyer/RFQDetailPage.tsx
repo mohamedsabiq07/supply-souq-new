@@ -111,18 +111,18 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
       {/* RFQ Meta Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <Card className="p-4">
-          <span className="text-slate-400 text-xs font-medium block">Project & Category</span>
-          <strong className="text-sm text-slate-900 font-bold">{rfq.projectName}</strong>
-          <span className="text-[11px] text-slate-500 block mt-0.5">
-            {rfq.consultantName ? `Consultant: ${rfq.consultantName}` : rfq.category}
+          <span className="text-slate-400 text-xs font-medium block">Category</span>
+          <strong className="text-sm text-slate-900 font-bold truncate block">{rfq.category}</strong>
+          <span className="text-[11px] text-brand-600 font-semibold block mt-0.5">
+            {rfq.items.length} Material Items
           </span>
         </Card>
 
         <Card className="p-4">
-          <span className="text-slate-400 text-xs font-medium block">Delivery Logistics</span>
+          <span className="text-slate-400 text-xs font-medium block">Delivery Site</span>
           <strong className="text-sm text-slate-900 font-bold">{rfq.deliveryEmirate}</strong>
           <span className="text-[11px] text-slate-500 block mt-0.5 truncate">
-            {rfq.offloadingRequired ? '🚚 Crane Offload' : '🏗️ Site Offload'} • {rfq.deliveryAddress}
+            {rfq.deliveryAddress}
           </span>
         </Card>
 
