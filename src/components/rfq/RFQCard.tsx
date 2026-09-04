@@ -61,6 +61,11 @@ export const RFQCard: React.FC<RFQCardProps> = ({
               <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 inline-flex items-center gap-1">
                 <Clock className="w-3 h-3 text-emerald-600" /> 24-Hour SLA
               </span>
+              {rfq.authorityApproval && (
+                <span className="text-[11px] font-bold text-cyan-800 bg-cyan-50 px-2 py-0.5 rounded border border-cyan-200">
+                  {rfq.authorityApproval.split('(')[0].trim()}
+                </span>
+              )}
               {rfq.priority === 'urgent' && (
                 <span className="inline-flex items-center gap-1 text-[11px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">
                   <AlertTriangle className="w-3 h-3" /> URGENT
@@ -72,6 +77,9 @@ export const RFQCard: React.FC<RFQCardProps> = ({
             </h3>
             <p className="text-xs text-slate-500 mt-0.5 font-medium">
               Project: <span className="text-slate-700 font-semibold">{rfq.projectName}</span>
+              {rfq.consultantName && (
+                <span className="ml-1 text-slate-400">({rfq.consultantName})</span>
+              )}
               {rfq.category && (
                 <span className="ml-2 text-slate-400">• Category: <strong className="text-slate-600">{rfq.category}</strong></span>
               )}
@@ -120,18 +128,24 @@ export const RFQCard: React.FC<RFQCardProps> = ({
         </div>
 
         <div className="bg-slate-50 p-2.5 rounded-lg mb-4 text-xs space-y-1">
-          {rfq.items.slice(0, 2).map((item, idx) => (
-            <div key={item.id || idx} className="flex items-center justify-between text-slate-600">
-              <span className="truncate font-medium text-slate-800">
-                • {item.quantity} {item.unit} — {item.description}
-              </span>
-              {item.preferredBrand && (
-                <span className="text-[10px] text-slate-500 bg-white px-1.5 py-0.5 rounded border border-slate-200 shrink-0 ml-2">
-                  {item.preferredBrand}
+          {rfq.items.slice(0, 2).map((item, idx) => {
+            const brandDisplay = (item.preferredBrands && item.preferredBrands.length > 0)
+              ? item.preferredBrands.join(' / ')
+              : item.preferredBrand;
+
+            return (
+              <div key={item.id || idx} className="flex items-center justify-between text-slate-600">
+                <span className="truncate font-medium text-slate-800">
+                  • {item.quantity} {item.unit} — {item.description}
                 </span>
-              )}
-            </div>
-          ))}
+                {brandDisplay && (
+                  <span className="text-[10px] font-bold text-brand-700 bg-white px-1.5 py-0.5 rounded border border-brand-200 shrink-0 ml-2">
+                    {brandDisplay}
+                  </span>
+                )}
+              </div>
+            );
+          })}
           {rfq.items.length > 2 && (
             <p className="text-[11px] text-brand-600 font-semibold pt-0.5">
               + {rfq.items.length - 2} more items in BOQ

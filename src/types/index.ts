@@ -100,8 +100,10 @@ export interface RFQItem {
   description: string;
   specification: string;
   preferredBrand?: string;
+  preferredBrands?: string[];
+  allowAlternatives?: boolean;
   quantity: number;
-  unit: 'm' | 'pcs' | 'sets' | 'coils' | 'tons' | 'sqm' | 'rolls' | 'boxes' | 'kg' | 'drums' | 'gallons' | 'cartons';
+  unit: 'm' | 'pcs' | 'sets' | 'coils' | 'tons' | 'sqm' | 'rolls' | 'boxes' | 'kg' | 'drums' | 'gallons' | 'cartons' | 'lengths';
   notes?: string;
 }
 
@@ -143,6 +145,10 @@ export interface RFQ {
   priority: 'low' | 'normal' | 'urgent';
   targetSupplierScope: 'all_verified' | 'local_emirate_only' | 'preferred_only';
   status: RFQStatus;
+  authorityApproval?: string;
+  consultantName?: string;
+  offloadingRequired?: boolean;
+  paymentTermsPreference?: string;
   notes?: string;
   photoUploadUrl?: string;
   isQuickTemplate?: boolean;

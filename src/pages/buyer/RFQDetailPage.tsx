@@ -111,21 +111,29 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
       {/* RFQ Meta Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <Card className="p-4">
-          <span className="text-slate-400 text-xs font-medium block">Project</span>
+          <span className="text-slate-400 text-xs font-medium block">Project & Category</span>
           <strong className="text-sm text-slate-900 font-bold">{rfq.projectName}</strong>
-          <span className="text-[11px] text-slate-500 block mt-0.5">Category: {rfq.category}</span>
+          <span className="text-[11px] text-slate-500 block mt-0.5">
+            {rfq.consultantName ? `Consultant: ${rfq.consultantName}` : rfq.category}
+          </span>
         </Card>
 
         <Card className="p-4">
-          <span className="text-slate-400 text-xs font-medium block">Delivery Site</span>
+          <span className="text-slate-400 text-xs font-medium block">Delivery Logistics</span>
           <strong className="text-sm text-slate-900 font-bold">{rfq.deliveryEmirate}</strong>
-          <span className="text-[11px] text-slate-500 block mt-0.5 truncate">{rfq.deliveryAddress}</span>
+          <span className="text-[11px] text-slate-500 block mt-0.5 truncate">
+            {rfq.offloadingRequired ? '🚚 Crane Offload' : '🏗️ Site Offload'} • {rfq.deliveryAddress}
+          </span>
         </Card>
 
         <Card className="p-4">
-          <span className="text-slate-400 text-xs font-medium block">Required Date</span>
-          <strong className="text-sm text-slate-900 font-bold">{formatDate(rfq.requiredDeliveryDate)}</strong>
-          <span className="text-[11px] text-slate-500 block mt-0.5">Closing: {formatDate(rfq.closingDate)}</span>
+          <span className="text-slate-400 text-xs font-medium block">Compliance & Payment</span>
+          <strong className="text-sm text-brand-700 font-bold">
+            {rfq.authorityApproval || 'DEWA Standard'}
+          </strong>
+          <span className="text-[11px] text-slate-500 block mt-0.5">
+            {rfq.paymentTermsPreference || 'PDC 30 Days'}
+          </span>
         </Card>
 
         <Card className="p-4">
@@ -301,9 +309,24 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
                   <td className="p-3 font-bold text-slate-900">{item.description}</td>
                   <td className="p-3 text-slate-600">{item.specification || 'Standard Spec'}</td>
                   <td className="p-3 font-medium text-slate-800">
-                    <span className="bg-slate-100 px-2 py-0.5 rounded text-[11px]">
-                      {item.preferredBrand || 'Open Spec'}
-                    </span>
+                    <div className="flex flex-wrap gap-1 items-center">
+                      {(item.preferredBrands && item.preferredBrands.length > 0) ? (
+                        item.preferredBrands.map((b) => (
+                          <span key={b} className="bg-brand-50 text-brand-700 border border-brand-200 font-bold px-2 py-0.5 rounded text-[10px]">
+                            {b}
+                          </span>
+                        ))
+                      ) : (
+                        <span className="bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-[11px] font-medium">
+                          {item.preferredBrand || 'Open Spec'}
+                        </span>
+                      )}
+                      {item.allowAlternatives && (
+                        <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
+                          (Equiv. OK)
+                        </span>
+                      )}
+                    </div>
                   </td>
                   <td className="p-3 font-extrabold text-slate-900">{item.quantity}</td>
                   <td className="p-3 text-slate-600">{item.unit}</td>

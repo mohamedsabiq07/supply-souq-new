@@ -128,12 +128,31 @@ export const QuotationForm: React.FC<QuotationFormProps> = ({
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="bg-brand-50/70 p-4 rounded-xl border border-brand-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
         <div>
-          <span className="font-mono font-bold text-brand-700 bg-white px-2 py-0.5 rounded border border-brand-200">
-            {rfq.rfqNumber}
-          </span>
+          <div className="flex items-center gap-2 flex-wrap mb-1">
+            <span className="font-mono font-bold text-brand-700 bg-white px-2 py-0.5 rounded border border-brand-200">
+              {rfq.rfqNumber}
+            </span>
+            {rfq.authorityApproval && (
+              <span className="text-[10px] font-bold text-cyan-800 bg-cyan-100/70 px-2 py-0.5 rounded border border-cyan-300">
+                {rfq.authorityApproval}
+              </span>
+            )}
+            {rfq.offloadingRequired && (
+              <span className="text-[10px] font-bold text-amber-800 bg-amber-100/70 px-2 py-0.5 rounded border border-amber-300">
+                🚚 Crane Offload Required
+              </span>
+            )}
+            {rfq.paymentTermsPreference && (
+              <span className="text-[10px] font-bold text-slate-700 bg-white px-2 py-0.5 rounded border border-slate-200">
+                💳 {rfq.paymentTermsPreference}
+              </span>
+            )}
+          </div>
           <h4 className="text-sm font-bold text-slate-900 mt-1">{rfq.title}</h4>
-          <p className="text-slate-500">
-            Buyer: <strong className="text-slate-700">{rfq.buyerCompanyName}</strong> • Delivery: <strong>{rfq.deliveryAddress}</strong>
+          <p className="text-slate-500 mt-0.5">
+            Buyer: <strong className="text-slate-700">{rfq.buyerCompanyName}</strong> • Delivery: <strong>{rfq.deliveryAddress} ({rfq.deliveryEmirate})</strong>
+            {rfq.projectName && <> • Project: <strong className="text-slate-700">{rfq.projectName}</strong></>}
+            {rfq.consultantName && <> (Consultant: <strong className="text-slate-700">{rfq.consultantName}</strong>)</>}
           </p>
         </div>
         <div className="text-right shrink-0">
@@ -162,7 +181,7 @@ export const QuotationForm: React.FC<QuotationFormProps> = ({
         <CardHeader>
           <div>
             <h4 className="text-sm font-bold text-slate-900">1. Itemized Pricing & Brand Specifications</h4>
-            <p className="text-xs text-slate-500">Enter unit price (AED) and offered brands matching or equivalent to buyer requirements.</p>
+            <p className="text-xs text-slate-500">Click any of the buyer's approved brands below to auto-fill your quotation, or type your alternative brand.</p>
           </div>
         </CardHeader>
         <CardContent className="p-0 overflow-x-auto">
@@ -170,9 +189,9 @@ export const QuotationForm: React.FC<QuotationFormProps> = ({
             <thead className="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
               <tr>
                 <th className="p-3">#</th>
-                <th className="p-3 min-w-[220px]">Item & Required Spec</th>
+                <th className="p-3 min-w-[260px]">Item, Required Spec & Approved Brands</th>
                 <th className="p-3">Qty & Unit</th>
-                <th className="p-3 min-w-[140px]">Offered Brand</th>
+                <th className="p-3 min-w-[150px]">Offered Brand</th>
                 <th className="p-3 min-w-[120px]">Unit Price (AED)</th>
                 <th className="p-3 text-right">Line Total (AED)</th>
               </tr>
@@ -180,17 +199,55 @@ export const QuotationForm: React.FC<QuotationFormProps> = ({
             <tbody className="divide-y divide-slate-100">
               {items.map((item, idx) => {
                 const lineTotal = item.quantity * (item.unitPriceAED || 0);
+                const rfqItem = rfq.items.find(i => i.id === item.rfqItemId) || rfq.items[idx];
+                const approvedBrands = rfqItem?.preferredBrands || (rfqItem?.preferredBrand ? rfqItem.preferredBrand.split('/').map(b => b.trim()) : []);
+
                 return (
                   <tr key={idx} className="hover:bg-slate-50/50">
                     <td className="p-3 font-mono font-semibold text-slate-400">{idx + 1}</td>
                     <td className="p-3">
-                      <p className="font-semibold text-slate-900">{item.itemDescription}</p>
+                      <p className="font-bold text-slate-900">{item.itemDescription}</p>
+                      {rfqItem?.specification && (
+                        <p className="text-[11px] text-slate-500 mt-0.5">{rfqItem.specification}</p>
+                      )}
+                      
+                      {/* Buyer Approved Brands Badges (Click to fill!) */}
+                      <div className="mt-2 flex items-center gap-1.5 flex-wrap">
+                        <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Approved:</span>
+                        {approvedBrands.length > 0 ? (
+                          approvedBrands.map((b) => (
+                            <button
+                              key={b}
+                              type="button"
+                              onClick={() => handleBrandChange(idx, b)}
+                              className={`text-[10px] font-bold px-2 py-0.5 rounded border transition-all ${
+                                item.offeredBrand === b
+                                  ? 'bg-brand-600 text-white border-brand-700 shadow-sm'
+                                  : 'bg-brand-50 text-brand-700 border-brand-200 hover:bg-brand-100'
+                              }`}
+                              title="Click to offer this approved brand"
+                            >
+                              ✓ {b}
+                            </button>
+                          ))
+                        ) : (
+                          <span className="text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-medium">
+                            {rfqItem?.preferredBrand || 'Open Spec'}
+                          </span>
+                        )}
+                        {rfqItem?.allowAlternatives && (
+                          <span className="text-[9px] text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
+                            Equivalents Welcome
+                          </span>
+                        )}
+                      </div>
+
                       <input
                         type="text"
                         value={item.remarks}
                         onChange={(e) => handleRemarksChange(idx, e.target.value)}
                         placeholder="Add notes / model number..."
-                        className="mt-1 w-full text-[11px] p-1.5 rounded border border-slate-200 focus:ring-1 focus:ring-brand-500 focus:outline-none"
+                        className="mt-2 w-full text-[11px] p-1.5 rounded border border-slate-200 focus:ring-1 focus:ring-brand-500 focus:outline-none"
                       />
                     </td>
                     <td className="p-3 font-bold text-slate-700">
@@ -199,9 +256,11 @@ export const QuotationForm: React.FC<QuotationFormProps> = ({
                     <td className="p-3">
                       <input
                         type="text"
+                        required
                         value={item.offeredBrand}
                         onChange={(e) => handleBrandChange(idx, e.target.value)}
-                        className="w-full text-xs p-1.5 rounded border border-slate-200 font-medium focus:ring-1 focus:ring-brand-500 focus:outline-none"
+                        placeholder="e.g. Ducab"
+                        className="w-full text-xs p-1.5 rounded border border-slate-200 font-bold text-brand-700 focus:ring-1 focus:ring-brand-500 focus:outline-none"
                       />
                     </td>
                     <td className="p-3">

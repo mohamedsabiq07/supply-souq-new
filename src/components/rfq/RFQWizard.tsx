@@ -20,8 +20,70 @@ import {
   Clock,
   ShieldCheck,
   Building2,
+  Tag,
+  Check,
+  HelpCircle,
   X
 } from 'lucide-react';
+
+// Contextual UAE Top Brands by Electrical Category
+export const CATEGORY_BRAND_MAP: Record<string, string[]> = {
+  'LV Power Cables & Building Wires': ['Ducab', 'Riyadh Cables', 'Oman Cables', 'Elsewedy Electric', 'BICC', 'Brugg Cables'],
+  'MV & HV Power Cables (11kV - 132kV)': ['Ducab', 'Prysmian', 'Elsewedy Electric', 'Riyadh Cables', 'Oman Cables', 'Brugg Cables'],
+  'Switchgear, DBs & Circuit Breakers': ['Schneider Electric', 'ABB', 'Siemens', 'Hager', 'Legrand', 'Eaton'],
+  'Conduits, Trays & Cable Containment': ['Decoduct', 'Dietzel Univolt', 'Marshall Tufflex', 'Profab GI', 'National Plastic', 'EGA'],
+  'Fire-Resistant, LSZH & Instrument Cables': ['Ducab FlamBICC', 'Prysmian FP200', 'Elsewedy Fire-Resistant', 'Belden', 'Cavicel'],
+  'Earthing & Lightning Protection Systems': ['Furse (ABB)', 'Wallis', 'Kumwell', 'Erico / nVent', 'Kingsmill'],
+  'Commercial, Industrial & Emergency Lighting': ['Philips / Signify', 'Osram / Ledvance', 'Tridonic', 'Thorn', 'Zumtobel', 'Cooper'],
+  'Wiring Accessories, Sockets & Industrial Plugs': ['Schneider Electric', 'Legrand', 'MK (Honeywell)', 'Crabtree', 'Mennekes'],
+  'Transformers, Substations & RMU Units': ['Schneider Electric', 'ABB', 'Siemens', 'Lucy Electric', 'Federal Transformers'],
+  'Solar PV Equipment, Inverters & UPS Power': ['SMA', 'Huawei Solar', 'Fronius', 'Schneider Electric', 'ABB', 'APC by Schneider'],
+};
+
+// Default Fallback UAE Electrical Brands
+export const DEFAULT_ELECTRICAL_BRANDS = [
+  'Ducab', 'Schneider Electric', 'ABB', 'Decoduct', 'Riyadh Cables', 'Oman Cables', 'Furse (ABB)', 'Philips'
+];
+
+// Realistic Initial UAE Electrical Items
+export const DEFAULT_ELECTRICAL_ITEMS: RFQItem[] = [
+  {
+    id: 'item-elec-1',
+    itemNumber: 1,
+    description: '4C x 16mm² XLPE/SWA/PVC 0.6/1kV Copper Armoured Cable',
+    specification: 'Stranded copper conductor, XLPE insulated, steel wire armoured, black PVC outer sheath (DEWA compliant)',
+    preferredBrands: ['Ducab', 'Riyadh Cables'],
+    preferredBrand: 'Ducab / Riyadh Cables',
+    allowAlternatives: true,
+    quantity: 500,
+    unit: 'm',
+    notes: 'Drum length 500m preferred. Factory test certificate required.'
+  },
+  {
+    id: 'item-elec-2',
+    itemNumber: 2,
+    description: '3-Phase 12-Way Flush Mounted Distribution Board (DB)',
+    specification: '125A Incomer capacity, IP41 rated, complete with copper busbar, neutral & earth bars, DIN rail',
+    preferredBrands: ['Schneider Electric', 'ABB'],
+    preferredBrand: 'Schneider Electric / ABB',
+    allowAlternatives: false,
+    quantity: 4,
+    unit: 'pcs',
+    notes: 'Include 100A 4P isolator & 12x 20A 1P MCBs'
+  },
+  {
+    id: 'item-elec-3',
+    itemNumber: 3,
+    description: '25mm High-Impact Rigid PVC Conduit (Class 4 Heavy Duty)',
+    specification: 'BS 4607 / BS EN 61386 standard, 3-meter length pipes, black UV-stabilized, high impact',
+    preferredBrands: ['Decoduct', 'Dietzel Univolt'],
+    preferredBrand: 'Decoduct / Dietzel Univolt',
+    allowAlternatives: true,
+    quantity: 50,
+    unit: 'lengths',
+    notes: 'Standard 3m pipes for underground and ceiling slab containment'
+  }
+];
 
 interface RFQWizardProps {
   buyerCompany: {
@@ -56,7 +118,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
   // Target Supplier State
   const [selectedTargetSupplier, setSelectedTargetSupplier] = useState<any>(targetSupplier || null);
 
-  // Step 1: Details
+  // Step 1: Core Details
   const [title, setTitle] = useState(
     initialBundle 
       ? initialBundle.title 
@@ -65,6 +127,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
         : 'LV Copper Power Cables & Switchgear Requirement'
   );
   const [projectName, setProjectName] = useState('Commercial Fit-Out Project');
+  const [consultantName, setConsultantName] = useState('');
   const [deliveryEmirate, setDeliveryEmirate] = useState<Emirate>('Dubai');
   const [deliveryAddress, setDeliveryAddress] = useState('Al Quoz Industrial Loading Bay 3, Dubai');
   const [category, setCategory] = useState(
@@ -80,10 +143,18 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
   const [closingDate, setClosingDate] = useState('2026-08-26');
   const [priority, setPriority] = useState<'low' | 'normal' | 'urgent'>('normal');
 
+  // Authority Compliance & Logistics Parameters
+  const [authorityApproval, setAuthorityApproval] = useState('DEWA Approved (Dubai Standard)');
+  const [offloadingRequired, setOffloadingRequired] = useState(false);
+  const [paymentTermsPreference, setPaymentTermsPreference] = useState('PDC 30 Days Credit');
+
   // Photo Mode state
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
 
-  // Step 2: Line Items
+  // Custom Brand Input State per Item index
+  const [customBrandInputs, setCustomBrandInputs] = useState<Record<number, string>>({});
+
+  // Line Items
   const [items, setItems] = useState<RFQItem[]>(() => {
     if (initialBundle) {
       return initialBundle.items.map((it, idx) => ({
@@ -92,49 +163,62 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
         description: it.description,
         specification: it.specification,
         preferredBrand: it.preferredBrand || '',
+        preferredBrands: it.preferredBrand ? it.preferredBrand.split('/').map(b => b.trim()) : [],
+        allowAlternatives: true,
         quantity: it.quantity,
         unit: it.unit as any,
       }));
     }
-    return [
-      {
-        id: 'item-new-1',
-        itemNumber: 1,
-        description: 'Neutral Floor Cleaner & Sanitizer (5L Drum)',
-        specification: 'Concentrated neutral lavender fragrance floor cleaner',
-        preferredBrand: 'Diversey / Clorox Pro / Purex',
-        quantity: 40,
-        unit: 'drums',
-        notes: 'Monthly replenishment'
-      },
-      {
-        id: 'item-new-2',
-        itemNumber: 2,
-        description: 'Jumbo Toilet Paper Rolls 2-Ply 300m (6 Rolls/Carton)',
-        specification: '100% Virgin wood pulp, 2-ply embossed',
-        preferredBrand: 'Fine / Kleenex / Al Khaleej',
-        quantity: 80,
-        unit: 'cartons',
-        notes: 'Carton pack'
-      },
-      {
-        id: 'item-new-3',
-        itemNumber: 3,
-        description: 'Heavy Duty Black Trash Bags 50 Gallon (80x110cm)',
-        specification: '50 Micron heavy grade LDPE, roll pack',
-        preferredBrand: 'Falcon / Hotpack',
-        quantity: 500,
-        unit: 'pcs',
-        notes: 'Rolls of 50'
-      }
-    ];
+    return DEFAULT_ELECTRICAL_ITEMS;
   });
 
   const [documents, setDocuments] = useState<RFQDocument[]>([]);
   const [targetScope, setTargetScope] = useState<'all_verified' | 'local_emirate_only' | 'preferred_only'>('all_verified');
-  const [verifiedOnly, setVerifiedOnly] = useState(true);
-  const [notes, setNotes] = useState('Standard UAE wholesale commercial terms. Material Safety Data Sheets (MSDS) or test certificates required with delivery.');
+  const [notes, setNotes] = useState('All materials must be genuine factory-sealed with valid mill test certificates and UAE authority compliance.');
 
+  // Current category brand options
+  const categoryBrands = CATEGORY_BRAND_MAP[category] || DEFAULT_ELECTRICAL_BRANDS;
+
+  // Toggle brand selection for a specific item
+  const handleToggleBrand = (itemIndex: number, brandName: string) => {
+    const next = [...items];
+    const currentBrands = next[itemIndex].preferredBrands || [];
+    
+    let updatedBrands: string[];
+    if (currentBrands.includes(brandName)) {
+      updatedBrands = currentBrands.filter(b => b !== brandName);
+    } else {
+      updatedBrands = [...currentBrands, brandName];
+    }
+
+    next[itemIndex] = {
+      ...next[itemIndex],
+      preferredBrands: updatedBrands,
+      preferredBrand: updatedBrands.join(' / ')
+    };
+    setItems(next);
+  };
+
+  // Add a custom brand typed by the user
+  const handleAddCustomBrand = (itemIndex: number) => {
+    const customBrand = (customBrandInputs[itemIndex] || '').trim();
+    if (!customBrand) return;
+
+    const next = [...items];
+    const currentBrands = next[itemIndex].preferredBrands || [];
+    if (!currentBrands.includes(customBrand)) {
+      const updatedBrands = [...currentBrands, customBrand];
+      next[itemIndex] = {
+        ...next[itemIndex],
+        preferredBrands: updatedBrands,
+        preferredBrand: updatedBrands.join(' / ')
+      };
+      setItems(next);
+    }
+    setCustomBrandInputs(prev => ({ ...prev, [itemIndex]: '' }));
+  };
+
+  // Quick Bundle Preset loader
   const handleSelectBundlePreset = (bundle: QuickBundle) => {
     setTitle(bundle.title);
     setCategory(bundle.category);
@@ -145,6 +229,8 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
         description: it.description,
         specification: it.specification,
         preferredBrand: it.preferredBrand || '',
+        preferredBrands: it.preferredBrand ? it.preferredBrand.split('/').map(b => b.trim()) : [],
+        allowAlternatives: true,
         quantity: it.quantity,
         unit: it.unit as any,
       }))
@@ -153,14 +239,17 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
 
   const handleSimulatePhotoUpload = () => {
     setPhotoPreview('https://images.unsplash.com/photo-1584824486509-112e4181ff6b?w=600&auto=format&fit=crop&q=80');
-    setTitle('Handwritten Supply List RFQ - ' + deliveryEmirate);
-    setCategory('FM & Cleaning Chemicals');
+    setTitle('Electrical Material List RFQ - ' + deliveryEmirate);
+    setCategory('LV Power Cables & Building Wires');
     setItems([
       {
         id: 'item-photo-1',
         itemNumber: 1,
-        description: 'Items as specified in attached handwritten photo list',
+        description: 'Items as specified in attached handwritten electrical schedule',
         specification: 'Refer to attached high-resolution list image',
+        preferredBrands: ['Ducab', 'Schneider Electric'],
+        preferredBrand: 'Ducab / Schneider Electric',
+        allowAlternatives: true,
         quantity: 1,
         unit: 'sets',
         notes: 'Attached photo list'
@@ -169,14 +258,17 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
   };
 
   const handleAddItem = () => {
+    const defaultBrand = categoryBrands[0] || 'Ducab';
     const newItem: RFQItem = {
       id: 'item-' + Date.now(),
       itemNumber: items.length + 1,
       description: '',
       specification: '',
-      preferredBrand: '',
-      quantity: 10,
-      unit: 'pcs',
+      preferredBrand: defaultBrand,
+      preferredBrands: [defaultBrand],
+      allowAlternatives: true,
+      quantity: 100,
+      unit: 'm',
     };
     setItems([...items, newItem]);
   };
@@ -208,6 +300,10 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
       requiredDeliveryDate,
       closingDate,
       priority,
+      authorityApproval,
+      consultantName,
+      offloadingRequired,
+      paymentTermsPreference,
       targetSupplierScope: targetScope,
       targetSupplierId: selectedTargetSupplier?.id,
       targetSupplierName: selectedTargetSupplier?.name,
@@ -228,29 +324,10 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
           <span className="text-[11px] font-bold text-amber-400 uppercase tracking-wider block">
             Choose How You Want to Create Your RFQ
           </span>
-          <h3 className="text-base font-bold text-white">Super-Simple 30-Second Procurement</h3>
+          <h3 className="text-base font-bold text-white">High-Speed UAE Electrical Procurement</h3>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-semibold">
-          <button
-            type="button"
-            onClick={() => {
-              setWizardMode('photo_upload');
-              setStep(1);
-            }}
-            className={`p-3.5 rounded-xl border text-left flex items-start gap-3 transition-all ${
-              wizardMode === 'photo_upload'
-                ? 'bg-brand-600 text-white border-brand-400 shadow-md font-bold'
-                : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700/60'
-            }`}
-          >
-            <Camera className="w-5 h-5 text-emerald-300 shrink-0 mt-0.5" />
-            <div>
-              <span className="block font-bold">Snap Photo of List / Invoice</span>
-              <span className="text-[10px] text-slate-300 font-normal">Handwritten material list, PDF schedule, or paper bill</span>
-            </div>
-          </button>
-
           <button
             type="button"
             onClick={() => {
@@ -265,8 +342,27 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
           >
             <FileText className="w-5 h-5 text-sky-300 shrink-0 mt-0.5" />
             <div>
-              <span className="block font-bold">Custom Line-Item BOQ</span>
-              <span className="text-[10px] text-slate-300 font-normal">Type material specs, preferred brands & quantities</span>
+              <span className="block font-bold">Custom Electrical Line-Item BOQ</span>
+              <span className="text-[10px] text-slate-300 font-normal">Select approved brands, specs, sizes & quantities</span>
+            </div>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setWizardMode('photo_upload');
+              setStep(1);
+            }}
+            className={`p-3.5 rounded-xl border text-left flex items-start gap-3 transition-all ${
+              wizardMode === 'photo_upload'
+                ? 'bg-brand-600 text-white border-brand-400 shadow-md font-bold'
+                : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700/60'
+            }`}
+          >
+            <Camera className="w-5 h-5 text-emerald-300 shrink-0 mt-0.5" />
+            <div>
+              <span className="block font-bold">Snap Photo of BOQ / Previous Invoice</span>
+              <span className="text-[10px] text-slate-300 font-normal">Handwritten cable schedule, single-line diagram, or paper bill</span>
             </div>
           </button>
         </div>
@@ -279,28 +375,47 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
             {step}
           </span>
           <span className="font-bold text-slate-900">
-            {step === 1 ? '1. Material Requirement & Delivery Location' : '2. Review & Broadcast to Verified Suppliers'}
+            {step === 1 ? '1. Material Requirement, Brands & Delivery Logistics' : '2. Review & Broadcast to Verified Stockists'}
           </span>
         </div>
-        <span className="text-slate-400">Step {step} of 2</span>
+        <span className="text-slate-400 font-medium">Step {step} of 2</span>
       </div>
 
       {/* STEP 1 */}
       {step === 1 && (
         <Card className="animate-in fade-in duration-150">
           <CardHeader>
-            <div>
-              <h3 className="text-base font-bold text-slate-900">
-                {wizardMode === 'photo_upload' ? 'Upload Photo & Delivery Site' : 'Select Package & Delivery Site'}
-              </h3>
-              <p className="text-xs text-slate-500">
-                {wizardMode === 'photo_upload'
-                  ? 'Take a photo of your paper list or existing supplier invoice to get competing wholesale quotes.'
-                  : 'Enter your project details and material items.'}
-              </p>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <h3 className="text-base font-bold text-slate-900">
+                  {wizardMode === 'photo_upload' ? 'Upload Photo & Delivery Site' : 'Select Package, Brands & Delivery Site'}
+                </h3>
+                <p className="text-xs text-slate-500">
+                  {wizardMode === 'photo_upload'
+                    ? 'Take a photo of your paper material list or existing supplier invoice to get competing wholesale bids.'
+                    : 'Specify your electrical materials, acceptable manufacturer brands, and project criteria.'}
+                </p>
+              </div>
+
+              {/* 1-Click Fast Bundle Presets */}
+              {wizardMode !== 'photo_upload' && (
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Fast Presets:</span>
+                  {initialQuickBundles.slice(0, 3).map((b) => (
+                    <button
+                      key={b.id}
+                      type="button"
+                      onClick={() => handleSelectBundlePreset(b)}
+                      className="text-[10px] font-bold text-brand-700 bg-brand-50 hover:bg-brand-100 px-2 py-1 rounded-md border border-brand-200 transition-colors"
+                    >
+                      + {b.title.split(' ')[0]} {b.title.split(' ')[1]}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           </CardHeader>
-          <CardContent className="space-y-5 text-xs">
+          <CardContent className="space-y-6 text-xs">
 
             {/* Photo Upload Mode */}
             {wizardMode === 'photo_upload' && (
@@ -351,170 +466,438 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
               </div>
             )}
 
-            {/* Title & Category */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="font-semibold text-slate-700 block mb-1">RFQ Title / Requirement Name *</label>
-                <input
-                  type="text"
-                  required
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  className="w-full p-2.5 rounded-lg border border-slate-200 text-xs font-semibold focus:ring-2 focus:ring-brand-500"
-                />
+            {/* Section A: Title, Category & Authority Approval */}
+            <div className="bg-slate-50/80 p-4 rounded-2xl border border-slate-200 space-y-4">
+              <span className="text-[11px] font-extrabold uppercase tracking-wider text-brand-700 flex items-center gap-1.5">
+                <Building2 className="w-3.5 h-3.5" /> Requirement & Specification Standards
+              </span>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="font-semibold text-slate-700 block mb-1">RFQ Title / Requirement Name *</label>
+                  <input
+                    type="text"
+                    required
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    className="w-full p-2.5 rounded-lg border border-slate-200 text-xs font-semibold focus:ring-2 focus:ring-brand-500 bg-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="font-semibold text-slate-700 block mb-1">Procurement Category *</label>
+                  <select
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    className="w-full p-2.5 rounded-lg border border-slate-200 text-xs font-semibold focus:ring-2 focus:ring-brand-500 bg-white"
+                  >
+                    <option value="LV Power Cables & Building Wires">⚡ LV Power Cables & Building Wires</option>
+                    <option value="MV & HV Power Cables (11kV - 132kV)">⚡ MV & HV Power Cables (11kV - 132kV)</option>
+                    <option value="Switchgear, DBs & Circuit Breakers">🔌 Switchgear, DBs & Circuit Breakers</option>
+                    <option value="Conduits, Trays & Cable Containment">🛡️ Conduits, Trays & Cable Containment</option>
+                    <option value="Fire-Resistant, LSZH & Instrument Cables">🔥 Fire-Resistant, LSZH & Instrument Cables</option>
+                    <option value="Earthing & Lightning Protection Systems">⚡ Earthing & Lightning Protection Systems</option>
+                    <option value="Commercial, Industrial & Emergency Lighting">💡 Commercial, Industrial & Emergency Lighting</option>
+                    <option value="Wiring Accessories, Sockets & Industrial Plugs">🔌 Wiring Accessories, Sockets & Industrial Plugs</option>
+                    <option value="Transformers, Substations & RMU Units">⚡ Transformers, Substations & RMU Units</option>
+                    <option value="Solar PV Equipment, Inverters & UPS Power">☀️ Solar PV Equipment, Inverters & UPS Power</option>
+                  </select>
+                </div>
               </div>
 
-              <div>
-                <label className="font-semibold text-slate-700 block mb-1">Procurement Category *</label>
-                <select
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                  className="w-full p-2.5 rounded-lg border border-slate-200 text-xs font-semibold focus:ring-2 focus:ring-brand-500 bg-white"
-                >
-                  <option value="LV Power Cables & Building Wires">⚡ LV Power Cables & Building Wires</option>
-                  <option value="MV & HV Power Cables (11kV - 132kV)">⚡ MV & HV Power Cables (11kV - 132kV)</option>
-                  <option value="Switchgear, DBs & Circuit Breakers">🔌 Switchgear, DBs & Circuit Breakers</option>
-                  <option value="Conduits, Trays & Cable Containment">🛡️ Conduits, Trays & Cable Containment</option>
-                  <option value="Fire-Resistant, LSZH & Instrument Cables">🔥 Fire-Resistant, LSZH & Instrument Cables</option>
-                  <option value="Earthing & Lightning Protection Systems">⚡ Earthing & Lightning Protection Systems</option>
-                  <option value="Commercial, Industrial & Emergency Lighting">💡 Commercial, Industrial & Emergency Lighting</option>
-                  <option value="Wiring Accessories, Sockets & Industrial Plugs">🔌 Wiring Accessories, Sockets & Industrial Plugs</option>
-                  <option value="Transformers, Substations & RMU Units">⚡ Transformers, Substations & RMU Units</option>
-                  <option value="Solar PV Equipment, Inverters & UPS Power">☀️ Solar PV Equipment, Inverters & UPS Power</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Delivery Location & Emirate */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="font-semibold text-slate-700 block mb-1">Delivery Emirate *</label>
-                <select
-                  value={deliveryEmirate}
-                  onChange={(e) => setDeliveryEmirate(e.target.value as Emirate)}
-                  className="w-full p-2.5 rounded-lg border border-slate-200 text-xs font-bold text-brand-700 focus:ring-2 focus:ring-brand-500"
-                >
-                  <option value="Dubai">Dubai</option>
-                  <option value="Sharjah">Sharjah</option>
-                  <option value="Ajman">Ajman</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="font-semibold text-slate-700 block mb-1">Delivery Site / Gate Address *</label>
-                <input
-                  type="text"
-                  required
-                  value={deliveryAddress}
-                  onChange={(e) => setDeliveryAddress(e.target.value)}
-                  placeholder="e.g. Loading Bay 2, Downtown Dubai"
-                  className="w-full p-2.5 rounded-lg border border-slate-200 text-xs focus:ring-2 focus:ring-brand-500"
-                />
-              </div>
-            </div>
-
-            {/* Required Date & Urgency */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="font-semibold text-slate-700 block mb-1">Required Delivery Date *</label>
-                <input
-                  type="date"
-                  required
-                  value={requiredDeliveryDate}
-                  onChange={(e) => setRequiredDeliveryDate(e.target.value)}
-                  className="w-full p-2.5 rounded-lg border border-slate-200 text-xs font-semibold focus:ring-2 focus:ring-brand-500"
-                />
-              </div>
-
-              <div>
-                <label className="font-semibold text-slate-700 block mb-1">Turnaround Priority</label>
-                <select
-                  value={priority}
-                  onChange={(e) => setPriority(e.target.value as any)}
-                  className="w-full p-2.5 rounded-lg border border-slate-200 text-xs font-semibold focus:ring-2 focus:ring-brand-500"
-                >
-                  <option value="normal">Normal (Standard 48h quotation)</option>
-                  <option value="urgent">⚡ Urgent (Express 24h quotation needed)</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Items List for Quick Bundle & Detailed BOQ */}
-            {wizardMode !== 'photo_upload' && (
-              <div className="space-y-3 pt-2">
-                <div className="flex items-center justify-between">
-                  <label className="font-bold text-slate-800">
-                    Material Items Included ({items.length}):
+              {/* UAE Authority Compliance & Consultant / Project */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-1">
+                <div>
+                  <label className="font-semibold text-slate-700 block mb-1">
+                    Authority Compliance *
                   </label>
+                  <select
+                    value={authorityApproval}
+                    onChange={(e) => setAuthorityApproval(e.target.value)}
+                    className="w-full p-2.5 rounded-lg border border-slate-200 text-xs font-bold text-brand-700 focus:ring-2 focus:ring-brand-500 bg-white"
+                  >
+                    <option value="DEWA Approved (Dubai Standard)">🏛️ DEWA Approved (Dubai)</option>
+                    <option value="SEWA Approved (Sharjah Standard)">🏛️ SEWA Approved (Sharjah)</option>
+                    <option value="FEWA Approved (Northern Emirates)">🏛️ FEWA Approved (Northern Emirates)</option>
+                    <option value="ADDC / AADC Approved (Abu Dhabi)">🏛️ ADDC / AADC Approved (Abu Dhabi)</option>
+                    <option value="Civil Defense Approved (DCD)">🔥 Civil Defense Approved (DCD)</option>
+                    <option value="Standard Commercial Spec">📦 Standard Commercial / Fit-Out Spec</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="font-semibold text-slate-700 block mb-1">
+                    Project Reference Name
+                  </label>
+                  <input
+                    type="text"
+                    value={projectName}
+                    onChange={(e) => setProjectName(e.target.value)}
+                    placeholder="e.g. Creek Marina Tower Phase 2"
+                    className="w-full p-2.5 rounded-lg border border-slate-200 text-xs focus:ring-2 focus:ring-brand-500 bg-white"
+                  />
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="font-semibold text-slate-700 block">
+                      Consultant / Client
+                    </label>
+                    <span className="text-[10px] text-amber-600 font-bold">Unlocks OEM Discounts</span>
+                  </div>
+                  <input
+                    type="text"
+                    value={consultantName}
+                    onChange={(e) => setConsultantName(e.target.value)}
+                    placeholder="e.g. Atkins, WSP, Emaar, Damac"
+                    className="w-full p-2.5 rounded-lg border border-slate-200 text-xs focus:ring-2 focus:ring-brand-500 bg-white"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Section B: Delivery Logistics & Commercial Terms */}
+            <div className="bg-slate-50/80 p-4 rounded-2xl border border-slate-200 space-y-4">
+              <span className="text-[11px] font-extrabold uppercase tracking-wider text-brand-700 flex items-center gap-1.5">
+                <MapPin className="w-3.5 h-3.5" /> Delivery Logistics & Commercial Terms
+              </span>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div>
+                  <label className="font-semibold text-slate-700 block mb-1">Delivery Emirate *</label>
+                  <select
+                    value={deliveryEmirate}
+                    onChange={(e) => setDeliveryEmirate(e.target.value as Emirate)}
+                    className="w-full p-2.5 rounded-lg border border-slate-200 text-xs font-bold text-brand-700 focus:ring-2 focus:ring-brand-500 bg-white"
+                  >
+                    <option value="Dubai">Dubai</option>
+                    <option value="Sharjah">Sharjah</option>
+                    <option value="Ajman">Ajman</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="font-semibold text-slate-700 block mb-1">Delivery Site / Gate Address *</label>
+                  <input
+                    type="text"
+                    required
+                    value={deliveryAddress}
+                    onChange={(e) => setDeliveryAddress(e.target.value)}
+                    placeholder="e.g. Loading Bay 2, Al Quoz, Dubai"
+                    className="w-full p-2.5 rounded-lg border border-slate-200 text-xs focus:ring-2 focus:ring-brand-500 bg-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="font-semibold text-slate-700 block mb-1">Required Delivery Date *</label>
+                  <input
+                    type="date"
+                    required
+                    value={requiredDeliveryDate}
+                    onChange={(e) => setRequiredDeliveryDate(e.target.value)}
+                    className="w-full p-2.5 rounded-lg border border-slate-200 text-xs font-semibold focus:ring-2 focus:ring-brand-500 bg-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="font-semibold text-slate-700 block mb-1">Turnaround Priority</label>
+                  <select
+                    value={priority}
+                    onChange={(e) => setPriority(e.target.value as any)}
+                    className="w-full p-2.5 rounded-lg border border-slate-200 text-xs font-semibold focus:ring-2 focus:ring-brand-500 bg-white"
+                  >
+                    <option value="normal">Normal (Standard 48h quotation)</option>
+                    <option value="urgent">⚡ Urgent (Express 24h quotation needed)</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Offloading & Payment Terms Preference */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                <div>
+                  <label className="font-semibold text-slate-700 block mb-1">Site Offloading Responsibility</label>
+                  <select
+                    value={offloadingRequired ? 'crane_required' : 'contractor_offload'}
+                    onChange={(e) => setOffloadingRequired(e.target.value === 'crane_required')}
+                    className="w-full p-2.5 rounded-lg border border-slate-200 text-xs font-semibold focus:ring-2 focus:ring-brand-500 bg-white"
+                  >
+                    <option value="contractor_offload">🏗️ Contractor will offload on site (Site Forklift / Crane available)</option>
+                    <option value="crane_required">🚚 Crane / Hiab Truck Offloading Required by Stockist</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="font-semibold text-slate-700 block mb-1">Preferred Payment Terms</label>
+                  <select
+                    value={paymentTermsPreference}
+                    onChange={(e) => setPaymentTermsPreference(e.target.value)}
+                    className="w-full p-2.5 rounded-lg border border-slate-200 text-xs font-semibold focus:ring-2 focus:ring-brand-500 bg-white"
+                  >
+                    <option value="PDC 30 Days Credit">PDC 30 Days Credit</option>
+                    <option value="PDC 60 Days Credit">PDC 60 Days Credit</option>
+                    <option value="100% Advance Payment (Maximum Discount)">100% Advance Payment (Maximum Discount)</option>
+                    <option value="Cash Against Delivery (CAD)">Cash Against Delivery (CAD)</option>
+                    <option value="Letter of Credit (LC)">Letter of Credit (LC)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* Section C: Material Line Items with Multi-Brand Selection */}
+            {wizardMode !== 'photo_upload' && (
+              <div className="space-y-4 pt-2">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-bold text-slate-900 text-sm">
+                      Material Items & Approved Brands ({items.length}):
+                    </h4>
+                    <p className="text-[11px] text-slate-500">
+                      Select one or more acceptable brands per item. Stockists will quote strictly according to your selected brands.
+                    </p>
+                  </div>
                   <Button
                     type="button"
                     variant="outline"
                     size="sm"
                     onClick={handleAddItem}
                     leftIcon={<Plus className="w-3.5 h-3.5" />}
+                    className="font-bold"
                   >
                     Add Item
                   </Button>
                 </div>
 
-                <div className="space-y-2">
-                  {items.map((item, idx) => (
-                    <div key={item.id || idx} className="p-3 bg-slate-50 rounded-xl border border-slate-200 grid grid-cols-1 sm:grid-cols-6 gap-2 items-center">
-                      <div className="sm:col-span-3">
-                        <input
-                          type="text"
-                          required
-                          value={item.description}
-                          onChange={(e) => handleItemChange(idx, 'description', e.target.value)}
-                          placeholder="Item description / chemical / spec..."
-                          className="w-full p-1.5 rounded-lg border border-slate-200 text-xs font-semibold focus:ring-1 focus:ring-brand-500"
-                        />
+                <div className="space-y-3.5">
+                  {items.map((item, idx) => {
+                    const selectedBrands = item.preferredBrands || [];
+                    const customBrandVal = customBrandInputs[idx] || '';
+
+                    return (
+                      <div 
+                        key={item.id || idx} 
+                        className="p-4 bg-white rounded-2xl border border-slate-200 shadow-subtle hover:border-slate-300 transition-all space-y-3"
+                      >
+                        {/* Item Card Header */}
+                        <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                          <div className="flex items-center gap-2">
+                            <span className="w-5 h-5 rounded-full bg-brand-50 text-brand-700 font-extrabold text-[11px] flex items-center justify-center border border-brand-200">
+                              {idx + 1}
+                            </span>
+                            <span className="font-bold text-slate-800 text-xs">Line Item #{idx + 1}</span>
+                          </div>
+
+                          {items.length > 1 && (
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveItem(idx)}
+                              className="text-slate-400 hover:text-rose-600 p-1 flex items-center gap-1 text-[11px] font-semibold transition-colors"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" /> Remove
+                            </button>
+                          )}
+                        </div>
+
+                        {/* Row 1: Description, Quantity & Electrical Unit */}
+                        <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
+                          <div className="sm:col-span-6">
+                            <label className="block text-[11px] font-semibold text-slate-700 mb-1">
+                              Material Description / Name *
+                            </label>
+                            <input
+                              type="text"
+                              required
+                              value={item.description}
+                              onChange={(e) => handleItemChange(idx, 'description', e.target.value)}
+                              placeholder="e.g. 4C x 16mm² XLPE/SWA/PVC Copper Armoured Cable..."
+                              className="w-full p-2 rounded-lg border border-slate-200 text-xs font-bold text-slate-900 focus:ring-2 focus:ring-brand-500"
+                            />
+                          </div>
+
+                          <div className="sm:col-span-3">
+                            <label className="block text-[11px] font-semibold text-slate-700 mb-1">
+                              Quantity *
+                            </label>
+                            <input
+                              type="number"
+                              min="1"
+                              required
+                              value={item.quantity}
+                              onChange={(e) => handleItemChange(idx, 'quantity', parseFloat(e.target.value) || 1)}
+                              className="w-full p-2 rounded-lg border border-slate-200 text-xs font-black text-center focus:ring-2 focus:ring-brand-500"
+                            />
+                          </div>
+
+                          <div className="sm:col-span-3">
+                            <label className="block text-[11px] font-semibold text-slate-700 mb-1">
+                              Electrical Unit *
+                            </label>
+                            <select
+                              value={item.unit}
+                              onChange={(e) => handleItemChange(idx, 'unit', e.target.value)}
+                              className="w-full p-2 rounded-lg border border-slate-200 text-xs font-semibold focus:ring-2 focus:ring-brand-500 bg-white"
+                            >
+                              <option value="m">Meters (m)</option>
+                              <option value="pcs">Pieces (pcs)</option>
+                              <option value="lengths">Lengths (3m / 6m)</option>
+                              <option value="coils">Coils / Rolls</option>
+                              <option value="drums">Wooden Cable Drums</option>
+                              <option value="sets">Complete Sets</option>
+                              <option value="boxes">Boxes / Cartons</option>
+                              <option value="tons">Metric Tons</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        {/* Row 2: Technical Specifications & Sizing */}
+                        <div>
+                          <label className="block text-[11px] font-semibold text-slate-700 mb-1">
+                            Technical Specification & Sizing
+                          </label>
+                          <input
+                            type="text"
+                            value={item.specification}
+                            onChange={(e) => handleItemChange(idx, 'specification', e.target.value)}
+                            placeholder="e.g. BS 5467, 600/1000V, stranded annealed copper, galvanized steel wire armoured, flame retardant..."
+                            className="w-full p-2 rounded-lg border border-slate-200 text-xs text-slate-700 focus:ring-1 focus:ring-brand-500"
+                          />
+                        </div>
+
+                        {/* Row 3: Multi-Brand Selection (Core User Feature) */}
+                        <div className="bg-slate-50/90 p-3 rounded-xl border border-slate-200 space-y-2">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+                            <div className="flex items-center gap-1.5">
+                              <Tag className="w-3.5 h-3.5 text-brand-600" />
+                              <span className="font-bold text-slate-800 text-[11px]">
+                                Approved Brands:
+                              </span>
+                              <span className="text-[10px] text-slate-500">
+                                (Select 1 or more acceptable brands)
+                              </span>
+                            </div>
+
+                            {/* Equal & Approved Alternatives Toggle */}
+                            <label className="inline-flex items-center gap-1.5 cursor-pointer select-none">
+                              <input
+                                type="checkbox"
+                                checked={item.allowAlternatives ?? true}
+                                onChange={(e) => handleItemChange(idx, 'allowAlternatives', e.target.checked)}
+                                className="w-3.5 h-3.5 text-brand-600 rounded border-slate-300 focus:ring-brand-500"
+                              />
+                              <span className="text-[11px] font-semibold text-slate-700">
+                                Equal & Approved Equivalents Welcome
+                              </span>
+                            </label>
+                          </div>
+
+                          {/* Brand Pills Grid */}
+                          <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                            {categoryBrands.map((brandName) => {
+                              const isSelected = selectedBrands.includes(brandName);
+                              return (
+                                <button
+                                  key={brandName}
+                                  type="button"
+                                  onClick={() => handleToggleBrand(idx, brandName)}
+                                  className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all inline-flex items-center gap-1 border ${
+                                    isSelected
+                                      ? 'bg-brand-600 text-white border-brand-700 shadow-sm'
+                                      : 'bg-white text-slate-700 border-slate-200 hover:border-brand-300 hover:bg-brand-50/50'
+                                  }`}
+                                >
+                                  {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
+                                  <span>{brandName}</span>
+                                </button>
+                              );
+                            })}
+
+                            {/* Any Custom Brands Already Added */}
+                            {selectedBrands
+                              .filter(b => !categoryBrands.includes(b))
+                              .map(customB => (
+                                <span
+                                  key={customB}
+                                  className="px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-500 text-white border border-amber-600 shadow-sm inline-flex items-center gap-1"
+                                >
+                                  <Check className="w-3 h-3 stroke-[3]" />
+                                  <span>{customB}</span>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleToggleBrand(idx, customB)}
+                                    className="ml-1 hover:text-rose-200"
+                                  >
+                                    <X className="w-3 h-3" />
+                                  </button>
+                                </span>
+                              ))}
+                          </div>
+
+                          {/* Inline Custom Brand Add */}
+                          <div className="flex items-center gap-2 pt-1 max-w-xs">
+                            <input
+                              type="text"
+                              value={customBrandVal}
+                              onChange={(e) => setCustomBrandInputs(prev => ({ ...prev, [idx]: e.target.value }))}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                  e.preventDefault();
+                                  handleAddCustomBrand(idx);
+                                }
+                              }}
+                              placeholder="+ Add other brand name..."
+                              className="flex-1 p-1.5 text-[11px] rounded-lg border border-slate-200 bg-white focus:ring-1 focus:ring-brand-500"
+                            />
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleAddCustomBrand(idx)}
+                              className="text-[11px] py-1 px-2.5 font-bold h-7"
+                            >
+                              Add
+                            </Button>
+                          </div>
+                        </div>
+
+                        {/* Row 4: Optional Notes */}
+                        <div>
+                          <input
+                            type="text"
+                            value={item.notes || ''}
+                            onChange={(e) => handleItemChange(idx, 'notes', e.target.value)}
+                            placeholder="Special instructions: e.g. Drum length 500m preferred, test certificate required..."
+                            className="w-full p-1.5 rounded-lg border border-slate-200 text-[11px] text-slate-500 italic bg-white"
+                          />
+                        </div>
                       </div>
-                      <div className="sm:col-span-1">
-                        <input
-                          type="number"
-                          min="1"
-                          required
-                          value={item.quantity}
-                          onChange={(e) => handleItemChange(idx, 'quantity', parseFloat(e.target.value) || 1)}
-                          className="w-full p-1.5 rounded-lg border border-slate-200 text-xs font-bold text-center focus:ring-1 focus:ring-brand-500"
-                        />
-                      </div>
-                      <div className="sm:col-span-1">
-                        <select
-                          value={item.unit}
-                          onChange={(e) => handleItemChange(idx, 'unit', e.target.value)}
-                          className="w-full p-1.5 rounded-lg border border-slate-200 text-xs font-semibold focus:ring-1 focus:ring-brand-500"
-                        >
-                          <option value="drums">Drums (5L Canister)</option>
-                          <option value="cartons">Cartons</option>
-                          <option value="boxes">Boxes</option>
-                          <option value="pcs">Pieces</option>
-                          <option value="m">Meters</option>
-                          <option value="sets">Sets</option>
-                        </select>
-                      </div>
-                      <div className="sm:col-span-1 flex justify-end">
-                        {items.length > 1 && (
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveItem(idx)}
-                            className="text-slate-400 hover:text-rose-600 p-1"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             )}
 
+            {/* General RFQ Notes */}
+            <div className="pt-2">
+              <label className="font-semibold text-slate-700 block mb-1">
+                General Commercial Instructions to Stockists
+              </label>
+              <textarea
+                rows={2}
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                className="w-full p-2.5 rounded-lg border border-slate-200 text-xs text-slate-700 focus:ring-2 focus:ring-brand-500"
+              />
+            </div>
+
           </CardContent>
           <CardFooter className="justify-between">
             <Button variant="outline" onClick={onCancel}>Cancel</Button>
-            <Button variant="primary" size="lg" onClick={() => setStep(2)} rightIcon={<ArrowRight className="w-4 h-4" />}>
+            <Button 
+              variant="primary" 
+              size="lg" 
+              onClick={() => setStep(2)} 
+              rightIcon={<ArrowRight className="w-4 h-4" />}
+              className="font-bold"
+            >
               Continue to Supplier Matching
             </Button>
           </CardFooter>
@@ -526,7 +909,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
         <Card className="animate-in fade-in duration-150">
           <CardHeader>
             <div>
-              <h3 className="text-base font-bold text-slate-900">Step 2: Confirm & Broadcast to Verified UAE Suppliers</h3>
+              <h3 className="text-base font-bold text-slate-900">Step 2: Confirm & Broadcast to Verified UAE Stockists</h3>
               <p className="text-xs text-slate-500">Your RFQ will be distributed to verified traders matching {category} in {deliveryEmirate}.</p>
             </div>
           </CardHeader>
@@ -541,10 +924,10 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                   <h4 className="font-bold text-emerald-950 text-sm">
                     {selectedTargetSupplier 
                       ? `Delivering Directly to ${selectedTargetSupplier.name} + 4 Matched Stockists`
-                      : `5 Verified UAE Suppliers Ready to Bid`}
+                      : `5 Verified UAE Stockists Ready to Compete`}
                   </h4>
                   <p className="text-emerald-700 text-xs">
-                    Stockists in {deliveryEmirate} & Sharjah Industrial will receive your RFQ immediately on their sales desk.
+                    Stockists in {deliveryEmirate} & Sharjah Industrial will receive your RFQ immediately on their sales desk under the <strong className="font-bold">Fastest 5 Bids Rule</strong>.
                   </p>
                 </div>
               </div>
@@ -563,11 +946,23 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                 <strong className="text-slate-900">{deliveryAddress} ({deliveryEmirate})</strong>
               </div>
               <div>
-                <span className="text-slate-400 block font-medium">Target Supplier:</span>
-                <strong className="text-brand-700 font-bold">
-                  {selectedTargetSupplier ? selectedTargetSupplier.name : 'Top 5 Auto-Matched Stockists'}
+                <span className="text-slate-400 block font-medium">Authority Compliance:</span>
+                <span className="font-bold text-brand-700 bg-brand-50 px-2 py-0.5 rounded border border-brand-200 inline-block">
+                  {authorityApproval}
+                </span>
+              </div>
+              <div>
+                <span className="text-slate-400 block font-medium">Offloading & Payment:</span>
+                <strong className="text-slate-800">
+                  {offloadingRequired ? 'Crane Offload Required' : 'Contractor Offloads'} • {paymentTermsPreference}
                 </strong>
               </div>
+              {projectName && (
+                <div>
+                  <span className="text-slate-400 block font-medium">Project Reference:</span>
+                  <strong className="text-slate-900">{projectName} {consultantName ? `(Consultant: ${consultantName})` : ''}</strong>
+                </div>
+              )}
               <div>
                 <span className="text-slate-400 block font-medium">Target Category:</span>
                 <span className="font-semibold text-brand-700">{category}</span>
@@ -584,21 +979,47 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
               </div>
             ) : (
               <div>
-                <h4 className="font-bold text-slate-900 mb-2">Material Items Summary ({items.length}):</h4>
+                <h4 className="font-bold text-slate-900 mb-2">Material Items & Approved Brands Summary ({items.length}):</h4>
                 <div className="border border-slate-200 rounded-xl overflow-hidden">
                   <table className="w-full text-left text-xs">
                     <thead className="bg-slate-100 text-slate-600 font-semibold border-b border-slate-200">
                       <tr>
                         <th className="p-2.5">#</th>
                         <th className="p-2.5">Description</th>
+                        <th className="p-2.5">Approved Brands</th>
                         <th className="p-2.5">Quantity & Unit</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
                       {items.map((item, idx) => (
-                        <tr key={idx}>
+                        <tr key={idx} className="hover:bg-slate-50">
                           <td className="p-2.5 font-mono text-slate-400">{idx + 1}</td>
-                          <td className="p-2.5 font-semibold text-slate-900">{item.description}</td>
+                          <td className="p-2.5 font-semibold text-slate-900">
+                            {item.description}
+                            {item.specification && (
+                              <p className="text-[11px] text-slate-500 font-normal">{item.specification}</p>
+                            )}
+                          </td>
+                          <td className="p-2.5">
+                            <div className="flex flex-wrap gap-1">
+                              {(item.preferredBrands && item.preferredBrands.length > 0) ? (
+                                item.preferredBrands.map(b => (
+                                  <span key={b} className="bg-brand-50 text-brand-700 border border-brand-200 font-bold px-2 py-0.5 rounded text-[10px]">
+                                    {b}
+                                  </span>
+                                ))
+                              ) : (
+                                <span className="bg-slate-100 text-slate-600 font-medium px-2 py-0.5 rounded text-[10px]">
+                                  {item.preferredBrand || 'Open Spec'}
+                                </span>
+                              )}
+                              {item.allowAlternatives && (
+                                <span className="text-[10px] text-emerald-700 font-bold self-center">
+                                  (Equiv. OK)
+                                </span>
+                              )}
+                            </div>
+                          </td>
                           <td className="p-2.5 font-bold text-slate-800">{item.quantity} {item.unit}</td>
                         </tr>
                       ))}
@@ -611,7 +1032,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
             <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 text-amber-900 flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-amber-700 shrink-0" />
               <span>
-                100% Free for Buyers. You will receive notification when verified suppliers submit prices.
+                100% Free for Buyers. The first 5 stockists to submit itemized prices will deliver directly to your dashboard within 24 hours.
               </span>
             </div>
 
