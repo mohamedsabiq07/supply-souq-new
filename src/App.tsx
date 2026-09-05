@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { AppDataProvider } from './context/AppDataContext';
-import { DemoRoleBar } from './components/layout/DemoRoleBar';
 import { MarketTicker } from './components/ui/MarketTicker';
 import { Navbar } from './components/layout/Navbar';
 import { Sidebar } from './components/layout/Sidebar';
@@ -94,9 +93,8 @@ const AppContent: React.FC = () => {
   if (!isAuthenticated && !isPublicPage) {
     return (
       <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-brand-500 selection:text-white">
-        <MarketTicker />
-        <DemoRoleBar onNavigate={handleNavigate} />
         <Navbar currentView={currentView} setCurrentView={handleNavigate} />
+        <MarketTicker />
         <main className="flex-1">
           <LoginPage 
             onSuccess={(target) => {
@@ -118,11 +116,6 @@ const AppContent: React.FC = () => {
 
       {/* Live Market Telemetry Ticker - Sleek Sub-Navbar Ribbon */}
       <MarketTicker />
-
-      {/* Internal Workspace Session Bar (Only visible inside private workspace, completely removed from Home page) */}
-      {!isPublicPage && (
-        <DemoRoleBar onNavigate={handleNavigate} />
-      )}
 
       {/* Main Content Body */}
       {isPublicPage ? (
