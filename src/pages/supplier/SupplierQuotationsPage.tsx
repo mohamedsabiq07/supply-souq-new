@@ -51,7 +51,7 @@ export const SupplierQuotationsPage: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-slate-600 my-3">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs text-slate-600 my-3">
                   <div>
                     <span className="text-slate-400 block">Lead Time:</span>
                     <strong className="text-slate-800">{quote.leadTimeDisplay || quote.leadTimeDays + ' Days'}</strong>
@@ -64,7 +64,32 @@ export const SupplierQuotationsPage: React.FC = () => {
                     <span className="text-slate-400 block">Warranty Period:</span>
                     <strong className="text-slate-800">{quote.warrantyPeriod}</strong>
                   </div>
+                  <div>
+                    <span className="text-slate-400 block">Delivery Method:</span>
+                    <strong className={quote.deliveryMethod === 'supplysouq_managed' ? 'text-brand-700' : 'text-slate-800'}>
+                      {quote.deliveryMethod === 'supplysouq_managed' ? 'SupplySouq Logistics' : 'In-House Fleet'}
+                    </strong>
+                  </div>
                 </div>
+
+                {quote.deliveryMethod === 'supplysouq_managed' && quote.deliveryDetails && (
+                  <div className="p-2.5 bg-brand-50/70 rounded-lg text-xs border border-brand-200 mb-3 flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-base">🚚</span>
+                      <div>
+                        <span className="font-bold text-brand-950 block">
+                          SupplySouq Dispatch: {quote.deliveryDetails.pickupZone} ➔ {quote.deliveryDetails.deliveryAddress}
+                        </span>
+                        <span className="text-[11px] text-slate-500">
+                          {quote.deliveryDetails.estimatedDistanceKm} km • {quote.deliveryDetails.vehicleType}
+                        </span>
+                      </div>
+                    </div>
+                    <span className="font-mono font-bold text-brand-800 bg-white px-2 py-0.5 rounded border border-brand-200">
+                      Fee: {formatAED(quote.deliveryChargeAED || quote.deliveryDetails.spotDeliveryFeeAED)}
+                    </span>
+                  </div>
+                )}
 
                 {quote.notes && (
                   <div className="p-2.5 bg-slate-50 rounded-lg text-xs text-slate-600 border border-slate-200">

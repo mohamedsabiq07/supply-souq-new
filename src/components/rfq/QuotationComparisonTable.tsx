@@ -288,6 +288,24 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
                     </div>
                   </div>
 
+                  {/* Delivery & Fleet Badge */}
+                  <div className={`p-2 rounded-lg text-xs border flex items-center justify-between gap-2 ${
+                    quote.deliveryMethod === 'supplysouq_managed'
+                      ? 'bg-brand-50/70 border-brand-200 text-brand-900'
+                      : 'bg-slate-50 border-slate-200 text-slate-700'
+                  }`}>
+                    <div className="flex items-center gap-1.5 truncate">
+                      <Truck className={`w-3.5 h-3.5 shrink-0 ${quote.deliveryMethod === 'supplysouq_managed' ? 'text-brand-600' : 'text-slate-500'}`} />
+                      <span className="font-semibold truncate">
+                        {quote.deliveryMethod === 'supplysouq_managed' ? 'SupplySouq Logistics' : 'Supplier In-House Fleet'}
+                      </span>
+                    </div>
+                    <span className="text-[10px] font-mono font-bold shrink-0">
+                      {quote.deliveryDetails?.estimatedDistanceKm ? `${quote.deliveryDetails.estimatedDistanceKm} km • ` : ''}
+                      {quote.deliveryChargeAED && quote.deliveryChargeAED > 0 ? formatAED(quote.deliveryChargeAED) : 'FREE'}
+                    </span>
+                  </div>
+
                   {/* Itemized Material Rates Summary */}
                   <div className="space-y-1 pt-1">
                     <button

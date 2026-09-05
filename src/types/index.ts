@@ -207,6 +207,14 @@ export interface Quotation {
   validityDate: string;
   notes?: string;
   quotationPdfUrl?: string;
+  deliveryMethod?: 'supplier_fleet' | 'supplysouq_managed';
+  deliveryDetails?: {
+    pickupZone: string;
+    deliveryAddress: string;
+    estimatedDistanceKm: number;
+    vehicleType: string;
+    spotDeliveryFeeAED: number;
+  };
   status: QuotationStatus;
   items: QuotationItem[];
   submittedAt: string;

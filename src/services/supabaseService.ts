@@ -174,7 +174,9 @@ export const mapQuotationFromDB = (row: any): Quotation => ({
   notes: row.notes,
   quotationPdfUrl: row.quotation_pdf_url,
   status: (row.status as any) || 'submitted',
-  submittedAt: row.submitted_at || new Date().toISOString()
+  submittedAt: row.submitted_at || new Date().toISOString(),
+  deliveryMethod: row.delivery_method || 'supplier_fleet',
+  deliveryDetails: row.delivery_details || undefined,
 });
 
 export const mapQuotationToDB = (q: Quotation) => ({
@@ -192,6 +194,7 @@ export const mapQuotationToDB = (q: Quotation) => ({
   items: q.items,
   subtotal_aed: q.subtotalAED,
   vat_aed: q.vatAED,
+  delivery_charge_aed: q.deliveryChargeAED || 0,
   total_amount_aed: q.grandTotalAED,
   delivery_days: q.leadTimeDays,
   delivery_terms: q.leadTimeDisplay,
@@ -199,7 +202,9 @@ export const mapQuotationToDB = (q: Quotation) => ({
   valid_until: q.validityDate,
   notes: q.notes,
   status: q.status,
-  submitted_at: q.submittedAt
+  submitted_at: q.submittedAt,
+  delivery_method: q.deliveryMethod || 'supplier_fleet',
+  delivery_details: q.deliveryDetails || null,
 });
 
 export const mapPOFromDB = (row: any): PurchaseOrder => ({
