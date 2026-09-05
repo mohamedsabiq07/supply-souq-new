@@ -207,29 +207,38 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
       )}
 
       {/* Control Tower Master Header */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-slate-900 text-white p-6 rounded-2xl shadow-xl border border-slate-800">
-        <div className="space-y-1.5">
-          <div className="flex items-center gap-2.5 flex-wrap">
-            <span className="w-3 h-3 rounded-full bg-emerald-400 animate-pulse" />
-            <h1 className="text-xl sm:text-2xl font-black tracking-tight">
-              SupplySouq Operations Control Tower
-            </h1>
-            <span className="bg-emerald-500/20 text-emerald-300 font-bold px-2.5 py-0.5 rounded text-[10px] border border-emerald-500/30">
-              Live UAE Radar Active
-            </span>
-            {isSupabaseConnected && (
-              <span className="bg-blue-500/20 text-blue-300 font-bold px-2 py-0.5 rounded text-[10px] border border-blue-500/30">
-                Cloud Synced
+      <div className="bg-slate-900 text-white p-6 rounded-2xl shadow-xl border border-slate-800 space-y-4 overflow-hidden">
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <span className="w-3 h-3 rounded-full bg-emerald-400 animate-pulse" />
+              <h1 className="text-xl sm:text-2xl font-black tracking-tight">
+                SupplySouq Operations Control Tower
+              </h1>
+              <span className="bg-emerald-500/20 text-emerald-300 font-bold px-2.5 py-0.5 rounded text-[10px] border border-emerald-500/30">
+                Live UAE Radar Active
               </span>
-            )}
+              {isSupabaseConnected && (
+                <span className="bg-blue-500/20 text-blue-300 font-bold px-2.5 py-0.5 rounded text-[10px] border border-blue-500/30">
+                  Cloud Synced
+                </span>
+              )}
+            </div>
+            <p className="text-xs text-slate-400 max-w-3xl">
+              Central command for UAE construction marketplace liquidity, 24-hour RFQ SLAs, DET legal verifications, 3% commission reconciliation & dispute mitigation.
+            </p>
           </div>
-          <p className="text-xs text-slate-400 max-w-3xl">
-            Central command for UAE construction marketplace liquidity, 24-hour RFQ SLAs, DET legal verifications, 3% commission reconciliation & dispute mitigation.
-          </p>
+
+          <div className="hidden sm:flex items-center gap-2 text-right text-xs shrink-0 self-start">
+            <div className="bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-700">
+              <span className="text-[10px] text-slate-400 block font-bold uppercase tracking-wider">Session Authority</span>
+              <span className="font-mono font-bold text-emerald-400">admin@supplysouq.ae</span>
+            </div>
+          </div>
         </div>
 
-        {/* Admin RBAC Role Switcher */}
-        <div className="shrink-0">
+        {/* Integrated Admin RBAC Role Switcher */}
+        <div className="w-full pt-1">
           <AdminRBACSelector
             currentRole={adminRole}
             onChangeRole={(newRole) => {
