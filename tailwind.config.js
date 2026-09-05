@@ -46,6 +46,15 @@ export default {
         emerald: {
           500: '#10b981',
           600: '#059669',
+        },
+        gent: {
+          obsidian: '#020f0c',
+          mint: '#00ffae',
+          ice: '#a4ffe2',
+          surface: '#002116cc',
+          border: 'rgba(0, 255, 174, 0.15)',
+          dark: '#00120bd9',
+          deep: '#00452ecc',
         }
       },
       fontFamily: {
@@ -59,6 +68,8 @@ export default {
         'glow-cyan': '0 0 20px -2px rgba(0, 240, 255, 0.35)',
         'glow-amber': '0 0 20px -2px rgba(245, 158, 11, 0.35)',
         'glow-brand': '0 0 25px -3px rgba(12, 143, 233, 0.4)',
+        'glow-mint': '0 0 25px -2px rgba(0, 255, 174, 0.4)',
+        'glow-mint-lg': '0 0 45px -5px rgba(0, 255, 174, 0.3)',
       },
       animation: {
         'marquee': 'marquee 70s linear infinite',

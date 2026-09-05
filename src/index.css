@@ -77,3 +77,37 @@
   -webkit-text-fill-color: transparent;
   animation: shimmer 3s linear infinite;
 }
+
+/* Gent Cyber-Mint Utilities */
+.cyber-grid-mint {
+  background-image: 
+    linear-gradient(to right, rgba(0, 255, 174, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 255, 174, 0.05) 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+
+.gent-glass {
+  background: rgba(0, 33, 22, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 255, 174, 0.15);
+}
+
+.gent-glass-card {
+  background: rgba(2, 15, 12, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.gent-glass-card:hover {
+  border-color: rgba(0, 255, 174, 0.35);
+  box-shadow: 0 0 25px -5px rgba(0, 255, 174, 0.18);
+}
+
+.text-gradient-mint {
+  background: linear-gradient(135deg, #ffffff 0%, #a4ffe2 50%, #00ffae 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+

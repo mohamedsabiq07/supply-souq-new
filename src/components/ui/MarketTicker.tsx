@@ -54,12 +54,12 @@ export const MarketTicker: React.FC = () => {
   ];
 
   return (
-    <div className="bg-obsidian-950 border-b border-cyan-900/40 text-white overflow-hidden select-none py-1.5 px-3 relative z-30 font-sans text-[11px] font-medium tracking-wide">
+    <div className="bg-[#020f0c] border-b border-[#00ffae]/15 text-white overflow-hidden select-none py-1.5 px-3 relative z-30 font-sans text-[11px] font-medium tracking-wide">
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
         {/* Live Badge Indicator */}
-        <div className="flex items-center gap-2 shrink-0 bg-cyan-950/80 text-cyan-300 px-2.5 py-0.5 rounded border border-cyan-500/30">
-          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
-          <span className="font-bold tracking-wider uppercase text-[10px]">MARKET TELEMETRY</span>
+        <div className="flex items-center gap-2 shrink-0 bg-[#002116cc] text-[#00ffae] px-2.5 py-0.5 rounded-full border border-[#00ffae]/30 shadow-glow-mint">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#00ffae] animate-ping" />
+          <span className="font-bold tracking-wider uppercase text-[10px]">LIVE TELEMETRY</span>
         </div>
 
         {/* Marquee Ticker Track */}
