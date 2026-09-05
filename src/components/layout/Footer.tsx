@@ -131,7 +131,7 @@ export const Footer: React.FC<FooterProps> = ({ setCurrentView }) => {
             <span className="hover:text-slate-400 cursor-pointer">Supplier Code of Conduct</span>
             <span>•</span>
             <button
-              onClick={() => setCurrentView('login')}
+              onClick={() => setCurrentView('admin-login')}
               className="text-slate-500 hover:text-emerald-400 transition-colors flex items-center gap-1 font-semibold"
             >
               <span>🔒 Operator Portal</span>

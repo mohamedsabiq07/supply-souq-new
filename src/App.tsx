@@ -43,12 +43,40 @@ import { RegisterPage } from './pages/auth/RegisterPage';
 
 const AppContent: React.FC = () => {
   const { role, setRole, isAuthenticated } = useAuth();
-  const [currentView, setCurrentView] = useState<string>('home');
+  const [currentView, setCurrentView] = useState<string>(() => {
+    try {
+      const hash = window.location.hash.replace('#', '').toLowerCase();
+      const search = new URLSearchParams(window.location.search);
+      const viewParam = search.get('view')?.toLowerCase() || search.get('page')?.toLowerCase();
+      if (hash === 'admin' || hash === 'admin-dashboard' || hash === 'admin-login' || viewParam === 'admin' || viewParam === 'admin-dashboard' || viewParam === 'admin-login') {
+        return 'admin-login';
+      }
+    } catch (e) {}
+    return 'home';
+  });
   const [viewParams, setViewParams] = useState<any>({});
+
+  // Listen to hash / URL change for direct #admin access
+  React.useEffect(() => {
+    const handleHashOrSearch = () => {
+      const hash = window.location.hash.replace('#', '').toLowerCase();
+      const search = new URLSearchParams(window.location.search);
+      const viewParam = search.get('view')?.toLowerCase() || search.get('page')?.toLowerCase();
+      if (hash === 'admin' || hash === 'admin-dashboard' || hash === 'admin-login' || viewParam === 'admin' || viewParam === 'admin-dashboard' || viewParam === 'admin-login') {
+        if (isAuthenticated && role === 'admin') {
+          setCurrentView('admin-dashboard');
+        } else {
+          setCurrentView('admin-login');
+        }
+      }
+    };
+    window.addEventListener('hashchange', handleHashOrSearch);
+    return () => window.removeEventListener('hashchange', handleHashOrSearch);
+  }, [isAuthenticated, role]);
 
   // Auto-redirect to dashboard when authenticated on login/register pages
   React.useEffect(() => {
-    if (isAuthenticated && (currentView === 'login' || currentView === 'register')) {
+    if (isAuthenticated && (currentView === 'login' || currentView === 'admin-login' || currentView === 'register')) {
       const destination = role === 'supplier' ? 'supplier-dashboard' : role === 'admin' ? 'admin-dashboard' : 'buyer-dashboard';
       setCurrentView(destination);
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -66,11 +94,16 @@ const AppContent: React.FC = () => {
       'onboarding-guide', 
       'invoice-audit', 
       'login', 
+      'admin-login',
       'register'
     ];
 
     if (!isAuthenticated && !allowBypass && !publicViews.includes(view)) {
-      setCurrentView('login');
+      if (view.startsWith('admin')) {
+        setCurrentView('admin-login');
+      } else {
+        setCurrentView('login');
+      }
     } else {
       setCurrentView(view);
     }
@@ -86,6 +119,7 @@ const AppContent: React.FC = () => {
     'onboarding-guide', 
     'invoice-audit', 
     'login', 
+    'admin-login',
     'register'
   ].includes(currentView);
 
@@ -97,6 +131,7 @@ const AppContent: React.FC = () => {
         <MarketTicker />
         <main className="flex-1">
           <LoginPage 
+            isAdminMode={currentView.startsWith('admin')}
             onSuccess={(target) => {
               const dest = target || (role === 'supplier' ? 'supplier-dashboard' : role === 'admin' ? 'admin-dashboard' : 'buyer-dashboard');
               handleNavigate(dest, {}, true);
@@ -164,8 +199,9 @@ const AppContent: React.FC = () => {
               }}
             />
           )}
-          {currentView === 'login' && (
+          {(currentView === 'login' || currentView === 'admin-login') && (
             <LoginPage 
+              isAdminMode={currentView === 'admin-login'}
               onSuccess={(target) => {
                 const dest = target || (role === 'supplier' ? 'supplier-dashboard' : role === 'admin' ? 'admin-dashboard' : 'buyer-dashboard');
                 handleNavigate(dest, {}, true);

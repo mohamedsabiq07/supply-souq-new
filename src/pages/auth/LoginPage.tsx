@@ -22,12 +22,22 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // Sync role if isAdminMode prop changes
+  React.useEffect(() => {
+    if (isAdminMode) {
+      setRole('admin');
+      setIdentifier('admin');
+    }
+  }, [isAdminMode]);
+
+  const isActuallyAdmin = role === 'admin' || isAdminMode;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg('');
     setLoading(true);
 
-    if (role === 'admin' || isAdminMode) {
+    if (isActuallyAdmin) {
       const ok = adminLogin(adminPassword || password);
       setLoading(false);
       if (ok) {
@@ -41,7 +51,12 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
     const res = await signIn(identifier, password);
     setLoading(false);
     if (res.success) {
-      const target = role === 'supplier' ? 'supplier-dashboard' : 'buyer-dashboard';
+      const cleanId = (identifier || '').trim().toLowerCase();
+      const target = (cleanId === 'admin' || cleanId === 'admin@supplysouq.ae')
+        ? 'admin-dashboard'
+        : role === 'supplier'
+        ? 'supplier-dashboard'
+        : 'buyer-dashboard';
       onSuccess(target);
     } else {
       setErrorMsg(res.error || 'Invalid username, email, or password');
@@ -56,17 +71,17 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
             <Layers className="w-6 h-6 text-amber-400" />
           </div>
           <h2 className="text-2xl font-extrabold text-slate-900">
-            {isAdminMode ? 'Operations Desk Login' : 'Login to SupplySouq'}
+            {isActuallyAdmin ? 'Operations Desk Login' : 'Login to SupplySouq'}
           </h2>
           <p className="text-xs text-slate-500">
-            {isAdminMode
-              ? 'Authorized UAE marketplace operator clearance'
+            {isActuallyAdmin
+              ? 'Authorized UAE marketplace operator clearance (Default passkey: admin123)'
               : 'Enter your unique username or email to access your workspace'}
           </p>
         </div>
 
-        {/* Portal Type Switcher - ONLY BUYER & SUPPLIER (No Admin) */}
-        {!isAdminMode && (
+        {/* Portal Type Switcher */}
+        {!isActuallyAdmin ? (
           <div className="grid grid-cols-2 gap-2 bg-slate-100 p-1 rounded-xl text-xs font-bold">
             <button
               type="button"
@@ -99,6 +114,13 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
               <span>Verified Supplier</span>
             </button>
           </div>
+        ) : (
+          <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-2.5 text-center">
+            <span className="text-xs font-bold text-emerald-900 flex items-center justify-center gap-1.5">
+              <Lock className="w-3.5 h-3.5 text-emerald-700" />
+              Master Operations Clearance Desk
+            </span>
+          </div>
         )}
 
         {errorMsg && (
@@ -109,7 +131,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4 text-xs">
-          {!isAdminMode ? (
+          {!isActuallyAdmin ? (
             <>
               <div>
                 <label className="font-bold text-slate-700 block mb-1 flex items-center gap-1">
@@ -159,6 +181,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
                 <input
                   type="password"
                   required
+                  autoFocus
                   value={adminPassword}
                   onChange={(e) => setAdminPassword(e.target.value)}
                   placeholder="Enter administrator passkey (admin123)"
@@ -178,18 +201,43 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
           )}
         </form>
 
-        {!isAdminMode && (
-          <div className="text-center pt-2 border-t border-slate-100 text-xs text-slate-500">
-            Don't have an account yet?{' '}
+        {!isActuallyAdmin ? (
+          <div className="pt-3 border-t border-slate-100 text-xs text-slate-500 flex flex-col items-center gap-2">
+            <div>
+              Don't have an account yet?{' '}
+              <button
+                type="button"
+                onClick={() => {
+                  if (onNavigateToRegister) onNavigateToRegister();
+                  else onSuccess();
+                }}
+                className="text-brand-600 font-bold hover:underline"
+              >
+                Sign Up as Contractor or Supplier
+              </button>
+            </div>
             <button
               type="button"
               onClick={() => {
-                if (onNavigateToRegister) onNavigateToRegister();
-                else onSuccess();
+                setRole('admin');
+                setErrorMsg('');
+              }}
+              className="text-slate-400 hover:text-emerald-700 transition-colors font-medium flex items-center gap-1 mt-1 text-[11px]"
+            >
+              <span>🔒 Operator / Admin Login</span>
+            </button>
+          </div>
+        ) : (
+          <div className="text-center pt-3 border-t border-slate-100 text-xs text-slate-500">
+            <button
+              type="button"
+              onClick={() => {
+                setRole('buyer');
+                setErrorMsg('');
               }}
               className="text-brand-600 font-bold hover:underline"
             >
-              Sign Up as Contractor or Supplier
+              ← Return to Contractor & Supplier Login
             </button>
           </div>
         )}
