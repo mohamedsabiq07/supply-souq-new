@@ -124,6 +124,22 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
                 >
                   <span>My Workspace</span>
                 </button>
+                <button
+                  onClick={() => {
+                    if (role === 'buyer') setCurrentView('buyer-profile');
+                    else if (role === 'supplier') setCurrentView('supplier-profile');
+                    else setCurrentView('admin-profile');
+                  }}
+                  className="p-1.5 rounded-lg border border-slate-200 hover:border-slate-300 hover:bg-slate-50 transition-colors flex items-center gap-2"
+                  title="View & Edit Profile"
+                >
+                  <img
+                    src={currentUser.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100'}
+                    alt={currentUser.fullName}
+                    className="w-6 h-6 rounded-full object-cover"
+                  />
+                  <span className="text-xs font-bold text-slate-700 hidden lg:inline max-w-[120px] truncate">{currentUser.fullName}</span>
+                </button>
               </div>
             )}
           </div>
@@ -219,6 +235,18 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
                   className="w-full justify-center"
                 >
                   Go to Workspace
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    if (role === 'buyer') setCurrentView('buyer-profile');
+                    else if (role === 'supplier') setCurrentView('supplier-profile');
+                    else setCurrentView('admin-profile');
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full justify-center"
+                >
+                  Profile & Settings
                 </Button>
                 <Button
                   variant="ghost"

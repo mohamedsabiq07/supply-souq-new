@@ -30,11 +30,13 @@ import { SupplierInboxPage } from './pages/supplier/SupplierInboxPage';
 import { SubmitQuotePage } from './pages/supplier/SubmitQuotePage';
 import { SupplierQuotationsPage } from './pages/supplier/SupplierQuotationsPage';
 import { SupplierOrdersPage } from './pages/supplier/SupplierOrdersPage';
-import { SupplierProfilePage } from './pages/supplier/SupplierProfilePage';
 
 // Admin Pages
 import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { AdminVerificationPage } from './pages/admin/AdminVerificationPage';
+
+// Profile Page
+import { ProfilePage } from './pages/profile/ProfilePage';
 
 // Auth Pages
 import { LoginPage } from './pages/auth/LoginPage';
@@ -238,11 +240,13 @@ const AppContent: React.FC = () => {
             {currentView === 'supplier-orders' && (
               <SupplierOrdersPage />
             )}
-            {currentView === 'supplier-profile' && (
-              <SupplierProfilePage />
-            )}
             {currentView === 'supplier-messages' && (
               <BuyerMessagesPage />
+            )}
+
+            {/* Universal Profile & Settings View */}
+            {(currentView === 'profile' || currentView === 'buyer-profile' || currentView === 'supplier-profile' || currentView === 'admin-profile') && (
+              <ProfilePage />
             )}
 
             {/* Admin Views */}

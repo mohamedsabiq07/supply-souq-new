@@ -13,6 +13,7 @@ import {
   Settings,
   Building2,
   Award,
+  User,
   LogOut
 } from 'lucide-react';
 
@@ -40,6 +41,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView })
     { id: 'buyer-compare-quick', label: 'Compare Quotes', icon: GitCompare, count: comparingRFQs.length, highlight: true },
     { id: 'buyer-orders', label: 'Purchase Orders', icon: Package, count: buyerOrders.length },
     { id: 'buyer-messages', label: 'Messages', icon: MessageSquare, count: buyerUnreadMessages },
+    { id: 'buyer-profile', label: 'Company & Profile', icon: User },
   ];
 
   // Supplier accurate counts
@@ -53,7 +55,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView })
     { id: 'supplier-inbox', label: 'RFQ Inbox (Live)', icon: FileText, count: supplierLiveRFQs.length, highlight: true },
     { id: 'supplier-quotes', label: 'My Quotations', icon: GitCompare, count: supplierQuotes.length },
     { id: 'supplier-orders', label: 'Orders & POs', icon: Package, count: supplierOrders.length },
-    { id: 'supplier-profile', label: 'Company & License', icon: Building2 },
+    { id: 'supplier-profile', label: 'Company & Profile', icon: Building2 },
     { id: 'supplier-messages', label: 'Messages', icon: MessageSquare, count: supplierUnreadMessages },
   ];
 
@@ -61,6 +63,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView })
     { id: 'admin-dashboard', label: 'Command Center', icon: LayoutDashboard },
     { id: 'admin-verifications', label: 'Trade License Verification', icon: ShieldCheck, count: pendingVerifications, highlight: true },
     { id: 'admin-rfqs', label: 'Global RFQs Monitor', icon: FileText, count: rfqs.length },
+    { id: 'admin-profile', label: 'Admin Profile', icon: User },
   ];
 
   const links = role === 'buyer' ? buyerLinks : role === 'supplier' ? supplierLinks : adminLinks;
@@ -73,15 +76,23 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView })
     <aside className="w-64 bg-white border-r border-slate-200 shrink-0 hidden md:flex flex-col justify-between p-4 min-h-[calc(100vh-6.5rem)]">
       <div>
         {/* User Card */}
-        <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 mb-5">
+        <button
+          type="button"
+          onClick={() => setCurrentView(role === 'buyer' ? 'buyer-profile' : role === 'supplier' ? 'supplier-profile' : 'admin-profile')}
+          className="w-full text-left p-3 bg-slate-50 hover:bg-slate-100/90 rounded-xl border border-slate-200/80 mb-5 transition-all group cursor-pointer shadow-2xs hover:shadow-xs"
+          title="Click to view and edit profile"
+        >
           <div className="flex items-center gap-3">
             <img
               src={currentUser.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100'}
               alt={currentUser.fullName}
-              className="w-10 h-10 rounded-full object-cover border border-slate-200"
+              className="w-10 h-10 rounded-full object-cover border border-slate-200 group-hover:ring-2 group-hover:ring-brand-500/30 transition-all"
             />
-            <div className="overflow-hidden">
-              <p className="text-xs font-bold text-slate-900 truncate">{currentUser.fullName}</p>
+            <div className="overflow-hidden flex-1">
+              <div className="flex items-center justify-between gap-1">
+                <p className="text-xs font-bold text-slate-900 truncate group-hover:text-brand-600 transition-colors">{currentUser.fullName}</p>
+                <span className="text-[10px] text-slate-400 group-hover:text-brand-500 font-medium">Edit ✎</span>
+              </div>
               <p className="text-[11px] text-slate-500 truncate">{currentCompany.name}</p>
               <span className={`inline-block text-[10px] font-bold px-1.5 py-0.2 rounded mt-0.5 ${
                 role === 'buyer' ? 'bg-brand-100 text-brand-800' : role === 'supplier' ? 'bg-amber-100 text-amber-900' : 'bg-emerald-100 text-emerald-800'
@@ -90,7 +101,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView })
               </span>
             </div>
           </div>
-        </div>
+        </button>
 
         {/* Action Button */}
         {role === 'buyer' && (

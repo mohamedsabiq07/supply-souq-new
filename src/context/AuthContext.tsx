@@ -84,6 +84,7 @@ interface AuthContextType {
   adminLogin: (password: string) => boolean;
   signUpBuyer: (data: BuyerSignupData) => Promise<{ success: boolean; user?: UserProfile; error?: string }>;
   signUpSupplier: (data: SupplierSignupData) => Promise<{ success: boolean; user?: UserProfile; error?: string }>;
+  updateProfile: (updatedUser: Partial<UserProfile>, updatedCompany?: Partial<Company>) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
 }
 
@@ -565,6 +566,66 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  // Update Profile & Company
+  const updateProfile = async (
+    updatedUserData: Partial<UserProfile>,
+    updatedCompanyData?: Partial<Company>
+  ): Promise<{ success: boolean; error?: string }> => {
+    try {
+      // 1. Merge user
+      const mergedUser: UserProfile = {
+        ...currentUser,
+        ...updatedUserData,
+        companyName: updatedCompanyData?.name || updatedUserData.companyName || currentUser.companyName,
+      };
+
+      // 2. Merge company
+      const mergedCompany: Company = {
+        ...currentCompany,
+        ...(updatedCompanyData || {}),
+        name: updatedCompanyData?.name || mergedUser.companyName || currentCompany.name,
+      };
+
+      // 3. Update active state
+      setCurrentUser(mergedUser);
+      setCurrentCompany(mergedCompany);
+
+      // 4. Update registeredUsers list
+      setRegisteredUsers((prev) => {
+        const index = prev.findIndex(
+          (u) => u.id === mergedUser.id || (u.email && u.email.toLowerCase() === mergedUser.email.toLowerCase())
+        );
+        if (index >= 0) {
+          const updated = [...prev];
+          updated[index] = mergedUser;
+          return updated;
+        }
+        return [mergedUser, ...prev];
+      });
+
+      // 5. Update local storage session
+      try {
+        localStorage.setItem(`${AUTH_STORAGE_KEY}_user`, JSON.stringify(mergedUser));
+        localStorage.setItem(`${AUTH_STORAGE_KEY}_company`, JSON.stringify(mergedCompany));
+      } catch (e) {}
+
+      // 6. Persist to Supabase if connected
+      try {
+        await supabaseService.registerUser({
+          user: mergedUser,
+          company: mergedCompany,
+        });
+      } catch (e) {
+        console.warn('Could not sync profile update with Supabase, saved locally:', e);
+      }
+
+      return { success: true };
+    } catch (err: any) {
+      console.error('Update Profile Error:', err);
+      return { success: false, error: err?.message || 'Failed to update profile' };
+    }
+  };
+
   const logout = () => {
     setIsAuthenticated(false);
     setCurrentUser(guestUser);
@@ -594,6 +655,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         adminLogin,
         signUpBuyer,
         signUpSupplier,
+        updateProfile,
         logout,
       }}
     >

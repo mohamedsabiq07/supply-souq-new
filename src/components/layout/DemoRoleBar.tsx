@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useAppData } from '../../context/AppDataContext';
-import { Building2, Store, ShieldAlert, LogOut } from 'lucide-react';
+import { Building2, Store, ShieldAlert, LogOut, User } from 'lucide-react';
 
 interface DemoRoleBarProps {
   onNavigate?: (view: string) => void;
@@ -55,6 +55,16 @@ export const DemoRoleBar: React.FC<DemoRoleBarProps> = ({ onNavigate }) => {
         <span className="text-slate-400 text-[11px] hidden md:inline">
           Active User: <strong className="text-white">{currentUser.fullName}</strong>
         </span>
+        {onNavigate && (
+          <button
+            type="button"
+            onClick={() => onNavigate(role === 'buyer' ? 'buyer-profile' : role === 'supplier' ? 'supplier-profile' : 'admin-profile')}
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white text-[11px] font-semibold border border-slate-700 transition-colors cursor-pointer"
+          >
+            <User className="w-3 h-3 text-brand-400" />
+            <span>Profile & Settings</span>
+          </button>
+        )}
       </div>
     </div>
   );
