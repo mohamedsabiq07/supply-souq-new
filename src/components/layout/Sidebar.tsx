@@ -83,11 +83,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView })
           title="Click to view and edit profile"
         >
           <div className="flex items-center gap-3">
-            <img
-              src={currentUser.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100'}
-              alt={currentUser.fullName}
-              className="w-10 h-10 rounded-full object-cover border border-slate-200 group-hover:ring-2 group-hover:ring-brand-500/30 transition-all"
-            />
+            {currentUser.avatarUrl ? (
+              <img
+                src={currentUser.avatarUrl}
+                alt={currentUser.fullName}
+                className="w-10 h-10 rounded-full object-cover border border-slate-200 group-hover:ring-2 group-hover:ring-brand-500/30 transition-all"
+              />
+            ) : (
+              <div className="w-10 h-10 rounded-full bg-slate-900 text-white font-bold flex items-center justify-center text-xs border border-slate-700 shrink-0">
+                {(currentUser.fullName || 'User').trim().split(/\s+/).map((w: string) => w[0]).join('').slice(0, 2).toUpperCase()}
+              </div>
+            )}
             <div className="overflow-hidden flex-1">
               <div className="flex items-center justify-between gap-1">
                 <p className="text-xs font-bold text-slate-900 truncate group-hover:text-brand-600 transition-colors">{currentUser.fullName}</p>

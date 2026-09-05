@@ -133,11 +133,17 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
                   className="p-1.5 rounded-lg border border-slate-200 hover:border-slate-300 hover:bg-slate-50 transition-colors flex items-center gap-2"
                   title="View & Edit Profile"
                 >
-                  <img
-                    src={currentUser.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100'}
-                    alt={currentUser.fullName}
-                    className="w-6 h-6 rounded-full object-cover"
-                  />
+                  {currentUser.avatarUrl ? (
+                    <img
+                      src={currentUser.avatarUrl}
+                      alt={currentUser.fullName}
+                      className="w-6 h-6 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-6 h-6 rounded-full bg-slate-900 text-white font-bold flex items-center justify-center text-[10px] shrink-0">
+                      {(currentUser.fullName || 'User').trim().split(/\s+/).map((w: string) => w[0]).join('').slice(0, 2).toUpperCase()}
+                    </div>
+                  )}
                   <span className="text-xs font-bold text-slate-700 hidden lg:inline max-w-[120px] truncate">{currentUser.fullName}</span>
                 </button>
               </div>
