@@ -18,7 +18,8 @@ import {
   ShieldCheck,
   Zap,
   ArrowRight,
-  PackageCheck
+  PackageCheck,
+  Gift
 } from 'lucide-react';
 
 interface SupplierDashboardProps {
@@ -92,6 +93,33 @@ export const SupplierDashboard: React.FC<SupplierDashboardProps> = ({ onNavigate
         }`}>
           {isPending ? 'Verification Pending' : '100% Verified Profile'}
         </span>
+      </div>
+
+      {/* 3-Month Free Trial & Pricing Banner */}
+      <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white p-4 sm:p-5 rounded-2xl border border-slate-700/80 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs">
+        <div className="flex items-center gap-3.5">
+          <div className="w-11 h-11 rounded-2xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-400 font-bold shrink-0">
+            <Gift className="w-6 h-6 text-amber-400" />
+          </div>
+          <div className="space-y-0.5">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="font-extrabold text-sm text-white">First 3 Months 100% Free Trial Active</span>
+              <span className="bg-emerald-400 text-slate-950 font-black px-2 py-0.5 rounded text-[10px] uppercase tracking-wide">
+                Day 22 of 90 • 68 Days Remaining
+              </span>
+              <span className="bg-amber-400/20 text-amber-300 border border-amber-400/30 font-bold px-2 py-0.5 rounded text-[10px]">
+                0% Commission Active
+              </span>
+            </div>
+            <p className="text-slate-300 text-xs">
+              Quote unlimited contractor RFQs with <strong>0% platform commission</strong>. Regular membership after your 3-month trial is only <strong className="text-amber-400 font-bold">AED 1 / Day</strong> (AED 30/mo) with zero commitments.
+            </p>
+          </div>
+        </div>
+        <div className="shrink-0 bg-slate-950/80 px-4 py-2 rounded-xl border border-slate-700 text-right self-start sm:self-auto">
+          <span className="text-[10px] text-slate-400 block uppercase font-bold tracking-wider">After 3-Month Trial</span>
+          <span className="text-amber-400 font-black text-sm font-mono">AED 1.00 <span className="text-[10px] text-slate-400 font-normal">/ day</span></span>
+        </div>
       </div>
 
       {/* Supplier KPIs */}

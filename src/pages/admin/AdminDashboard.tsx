@@ -170,7 +170,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
   const buyersCount = allUsers.filter((u) => u.role === 'buyer').length;
   const suppliersCount = allUsers.filter((u) => u.role === 'supplier').length;
   const totalGMV = purchaseOrders.reduce((sum, po) => sum + po.totalAmountAED, 0);
-  const platformFee = totalGMV * 0.03;
+  const platformFee = totalGMV * 0.013;
   const pendingVerifs = verifications.filter((v) => v.status === 'pending');
 
   // Handle Account Impersonation
@@ -225,7 +225,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
               )}
             </div>
             <p className="text-xs text-slate-400 max-w-3xl">
-              Central command for UAE construction marketplace liquidity, 24-hour RFQ SLAs, DET legal verifications, 3% commission reconciliation & dispute mitigation.
+              Central command for UAE construction marketplace liquidity, 24-hour RFQ SLAs, DET legal verifications, 1.3% commission model (waived during launch) & dispute mitigation.
             </p>
           </div>
 
@@ -268,7 +268,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
         <StatWidget
           title="Total Platform GMV"
           value={formatAED(totalGMV || 43920)}
-          subtitle={`3% Revenue: ${formatAED(platformFee || 1317)}`}
+          subtitle="1.3% Waived (Launch 0%)"
           icon={<DollarSign className="w-6 h-6 text-emerald-600" />}
           trend={{ value: '+24%', isPositive: true }}
         />
@@ -315,7 +315,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
           }`}
         >
           <DollarSign className="w-4 h-4" />
-          <span>💰 3% Commission & Tax Invoices</span>
+          <span>💰 1.3% Commission & Invoices</span>
         </button>
 
         <button
@@ -403,6 +403,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
       {activeTab === 'finance' && (
         <AdminFinanceEngine
           purchaseOrders={purchaseOrders}
+          companies={companies}
         />
       )}
 

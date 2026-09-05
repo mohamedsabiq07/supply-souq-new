@@ -42,7 +42,7 @@ export const AdminRBACSelector: React.FC<AdminRBACSelectorProps> = ({
     finance_officer: {
       title: 'Accounts & Finance Officer',
       shortTitle: 'Accounts & Finance',
-      desc: 'UAE FTA Tax Invoices (TRN), 3% commission tracking, PDC maturities, and escrow disbursement ledger.',
+      desc: 'UAE FTA Tax Invoices (TRN), 1.3% commission tracking (waived during launch), AED 1/day supplier memberships, and PDC maturities.',
       icon: DollarSign,
       color: 'bg-indigo-500 text-white font-black shadow-sm',
     },

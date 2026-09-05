@@ -93,9 +93,9 @@ export const AdminAnalyticsExport: React.FC<AdminAnalyticsExportProps> = ({
   };
 
   const exportOrders = () => {
-    const headers = ['PO Number', 'RFQ Number', 'Buyer Company', 'Supplier Company', 'Total AED (Incl VAT)', '3% Commission AED', 'Payment Terms', 'Created Date'];
+    const headers = ['PO Number', 'RFQ Number', 'Buyer Company', 'Supplier Company', 'Total AED (Incl VAT)', '1.3% Commission AED (Waived)', 'Payment Terms', 'Created Date'];
     const rows = purchaseOrders.map(p => {
-      const comm = p.commissionAmountAED ?? (p.totalAmountAED * 0.03);
+      const comm = p.commissionAmountAED ?? (p.totalAmountAED * 0.013);
       return [
         p.poNumber,
         p.rfqNumber,

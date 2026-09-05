@@ -119,7 +119,7 @@ export const AdminDealProtection: React.FC<AdminDealProtectionProps> = ({
             </span>
           </div>
           <p className="text-xs text-slate-300 max-w-2xl leading-relaxed">
-            Prevent contractors and stockists from closing procurement deals offline to bypass your 3% marketplace commission. Enforce buyer/supplier contact masking and flag suspicious RFQ cancellations.
+            Prevent contractors and stockists from closing procurement deals offline. Protect the marketplace ecosystem, warranty guarantees, and standard 1.3% commission framework (currently 100% waived for launch).
           </p>
         </div>
 

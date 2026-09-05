@@ -71,6 +71,49 @@ export const HowItWorksPage: React.FC<{ onStartRFQ: () => void }> = ({ onStartRF
         })}
       </div>
 
+      {/* Transparent Pricing Model */}
+      <div className="bg-gradient-to-br from-slate-900 to-slate-950 text-white rounded-3xl p-8 border border-slate-800 shadow-xl space-y-6">
+        <div className="text-center max-w-xl mx-auto space-y-2">
+          <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest">Transparent UAE Pricing</span>
+          <h2 className="text-2xl font-black">Zero Commissions During Launch</h2>
+          <p className="text-xs text-slate-400 leading-relaxed">
+            We are dedicated to building liquidity in the UAE construction and MEP wholesale market. Our standard 1.3% transaction commission is <strong>100% waived</strong> during our founder growth phase.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+          {/* Contractors */}
+          <div className="bg-slate-800/80 p-6 rounded-2xl border border-slate-700/80 space-y-3">
+            <span className="text-xs font-extrabold uppercase tracking-wider text-brand-400">For MEP & Civil Contractors</span>
+            <div className="text-2xl font-black text-white">100% Free Forever</div>
+            <ul className="space-y-2 text-xs text-slate-300">
+              <li className="flex items-center gap-2">✓ Unlimited RFQ & BOQ Uploads</li>
+              <li className="flex items-center gap-2">✓ Fastest 5 Bids Rule (24-Hour SLA)</li>
+              <li className="flex items-center gap-2">✓ Direct Supplier Side-by-Side Comparison</li>
+              <li className="flex items-center gap-2">✓ 0% Platform Commission</li>
+            </ul>
+          </div>
+
+          {/* Suppliers */}
+          <div className="bg-slate-800/80 p-6 rounded-2xl border border-emerald-500/40 space-y-3 relative overflow-hidden">
+            <div className="absolute top-3 right-3 bg-emerald-500 text-slate-950 text-[10px] font-black uppercase px-2 py-0.5 rounded">
+              Launch Special
+            </div>
+            <span className="text-xs font-extrabold uppercase tracking-wider text-emerald-400">For Stockists & Distributors</span>
+            <div>
+              <div className="text-2xl font-black text-white">First 3 Months Free</div>
+              <div className="text-xs text-emerald-400 font-bold mt-0.5">Then only AED 1 / Day (AED 30 / month)</div>
+            </div>
+            <ul className="space-y-2 text-xs text-slate-300">
+              <li className="flex items-center gap-2">✓ Receive direct matched contractor schedules</li>
+              <li className="flex items-center gap-2">✓ 3-Month full access trial with 0 commitments</li>
+              <li className="flex items-center gap-2">✓ Standard 1.3% commission waived during growth phase</li>
+              <li className="flex items-center gap-2">✓ AED 1/day thereafter for unlimited quotes</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
       <div className="text-center bg-slate-900 text-white rounded-3xl p-8 space-y-4">
         <h3 className="text-xl font-bold">Ready to Experience Faster Procurement?</h3>
         <p className="text-xs text-slate-300 max-w-md mx-auto">
