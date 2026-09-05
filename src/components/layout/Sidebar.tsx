@@ -12,7 +12,6 @@ import {
   PlusCircle,
   Settings,
   Building2,
-  TrendingUp,
   Award,
   LogOut
 } from 'lucide-react';
@@ -39,7 +38,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView })
     { id: 'buyer-dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'buyer-rfqs', label: 'My RFQs', icon: FileText, count: buyerRFQs.length },
     { id: 'buyer-compare-quick', label: 'Compare Quotes', icon: GitCompare, count: comparingRFQs.length, highlight: true },
-    { id: 'invoice-audit', label: 'Invoice Cost Audit', icon: TrendingUp },
     { id: 'buyer-orders', label: 'Purchase Orders', icon: Package, count: buyerOrders.length },
     { id: 'buyer-messages', label: 'Messages', icon: MessageSquare, count: buyerUnreadMessages },
   ];
