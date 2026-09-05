@@ -113,14 +113,16 @@ const AppContent: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-brand-500 selection:text-white">
-      {/* Live Market Telemetry Ticker */}
+      {/* Main Brand Navbar at the Top */}
+      <Navbar currentView={currentView} setCurrentView={handleNavigate} />
+
+      {/* Live Market Telemetry Ticker - Sleek Sub-Navbar Ribbon */}
       <MarketTicker />
 
-      {/* Top Role Session & Database Bar (Only visible when logged in) */}
-      <DemoRoleBar onNavigate={handleNavigate} />
-
-      {/* Main Navbar */}
-      <Navbar currentView={currentView} setCurrentView={handleNavigate} />
+      {/* Internal Workspace Session Bar (Only visible inside private workspace, completely removed from Home page) */}
+      {!isPublicPage && (
+        <DemoRoleBar onNavigate={handleNavigate} />
+      )}
 
       {/* Main Content Body */}
       {isPublicPage ? (
