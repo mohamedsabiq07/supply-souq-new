@@ -41,6 +41,13 @@ export interface Company {
   yearsInBusiness: number;
   badge?: 'Top Rated' | 'Fast Responder' | 'Verified Trader' | 'Premium Partner';
   logoUrl?: string;
+  tradeLicenseExpiryDate?: string;
+  licenseActivities?: string[];
+  trnNumber?: string;
+  creditRiskTier?: 'low' | 'moderate' | 'high_risk';
+  creditLimitAED?: number;
+  paymentRestriction?: 'standard' | 'upfront_cod_only';
+  isSuspended?: boolean;
   createdAt: string;
 }
 
@@ -57,10 +64,12 @@ export interface UserProfile {
   jobTitle: string;
   tradeLicenseNumber?: string;
   tradeLicenseDocUrl?: string;
+  tradeLicenseExpiryDate?: string;
   emirate?: Emirate;
   address?: string;
   industrialZone?: string;
   verificationStatus?: VerificationStatus;
+  isSuspended?: boolean;
   avatarUrl?: string;
   createdAt?: string;
 }
@@ -257,6 +266,19 @@ export interface PurchaseOrder {
   actualDeliveryDate?: string;
   trackingNotes?: string;
   reviewedByBuyer: boolean;
+  commissionRatePercent?: number;
+  commissionAmountAED?: number;
+  commissionStatus?: 'pending' | 'invoiced' | 'collected' | 'overdue';
+  taxInvoiceNumber?: string;
+  taxInvoiceIssuedAt?: string;
+  paymentMethodType?: 'bank_transfer' | 'pdc_cheque' | 'credit_card' | 'escrow';
+  pdcMaturityDate?: string;
+  pdcBankName?: string;
+  payoutStatus?: 'held_in_escrow' | 'released_to_supplier' | 'disputed';
+  podUrl?: string;
+  podStatus?: 'pending' | 'approved' | 'rejected';
+  deliveryMethod?: 'supplier_fleet' | 'supplysouq_managed';
+  assignedVehicleType?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -307,6 +329,9 @@ export interface VerificationRequest {
   submittedAt: string;
   status: VerificationStatus;
   notes?: string;
+  tradeLicenseExpiryDate?: string;
+  licenseActivities?: string[];
+  creditRiskTier?: 'low' | 'moderate' | 'high_risk';
 }
 
 export interface DeclineRFQRecord {
@@ -319,3 +344,32 @@ export interface DeclineRFQRecord {
   notes?: string;
   declinedAt: string;
 }
+
+export interface DisputeRecord {
+  id: string;
+  purchaseOrderId: string;
+  poNumber: string;
+  rfqNumber: string;
+  buyerCompanyName: string;
+  supplierCompanyName: string;
+  issueType: 'spec_mismatch' | 'damaged_goods' | 'delayed_site_access' | 'missing_items' | 'other';
+  description: string;
+  disputedAmountAED: number;
+  status: 'open' | 'under_investigation' | 'resolved_credit_note' | 'resolved_replacement' | 'refunded';
+  createdAt: string;
+  resolvedAt?: string;
+  resolutionNotes?: string;
+}
+
+export interface AdminAuditLog {
+  id: string;
+  timestamp: string;
+  operatorName: string;
+  action: string;
+  targetType: 'rfq' | 'quote' | 'user' | 'order' | 'verification' | 'dispute' | 'security';
+  targetId: string;
+  details: string;
+  severity: 'info' | 'warning' | 'critical';
+}
+
+export type AdminRole = 'super_admin' | 'procurement_ops' | 'verification_officer' | 'finance_officer';

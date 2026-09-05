@@ -6,7 +6,7 @@ import { Card, CardHeader, CardContent } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { StatusBadge } from '../../components/ui/Badge';
 import { formatAED, formatDate } from '../../lib/utils';
-import { UserProfile, Company, RFQ, Quotation, PurchaseOrder } from '../../types';
+import { UserProfile, Company, RFQ, Quotation, PurchaseOrder, AdminRole } from '../../types';
 import {
   ShieldCheck,
   Building2,
@@ -29,8 +29,22 @@ import {
   AlertTriangle,
   Clock,
   Layers,
-  Sparkles
+  Sparkles,
+  Truck,
+  Shield,
+  BarChart3,
+  UserCheck,
+  ExternalLink,
+  RotateCcw
 } from 'lucide-react';
+
+import { AdminSLATower } from '../../components/admin/AdminSLATower';
+import { AdminKYBDesk } from '../../components/admin/AdminKYBDesk';
+import { AdminFinanceEngine } from '../../components/admin/AdminFinanceEngine';
+import { AdminDealProtection } from '../../components/admin/AdminDealProtection';
+import { AdminLogisticsDispute } from '../../components/admin/AdminLogisticsDispute';
+import { AdminAnalyticsExport } from '../../components/admin/AdminAnalyticsExport';
+import { AdminRBACSelector } from '../../components/admin/AdminRBACSelector';
 
 interface AdminDashboardProps {
   onNavigate: (view: string, params?: any) => void;
@@ -46,16 +60,30 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
     updateVerificationStatus,
     isSupabaseConnected 
   } = useAppData();
-  const { role, registeredUsers, adminLogin } = useAuth();
+  
+  const { 
+    role, 
+    registeredUsers, 
+    adminLogin,
+    isImpersonating,
+    impersonatedUser,
+    impersonateUser,
+    stopImpersonating
+  } = useAuth();
 
-  const [activeTab, setActiveTab] = useState<'users' | 'rfqs' | 'quotes' | 'orders' | 'verifications'>('users');
+  // Tab State
+  type AdminTab = 'sla' | 'kyb' | 'finance' | 'protection' | 'logistics' | 'analytics' | 'users' | 'rfqs';
+  const [activeTab, setActiveTab] = useState<AdminTab>('sla');
+  const [adminRole, setAdminRole] = useState<AdminRole>('super_admin');
+  const [isMaskingEnabled, setIsMaskingEnabled] = useState<boolean>(true);
+
+  // Filters for Users directory
   const [userFilter, setUserFilter] = useState<'all' | 'buyer' | 'supplier'>('all');
   const [emirateFilter, setEmirateFilter] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCustomer, setSelectedCustomer] = useState<UserProfile | null>(null);
-  const [selectedRFQ, setSelectedRFQ] = useState<RFQ | null>(null);
 
-  // Security gate if not logged in as admin
+  // Security gate if not authenticated as admin
   const [adminPass, setAdminPass] = useState('');
   const [adminUnlocked, setAdminUnlocked] = useState(role === 'admin');
   const [passError, setPassError] = useState('');
@@ -145,30 +173,72 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
   const platformFee = totalGMV * 0.03;
   const pendingVerifs = verifications.filter((v) => v.status === 'pending');
 
+  // Handle Account Impersonation
+  const handleImpersonateUser = (targetUser: UserProfile) => {
+    impersonateUser(targetUser);
+    if (targetUser.role === 'buyer') {
+      onNavigate('buyer-dashboard');
+    } else if (targetUser.role === 'supplier') {
+      onNavigate('supplier-dashboard');
+    }
+  };
+
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-900 text-white p-6 rounded-2xl shadow-xl">
-        <div className="space-y-1">
+      {/* Impersonation Active Banner */}
+      {isImpersonating && impersonatedUser && (
+        <div className="bg-amber-500 text-slate-950 p-3 rounded-xl font-bold text-xs flex items-center justify-between shadow-md border border-amber-600">
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-            <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight">
-              SupplySouq Master Operations & Admin Desk
-            </h1>
-            <span className="bg-emerald-500/20 text-emerald-300 font-bold px-2 py-0.5 rounded text-[10px] border border-emerald-500/30">
-              Live Cloud Database
+            <span className="bg-slate-950 text-amber-400 px-2 py-0.5 rounded text-[10px] uppercase tracking-wider font-extrabold">
+              Ghost Impersonation Active
+            </span>
+            <span>
+              Currently operating as: <strong>{impersonatedUser.fullName}</strong> ({impersonatedUser.companyName})
             </span>
           </div>
-          <p className="text-xs text-slate-400">
-            Real-time directory of all signed-up contractors, verified stockists, live RFQs, quotes & trade licenses across Dubai, Sharjah & Ajman.
+          <Button
+            size="sm"
+            onClick={stopImpersonating}
+            className="bg-slate-950 hover:bg-slate-900 text-white font-extrabold text-xs"
+          >
+            Exit Impersonation
+          </Button>
+        </div>
+      )}
+
+      {/* Control Tower Master Header */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-slate-900 text-white p-6 rounded-2xl shadow-xl border border-slate-800">
+        <div className="space-y-1.5">
+          <div className="flex items-center gap-2.5 flex-wrap">
+            <span className="w-3 h-3 rounded-full bg-emerald-400 animate-pulse" />
+            <h1 className="text-xl sm:text-2xl font-black tracking-tight">
+              SupplySouq Operations Control Tower
+            </h1>
+            <span className="bg-emerald-500/20 text-emerald-300 font-bold px-2.5 py-0.5 rounded text-[10px] border border-emerald-500/30">
+              Live UAE Radar Active
+            </span>
+            {isSupabaseConnected && (
+              <span className="bg-blue-500/20 text-blue-300 font-bold px-2 py-0.5 rounded text-[10px] border border-blue-500/30">
+                Cloud Synced
+              </span>
+            )}
+          </div>
+          <p className="text-xs text-slate-400 max-w-3xl">
+            Central command for UAE construction marketplace liquidity, 24-hour RFQ SLAs, DET legal verifications, 3% commission reconciliation & dispute mitigation.
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
-          <div className="text-right text-xs">
-            <p className="text-slate-400">Master Operator</p>
-            <p className="font-bold text-white">admin@supplysouq.ae</p>
-          </div>
+        {/* Admin RBAC Role Switcher */}
+        <div className="shrink-0">
+          <AdminRBACSelector
+            currentRole={adminRole}
+            onChangeRole={(newRole) => {
+              setAdminRole(newRole);
+              if (newRole === 'procurement_ops') setActiveTab('sla');
+              else if (newRole === 'verification_officer') setActiveTab('kyb');
+              else if (newRole === 'finance_officer') setActiveTab('finance');
+            }}
+          />
         </div>
       </div>
 
@@ -181,90 +251,179 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
           icon={<Users className="w-6 h-6 text-brand-600" />}
         />
         <StatWidget
-          title="Total Posted RFQs"
+          title="Active RFQs Under SLA"
           value={rfqs.length}
-          subtitle="Contractor BOQs & Photos"
-          icon={<FileText className="w-6 h-6 text-indigo-600" />}
+          subtitle="24h Countdown Monitored"
+          icon={<Clock className="w-6 h-6 text-amber-600" />}
         />
         <StatWidget
-          title="Stockist Quotations"
-          value={quotations.length}
-          subtitle="Bids submitted"
-          icon={<Store className="w-6 h-6 text-amber-600" />}
-        />
-        <StatWidget
-          title="Marketplace GMV (AED)"
+          title="Total Platform GMV"
           value={formatAED(totalGMV || 43920)}
-          subtitle={`Commission: ${formatAED(platformFee || 1317)}`}
+          subtitle={`3% Revenue: ${formatAED(platformFee || 1317)}`}
           icon={<DollarSign className="w-6 h-6 text-emerald-600" />}
           trend={{ value: '+24%', isPositive: true }}
+        />
+        <StatWidget
+          title="Trade License Queue"
+          value={pendingVerifs.length}
+          subtitle="Awaiting DET Validation"
+          icon={<ShieldCheck className="w-6 h-6 text-indigo-600" />}
         />
       </div>
 
       {/* Main Tabs Navigation */}
-      <div className="flex items-center gap-2 border-b border-slate-200 pb-2 overflow-x-auto text-xs font-bold">
+      <div className="flex items-center gap-2 border-b border-slate-200 pb-2 overflow-x-auto text-xs font-bold scrollbar-thin">
         <button
-          onClick={() => setActiveTab('users')}
+          onClick={() => setActiveTab('sla')}
           className={`py-2.5 px-4 rounded-xl flex items-center gap-2 transition-all shrink-0 ${
-            activeTab === 'users'
+            activeTab === 'sla'
+              ? 'bg-amber-500 text-slate-950 font-black shadow-md'
+              : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+          }`}
+        >
+          <Clock className="w-4 h-4" />
+          <span>⏱️ SLA Control Tower ({rfqs.length})</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('kyb')}
+          className={`py-2.5 px-4 rounded-xl flex items-center gap-2 transition-all shrink-0 ${
+            activeTab === 'kyb'
               ? 'bg-brand-600 text-white shadow-md'
               : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
           }`}
         >
+          <ShieldCheck className="w-4 h-4" />
+          <span>🛡️ KYB & DET Verification ({pendingVerifs.length} Pending)</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('finance')}
+          className={`py-2.5 px-4 rounded-xl flex items-center gap-2 transition-all shrink-0 ${
+            activeTab === 'finance'
+              ? 'bg-emerald-600 text-white shadow-md'
+              : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+          }`}
+        >
+          <DollarSign className="w-4 h-4" />
+          <span>💰 3% Commission & Tax Invoices</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('protection')}
+          className={`py-2.5 px-4 rounded-xl flex items-center gap-2 transition-all shrink-0 ${
+            activeTab === 'protection'
+              ? 'bg-red-600 text-white shadow-md'
+              : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+          }`}
+        >
+          <ShieldAlert className="w-4 h-4" />
+          <span>🔒 Deal Leakage Shield</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('logistics')}
+          className={`py-2.5 px-4 rounded-xl flex items-center gap-2 transition-all shrink-0 ${
+            activeTab === 'logistics'
+              ? 'bg-indigo-600 text-white shadow-md'
+              : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+          }`}
+        >
+          <Truck className="w-4 h-4" />
+          <span>🚚 Fleet & Disputes</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('analytics')}
+          className={`py-2.5 px-4 rounded-xl flex items-center gap-2 transition-all shrink-0 ${
+            activeTab === 'analytics'
+              ? 'bg-purple-600 text-white shadow-md'
+              : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+          }`}
+        >
+          <BarChart3 className="w-4 h-4" />
+          <span>📊 Analytics & Exports</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('users')}
+          className={`py-2.5 px-4 rounded-xl flex items-center gap-2 transition-all shrink-0 ${
+            activeTab === 'users'
+              ? 'bg-slate-900 text-white shadow-md'
+              : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+          }`}
+        >
           <Users className="w-4 h-4" />
-          <span>👥 All Registered Customers ({allUsers.length})</span>
+          <span>👥 Customer Directory ({allUsers.length})</span>
         </button>
 
         <button
           onClick={() => setActiveTab('rfqs')}
           className={`py-2.5 px-4 rounded-xl flex items-center gap-2 transition-all shrink-0 ${
             activeTab === 'rfqs'
-              ? 'bg-brand-600 text-white shadow-md'
+              ? 'bg-slate-900 text-white shadow-md'
               : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
           }`}
         >
           <FileText className="w-4 h-4" />
-          <span>📋 All Posted RFQs & BOQs ({rfqs.length})</span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab('quotes')}
-          className={`py-2.5 px-4 rounded-xl flex items-center gap-2 transition-all shrink-0 ${
-            activeTab === 'quotes'
-              ? 'bg-brand-600 text-white shadow-md'
-              : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
-          }`}
-        >
-          <Store className="w-4 h-4" />
-          <span>💼 All Supplier Quotes ({quotations.length})</span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab('orders')}
-          className={`py-2.5 px-4 rounded-xl flex items-center gap-2 transition-all shrink-0 ${
-            activeTab === 'orders'
-              ? 'bg-brand-600 text-white shadow-md'
-              : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
-          }`}
-        >
-          <DollarSign className="w-4 h-4" />
-          <span>📦 Purchase Orders ({purchaseOrders.length})</span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab('verifications')}
-          className={`py-2.5 px-4 rounded-xl flex items-center gap-2 transition-all shrink-0 ${
-            activeTab === 'verifications'
-              ? 'bg-amber-500 text-slate-950 font-extrabold shadow-md'
-              : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
-          }`}
-        >
-          <ShieldCheck className="w-4 h-4" />
-          <span>🛡️ Trade License Queue ({pendingVerifs.length} Pending)</span>
+          <span>📋 RFQ & Bids Matrix</span>
         </button>
       </div>
 
-      {/* ---------------- TAB 1: ALL REGISTERED CUSTOMERS ---------------- */}
+      {/* ---------------- TAB 1: SLA CONTROL TOWER ---------------- */}
+      {activeTab === 'sla' && (
+        <AdminSLATower
+          rfqs={rfqs}
+          companies={companies}
+          onNavigateToRFQ={(rfqId) => onNavigate('rfq-detail', { rfqId })}
+        />
+      )}
+
+      {/* ---------------- TAB 2: KYB & DET VERIFICATION ---------------- */}
+      {activeTab === 'kyb' && (
+        <AdminKYBDesk
+          companies={companies}
+          registeredUsers={allUsers}
+          verifications={verifications}
+          onUpdateVerification={(companyId, status, notes) => updateVerificationStatus(companyId, status, notes)}
+          onImpersonateUser={handleImpersonateUser}
+        />
+      )}
+
+      {/* ---------------- TAB 3: FINANCIAL ENGINE & TAX INVOICES ---------------- */}
+      {activeTab === 'finance' && (
+        <AdminFinanceEngine
+          purchaseOrders={purchaseOrders}
+        />
+      )}
+
+      {/* ---------------- TAB 4: DEAL LEAKAGE SHIELD ---------------- */}
+      {activeTab === 'protection' && (
+        <AdminDealProtection
+          rfqs={rfqs}
+          isMaskingEnabled={isMaskingEnabled}
+          onToggleMasking={() => setIsMaskingEnabled(!isMaskingEnabled)}
+        />
+      )}
+
+      {/* ---------------- TAB 5: FLEET LOGISTICS & DISPUTES ---------------- */}
+      {activeTab === 'logistics' && (
+        <AdminLogisticsDispute
+          purchaseOrders={purchaseOrders}
+        />
+      )}
+
+      {/* ---------------- TAB 6: ANALYTICS & 1-CLICK EXPORTS ---------------- */}
+      {activeTab === 'analytics' && (
+        <AdminAnalyticsExport
+          rfqs={rfqs}
+          companies={companies}
+          purchaseOrders={purchaseOrders}
+          registeredUsers={allUsers}
+        />
+      )}
+
+      {/* ---------------- TAB 7: ALL REGISTERED CUSTOMERS DIRECTORY ---------------- */}
       {activeTab === 'users' && (
         <Card className="shadow-lg border-slate-200">
           <CardHeader className="bg-slate-50/70 border-b border-slate-200 p-4">
@@ -275,7 +434,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
                   All Registered Customers (Buyers & Suppliers Directory)
                 </h3>
                 <p className="text-xs text-slate-500">
-                  Full list of all corporate accounts created on SupplySouq.
+                  Full corporate accounts roster with 1-Click "Login as User" impersonation for rapid customer support.
                 </p>
               </div>
 
@@ -405,12 +564,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
                           </span>
                         )}
                       </td>
-                      <td className="p-3.5 text-right">
+                      <td className="p-3.5 text-right space-x-1.5">
+                        <button
+                          onClick={() => handleImpersonateUser(u)}
+                          className="px-2.5 py-1 rounded bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold text-xs inline-flex items-center gap-1 transition-colors border border-amber-200"
+                          title={`Log in directly as ${u.fullName}`}
+                        >
+                          <UserCheck className="w-3.5 h-3.5 text-amber-700" />
+                          <span>Login as User</span>
+                        </button>
                         <button
                           onClick={() => setSelectedCustomer(u)}
-                          className="px-2.5 py-1 rounded bg-slate-100 hover:bg-brand-50 text-brand-700 font-bold text-xs inline-flex items-center gap-1 transition-colors"
+                          className="px-2.5 py-1 rounded bg-slate-100 hover:bg-brand-50 text-brand-700 font-bold text-xs inline-flex items-center gap-1 transition-colors border border-slate-200"
                         >
-                          <Eye className="w-3.5 h-3.5" /> View Profile
+                          <Eye className="w-3.5 h-3.5" /> View
                         </button>
                       </td>
                     </tr>
@@ -428,7 +595,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
         </Card>
       )}
 
-      {/* ---------------- TAB 2: ALL POSTED RFQS & BOQS ---------------- */}
+      {/* ---------------- TAB 8: ALL POSTED RFQS & BOQS MATRIX ---------------- */}
       {activeTab === 'rfqs' && (
         <Card className="shadow-lg border-slate-200">
           <CardHeader className="p-4 bg-slate-50 border-b border-slate-200">
@@ -445,7 +612,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
                   <th className="p-3">Buyer Company</th>
                   <th className="p-3">Requirement Title</th>
                   <th className="p-3">Category</th>
-                  <th className="p-3">5 Matched Stockists (24h SLA)</th>
+                  <th className="p-3">Matched Stockists (24h SLA)</th>
                   <th className="p-3">Quote Response</th>
                   <th className="p-3">Status</th>
                   <th className="p-3 text-right">Date</th>
@@ -454,7 +621,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
               <tbody className="divide-y divide-slate-100">
                 {rfqs.map((r) => (
                   <tr key={r.id} className="hover:bg-slate-50/80">
-                    <td className="p-3 font-mono font-bold text-brand-700">{r.rfqNumber}</td>
+                    <td className="p-3 font-mono font-bold text-brand-700">
+                      <button
+                        onClick={() => onNavigate('rfq-detail', { rfqId: r.id })}
+                        className="hover:underline flex items-center gap-1 text-left"
+                      >
+                        {r.rfqNumber}
+                        <ExternalLink className="w-3 h-3 text-slate-400 inline" />
+                      </button>
+                    </td>
                     <td className="p-3 font-bold text-slate-900">
                       {r.buyerCompanyName}
                       <span className="text-[10px] text-slate-400 block">{r.buyerContactName} ({r.buyerPhone})</span>
@@ -487,164 +662,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
                       <StatusBadge status={r.status} />
                     </td>
                     <td className="p-3 text-right text-slate-400">{formatDate(r.createdAt)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* ---------------- TAB 3: ALL SUPPLIER QUOTATIONS ---------------- */}
-      {activeTab === 'quotes' && (
-        <Card className="shadow-lg border-slate-200">
-          <CardHeader className="p-4 bg-slate-50 border-b border-slate-200">
-            <h3 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
-              <Store className="w-4 h-4 text-amber-600" />
-              All Submitted Supplier Quotations ({quotations.length})
-            </h3>
-          </CardHeader>
-          <CardContent className="p-0 overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
-                <tr>
-                  <th className="p-3">Quote #</th>
-                  <th className="p-3">RFQ #</th>
-                  <th className="p-3">Supplier Name</th>
-                  <th className="p-3">Emirate / Zone</th>
-                  <th className="p-3">Subtotal (AED)</th>
-                  <th className="p-3">Grand Total (AED)</th>
-                  <th className="p-3">Lead Time</th>
-                  <th className="p-3">Status</th>
-                  <th className="p-3 text-right">Submitted</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {quotations.map((q) => (
-                  <tr key={q.id} className="hover:bg-slate-50/80">
-                    <td className="p-3 font-mono font-bold text-amber-800">{q.quotationNumber}</td>
-                    <td className="p-3 font-mono font-semibold text-brand-700">{q.rfqNumber}</td>
-                    <td className="p-3 font-bold text-slate-900">{q.supplierCompanyName}</td>
-                    <td className="p-3 text-slate-600">{q.supplierEmirate} ({q.supplierZone})</td>
-                    <td className="p-3 font-mono text-slate-700">{formatAED(q.subtotalAED)}</td>
-                    <td className="p-3 font-mono font-bold text-emerald-700 text-sm">{formatAED(q.grandTotalAED)}</td>
-                    <td className="p-3 text-slate-700">{q.leadTimeDisplay || '3 Days'}</td>
-                    <td className="p-3">
-                      <StatusBadge status={q.status as any} />
-                    </td>
-                    <td className="p-3 text-right text-slate-400">{formatDate(q.submittedAt)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* ---------------- TAB 4: ALL PURCHASE ORDERS ---------------- */}
-      {activeTab === 'orders' && (
-        <Card className="shadow-lg border-slate-200">
-          <CardHeader className="p-4 bg-slate-50 border-b border-slate-200">
-            <h3 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
-              <DollarSign className="w-4 h-4 text-emerald-600" />
-              All Awarded Purchase Orders ({purchaseOrders.length})
-            </h3>
-          </CardHeader>
-          <CardContent className="p-0 overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
-                <tr>
-                  <th className="p-3">PO Number</th>
-                  <th className="p-3">Buyer Company</th>
-                  <th className="p-3">Supplier Stockist</th>
-                  <th className="p-3">Total Amount (AED)</th>
-                  <th className="p-3">Delivery Site</th>
-                  <th className="p-3">Payment Terms</th>
-                  <th className="p-3">Status</th>
-                  <th className="p-3 text-right">Created</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {purchaseOrders.map((po) => (
-                  <tr key={po.id} className="hover:bg-slate-50/80">
-                    <td className="p-3 font-mono font-bold text-emerald-800">{po.poNumber}</td>
-                    <td className="p-3 font-bold text-slate-900">{po.buyerCompanyName}</td>
-                    <td className="p-3 font-bold text-slate-900">{po.supplierCompanyName}</td>
-                    <td className="p-3 font-mono font-extrabold text-emerald-700 text-sm">{formatAED(po.totalAmountAED)}</td>
-                    <td className="p-3 text-slate-600">{po.deliveryEmirate}</td>
-                    <td className="p-3 text-slate-700">{po.paymentTerms || '30 Days Credit'}</td>
-                    <td className="p-3">
-                      <StatusBadge status={po.status} />
-                    </td>
-                    <td className="p-3 text-right text-slate-400">{formatDate(po.createdAt)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* ---------------- TAB 5: TRADE LICENSE VERIFICATION QUEUE ---------------- */}
-      {activeTab === 'verifications' && (
-        <Card className="shadow-lg border-slate-200">
-          <CardHeader className="p-4 bg-slate-50 border-b border-slate-200">
-            <h3 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-amber-600" />
-              Supplier Safety & Trade License Verification Queue
-            </h3>
-            <p className="text-xs text-slate-500">
-              Verify legal trade license documents before allowing suppliers to submit bids to contractors.
-            </p>
-          </CardHeader>
-          <CardContent className="p-0 overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
-                <tr>
-                  <th className="p-3.5">Company Name</th>
-                  <th className="p-3.5">Trade License #</th>
-                  <th className="p-3.5">Emirate & Zone</th>
-                  <th className="p-3.5">Submission Date</th>
-                  <th className="p-3.5">Status</th>
-                  <th className="p-3.5 text-right">Review Action</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {verifications.map((v) => (
-                  <tr key={v.id} className="hover:bg-slate-50/80">
-                    <td className="p-3.5 font-bold text-slate-900">{v.companyName}</td>
-                    <td className="p-3.5 font-mono font-bold text-amber-900">{v.tradeLicenseNumber}</td>
-                    <td className="p-3.5 text-slate-700">{v.emirate} ({v.industrialZone})</td>
-                    <td className="p-3.5 text-slate-500">{formatDate(v.submittedAt)}</td>
-                    <td className="p-3.5">
-                      {v.status === 'verified' ? (
-                        <span className="inline-flex items-center gap-1 bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded text-[11px]">
-                          <CheckCircle2 className="w-3 h-3" /> Approved
-                        </span>
-                      ) : v.status === 'rejected' ? (
-                        <span className="inline-flex items-center gap-1 bg-red-100 text-red-800 font-bold px-2 py-0.5 rounded text-[11px]">
-                          <XCircle className="w-3 h-3" /> Rejected
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center gap-1 bg-amber-100 text-amber-900 font-bold px-2 py-0.5 rounded text-[11px]">
-                          <Clock className="w-3 h-3" /> Pending Review
-                        </span>
-                      )}
-                    </td>
-                    <td className="p-3.5 text-right space-x-2">
-                      <button
-                        onClick={() => updateVerificationStatus(v.companyId, 'verified', 'Approved by Operations Admin')}
-                        className="px-3 py-1 bg-emerald-600 text-white rounded font-bold hover:bg-emerald-700 text-xs transition-colors"
-                      >
-                        Approve License
-                      </button>
-                      <button
-                        onClick={() => updateVerificationStatus(v.companyId, 'rejected', 'Trade license expired or details mismatch')}
-                        className="px-3 py-1 bg-red-50 text-red-700 rounded font-bold hover:bg-red-100 border border-red-200 text-xs transition-colors"
-                      >
-                        Reject
-                      </button>
-                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -734,22 +751,33 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+            <div className="flex items-center justify-between gap-2 pt-2 border-t border-slate-100">
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setSelectedCustomer(null)}
+                onClick={() => handleImpersonateUser(selectedCustomer)}
+                className="bg-amber-50 hover:bg-amber-100 text-amber-900 border-amber-300 font-bold text-xs flex items-center gap-1.5"
               >
-                Close
+                <UserCheck className="w-3.5 h-3.5" />
+                Login as User
               </Button>
-              <a
-                href={`https://wa.me/${selectedCustomer.phone.replace(/[^0-9]/g, '')}`}
-                target="_blank"
-                rel="noreferrer"
-                className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold text-xs inline-flex items-center gap-1.5 transition-colors shadow-sm"
-              >
-                Contact via WhatsApp
-              </a>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setSelectedCustomer(null)}
+                >
+                  Close
+                </Button>
+                <a
+                  href={`https://wa.me/${selectedCustomer.phone.replace(/[^0-9]/g, '')}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold text-xs inline-flex items-center gap-1.5 transition-colors shadow-sm"
+                >
+                  Contact via WhatsApp
+                </a>
+              </div>
             </div>
           </div>
         </div>

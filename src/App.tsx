@@ -42,7 +42,7 @@ import { LoginPage } from './pages/auth/LoginPage';
 import { RegisterPage } from './pages/auth/RegisterPage';
 
 const AppContent: React.FC = () => {
-  const { role, setRole, isAuthenticated } = useAuth();
+  const { role, setRole, isAuthenticated, isImpersonating, impersonatedUser, stopImpersonating } = useAuth();
   const [currentView, setCurrentView] = useState<string>(() => {
     try {
       const hash = window.location.hash.replace('#', '').toLowerCase();
@@ -146,6 +146,29 @@ const AppContent: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-brand-500 selection:text-white">
+      {/* Ghost Impersonation Mode Banner */}
+      {isImpersonating && impersonatedUser && (
+        <div className="bg-amber-500 text-slate-950 px-4 py-2 flex flex-wrap items-center justify-between text-xs sticky top-0 z-[100] shadow-md border-b border-amber-600">
+          <div className="flex items-center gap-2">
+            <span className="bg-slate-950 text-amber-400 px-2 py-0.5 rounded text-[10px] uppercase tracking-wider font-black">
+              Ghost Mode Active
+            </span>
+            <span>
+              Operating SupplySouq as: <strong className="underline">{impersonatedUser.fullName}</strong> ({impersonatedUser.companyName} • <span className="capitalize">{impersonatedUser.role}</span>)
+            </span>
+          </div>
+          <button
+            onClick={() => {
+              stopImpersonating();
+              handleNavigate('admin-dashboard');
+            }}
+            className="bg-slate-950 hover:bg-slate-900 text-white px-3 py-1 rounded-lg text-xs font-black transition-colors shadow-sm cursor-pointer"
+          >
+            ✕ Exit Impersonation & Return to Operations Desk
+          </button>
+        </div>
+      )}
+
       {/* Main Brand Navbar at the Top */}
       <Navbar currentView={currentView} setCurrentView={handleNavigate} />
 

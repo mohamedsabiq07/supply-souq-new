@@ -78,6 +78,10 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isAdmin: boolean;
   registeredUsers: UserProfile[];
+  impersonatedUser: UserProfile | null;
+  isImpersonating: boolean;
+  impersonateUser: (user: UserProfile) => void;
+  stopImpersonating: () => void;
   switchDemoUser: (role: UserRole) => void;
   login: (email: string, role: UserRole) => void;
   signIn: (identifier: string, password?: string) => Promise<{ success: boolean; error?: string }>;
@@ -274,6 +278,41 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         createdAt: '2023-01-01T00:00:00Z',
       });
     }
+  };
+
+  const [impersonatedUser, setImpersonatedUser] = useState<UserProfile | null>(null);
+
+  const impersonateUser = (targetUser: UserProfile) => {
+    setImpersonatedUser(targetUser);
+    setCurrentUser(targetUser);
+    setRoleState(targetUser.role);
+    const comp = initialCompanies.find((c) => c.id === targetUser.companyId) || {
+      id: targetUser.companyId,
+      name: targetUser.companyName,
+      legalName: targetUser.companyName,
+      tradeLicenseNumber: targetUser.tradeLicenseNumber || 'TL-IMPERSONATED',
+      companyType: (targetUser.role === 'supplier' ? 'supplier' : 'buyer') as any,
+      emirate: targetUser.emirate || 'Dubai',
+      industrialZone: targetUser.industrialZone || 'Al Quoz Industrial Area',
+      address: targetUser.address || 'Dubai, UAE',
+      phone: targetUser.phone,
+      email: targetUser.email,
+      categories: ['LV & MV Power Cables & Wires', 'Switchgear, MCBs & Distribution Boards'],
+      serviceEmirates: ['Dubai', 'Sharjah', 'Ajman'] as any,
+      verificationStatus: targetUser.verificationStatus || 'verified',
+      rating: 5.0,
+      reviewCount: 3,
+      responseRatePercent: 100,
+      averageResponseHours: 1.0,
+      yearsInBusiness: 3,
+      createdAt: targetUser.createdAt || new Date().toISOString(),
+    };
+    setCurrentCompany(comp);
+  };
+
+  const stopImpersonating = () => {
+    setImpersonatedUser(null);
+    switchDemoUser('admin');
   };
 
   const setRole = (newRole: UserRole) => {
@@ -649,6 +688,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isAuthenticated: !!isAuthenticated && !!currentUser?.id,
         isAdmin: role === 'admin',
         registeredUsers,
+        impersonatedUser,
+        isImpersonating: Boolean(impersonatedUser),
+        impersonateUser,
+        stopImpersonating,
         switchDemoUser,
         login,
         signIn,
