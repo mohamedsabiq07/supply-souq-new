@@ -55,7 +55,7 @@ export const InvoiceAuditPage: React.FC<InvoiceAuditPageProps> = ({ onStartRFQWi
           Electrical Procurement & Cable Invoice Audit
         </h1>
         <p className="text-sm text-slate-600 leading-relaxed">
-          Most UAE MEP contractors and fit-out companies overpay 15% to 22% on copper power cables, Schneider switchgear, and commercial LED luminaires. Upload your recent bill to see exact wholesale price differences in 30 seconds.
+          Most UAE MEP contractors and fit-out companies can optimize 15% to 22% on copper power cables, Schneider switchgear, and commercial LED luminaires by comparing direct stockist quotations. Upload your recent bill to benchmark against competitive wholesale prices in 30 seconds.
         </p>
       </div>
 
@@ -71,7 +71,7 @@ export const InvoiceAuditPage: React.FC<InvoiceAuditPageProps> = ({ onStartRFQWi
             </div>
             <h3 className="text-base font-bold text-slate-900">Upload or Select Invoice</h3>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Upload any PDF bill, photo, or handwritten list from your current building materials or janitorial supplier.
+              Upload any PDF bill, photo, or handwritten list from your current building materials or electrical supplier.
             </p>
           </CardContent>
         </Card>
@@ -81,7 +81,7 @@ export const InvoiceAuditPage: React.FC<InvoiceAuditPageProps> = ({ onStartRFQWi
             <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
               2
             </div>
-            <h3 className="text-base font-bold text-slate-900">Al Quoz & Sharjah Benchmark</h3>
+            <h3 className="text-base font-bold text-slate-900">UAE Wholesale Market Benchmark</h3>
             <p className="text-xs text-slate-500 leading-relaxed">
               Our automated engine cross-checks each SKU against live inventory lists from 50+ verified UAE stockists.
             </p>

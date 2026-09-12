@@ -129,20 +129,20 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             {/* Glowing Pill Badge */}
             <div className="inline-flex items-center gap-2 bg-[#002116cc] border border-[#00ffae]/35 text-[#00ffae] px-4 py-1.5 rounded-full text-xs font-mono font-bold tracking-wider uppercase shadow-glow-mint backdrop-blur-xl">
               <span className="w-2 h-2 rounded-full bg-[#00ffae] animate-ping" />
-              <span>UAE B2B ELECTRICAL MATERIAL EXCHANGE • 24H SLA</span>
+              <span>UAE'S TRUSTED B2B PROCUREMENT MARKETPLACE</span>
             </div>
 
             {/* Main Headline */}
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white leading-[1.1]">
-              Source Verified UAE Materials.<br />
+              UAE Construction Procurement,<br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#a4ffe2] to-[#00ffae]">
-                Skip Deira Calling. Close Wholesale Quotes.
+                Simplified.
               </span>
             </h1>
 
             {/* Subheadline */}
             <p className="text-sm sm:text-base md:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed font-normal">
-              Upload your material BOQ or cable schedule in 60 seconds — top verified UAE stockists compete with wholesale pricing under our guaranteed <strong className="text-[#00ffae] font-semibold">Fastest 5 Bids Rule</strong> in 24 hours.
+              Upload your material list or BOQ in 60 seconds. Top verified UAE stockists compete to give you the best wholesale prices within 24 hours.
             </p>
 
             {/* Dual CTAs */}
@@ -271,7 +271,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                 <div className="text-2xl sm:text-3xl font-black text-[#00ffae] tracking-tight flex items-baseline">
                   <StatCounter target={18.4} decimals={1} suffix="%" />
                 </div>
-                <span className="text-[11px] text-slate-400 block mt-1">vs Deira retail quote</span>
+                <span className="text-[11px] text-slate-400 block mt-1">vs standard offline quotes</span>
               </div>
 
               <div className="p-4 rounded-2xl bg-[#00120bd9] border border-amber-500/20 backdrop-blur-xl hover:border-amber-400/50 hover:shadow-glow-amber transition-all duration-300 group">
@@ -343,13 +343,13 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
         <div className="text-center space-y-3 mb-14 max-w-3xl mx-auto">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-red-500/10 text-red-400 border border-red-500/30">
             <AlertTriangle className="w-3.5 h-3.5" />
-            <span>The Traditional Sourcing Problem</span>
+            <span>The Traditional Procurement Challenge</span>
           </div>
           <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
-            Contractors are drowning in manual sourcing.
+            Material procurement shouldn't take days of follow-ups.
           </h2>
           <p className="text-sm sm:text-base text-slate-400 leading-relaxed font-normal">
-            Manual phone calls to Deira &amp; Al Quoz, non-transparent markups, delayed quotes, and unverified suppliers — your project engineers waste days just trying to buy materials.
+            Manual phone calls, scattered WhatsApp messages, and waiting days for quotes — procurement teams spend hours chasing individual suppliers instead of focusing on project execution.
           </p>
         </div>
 
@@ -359,10 +359,10 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
               <PhoneOff className="w-6 h-6" />
             </div>
             <h3 className="text-lg font-bold text-white group-hover:text-red-300 transition-colors">
-              Endless WhatsApp Calling
+              Manual Follow-Ups
             </h3>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Calling 15 different retail shops across Deira and Sharjah just to check if cable drums or GI trays are physically in stock.
+              Contacting multiple suppliers individually just to check stock availability, specifications, and delivery schedules.
             </p>
           </div>
 
@@ -371,10 +371,10 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
               <Clock className="w-6 h-6" />
             </div>
             <h3 className="text-lg font-bold text-white group-hover:text-red-300 transition-colors">
-              Delayed 48h+ Quoting
+              Delayed Quotations
             </h3>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Waiting days for sales reps to convert your BOQ into a PDF quotation while your site works stall and deadlines approach.
+              Waiting days for responses and price updates while site work pauses and project deadlines approach.
             </p>
           </div>
 
@@ -383,10 +383,10 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
               <AlertTriangle className="w-6 h-6" />
             </div>
             <h3 className="text-lg font-bold text-white group-hover:text-red-300 transition-colors">
-              Unverified Grey Stock
+              Inconsistent Specifications
             </h3>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Risking site rejection by DEWA or SEWA inspectors due to missing mill test certificates or unlicensed middleman distributors.
+              Dealing with mismatched product standards, unverified compliance, or missing technical data sheets.
             </p>
           </div>
 
@@ -395,10 +395,10 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
               <FileSpreadsheet className="w-6 h-6" />
             </div>
             <h3 className="text-lg font-bold text-white group-hover:text-red-300 transition-colors">
-              Disorganized Manual BOQs
+              Scattered Comparisons
             </h3>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Juggling 20 different PDF quotes in different formats and notes with zero side-by-side transparency on price and lead times.
+              Juggling dozens of different PDF quotes across emails and chats with no easy way to compare rates side-by-side.
             </p>
           </div>
         </div>
@@ -623,7 +623,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
               <div className="text-xs font-mono uppercase tracking-wider text-[#00ffae] font-bold">
                 Average Savings
               </div>
-              <p className="text-[11px] text-slate-400">vs Deira retail quote</p>
+              <p className="text-[11px] text-slate-400">vs standard offline quotes</p>
             </div>
 
             <div className="space-y-1">
@@ -687,7 +687,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
               </div>
               <h4 className="text-lg font-bold text-white">"Cut cable sourcing from 4 days to 4 hours."</h4>
               <p className="text-xs text-slate-300 leading-relaxed">
-                "We replaced endless phone calls to Deira with SupplySouq. The Fastest 5 Bids rule ensures we get rock-bottom wholesale prices from Ducab stockists. Saved AED 34,000 on our last substation order alone."
+                "We replaced endless supplier phone calls with SupplySouq. Posting an RFQ takes minutes, and receiving itemized bids directly from verified stockists saved us AED 34,000 on our substation order alone."
               </p>
             </div>
             <div className="pt-4 border-t border-white/10 flex items-center gap-3">
@@ -987,14 +987,14 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
           </div>
 
           <h2 className="text-4xl sm:text-6xl font-black text-white tracking-tight leading-tight">
-            Stop calling Deira.<br />
+            Spend less time sourcing.<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#a4ffe2] to-[#00ffae]">
-              Start building.
+              More time building.
             </span>
           </h2>
 
           <p className="text-sm sm:text-base text-slate-300 max-w-xl mx-auto leading-relaxed">
-            Your project materials won't source themselves. But SupplySouq will. Post your first RFQ in 60 seconds — 100% free.
+            Connect directly with verified UAE suppliers ready to quote on your project needs. Post your material list in 60 seconds — 100% free for buyers.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">

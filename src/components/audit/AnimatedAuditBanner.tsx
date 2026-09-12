@@ -29,55 +29,55 @@ export const auditPrompts: AuditPrompt[] = [
     id: 1,
     pill: 'Free 30-Second Electrical Audit',
     savingsText: 'Average Cable Savings: 19.5%',
-    headline: 'Want to check if your cable & switchgear suppliers are overcharging you?',
-    description: 'Upload your last bill for Ducab copper cables, Schneider MCBs, or commercial LED panels. We benchmark every line item against live stockist prices in Al Quoz and Sharjah for free.',
+    headline: 'Benchmark your cable & switchgear procurement against live wholesale market rates.',
+    description: 'Upload your recent purchase invoice for Ducab copper cables, Schneider MCBs, or commercial LED panels. We benchmark every line item against live stockist prices across the UAE for free.',
     categoryIcon: Zap
   },
   {
     id: 2,
     pill: 'Power Cable Price Scanner',
     savingsText: 'Average Wire Savings: 18.2%',
-    headline: 'Are you paying a retail markup on DEWA-approved Ducab power cables?',
-    description: 'Snap a photo of your latest 4Cx16mm² or single-core copper wire invoice. Our algorithm compares your drum prices against authorized wholesale distributor rates in Dubai & Sharjah.',
+    headline: 'Want to ensure you are getting the best market price on DEWA-approved Ducab power cables?',
+    description: 'Upload your latest 4Cx16mm² or single-core copper wire invoice. We compare your rates against authorized wholesale distributor pricing across the UAE.',
     categoryIcon: Zap
   },
   {
     id: 3,
     pill: 'Commercial Lighting Audit',
     savingsText: 'Average LED Savings: 22.4%',
-    headline: 'Suspect your commercial LED lighting fixtures bill is 20%+ higher than wholesale market?',
-    description: 'Upload your invoice for Philips CoreLine, Osram, or Opple 60x60 LED recessed panels and downlights. See real-time wholesale pricing from Al Quoz master importers.',
+    headline: 'Looking to optimize your commercial LED lighting and fixture costs?',
+    description: 'Upload your invoice for Philips CoreLine, Osram, or Opple 60x60 LED panels and downlights to see real-time wholesale rates from authorized UAE distributors.',
     categoryIcon: Sparkles
   },
   {
     id: 4,
     pill: 'Switchgear & DB Benchmark',
     savingsText: 'Average Switchgear Savings: 24.1%',
-    headline: 'Overpaying for Schneider Acti9 MCBs, MCCBs & 3-Phase Distribution Boards?',
-    description: 'Drop in your distribution board purchase receipts. We cross-verify circuit breaker prices against verified Deira & Sharjah switchgear assemblers in 30 seconds.',
+    headline: 'Benchmarking costs for Schneider Acti9 MCBs, MCCBs & 3-Phase Distribution Boards?',
+    description: 'Upload your distribution board purchase receipts to cross-verify circuit breaker prices against verified UAE switchgear assemblers in seconds.',
     categoryIcon: Zap
   },
   {
     id: 5,
     pill: 'Containment Price Check',
     savingsText: 'Average Containment Savings: 21.0%',
-    headline: 'Are your galvanized GI cable trays and Decoduct PVC conduits costing you extra margin?',
-    description: 'Upload your bill for Profab 300mm perforated GI trays and Decoduct Class 4 conduits. Discover factory-direct rates across Sharjah Industrial Area 4 & 10.',
+    headline: 'Looking to get direct wholesale pricing on galvanized GI cable trays & Decoduct conduits?',
+    description: 'Upload your bill for Profab 300mm perforated GI trays and Decoduct Class 4 conduits. Discover competitive rates from certified stockists across the UAE.',
     categoryIcon: ShieldCheck
   },
   {
     id: 6,
     pill: 'Fire-Resistant Cable Audit',
     savingsText: 'Average FP200 Savings: 23.5%',
-    headline: 'Overpaying on Civil Defense Approved FP200 Gold & CWZ fire-rated cables?',
-    description: 'Upload your fire alarm & emergency wiring bill. We benchmark your 2C x 1.5mm² and 4C x 2.5mm² fire-resistant cables against direct factory importers in UAE.',
+    headline: 'Compare wholesale rates for Civil Defense Approved FP200 Gold & CWZ fire-rated cables.',
+    description: 'Upload your fire alarm & emergency wiring bill. We benchmark your 2C x 1.5mm² and 4C x 2.5mm² fire-resistant cables against direct factory importers in the UAE.',
     categoryIcon: Zap
   },
   {
     id: 7,
     pill: 'Earthing & Lightning Audit',
     savingsText: 'Average Earthing Savings: 20.8%',
-    headline: 'Are your copperbonded earth rods and bare copper tape marked up excessively?',
+    headline: 'Verify competitive pricing on copperbonded earth rods and bare copper tape.',
     description: 'Drop in your earthing and lightning protection invoice. We compare your Furse / Wallis copper rods and Cadweld molds against master electrical stockists.',
     categoryIcon: Zap
   },
@@ -85,7 +85,7 @@ export const auditPrompts: AuditPrompt[] = [
     id: 8,
     pill: 'Solar & Inverter Price Scan',
     savingsText: 'Average Solar Savings: 17.6%',
-    headline: 'Wondering if your solar PV DC cables and 3-phase string inverters are fairly priced?',
+    headline: 'Check live market pricing for solar PV DC cables and 3-phase string inverters.',
     description: 'Scan your solar electrical equipment receipt. We check TÜV certified 4mm²/6mm² DC solar cables and surge arresters against regional distributor pricing.',
     categoryIcon: Zap
   }

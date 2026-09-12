@@ -189,7 +189,7 @@ export const OnboardingGuidePage: React.FC<OnboardingGuidePageProps> = ({
               <div className="bg-white p-5 rounded-2xl border border-slate-200 space-y-2">
                 <span className="font-bold text-sm text-slate-900 block">3. Automated Free Cable & Invoice Cost Audit</span>
                 <p className="leading-relaxed text-slate-600">
-                  You can upload your past supplier invoices or bills to benchmark every line item against live stockist prices and identify overcharging in seconds.
+                  You can upload your past supplier invoices or bills to benchmark every line item against live stockist prices and identify competitive wholesale rates in seconds.
                 </p>
               </div>
 
