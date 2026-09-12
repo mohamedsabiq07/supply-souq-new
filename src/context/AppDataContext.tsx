@@ -71,8 +71,9 @@ interface AppDataContextType {
   sendMessage: (msg: Omit<Message, 'id' | 'createdAt' | 'isRead'>) => Message;
   getMessagesForRFQ: (rfqId: string) => Message[];
   
-  // Reviews
+  // Reviews & Quotation Ratings
   submitReview: (review: Omit<Review, 'id' | 'createdAt'>) => void;
+  rateQuotation: (rfqId: string, quotationId: string, rating: number, feedback?: string) => void;
   
   // Admin Verification
   updateVerificationStatus: (companyId: string, status: VerificationStatus, notes?: string) => void;
@@ -898,6 +899,103 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
     );
   };
 
+  const rateQuotation = (rfqId: string, quotationId: string, rating: number, feedback?: string) => {
+    const cleanRating = Math.max(1, Math.min(5, Math.round(rating * 10) / 10));
+
+    // 1. Locate the target quotation
+    const targetQuote = quotations.find((q) => q.id === quotationId);
+    if (!targetQuote) return;
+
+    const oldRating = targetQuote.buyerRating;
+    const isInitialRating = oldRating === undefined || oldRating === null;
+
+    // 2. Update Supplier Company Overall Rating & Review Count
+    let updatedSupplierOverallRating = targetQuote.supplierRating || 5.0;
+    setCompanies((prev) =>
+      prev.map((comp) => {
+        if (comp.id === targetQuote.supplierCompanyId) {
+          let newCount = comp.reviewCount || 0;
+          let newRating = comp.rating || 5.0;
+
+          if (isInitialRating) {
+            newCount = newCount + 1;
+            newRating = Number(((comp.rating * (comp.reviewCount || 0) + cleanRating) / newCount).toFixed(1));
+          } else {
+            const diff = cleanRating - oldRating;
+            newRating = Number(((comp.rating * (comp.reviewCount || 1) + diff) / (comp.reviewCount || 1)).toFixed(1));
+          }
+
+          newRating = Math.max(1.0, Math.min(5.0, newRating));
+          updatedSupplierOverallRating = newRating;
+
+          let newBadge = comp.badge;
+          if (newRating >= 4.8 && newCount >= 2) {
+            newBadge = 'Top Rated';
+          }
+
+          // Persist to Supabase
+          supabaseService.updateCompanyRating(comp.id, newRating, newCount).catch(console.error);
+
+          return {
+            ...comp,
+            rating: newRating,
+            reviewCount: newCount,
+            badge: newBadge,
+          };
+        }
+        return comp;
+      })
+    );
+
+    // 3. Update Quotations state (both the rated quote and all supplier quotes' display rating)
+    setQuotations((prev) =>
+      prev.map((q) => {
+        if (q.supplierCompanyId === targetQuote.supplierCompanyId) {
+          const isThisQuote = q.id === quotationId;
+          return {
+            ...q,
+            supplierRating: updatedSupplierOverallRating,
+            ...(isThisQuote
+              ? {
+                  buyerRating: cleanRating,
+                  buyerRatingFeedback: feedback !== undefined ? feedback : q.buyerRatingFeedback,
+                  buyerRatedAt: new Date().toISOString(),
+                }
+              : {}),
+          };
+        }
+        return q;
+      })
+    );
+
+    // 4. Send Notification Message to the Supplier
+    const targetRFQ = rfqs.find((r) => r.id === rfqId || r.rfqNumber === rfqId);
+    const rfqNum = targetRFQ?.rfqNumber || targetQuote.rfqNumber || 'RFQ';
+    const alertMsg: Message = {
+      id: `msg-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+      rfqId: targetQuote.rfqId,
+      rfqNumber: rfqNum,
+      senderId: targetRFQ?.buyerCompanyId || 'buyer',
+      senderName: targetRFQ?.buyerCompanyName || 'Verified Contractor',
+      senderCompanyId: targetRFQ?.buyerCompanyId || 'buyer',
+      senderCompanyName: targetRFQ?.buyerCompanyName || 'Verified Contractor',
+      senderRole: 'buyer',
+      recipientCompanyId: targetQuote.supplierCompanyId,
+      recipientCompanyName: targetQuote.supplierCompanyName,
+      messageText: `[⭐ Quotation Rating Received] A buyer rated your quotation on RFQ #${rfqNum} with ${cleanRating} / 5 Stars${
+        feedback ? ` ("${feedback}")` : ''
+      }! Your updated supplier rating is now ${updatedSupplierOverallRating} ★. Maintain high ratings to stay at the top of the supplier list!`,
+      createdAt: new Date().toISOString(),
+      isRead: false,
+    };
+    setMessages((prev) => [alertMsg, ...prev]);
+
+    // 5. Persist to Supabase and storage
+    supabaseService.updateQuotationRating(quotationId, cleanRating, feedback).catch(console.error);
+    supabaseService.sendMessage(alertMsg).catch(console.error);
+    broadcastSync();
+  };
+
   const updateVerificationStatus = (companyId: string, status: VerificationStatus, notes?: string) => {
     setCompanies((prev) =>
       prev.map((comp) => (comp.id === companyId ? { ...comp, verificationStatus: status, verificationNotes: notes } : comp))
@@ -954,6 +1052,7 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
         sendMessage,
         getMessagesForRFQ,
         submitReview,
+        rateQuotation,
         updateVerificationStatus,
         unlockedRFQIds,
         unlockExtendedQuotes,

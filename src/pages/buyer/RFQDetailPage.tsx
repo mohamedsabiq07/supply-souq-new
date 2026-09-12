@@ -192,9 +192,16 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
                 <div>
                   <div className="flex items-center justify-between text-[10px] text-slate-400 mb-1">
                     <span className="font-mono font-bold text-slate-700">{quote.quotationNumber}</span>
-                    <span className="font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
-                      Offer {idx + 1} of {visibleQuotes.length}
-                    </span>
+                    <div className="flex items-center gap-1">
+                      {quote.buyerRating ? (
+                        <span className="font-bold text-amber-800 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">
+                          ★ {quote.buyerRating}/5
+                        </span>
+                      ) : null}
+                      <span className="font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
+                        Offer {idx + 1} of {visibleQuotes.length}
+                      </span>
+                    </div>
                   </div>
                   <h4 className="text-xs font-bold text-slate-900 line-clamp-1">{quote.supplierCompanyName}</h4>
                   <span className="text-[10px] text-slate-500 block">{quote.supplierZone || quote.supplierEmirate}</span>

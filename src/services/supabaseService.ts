@@ -177,6 +177,9 @@ export const mapQuotationFromDB = (row: any): Quotation => ({
   submittedAt: row.submitted_at || new Date().toISOString(),
   deliveryMethod: row.delivery_method || 'supplier_fleet',
   deliveryDetails: row.delivery_details || undefined,
+  buyerRating: row.buyer_rating ? Number(row.buyer_rating) : undefined,
+  buyerRatingFeedback: row.buyer_rating_feedback || undefined,
+  buyerRatedAt: row.buyer_rated_at || undefined,
 });
 
 export const mapQuotationToDB = (q: Quotation) => ({
@@ -205,6 +208,9 @@ export const mapQuotationToDB = (q: Quotation) => ({
   submitted_at: q.submittedAt,
   delivery_method: q.deliveryMethod || 'supplier_fleet',
   delivery_details: q.deliveryDetails || null,
+  buyer_rating: q.buyerRating || null,
+  buyer_rating_feedback: q.buyerRatingFeedback || null,
+  buyer_rated_at: q.buyerRatedAt || null,
 });
 
 export const mapPOFromDB = (row: any): PurchaseOrder => ({
@@ -577,6 +583,31 @@ export const supabaseService = {
     } catch (e) {
       console.error('Error finding user by identifier from Supabase:', e);
       return null;
+    }
+  },
+
+  // Update Company Overall Rating & Review Count
+  async updateCompanyRating(companyId: string, rating: number, reviewCount: number) {
+    try {
+      await supabase.from('companies').update({
+        rating,
+        review_count: reviewCount,
+      }).eq('id', companyId);
+    } catch (e) {
+      console.error('Error updating company rating in Supabase:', e);
+    }
+  },
+
+  // Update Quotation Rating
+  async updateQuotationRating(quotationId: string, rating: number, feedback?: string) {
+    try {
+      await supabase.from('quotations').update({
+        buyer_rating: rating,
+        buyer_rating_feedback: feedback || null,
+        buyer_rated_at: new Date().toISOString(),
+      }).eq('id', quotationId);
+    } catch (e) {
+      console.error('Error updating quotation rating in Supabase:', e);
     }
   }
 };

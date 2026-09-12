@@ -216,11 +216,18 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
                           <div className="space-y-2">
                             <div className="flex items-center justify-between gap-1">
                               <span className="font-mono text-xs font-bold text-slate-600">{quote.quotationNumber}</span>
-                              {isLowest && (
-                                <span className="bg-emerald-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full">
-                                  Lowest Price
-                                </span>
-                              )}
+                              <div className="flex items-center gap-1.5">
+                                {quote.buyerRating ? (
+                                  <span className="font-bold text-amber-800 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 text-[10px]">
+                                    ★ {quote.buyerRating}/5
+                                  </span>
+                                ) : null}
+                                {isLowest && (
+                                  <span className="bg-emerald-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full">
+                                    Lowest Price
+                                  </span>
+                                )}
+                              </div>
                             </div>
                             <div>
                               <h5 className="font-bold text-slate-900 text-xs truncate">{quote.supplierCompanyName}</h5>

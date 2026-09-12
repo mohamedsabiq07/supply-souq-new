@@ -227,6 +227,9 @@ export interface Quotation {
   status: QuotationStatus;
   items: QuotationItem[];
   submittedAt: string;
+  buyerRating?: number;
+  buyerRatingFeedback?: string;
+  buyerRatedAt?: string;
 }
 
 export type OrderStatus = 

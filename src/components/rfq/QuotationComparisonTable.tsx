@@ -26,7 +26,8 @@ import {
   Unlock,
   CreditCard,
   Layers,
-  Flame
+  Flame,
+  Star
 } from 'lucide-react';
 
 interface QuotationComparisonTableProps {
@@ -41,14 +42,41 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
   quotations,
   onAward,
 }) => {
-  const { isRFQExtendedUnlocked, unlockExtendedQuotes } = useAppData();
+  const { isRFQExtendedUnlocked, unlockExtendedQuotes, rateQuotation } = useAppData();
   const [sortBy, setSortBy] = useState<'price_asc' | 'delivery_asc' | 'rating_desc' | 'recommended'>('recommended');
   const [expandedQuoteId, setExpandedQuoteId] = useState<string | null>(null);
   const [selectedAwardQuote, setSelectedAwardQuote] = useState<Quotation | null>(null);
   const [isAwardModalOpen, setIsAwardModalOpen] = useState(false);
   const [isUnlockModalOpen, setIsUnlockModalOpen] = useState(false);
 
+  // Rating Modal State
+  const [ratingModalQuote, setRatingModalQuote] = useState<Quotation | null>(null);
+  const [selectedStars, setSelectedStars] = useState<number>(5);
+  const [hoveredStars, setHoveredStars] = useState<number | null>(null);
+  const [ratingFeedback, setRatingFeedback] = useState<string>('');
+
   const isUnlocked = isRFQExtendedUnlocked(rfq.id);
+
+  const starLabels: Record<number, string> = {
+    1: '★ 1/5 - Uncompetitive Price / Inadequate Terms',
+    2: '★ 2/5 - Below Market Standard',
+    3: '★ 3/5 - Fair Average Market Price',
+    4: '★ 4/5 - Good Competitive Wholesale Quote',
+    5: '★ 5/5 - Exceptional Wholesale Rate & Fast Lead Time',
+  };
+
+  const handleOpenRatingModal = (quote: Quotation) => {
+    setRatingModalQuote(quote);
+    setSelectedStars(quote.buyerRating || 5);
+    setHoveredStars(null);
+    setRatingFeedback(quote.buyerRatingFeedback || '');
+  };
+
+  const handleSaveRating = () => {
+    if (!ratingModalQuote) return;
+    rateQuotation(rfq.id, ratingModalQuote.id, selectedStars, ratingFeedback);
+    setRatingModalQuote(null);
+  };
 
   if (quotations.length === 0) {
     return (
@@ -342,7 +370,35 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
               </div>
 
               {/* Card Footer CTA */}
-              <div className="p-4 bg-slate-50 border-t border-slate-100 space-y-2">
+              <div className="p-4 bg-slate-50 border-t border-slate-100 space-y-2.5">
+                {/* Quotation Rating Bar */}
+                <div className="flex items-center justify-between text-xs pb-1.5 border-b border-slate-200/60">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-slate-500 font-medium text-[11px]">Quote Rating:</span>
+                    {quote.buyerRating ? (
+                      <span className="inline-flex items-center gap-1 bg-amber-50 text-amber-900 border border-amber-200 px-2 py-0.5 rounded font-bold text-[11px]">
+                        <Star className="w-3 h-3 fill-amber-400 text-amber-500" />
+                        <span>{quote.buyerRating} / 5</span>
+                      </span>
+                    ) : (
+                      <span className="text-[10px] text-slate-400 italic">Unrated</span>
+                    )}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => handleOpenRatingModal(quote)}
+                    className={`text-[11px] font-bold px-2 py-1 rounded-md transition-all flex items-center gap-1 cursor-pointer ${
+                      quote.buyerRating
+                        ? 'text-amber-800 bg-amber-100/60 hover:bg-amber-100 border border-amber-300'
+                        : 'text-brand-700 bg-brand-50 hover:bg-brand-100 border border-brand-200'
+                    }`}
+                  >
+                    <Star className="w-3 h-3 fill-current" />
+                    <span>{quote.buyerRating ? 'Edit Rating' : 'Rate Quote'}</span>
+                  </button>
+                </div>
+
                 {isAwarded ? (
                   <div className="w-full text-center py-2.5 bg-emerald-100 text-emerald-800 font-bold text-xs rounded-lg border border-emerald-200">
                     ✓ Awarded & Purchase Order Issued
@@ -545,6 +601,129 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
                 className="font-bold"
               >
                 Generate & Issue Purchase Order
+              </Button>
+            </div>
+          </div>
+        )}
+      </Modal>
+
+      {/* RATE QUOTATION MODAL */}
+      <Modal
+        isOpen={!!ratingModalQuote}
+        onClose={() => setRatingModalQuote(null)}
+        title="Rate Supplier Quotation & Pricing"
+        subtitle={`RFQ #${rfq.rfqNumber} • ${ratingModalQuote?.supplierCompanyName}`}
+        maxWidth="md"
+      >
+        {ratingModalQuote && (
+          <div className="space-y-4 text-xs">
+            <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-xl space-y-1">
+              <div className="flex items-center justify-between">
+                <span className="font-bold text-slate-900 text-sm">{ratingModalQuote.supplierCompanyName}</span>
+                <span className="font-mono font-bold text-slate-800 text-sm">
+                  {formatAED(ratingModalQuote.grandTotalAED)}
+                </span>
+              </div>
+              <p className="text-slate-500 text-[11px]">
+                Quote #{ratingModalQuote.quotationNumber} • Lead Time: {ratingModalQuote.leadTimeDisplay || `${ratingModalQuote.leadTimeDays} Days`} • Terms: {ratingModalQuote.paymentTerms || '30 Days PDC'}
+              </p>
+            </div>
+
+            {/* Star Rating Interactive Selector */}
+            <div className="p-4 bg-gradient-to-b from-amber-50/70 to-white rounded-2xl border border-amber-200 text-center space-y-2">
+              <span className="text-xs font-bold text-slate-700 block">
+                How would you rate this supplier's rates & commercial quote?
+              </span>
+              <div className="flex items-center justify-center gap-2 py-1">
+                {[1, 2, 3, 4, 5].map((star) => {
+                  const isFilled = star <= (hoveredStars !== null ? hoveredStars : selectedStars);
+                  return (
+                    <button
+                      key={star}
+                      type="button"
+                      onMouseEnter={() => setHoveredStars(star)}
+                      onMouseLeave={() => setHoveredStars(null)}
+                      onClick={() => setSelectedStars(star)}
+                      className="p-1 transition-transform hover:scale-125 focus:outline-none cursor-pointer"
+                    >
+                      <Star
+                        className={`w-8 h-8 transition-colors ${
+                          isFilled
+                            ? 'fill-amber-400 text-amber-500 drop-shadow-sm'
+                            : 'text-slate-200 hover:text-amber-200'
+                        }`}
+                      />
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="text-xs font-bold text-amber-900">
+                {starLabels[hoveredStars !== null ? hoveredStars : selectedStars]}
+              </div>
+            </div>
+
+            {/* Quick Feedback Chips */}
+            <div className="space-y-1.5">
+              <span className="text-[11px] font-bold text-slate-600 block">Quick Feedback Tags:</span>
+              <div className="flex flex-wrap gap-1.5">
+                {[
+                  '🔥 Highly Competitive Price',
+                  '⚡ Fast Lead Time',
+                  '📄 Clear Mill Specifications',
+                  '🤝 Favorable Payment Terms',
+                  '📦 Genuine Factory Stock',
+                  '⚠️ High Rate vs Market',
+                ].map((tag) => (
+                  <button
+                    key={tag}
+                    type="button"
+                    onClick={() => {
+                      if (!ratingFeedback.includes(tag)) {
+                        setRatingFeedback(prev => prev ? `${prev}, ${tag}` : tag);
+                      }
+                    }}
+                    className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[11px] font-medium transition-colors cursor-pointer"
+                  >
+                    {tag}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Optional Comment */}
+            <div>
+              <label className="text-[11px] font-bold text-slate-700 block mb-1">
+                Feedback / Notes for Supplier (Optional):
+              </label>
+              <textarea
+                rows={2}
+                value={ratingFeedback}
+                onChange={(e) => setRatingFeedback(e.target.value)}
+                placeholder="e.g. Excellent rates on Ducab cable drum. Fast turnaround."
+                className="w-full p-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-brand-500"
+              />
+            </div>
+
+            {/* Trust Notice explaining how rating impacts supplier rank */}
+            <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-[11px] text-emerald-900 flex items-start gap-2">
+              <Sparkles className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+              <div>
+                <strong>Merit-Based Supplier Rankings:</strong> Your rating updates this supplier's overall profile rating in real-time. Suppliers with higher ratings are prioritized at the top of the supplier directory and receive first access to contractor RFQ broadcasts.
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+              <Button variant="outline" onClick={() => setRatingModalQuote(null)}>
+                Cancel
+              </Button>
+              <Button
+                variant="primary"
+                onClick={handleSaveRating}
+                leftIcon={<Star className="w-4 h-4 fill-amber-300 text-amber-300" />}
+                className="font-bold"
+              >
+                Save Rating & Update Score
               </Button>
             </div>
           </div>

@@ -33,15 +33,17 @@ export const SuppliersPage: React.FC<{ onRequestQuote: (supplier?: any, category
 
   const emirates = ['All', 'Dubai', 'Sharjah', 'Ajman'];
 
-  const filteredSuppliers = allSuppliers.filter(s => {
-    const matchesCategory = selectedCategory === 'All' || s.categories.includes(selectedCategory) || s.categories.some(c => c.toLowerCase().includes(selectedCategory.toLowerCase()));
-    const matchesEmirate = emirateFilter === 'All' || s.emirate === emirateFilter;
-    const matchesSearch = s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      s.categories.some(c => c.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      s.industrialZone.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (s.address && s.address.toLowerCase().includes(searchTerm.toLowerCase()));
-    return matchesCategory && matchesEmirate && matchesSearch;
-  });
+  const filteredSuppliers = allSuppliers
+    .filter(s => {
+      const matchesCategory = selectedCategory === 'All' || s.categories.includes(selectedCategory) || s.categories.some(c => c.toLowerCase().includes(selectedCategory.toLowerCase()));
+      const matchesEmirate = emirateFilter === 'All' || s.emirate === emirateFilter;
+      const matchesSearch = s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        s.categories.some(c => c.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        s.industrialZone.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (s.address && s.address.toLowerCase().includes(searchTerm.toLowerCase()));
+      return matchesCategory && matchesEmirate && matchesSearch;
+    })
+    .sort((a, b) => (b.rating || 0) - (a.rating || 0) || (b.reviewCount || 0) - (a.reviewCount || 0));
 
   const activeCategoryObj = categories.find(c => c.id === selectedCategory);
 
