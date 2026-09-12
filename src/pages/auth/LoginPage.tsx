@@ -454,17 +454,6 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
                 Sign Up as Contractor or Supplier
               </button>
             </div>
-            <button
-              type="button"
-              onClick={() => {
-                setRole('admin');
-                setErrorMsg('');
-              }}
-              className="text-slate-400 hover:text-emerald-700 transition-colors font-medium flex items-center gap-1 mt-1 text-[11px]"
-            >
-              <KeyRound className="w-3 h-3" />
-              <span>Operator / Admin Desk Login</span>
-            </button>
           </div>
         ) : (
           <div className="text-center pt-3 border-t border-slate-100 text-xs text-slate-500">

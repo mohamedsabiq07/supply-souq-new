@@ -41,28 +41,40 @@ import { ProfilePage } from './pages/profile/ProfilePage';
 import { LoginPage } from './pages/auth/LoginPage';
 import { RegisterPage } from './pages/auth/RegisterPage';
 
+const checkIsAdminSecretRoute = () => {
+  try {
+    const pathname = window.location.pathname.toLowerCase().replace(/^\/+|\/+$/g, '');
+    const hash = window.location.hash.replace('#', '').toLowerCase().replace(/^\/+|\/+$/g, '');
+    const search = new URLSearchParams(window.location.search);
+    const viewParam = (search.get('view') || search.get('page') || '').toLowerCase();
+
+    // Secret entry point: ONLY /admin07, #admin07, or ?view=admin07
+    return (
+      pathname === 'admin07' ||
+      pathname.startsWith('admin07/') ||
+      hash === 'admin07' ||
+      hash.startsWith('admin07/') ||
+      viewParam === 'admin07'
+    );
+  } catch (e) {
+    return false;
+  }
+};
+
 const AppContent: React.FC = () => {
   const { role, setRole, isAuthenticated, isImpersonating, impersonatedUser, stopImpersonating } = useAuth();
   const [currentView, setCurrentView] = useState<string>(() => {
-    try {
-      const hash = window.location.hash.replace('#', '').toLowerCase();
-      const search = new URLSearchParams(window.location.search);
-      const viewParam = search.get('view')?.toLowerCase() || search.get('page')?.toLowerCase();
-      if (hash === 'admin' || hash === 'admin-dashboard' || hash === 'admin-login' || viewParam === 'admin' || viewParam === 'admin-dashboard' || viewParam === 'admin-login') {
-        return 'admin-login';
-      }
-    } catch (e) {}
+    if (checkIsAdminSecretRoute()) {
+      return 'admin-login';
+    }
     return 'home';
   });
   const [viewParams, setViewParams] = useState<any>({});
 
-  // Listen to hash / URL change for direct #admin access & Ctrl+Shift+A shortcut
+  // Listen to path / hash / URL changes for secret /admin07 access & Ctrl+Shift+A shortcut
   React.useEffect(() => {
-    const handleHashOrSearch = () => {
-      const hash = window.location.hash.replace('#', '').toLowerCase();
-      const search = new URLSearchParams(window.location.search);
-      const viewParam = search.get('view')?.toLowerCase() || search.get('page')?.toLowerCase();
-      if (hash === 'admin' || hash === 'admin-dashboard' || hash === 'admin-login' || viewParam === 'admin' || viewParam === 'admin-dashboard' || viewParam === 'admin-login') {
+    const handleURLChange = () => {
+      if (checkIsAdminSecretRoute()) {
         if (isAuthenticated && role === 'admin') {
           setCurrentView('admin-dashboard');
         } else {
@@ -72,7 +84,7 @@ const AppContent: React.FC = () => {
     };
 
     const handleGlobalShortcuts = (e: KeyboardEvent) => {
-      // Ctrl + Shift + A or Cmd + Shift + A to instantly access Admin Operations Desk
+      // Secret operator shortcut: Ctrl + Shift + A to instantly access Admin Operations Desk
       if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
         e.preventDefault();
         if (isAuthenticated && role === 'admin') {
@@ -83,10 +95,12 @@ const AppContent: React.FC = () => {
       }
     };
 
-    window.addEventListener('hashchange', handleHashOrSearch);
+    window.addEventListener('popstate', handleURLChange);
+    window.addEventListener('hashchange', handleURLChange);
     window.addEventListener('keydown', handleGlobalShortcuts);
     return () => {
-      window.removeEventListener('hashchange', handleHashOrSearch);
+      window.removeEventListener('popstate', handleURLChange);
+      window.removeEventListener('hashchange', handleURLChange);
       window.removeEventListener('keydown', handleGlobalShortcuts);
     };
   }, [isAuthenticated, role]);
