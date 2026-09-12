@@ -136,7 +136,7 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
             </h3>
             <span className="text-xs font-extrabold bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-0.5 rounded-full flex items-center gap-1">
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-              <span>{visibleQuotes.length} Quotes Displayed {isUnlocked ? '(Unlocked Pack)' : '(Free Limit: 5)'}</span>
+              <span>{visibleQuotes.length} {visibleQuotes.length === 1 ? 'Quote' : 'Quotes'} Displayed{isUnlocked ? ' (Extended Pack Active)' : quotations.length >= 5 ? ' (Free Limit: 5)' : ''}</span>
             </span>
           </div>
           <p className="text-xs text-slate-500 mt-0.5">
@@ -362,8 +362,8 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
           );
         })}
 
-        {/* LOCKED 5 MORE QUOTES CARD IF NOT UNLOCKED */}
-        {!isUnlocked && (
+        {/* LOCKED 5 MORE QUOTES CARD IF NOT UNLOCKED - ONLY VISIBLE ONCE 5 QUOTATIONS ARE OBTAINED */}
+        {!isUnlocked && quotations.length >= 5 && (
           <div className="bg-gradient-to-br from-slate-900 via-slate-900 to-navy-950 text-white rounded-2xl border-2 border-dashed border-amber-400/60 p-6 flex flex-col justify-between shadow-lg">
             <div className="space-y-4">
               <div className="w-12 h-12 rounded-2xl bg-amber-400/20 border border-amber-400/40 text-amber-300 flex items-center justify-center font-bold">
