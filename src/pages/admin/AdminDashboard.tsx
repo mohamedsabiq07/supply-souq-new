@@ -126,7 +126,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
               <input
                 type="password"
                 required
-                placeholder="Enter Master Admin Passkey (admin123)"
+                placeholder="Enter Master Admin Passkey"
                 value={adminPass}
                 onChange={(e) => setAdminPass(e.target.value)}
                 className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 text-center font-bold text-slate-900"

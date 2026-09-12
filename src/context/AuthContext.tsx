@@ -138,7 +138,7 @@ export const mockAdminUser: UserProfile = {
   username: 'admin',
   email: 'admin@supplysouq.ae',
   phone: '+971 4 200 9900',
-  password: 'admin123',
+  password: 'Sabiq123',
   role: 'admin',
   jobTitle: 'Marketplace Operations Lead',
   emirate: 'Dubai',
@@ -442,8 +442,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return { success: true, user: mockSupplierUser, role: 'supplier' };
     }
     if (cleanId === 'admin' || cleanId === 'admin@supplysouq.ae') {
-      if (cleanPassword && cleanPassword !== 'admin123' && cleanPassword !== 'supplysouq2026') {
-        return { success: false, error: 'Incorrect master passkey. Default passkey is: admin123' };
+      if (cleanPassword && cleanPassword !== 'Sabiq123' && cleanPassword !== 'supplysouq2026') {
+        return { success: false, error: 'Incorrect master passkey.' };
       }
       switchDemoUser('admin');
       return { success: true, user: mockAdminUser, role: 'admin' };
@@ -453,7 +453,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const adminLogin = (password: string): boolean => {
-    if (password === 'admin123' || password === 'supplysouq2026') {
+    if (password === 'Sabiq123' || password === 'supplysouq2026') {
       switchDemoUser('admin');
       return true;
     }

@@ -193,7 +193,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
           </h2>
           <p className="text-xs text-slate-500">
             {isActuallyAdmin
-              ? 'Authorized UAE marketplace operator clearance (Default passkey: admin123)'
+              ? 'Authorized UAE marketplace operator clearance'
               : 'Enter your username or corporate email to access your workspace'}
           </p>
         </div>
@@ -376,7 +376,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
                     disabled={lockoutSeconds > 0 || loading}
                     value={adminPassword}
                     onChange={(e) => setAdminPassword(e.target.value)}
-                    placeholder="Enter administrator passkey (admin123)"
+                    placeholder="Enter administrator passkey"
                     className="w-full p-2.5 pr-10 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 font-bold text-slate-900 disabled:bg-slate-100"
                   />
                   <button
