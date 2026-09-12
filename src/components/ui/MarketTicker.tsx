@@ -1,57 +1,42 @@
 import React from 'react';
-import { Zap, TrendingUp, ShieldCheck, Clock, Activity } from 'lucide-react';
+import { useAppData, defaultTelemetryItems } from '../../context/AppDataContext';
+import { 
+  Zap, 
+  TrendingUp, 
+  TrendingDown,
+  ShieldCheck, 
+  Clock, 
+  Activity, 
+  Layers, 
+  Sparkles, 
+  Flame 
+} from 'lucide-react';
 
 export const MarketTicker: React.FC = () => {
-  const tickerItems = [
-    {
-      id: 1,
-      label: 'LME COPPER SPOT',
-      value: '$9,245.50 / MT',
-      change: '+1.18%',
-      isPositive: true,
-      icon: TrendingUp,
-    },
-    {
-      id: 2,
-      label: 'DUCAB CABLE INDEX',
-      value: 'AED 28.40/M',
-      change: 'STABLE',
-      isPositive: true,
-      icon: Zap,
-    },
-    {
-      id: 3,
-      label: 'FASTEST 5 BIDS RULE',
-      value: 'CAPACITY CAP: 5 QUOTES',
-      change: 'ACTIVE',
-      isPositive: true,
-      icon: Activity,
-    },
-    {
-      id: 4,
-      label: 'DEWA / SEWA STANDARDS',
-      value: '2026.1 SPEC',
-      change: 'COMPLIANT',
-      isPositive: true,
-      icon: ShieldCheck,
-    },
-    {
-      id: 5,
-      label: 'CONTRACTOR SLA',
-      value: '24-HOUR DISPATCH',
-      change: '100% ON-TIME',
-      isPositive: true,
-      icon: Clock,
-    },
-    {
-      id: 6,
-      label: 'UAE ELECTRICAL HUBS',
-      value: 'AL QUOZ & SHARJAH',
-      change: '32 ACTIVE STOCKISTS',
-      isPositive: true,
-      icon: Zap,
-    },
-  ];
+  const { telemetryItems } = useAppData();
+
+  const activeItems = React.useMemo(() => {
+    const list = (telemetryItems || []).filter((i) => i.isActive);
+    return list.length > 0 ? list : defaultTelemetryItems;
+  }, [telemetryItems]);
+
+  const getItemIcon = (category: string, isPositive: boolean) => {
+    switch (category) {
+      case 'metal':
+        return isPositive ? TrendingUp : TrendingDown;
+      case 'electrical':
+        return Zap;
+      case 'energy':
+        return Flame;
+      case 'platform':
+        return Sparkles;
+      case 'sla':
+        return ShieldCheck;
+      case 'building':
+      default:
+        return Layers;
+    }
+  };
 
   return (
     <div className="bg-[#020f0c] border-b border-[#00ffae]/15 text-white overflow-hidden select-none py-1.5 px-3 relative z-30 font-sans text-[11px] font-medium tracking-wide">
@@ -65,23 +50,33 @@ export const MarketTicker: React.FC = () => {
         {/* Marquee Ticker Track */}
         <div className="overflow-hidden whitespace-nowrap flex-1 relative [mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)]">
           <div className="inline-flex gap-8 animate-marquee hover:[animation-play-state:paused]">
-            {[...tickerItems, ...tickerItems].map((item, idx) => {
-              const Icon = item.icon;
+            {[...activeItems, ...activeItems].map((item, idx) => {
+              const Icon = getItemIcon(item.category, item.isPositive);
               return (
-                <div key={idx} className="inline-flex items-center gap-2 text-slate-300">
-                  <Icon className="w-3 h-3 text-cyan-400 shrink-0" />
+                <div key={`${item.id}-${idx}`} className="inline-flex items-center gap-2 text-slate-300">
+                  <Icon className="w-3 h-3 text-[#00ffae] shrink-0" />
                   <span className="text-slate-400 font-semibold">{item.label}:</span>
-                  <span className="font-bold text-white tracking-wide">{item.value}</span>
+                  <span className="font-mono font-bold text-white tracking-wide">{item.value}</span>
                   <span
                     className={`text-[10px] px-1.5 py-0.5 rounded font-bold ${
                       item.isPositive
                         ? 'text-emerald-400 bg-emerald-950/60 border border-emerald-500/30'
-                        : 'text-amber-400 bg-amber-950/60 border border-amber-500/30'
+                        : 'text-rose-400 bg-rose-950/60 border border-rose-500/30'
                     }`}
                   >
                     {item.change}
                   </span>
-                  <span className="text-slate-600 ml-2">/</span>
+                  {item.source === 'dynamic_platform' && (
+                    <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-cyan-950 text-cyan-300 border border-cyan-800/40">
+                      LIVE RFQ
+                    </span>
+                  )}
+                  {item.source === 'financial_feed' && (
+                    <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-amber-950 text-amber-300 border border-amber-800/40">
+                      LME
+                    </span>
+                  )}
+                  <span className="text-slate-700 ml-2">/</span>
                 </div>
               );
             })}

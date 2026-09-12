@@ -376,3 +376,21 @@ export interface AdminAuditLog {
 }
 
 export type AdminRole = 'super_admin' | 'procurement_ops' | 'verification_officer' | 'finance_officer';
+
+export type TelemetrySource = 'admin_manual' | 'dynamic_platform' | 'financial_feed';
+export type TelemetryCategory = 'metal' | 'building' | 'sla' | 'platform' | 'energy' | 'electrical';
+
+export interface TelemetryItem {
+  id: string;
+  label: string;
+  value: string;
+  change: string; // e.g. "+1.18%", "-0.5%", "STABLE", "ACTIVE"
+  isPositive: boolean;
+  category: TelemetryCategory;
+  source: TelemetrySource;
+  isActive: boolean;
+  lastUpdated?: string;
+  basePrice?: number;
+  currency?: string;
+  unit?: string;
+}

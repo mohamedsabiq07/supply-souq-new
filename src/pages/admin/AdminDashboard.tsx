@@ -35,10 +35,12 @@ import {
   BarChart3,
   UserCheck,
   ExternalLink,
-  RotateCcw
+  RotateCcw,
+  Radio
 } from 'lucide-react';
 
 import { AdminSLATower } from '../../components/admin/AdminSLATower';
+import { AdminMarketDesk } from '../../components/admin/AdminMarketDesk';
 import { AdminKYBDesk } from '../../components/admin/AdminKYBDesk';
 import { AdminFinanceEngine } from '../../components/admin/AdminFinanceEngine';
 import { AdminDealProtection } from '../../components/admin/AdminDealProtection';
@@ -72,7 +74,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
   } = useAuth();
 
   // Tab State
-  type AdminTab = 'sla' | 'kyb' | 'finance' | 'protection' | 'logistics' | 'analytics' | 'users' | 'rfqs';
+  type AdminTab = 'sla' | 'telemetry' | 'kyb' | 'finance' | 'protection' | 'logistics' | 'analytics' | 'users' | 'rfqs';
   const [activeTab, setActiveTab] = useState<AdminTab>('sla');
   const [adminRole, setAdminRole] = useState<AdminRole>('super_admin');
   const [isMaskingEnabled, setIsMaskingEnabled] = useState<boolean>(true);
@@ -295,6 +297,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
         </button>
 
         <button
+          onClick={() => setActiveTab('telemetry')}
+          className={`py-2.5 px-4 rounded-xl flex items-center gap-2 transition-all shrink-0 ${
+            activeTab === 'telemetry'
+              ? 'bg-[#002116] text-[#00ffae] font-extrabold border border-[#00ffae]/40 shadow-glow-mint'
+              : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+          }`}
+        >
+          <Radio className="w-4 h-4 text-[#00ffae]" />
+          <span>📡 Live Market Desk</span>
+        </button>
+
+        <button
           onClick={() => setActiveTab('kyb')}
           className={`py-2.5 px-4 rounded-xl flex items-center gap-2 transition-all shrink-0 ${
             activeTab === 'kyb'
@@ -386,6 +400,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
           companies={companies}
           onNavigateToRFQ={(rfqId) => onNavigate('rfq-detail', { rfqId })}
         />
+      )}
+
+      {/* ---------------- TAB: LIVE TELEMETRY & MARKET DESK ---------------- */}
+      {activeTab === 'telemetry' && (
+        <AdminMarketDesk />
       )}
 
       {/* ---------------- TAB 2: KYB & DET VERIFICATION ---------------- */}
