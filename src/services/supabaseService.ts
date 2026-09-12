@@ -533,5 +533,50 @@ export const supabaseService = {
       console.error('Error fetching users from Supabase:', e);
       return [];
     }
+  },
+
+  // Find a user by username or email directly from Supabase
+  async findUserByIdentifier(identifier: string): Promise<{ user: UserProfile; company?: Company } | null> {
+    try {
+      const clean = (identifier || '').trim().toLowerCase();
+      if (!clean) return null;
+
+      // Query Supabase for users matching email or username
+      let { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .or(`email.ilike.${clean},username.ilike.${clean}`)
+        .limit(1);
+
+      // Fallback exact ilike queries if .or has parsing nuances
+      if (!data || data.length === 0) {
+        const byEmail = await supabase.from('users').select('*').ilike('email', clean).limit(1);
+        if (byEmail.data && byEmail.data.length > 0) {
+          data = byEmail.data;
+        } else {
+          const byUser = await supabase.from('users').select('*').ilike('username', clean).limit(1);
+          if (byUser.data && byUser.data.length > 0) {
+            data = byUser.data;
+          }
+        }
+      }
+
+      if (!data || data.length === 0) return null;
+
+      const user = mapUserFromDB(data[0]);
+      let company: Company | undefined;
+
+      if (user.companyId) {
+        const compRes = await supabase.from('companies').select('*').eq('id', user.companyId).limit(1);
+        if (compRes.data && compRes.data.length > 0) {
+          company = mapCompanyFromDB(compRes.data[0]);
+        }
+      }
+
+      return { user, company };
+    } catch (e) {
+      console.error('Error finding user by identifier from Supabase:', e);
+      return null;
+    }
   }
 };

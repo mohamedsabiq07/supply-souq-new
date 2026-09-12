@@ -84,7 +84,7 @@ interface AuthContextType {
   stopImpersonating: () => void;
   switchDemoUser: (role: UserRole) => void;
   login: (email: string, role: UserRole) => void;
-  signIn: (identifier: string, password?: string) => Promise<{ success: boolean; error?: string }>;
+  signIn: (identifier: string, password?: string) => Promise<{ success: boolean; user?: UserProfile; role?: UserRole; error?: string }>;
   adminLogin: (password: string) => boolean;
   signUpBuyer: (data: BuyerSignupData) => Promise<{ success: boolean; user?: UserProfile; error?: string }>;
   signUpSupplier: (data: SupplierSignupData) => Promise<{ success: boolean; user?: UserProfile; error?: string }>;
@@ -148,7 +148,7 @@ export const mockAdminUser: UserProfile = {
   createdAt: '2023-01-01T00:00:00Z'
 };
 
-const defaultUsers: UserProfile[] = [mockAdminUser];
+const defaultUsers: UserProfile[] = [mockBuyerUser, mockSupplierUser, mockAdminUser];
 
 const AUTH_STORAGE_KEY = 'supplysouq_auth_session_clean_v11';
 const USERS_STORAGE_KEY = 'supplysouq_registered_users_clean_v11';
@@ -352,39 +352,68 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const signIn = async (identifier: string, password?: string): Promise<{ success: boolean; error?: string }> => {
+  const signIn = async (
+    identifier: string,
+    password?: string
+  ): Promise<{ success: boolean; user?: UserProfile; role?: UserRole; error?: string }> => {
     const cleanId = (identifier || '').trim().toLowerCase();
+    const cleanPassword = (password || '').trim();
+
     if (!cleanId) {
       return { success: false, error: 'Please enter your username or corporate email.' };
     }
 
-    const found = registeredUsers.find(
+    // 1. Check local registeredUsers state first
+    let found = registeredUsers.find(
       (u) =>
-        u.email?.toLowerCase() === cleanId ||
-        u.username?.toLowerCase() === cleanId
+        u.email?.trim().toLowerCase() === cleanId ||
+        u.username?.trim().toLowerCase() === cleanId
     );
 
+    let fetchedCompany: Company | undefined;
+
+    // 2. If not found in local cache (e.g. freshly opened tab, incognito, or network delay),
+    // query Supabase directly!
+    if (!found) {
+      try {
+        const cloudResult = await supabaseService.findUserByIdentifier(cleanId);
+        if (cloudResult && cloudResult.user) {
+          found = cloudResult.user;
+          fetchedCompany = cloudResult.company;
+          // Merge into registeredUsers so subsequent lookups are cached
+          setRegisteredUsers((prev) => {
+            const exists = prev.some((u) => u.id === found!.id || u.username?.toLowerCase() === found!.username?.toLowerCase());
+            if (exists) return prev;
+            return [...prev, found!];
+          });
+        }
+      } catch (e) {
+        console.error('Error in cloud user lookup fallback:', e);
+      }
+    }
+
+    // 3. If user is found, check credentials
     if (found) {
-      if (found.password && password && found.password !== password) {
+      if (found.password && cleanPassword && found.password.trim() !== cleanPassword) {
         return { success: false, error: 'Incorrect password. Please verify your credentials and try again.' };
       }
 
       setCurrentUser(found);
       setRoleState(found.role);
       setIsAuthenticated(true);
-      const comp = initialCompanies.find((c) => c.id === found.companyId) || {
+      const comp = fetchedCompany || initialCompanies.find((c) => c.id === found!.companyId) || {
         id: found.companyId,
         name: found.companyName,
         legalName: found.companyName,
-        tradeLicenseNumber: found.tradeLicenseNumber || 'TL-PENDING',
-        companyType: found.role === 'supplier' ? 'supplier' : 'buyer',
+        tradeLicenseNumber: found.tradeLicenseNumber || 'TL-VERIFIED',
+        companyType: (found.role === 'supplier' ? 'supplier' : 'buyer') as any,
         emirate: found.emirate || 'Dubai',
         industrialZone: found.industrialZone || 'Al Quoz Industrial Area',
         address: found.address || 'Dubai, UAE',
         phone: found.phone,
         email: found.email,
         categories: ['LV & MV Power Cables & Wires', 'Switchgear, MCBs & Distribution Boards'],
-        serviceEmirates: ['Dubai', 'Sharjah', 'Ajman'],
+        serviceEmirates: ['Dubai', 'Sharjah', 'Ajman'] as any,
         verificationStatus: found.verificationStatus || 'verified',
         rating: 5.0,
         reviewCount: 1,
@@ -394,24 +423,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         createdAt: found.createdAt || new Date().toISOString(),
       };
       setCurrentCompany(comp);
-      return { success: true };
+      return { success: true, user: found, role: found.role };
     }
 
-    // Check default mock accounts
+    // 4. Check default mock accounts
     if (cleanId === 'tariq' || cleanId === 'procurement@apexcontracting.ae') {
+      if (cleanPassword && cleanPassword !== 'password123') {
+        return { success: false, error: 'Incorrect password. Demo password is: password123' };
+      }
       switchDemoUser('buyer');
-      return { success: true };
+      return { success: true, user: mockBuyerUser, role: 'buyer' };
     }
     if (cleanId === 'rajesh' || cleanId === 'sales@alnoorelectrical.ae') {
+      if (cleanPassword && cleanPassword !== 'password123') {
+        return { success: false, error: 'Incorrect password. Demo password is: password123' };
+      }
       switchDemoUser('supplier');
-      return { success: true };
+      return { success: true, user: mockSupplierUser, role: 'supplier' };
     }
     if (cleanId === 'admin' || cleanId === 'admin@supplysouq.ae') {
+      if (cleanPassword && cleanPassword !== 'admin123' && cleanPassword !== 'supplysouq2026') {
+        return { success: false, error: 'Incorrect master passkey. Default passkey is: admin123' };
+      }
       switchDemoUser('admin');
-      return { success: true };
+      return { success: true, user: mockAdminUser, role: 'admin' };
     }
 
-    return { success: false, error: 'No account found with this username or email. Please check your credentials or sign up.' };
+    return { success: false, error: 'No account found with this username or email. Please check your credentials or register your company.' };
   };
 
   const adminLogin = (password: string): boolean => {
