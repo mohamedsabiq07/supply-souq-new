@@ -56,7 +56,7 @@ const AppContent: React.FC = () => {
   });
   const [viewParams, setViewParams] = useState<any>({});
 
-  // Listen to hash / URL change for direct #admin access
+  // Listen to hash / URL change for direct #admin access & Ctrl+Shift+A shortcut
   React.useEffect(() => {
     const handleHashOrSearch = () => {
       const hash = window.location.hash.replace('#', '').toLowerCase();
@@ -70,8 +70,25 @@ const AppContent: React.FC = () => {
         }
       }
     };
+
+    const handleGlobalShortcuts = (e: KeyboardEvent) => {
+      // Ctrl + Shift + A or Cmd + Shift + A to instantly access Admin Operations Desk
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+        e.preventDefault();
+        if (isAuthenticated && role === 'admin') {
+          setCurrentView('admin-dashboard');
+        } else {
+          setCurrentView('admin-login');
+        }
+      }
+    };
+
     window.addEventListener('hashchange', handleHashOrSearch);
-    return () => window.removeEventListener('hashchange', handleHashOrSearch);
+    window.addEventListener('keydown', handleGlobalShortcuts);
+    return () => {
+      window.removeEventListener('hashchange', handleHashOrSearch);
+      window.removeEventListener('keydown', handleGlobalShortcuts);
+    };
   }, [isAuthenticated, role]);
 
   // Auto-redirect to dashboard when authenticated on login/register pages
