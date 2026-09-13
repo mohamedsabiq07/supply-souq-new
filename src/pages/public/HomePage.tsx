@@ -111,31 +111,35 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
   ];
 
   return (
-    <div className="bg-white text-slate-900 selection:bg-[#cf2e46] selection:text-white overflow-hidden font-sans">
+    <div className="bg-[#f4f4f6] text-slate-900 selection:bg-[#cf2e46] selection:text-white overflow-hidden font-sans">
       
-      {/* 1. HERO SECTION - CLEAN WHITE & RED PALETTE */}
-      <section className="relative pt-16 sm:pt-24 pb-20 sm:pb-32 overflow-hidden border-b border-slate-200 bg-white">
-        {/* Subtle editorial grid background */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#f1f5f9_1px,transparent_1px),linear-gradient(to_bottom,#f1f5f9_1px,transparent_1px)] bg-[size:40px_40px] opacity-70 pointer-events-none" />
-        
-        {/* Ambient Radial Spotlights */}
-        <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[850px] h-[450px] bg-gradient-to-b from-rose-100/60 via-rose-50/20 to-transparent blur-[120px] pointer-events-none" />
-        <div className="absolute top-1/2 -left-40 w-[400px] h-[400px] bg-rose-100/40 blur-[140px] pointer-events-none" />
-        <div className="absolute top-1/3 -right-40 w-[450px] h-[450px] bg-rose-100/40 blur-[140px] pointer-events-none" />
+      {/* 1. HERO SECTION - ARCHITECTURAL STUDIO GRAY & NEIDEN GRID */}
+      <section className="relative pt-16 sm:pt-24 pb-20 sm:pb-32 overflow-hidden border-b border-slate-200/90 bg-[#f4f4f6]">
+        {/* Architectural Column Guide Lines (Neiden style) */}
+        <div className="absolute inset-0 pointer-events-none max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between z-0">
+          <div className="w-px h-full bg-slate-300/40" />
+          <div className="w-px h-full bg-slate-300/30 hidden md:block" />
+          <div className="w-px h-full bg-slate-300/30 hidden lg:block" />
+          <div className="w-px h-full bg-slate-300/40" />
+        </div>
+
+        {/* Subtle Architectural Grid with graceful radial mask */}
+        <div className="absolute inset-0 architectural-grid opacity-70 [mask-image:radial-gradient(ellipse_70%_70%_at_50%_20%,black_30%,transparent_90%)] pointer-events-none z-0" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-4xl mx-auto text-center space-y-6">
             
-            {/* Glowing Pill Badge */}
-            <div className="inline-flex items-center gap-2 bg-rose-50 border border-rose-200 text-[#cf2e46] px-4 py-1.5 rounded-full text-xs font-mono font-bold tracking-wider uppercase backdrop-blur-xl shadow-xs">
-              <span className="w-2 h-2 rounded-full bg-[#cf2e46] animate-ping" />
-              <span>UAE'S TRUSTED B2B PROCUREMENT MARKETPLACE</span>
+            {/* Neiden Technical Pill Badge */}
+            <div className="inline-flex items-center gap-2 bg-white border border-slate-300 px-4 py-1.5 rounded-full text-xs font-mono font-bold tracking-wider text-slate-800 shadow-2xs">
+              <span className="w-2 h-2 rounded-full bg-[#cf2e46] animate-pulse" />
+              <span className="text-[#cf2e46] font-extrabold">[SS®—PROCUREMENT]</span>
+              <span className="text-slate-700">UAE'S VERIFIED B2B SOURCING NETWORK</span>
             </div>
 
             {/* Main Headline */}
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-950 leading-[1.1]">
               UAE Construction Procurement,<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-rose-600 to-[#cf2e46]">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-rose-700 to-[#cf2e46]">
                 Simplified.
               </span>
             </h1>
@@ -158,7 +162,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
 
               <button
                 onClick={() => setCurrentView('invoice-audit')}
-                className="w-full sm:w-auto px-8 py-4 rounded-full text-sm font-bold bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 shadow-xs transition-all duration-300 hover:border-slate-400 flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full sm:w-auto px-8 py-4 rounded-full text-sm font-bold bg-white hover:bg-slate-50 text-slate-900 border border-slate-300 shadow-xs transition-all duration-300 hover:border-slate-400 flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Sparkles className="w-4 h-4 text-[#cf2e46]" />
                 <span>Free Cable Cost Audit (Save 15%+)</span>
@@ -177,8 +181,8 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                     onClick={() => setSelectedPrompt(p.id)}
                     className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
                       selectedPrompt === p.id
-                        ? 'bg-[#cf2e46] text-white font-bold shadow-md scale-105'
-                        : 'bg-slate-100 text-slate-700 border border-slate-200 hover:border-slate-300 hover:text-slate-900'
+                        ? 'bg-slate-950 text-white font-bold shadow-sm scale-105 border border-slate-950'
+                        : 'bg-white text-slate-700 border border-slate-300 hover:border-slate-400 hover:text-slate-950 shadow-2xs'
                     }`}
                   >
                     {p.label}
@@ -187,19 +191,19 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
               </div>
             </div>
 
-            {/* Central Interactive Terminal Mockup (Gent Flagship Card) */}
+            {/* Central Interactive Terminal Mockup sitting on gray canvas */}
             <div className="pt-6 max-w-3xl mx-auto text-left">
-              <div className="rounded-3xl bg-white border border-slate-200 p-5 sm:p-7 shadow-xl relative overflow-hidden group hover:border-slate-300 transition-all duration-300">
+              <div className="rounded-3xl bg-white border border-slate-300/80 p-5 sm:p-7 shadow-lg relative overflow-hidden group hover:border-slate-400 transition-all duration-300">
                 {/* Subtle top light bar */}
                 <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#cf2e46] to-transparent" />
                 
                 {/* Terminal Header */}
                 <div className="flex items-center justify-between border-b border-slate-200 pb-4 mb-4 text-xs font-mono text-slate-500">
                   <div className="flex items-center gap-2">
-                    <span className="w-3 h-3 rounded-full bg-rose-500 inline-block" />
+                    <span className="w-3 h-3 rounded-full bg-[#cf2e46] inline-block" />
                     <span className="w-3 h-3 rounded-full bg-slate-300 inline-block" />
                     <span className="w-3 h-3 rounded-full bg-slate-300 inline-block" />
-                    <span className="ml-2 text-slate-700 font-bold">SupplySouq B2B Procurement Engine v2.4</span>
+                    <span className="ml-2 text-slate-800 font-bold">SupplySouq B2B Procurement Engine v2.4</span>
                   </div>
                   <span className="text-[#cf2e46] font-bold flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-[#cf2e46] animate-ping" />
@@ -220,7 +224,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                   </div>
 
                   {/* Engine Live Response */}
-                  <div className="flex items-start gap-3 bg-rose-50/40 p-4 rounded-2xl border border-rose-100">
+                  <div className="flex items-start gap-3 bg-rose-50/50 p-4 rounded-2xl border border-rose-200/80">
                     <div className="w-8 h-8 rounded-xl bg-rose-100 text-[#cf2e46] flex items-center justify-center font-bold shrink-0 text-xs">
                       <CheckCircle2 className="w-4 h-4 text-[#cf2e46]" />
                     </div>
@@ -233,13 +237,13 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                         {currentPromptData.match}
                       </p>
                       <div className="flex flex-wrap items-center gap-2 pt-1 text-[11px]">
-                        <span className="inline-flex items-center gap-1 text-[#cf2e46] bg-rose-50 px-2.5 py-0.5 rounded-full border border-rose-200">
+                        <span className="inline-flex items-center gap-1 text-[#cf2e46] bg-white px-2.5 py-0.5 rounded-full border border-rose-200 shadow-2xs">
                           <BadgeCheck className="w-3.5 h-3.5" /> DET Trade License Verified
                         </span>
-                        <span className="inline-flex items-center gap-1 text-slate-700 bg-white px-2.5 py-0.5 rounded-full border border-slate-200">
+                        <span className="inline-flex items-center gap-1 text-slate-700 bg-white px-2.5 py-0.5 rounded-full border border-slate-200 shadow-2xs">
                           <Clock className="w-3.5 h-3.5 text-[#cf2e46]" /> 24h Site Delivery
                         </span>
-                        <span className="inline-flex items-center gap-1 text-slate-700 bg-white px-2.5 py-0.5 rounded-full border border-slate-200">
+                        <span className="inline-flex items-center gap-1 text-slate-700 bg-white px-2.5 py-0.5 rounded-full border border-slate-200 shadow-2xs">
                           <FileCheck2 className="w-3.5 h-3.5 text-[#cf2e46]" /> 5% UAE VAT FTA Ready
                         </span>
                       </div>
@@ -261,9 +265,9 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
               </div>
             </div>
 
-            {/* Live Metrics Grid (Gent 4-Column Stat Cards) */}
+            {/* Live Metrics Grid (Gent 4-Column Stat Cards with crisp definition) */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 pt-8 max-w-4xl mx-auto text-left font-sans">
-              <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs hover:border-slate-300 hover:shadow-md transition-all duration-300 group">
+              <div className="p-4 rounded-2xl bg-white border border-slate-300/80 shadow-xs hover:border-slate-400 hover:shadow-md transition-all duration-300 group">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-[11px] uppercase tracking-wider font-bold text-slate-500 font-mono">Avg Savings</span>
                   <span className="w-2 h-2 rounded-full bg-[#cf2e46] group-hover:animate-ping" />
@@ -274,7 +278,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                 <span className="text-[11px] text-slate-500 block mt-1">vs standard offline quotes</span>
               </div>
 
-              <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs hover:border-slate-300 hover:shadow-md transition-all duration-300 group">
+              <div className="p-4 rounded-2xl bg-white border border-slate-300/80 shadow-xs hover:border-slate-400 hover:shadow-md transition-all duration-300 group">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-[11px] uppercase tracking-wider font-bold text-slate-500 font-mono">Response SLA</span>
                   <span className="w-2 h-2 rounded-full bg-[#cf2e46] group-hover:animate-ping" />
@@ -286,7 +290,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                 <span className="text-[11px] text-slate-500 block mt-1">Guaranteed turnaround</span>
               </div>
 
-              <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs hover:border-slate-300 hover:shadow-md transition-all duration-300 group">
+              <div className="p-4 rounded-2xl bg-white border border-slate-300/80 shadow-xs hover:border-slate-400 hover:shadow-md transition-all duration-300 group">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-[11px] uppercase tracking-wider font-bold text-slate-500 font-mono">Fastest Bids Cap</span>
                   <span className="w-2 h-2 rounded-full bg-[#cf2e46] group-hover:animate-ping" />
@@ -298,7 +302,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                 <span className="text-[11px] text-slate-500 block mt-1">First-to-quote priority</span>
               </div>
 
-              <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs hover:border-slate-300 hover:shadow-md transition-all duration-300 group">
+              <div className="p-4 rounded-2xl bg-white border border-slate-300/80 shadow-xs hover:border-slate-400 hover:shadow-md transition-all duration-300 group">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-[11px] uppercase tracking-wider font-bold text-slate-500 font-mono">Trade License</span>
                   <span className="w-2 h-2 rounded-full bg-[#cf2e46] group-hover:animate-ping" />
@@ -314,20 +318,20 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
         </div>
       </section>
 
-      {/* 2. PARTNER / STOCKIST BRAND MARQUEE */}
-      <section className="py-12 border-b border-slate-200 bg-slate-50 relative overflow-hidden">
+      {/* 2. PARTNER / STOCKIST BRAND MARQUEE - RICH CONCRETE GRAY BAND */}
+      <section className="py-12 border-b border-slate-300/80 bg-[#eceef1] relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-6">
-          <p className="text-xs uppercase tracking-widest text-slate-500 font-bold font-mono">
+          <p className="text-xs uppercase tracking-widest text-slate-600 font-bold font-mono">
             Trusted by 250+ UAE Contractors &amp; Certified Stockists across Dubai, Sharjah &amp; Abu Dhabi
           </p>
         </div>
 
         <div className="overflow-hidden whitespace-nowrap relative [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
-          <div className="inline-flex gap-10 animate-marquee hover:[animation-play-state:paused]">
+          <div className="inline-flex gap-8 animate-marquee hover:[animation-play-state:paused]">
             {[...brands, ...brands].map((brand, idx) => (
               <div
                 key={idx}
-                className="inline-flex items-center gap-3 px-5 py-2.5 rounded-2xl bg-white border border-slate-200 text-slate-800 hover:border-slate-300 shadow-2xs transition-colors"
+                className="inline-flex items-center gap-3 px-5 py-2.5 rounded-2xl bg-white border border-slate-300/80 text-slate-800 hover:border-slate-400 shadow-2xs transition-colors"
               >
                 <div className="w-2 h-2 rounded-full bg-[#cf2e46]" />
                 <span className="font-extrabold text-sm tracking-wider text-slate-900">{brand.name}</span>
@@ -339,81 +343,237 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
       </section>
 
       {/* 3. THE PROBLEM SECTION */}
-      <section className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative bg-white">
-        <div className="text-center space-y-3 mb-14 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-rose-50 text-[#cf2e46] border border-rose-200">
-            <AlertTriangle className="w-3.5 h-3.5" />
-            <span>The Traditional Procurement Challenge</span>
-          </div>
-          <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
-            Material procurement shouldn't take days of follow-ups.
-          </h2>
-          <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
-            Manual phone calls, scattered WhatsApp messages, and waiting days for quotes — procurement teams spend hours chasing individual suppliers instead of focusing on project execution.
-          </p>
+      <section className="py-20 sm:py-28 relative bg-[#f4f4f6] border-b border-slate-200/90">
+        {/* Subtle column guide lines */}
+        <div className="absolute inset-0 pointer-events-none max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between z-0">
+          <div className="w-px h-full bg-slate-300/30" />
+          <div className="w-px h-full bg-slate-300/20 hidden md:block" />
+          <div className="w-px h-full bg-slate-300/20 hidden lg:block" />
+          <div className="w-px h-full bg-slate-300/30" />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          <div className="p-6 rounded-3xl bg-white border border-slate-200 space-y-4 hover:border-rose-300 hover:shadow-md transition-all group">
-            <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
-              <PhoneOff className="w-6 h-6" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center space-y-3 mb-14 max-w-3xl mx-auto">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white text-[#cf2e46] border border-slate-300 shadow-2xs">
+              <AlertTriangle className="w-3.5 h-3.5" />
+              <span>[SS®—CHALLENGE] The Traditional Procurement Bottleneck</span>
             </div>
-            <h3 className="text-lg font-bold text-slate-900 group-hover:text-[#cf2e46] transition-colors">
-              Manual Follow-Ups
-            </h3>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Contacting multiple suppliers individually just to check stock availability, specifications, and delivery schedules.
+            <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
+              Material procurement shouldn't take days of follow-ups.
+            </h2>
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
+              Manual phone calls, scattered WhatsApp messages, and waiting days for quotes — procurement teams spend hours chasing individual suppliers instead of focusing on project execution.
             </p>
           </div>
 
-          <div className="p-6 rounded-3xl bg-white border border-slate-200 space-y-4 hover:border-rose-300 hover:shadow-md transition-all group">
-            <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
-              <Clock className="w-6 h-6" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="p-6 sm:p-7 rounded-3xl bg-white border border-slate-300/80 space-y-4 hover:border-slate-400 hover:shadow-md transition-all group shadow-xs">
+              <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
+                <PhoneOff className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 group-hover:text-[#cf2e46] transition-colors">
+                Manual Follow-Ups
+              </h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Contacting multiple suppliers individually just to check stock availability, specifications, and delivery schedules.
+              </p>
             </div>
-            <h3 className="text-lg font-bold text-slate-900 group-hover:text-[#cf2e46] transition-colors">
-              Delayed Quotations
-            </h3>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Waiting days for responses and price updates while site work pauses and project deadlines approach.
-            </p>
-          </div>
 
-          <div className="p-6 rounded-3xl bg-white border border-slate-200 space-y-4 hover:border-rose-300 hover:shadow-md transition-all group">
-            <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
-              <AlertTriangle className="w-6 h-6" />
+            <div className="p-6 sm:p-7 rounded-3xl bg-white border border-slate-300/80 space-y-4 hover:border-slate-400 hover:shadow-md transition-all group shadow-xs">
+              <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
+                <Clock className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 group-hover:text-[#cf2e46] transition-colors">
+                Delayed Quotations
+              </h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Waiting days for responses and price updates while site work pauses and project deadlines approach.
+              </p>
             </div>
-            <h3 className="text-lg font-bold text-slate-900 group-hover:text-[#cf2e46] transition-colors">
-              Inconsistent Specifications
-            </h3>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Dealing with mismatched product standards, unverified compliance, or missing technical data sheets.
-            </p>
-          </div>
 
-          <div className="p-6 rounded-3xl bg-white border border-slate-200 space-y-4 hover:border-rose-300 hover:shadow-md transition-all group">
-            <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
-              <FileSpreadsheet className="w-6 h-6" />
+            <div className="p-6 sm:p-7 rounded-3xl bg-white border border-slate-300/80 space-y-4 hover:border-slate-400 hover:shadow-md transition-all group shadow-xs">
+              <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
+                <AlertTriangle className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 group-hover:text-[#cf2e46] transition-colors">
+                Inconsistent Specifications
+              </h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Dealing with mismatched product standards, unverified compliance, or missing technical data sheets.
+              </p>
             </div>
-            <h3 className="text-lg font-bold text-slate-900 group-hover:text-[#cf2e46] transition-colors">
-              Scattered Comparisons
-            </h3>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Juggling dozens of different PDF quotes across emails and chats with no easy way to compare rates side-by-side.
-            </p>
+
+            <div className="p-6 sm:p-7 rounded-3xl bg-white border border-slate-300/80 space-y-4 hover:border-slate-400 hover:shadow-md transition-all group shadow-xs">
+              <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
+                <FileSpreadsheet className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 group-hover:text-[#cf2e46] transition-colors">
+                Scattered Comparisons
+              </h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Juggling dozens of different PDF quotes across emails and chats with no easy way to compare rates side-by-side.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* 4. THE SOLUTION BENTO GRID (Gent Flagship: "Every feature shows its work") */}
-      <section className="py-20 sm:py-28 border-t border-b border-slate-200 bg-slate-50 relative overflow-hidden">
-        {/* Ambient background glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-rose-100/40 blur-[150px] pointer-events-none" />
+      {/* 3.5 EDITORIAL SOURCING DISCIPLINES & VISUAL GRID (Neiden Screenshot Layout) */}
+      <section className="py-20 sm:py-28 relative bg-[#f4f4f6] border-b border-slate-300/80 overflow-hidden">
+        {/* Architectural Column Guide Lines */}
+        <div className="absolute inset-0 pointer-events-none max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between z-0">
+          <div className="w-px h-full bg-slate-300/40" />
+          <div className="w-px h-full bg-slate-300/30 hidden md:block" />
+          <div className="w-px h-full bg-slate-300/30 hidden lg:block" />
+          <div className="w-px h-full bg-slate-300/40" />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            {/* Left Column: Editorial Headline & High-Contrast Button */}
+            <div className="lg:col-span-5 space-y-8">
+              <div className="space-y-4">
+                <div className="inline-flex items-center gap-2 text-xs font-mono font-bold tracking-wider text-slate-800 uppercase">
+                  <span className="text-[#cf2e46] font-black">●●●●</span>
+                  <span>[SS®—SERVICES / 思想と調達]</span>
+                </div>
+                <h2 className="text-4xl sm:text-6xl font-black text-slate-950 tracking-tight leading-[1.05]">
+                  What We<br />Source
+                </h2>
+                <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-md font-normal">
+                  Four core MEP electrical disciplines. One network: connecting UAE project teams directly to certified wholesale distributors at manufacturer-direct rates.
+                </p>
+              </div>
+
+              <div className="space-y-2 pt-2 border-t border-slate-200">
+                <div className="text-[11px] font-mono uppercase tracking-widest text-slate-500 font-bold">
+                  Beyond Standard Project Scope
+                </div>
+                <p className="text-xs text-slate-600">
+                  Made for commercial contractors. Built with certified UAE stockists.
+                </p>
+              </div>
+
+              <div>
+                <button
+                  onClick={() => handleStartBuyer()}
+                  className="px-8 py-4 rounded-xl bg-black text-white text-xs font-bold uppercase tracking-wider hover:bg-neutral-800 transition-colors flex items-center justify-between gap-4 shadow-sm cursor-pointer group"
+                >
+                  <span>Request Bulk Quote</span>
+                  <span className="text-base font-light group-hover:translate-x-0.5 transition-transform">+</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Right Column: Sourcing Tags & High-Resolution Editorial Photo Grid */}
+            <div className="lg:col-span-7 space-y-6">
+              {/* Category Pills Bar */}
+              <div className="p-6 rounded-3xl bg-white border border-slate-300/80 shadow-xs space-y-4">
+                <div className="flex items-center justify-between flex-wrap gap-2 text-xs">
+                  <span className="font-mono text-slate-500 uppercase tracking-wider font-bold">Core Sourcing Disciplines</span>
+                  <span className="font-mono font-bold text-[#cf2e46] uppercase bg-rose-50 px-2.5 py-0.5 rounded-full border border-rose-200">
+                    Starting from 0% Buyer Fee
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    'LV & MV Power Cables',
+                    'Switchgear & DBs',
+                    'Cable Trays & Ladders',
+                    'GI & PVC Conduits',
+                    'Commercial LED Lighting',
+                    'Distribution Transformers'
+                  ].map((tag, idx) => (
+                    <span
+                      key={idx}
+                      className="px-3.5 py-1.5 rounded-full text-xs font-medium bg-slate-50 border border-slate-200 text-slate-800 hover:border-slate-300 transition-colors"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Side-by-Side High-Contrast Editorial Images (Neiden Aesthetic) */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                
+                {/* Visual Card 1: Infrastructure & Cables */}
+                <div className="rounded-3xl bg-white border border-slate-300/80 overflow-hidden shadow-xs hover:shadow-md transition-all group">
+                  <div className="p-5 pb-3">
+                    <div className="text-[11px] font-mono text-slate-500 uppercase">
+                      001. / <span className="text-slate-400 font-sans">現場と配送</span>
+                    </div>
+                    <h3 className="text-base font-black text-slate-900 mt-1">
+                      Heavy Industrial Power
+                    </h3>
+                  </div>
+                  <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
+                    <img
+                      src="https://images.unsplash.com/photo-1541888946425-d0fbb186c5f7?w=800&auto=format&fit=crop&q=80"
+                      alt="UAE High-rise Infrastructure and Material Sourcing"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 filter contrast-[1.05]"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+                    <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-[11px] text-white font-mono">
+                      <span className="bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-md border border-white/20">
+                        [4C x 240mm² XLPE]
+                      </span>
+                      <span className="flex items-center gap-1.5 bg-[#cf2e46] px-2.5 py-1 rounded-md font-bold">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
+                        24H DISPATCH
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Visual Card 2: Switchgear & Engineering */}
+                <div className="rounded-3xl bg-white border border-slate-300/80 overflow-hidden shadow-xs hover:shadow-md transition-all group">
+                  <div className="p-5 pb-3">
+                    <div className="text-[11px] font-mono text-slate-500 uppercase">
+                      002. / <span className="text-slate-400 font-sans">検査と認証</span>
+                    </div>
+                    <h3 className="text-base font-black text-slate-900 mt-1">
+                      Type-Tested Switchgear
+                    </h3>
+                  </div>
+                  <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
+                    <img
+                      src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800&auto=format&fit=crop&q=80"
+                      alt="Precision electrical switchgear testing and quality compliance"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 filter contrast-[1.05]"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+                    <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-[11px] text-white font-mono">
+                      <span className="bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-md border border-white/20">
+                        [ASTA &amp; DEWA APPROVED]
+                      </span>
+                      <span className="flex items-center gap-1.5 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded-md border border-white/20 font-bold text-slate-200">
+                        5 BIDS RULE
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* 4. THE SOLUTION BENTO GRID - RICH CONCRETE GRAY BAND */}
+      <section className="py-20 sm:py-28 border-b border-slate-300/80 bg-[#eceef1] relative overflow-hidden">
+        {/* Subtle Architectural grid texture */}
+        <div className="absolute inset-0 architectural-grid-subtle opacity-40 pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center space-y-3 mb-16 max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-rose-50 text-[#cf2e46] border border-rose-200">
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white text-[#cf2e46] border border-slate-300 shadow-2xs">
               <ShieldCheck className="w-3.5 h-3.5" />
-              <span>The Next-Gen B2B Solution</span>
+              <span>[SS®—ARCHITECTURE] The Next-Gen B2B Solution</span>
             </div>
             <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
               Every feature shows its work.
@@ -427,7 +587,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
             {/* Bento Card 1: Multi-Vendor Bidding & 24H SLA */}
-            <div className="p-7 sm:p-9 rounded-3xl bg-white border border-slate-200 hover:border-slate-300 shadow-sm hover:shadow-md transition-all duration-300 space-y-6 flex flex-col justify-between group">
+            <div className="p-7 sm:p-9 rounded-3xl bg-white border border-slate-300/80 hover:border-slate-400 shadow-sm hover:shadow-md transition-all duration-300 space-y-6 flex flex-col justify-between group">
               <div className="space-y-3">
                 <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
                   <Zap className="w-6 h-6" />
@@ -457,7 +617,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             </div>
 
             {/* Bento Card 2: Fastest 5 Bids Rule */}
-            <div className="p-7 sm:p-9 rounded-3xl bg-white border border-slate-200 hover:border-slate-300 shadow-sm hover:shadow-md transition-all duration-300 space-y-6 flex flex-col justify-between group">
+            <div className="p-7 sm:p-9 rounded-3xl bg-white border border-slate-300/80 hover:border-slate-400 shadow-sm hover:shadow-md transition-all duration-300 space-y-6 flex flex-col justify-between group">
               <div className="space-y-3">
                 <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
                   <Activity className="w-6 h-6" />
@@ -496,7 +656,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             </div>
 
             {/* Bento Card 3: Automated BOQ & Schedule Standardizer */}
-            <div className="p-7 sm:p-9 rounded-3xl bg-white border border-slate-200 hover:border-slate-300 shadow-sm hover:shadow-md transition-all duration-300 space-y-6 flex flex-col justify-between group">
+            <div className="p-7 sm:p-9 rounded-3xl bg-white border border-slate-300/80 hover:border-slate-400 shadow-sm hover:shadow-md transition-all duration-300 space-y-6 flex flex-col justify-between group">
               <div className="space-y-3">
                 <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
                   <FileSpreadsheet className="w-6 h-6" />
@@ -525,7 +685,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             </div>
 
             {/* Bento Card 4: UAE DET KYB & FTA VAT Compliance */}
-            <div className="p-7 sm:p-9 rounded-3xl bg-white border border-slate-200 hover:border-slate-300 shadow-sm hover:shadow-md transition-all duration-300 space-y-6 flex flex-col justify-between group">
+            <div className="p-7 sm:p-9 rounded-3xl bg-white border border-slate-300/80 hover:border-slate-400 shadow-sm hover:shadow-md transition-all duration-300 space-y-6 flex flex-col justify-between group">
               <div className="space-y-3">
                 <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
                   <BadgeCheck className="w-6 h-6" />
@@ -544,7 +704,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                   <ShieldCheck className="w-5 h-5 text-[#cf2e46]" />
                   <span>TRN: 100482938400003</span>
                 </div>
-                <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase bg-rose-50 text-[#cf2e46] border border-rose-200">
+                <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase bg-white text-[#cf2e46] border border-rose-200 shadow-2xs">
                   FTA Verified
                 </span>
               </div>
@@ -555,11 +715,19 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
       </section>
 
       {/* 5. HOW IT WORKS 3-STEP MODERN WORKFLOW */}
-      <section className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-white">
-        <div className="text-center space-y-3 mb-16 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-rose-50 text-[#cf2e46] border border-rose-200">
+      <section className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative bg-[#f4f4f6]">
+        {/* Subtle column guide lines */}
+        <div className="absolute inset-0 pointer-events-none max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between z-0">
+          <div className="w-px h-full bg-slate-300/30" />
+          <div className="w-px h-full bg-slate-300/20 hidden md:block" />
+          <div className="w-px h-full bg-slate-300/20 hidden lg:block" />
+          <div className="w-px h-full bg-slate-300/30" />
+        </div>
+
+        <div className="text-center space-y-3 mb-16 max-w-3xl mx-auto relative z-10">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white text-[#cf2e46] border border-slate-300 shadow-2xs">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Fast &amp; Transparent Workflow</span>
+            <span>[SS®—WORKFLOW] Fast &amp; Transparent Execution</span>
           </div>
           <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
             How SupplySouq Works in 3 Steps
@@ -569,7 +737,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
           {[
             {
               step: '01',
@@ -594,7 +762,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             return (
               <div
                 key={idx}
-                className="p-8 rounded-3xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs hover:shadow-md transition-all duration-300 space-y-5 group"
+                className="p-8 rounded-3xl bg-white border border-slate-300/80 hover:border-slate-400 shadow-xs hover:shadow-md transition-all duration-300 space-y-5 group"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-3xl font-black font-mono text-[#cf2e46] opacity-90 group-hover:opacity-100 transition-opacity">
@@ -663,11 +831,19 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
       </section>
 
       {/* 7. CONTRACTOR & STOCKIST REVIEWS */}
-      <section className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-white">
-        <div className="text-center space-y-3 mb-16 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-rose-50 text-[#cf2e46] border border-rose-200">
+      <section className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative bg-[#f4f4f6]">
+        {/* Subtle column guide lines */}
+        <div className="absolute inset-0 pointer-events-none max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between z-0">
+          <div className="w-px h-full bg-slate-300/30" />
+          <div className="w-px h-full bg-slate-300/20 hidden md:block" />
+          <div className="w-px h-full bg-slate-300/20 hidden lg:block" />
+          <div className="w-px h-full bg-slate-300/30" />
+        </div>
+
+        <div className="text-center space-y-3 mb-16 max-w-3xl mx-auto relative z-10">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white text-[#cf2e46] border border-slate-300 shadow-2xs">
             <Star className="w-3.5 h-3.5 fill-[#cf2e46]" />
-            <span>Verified UAE Feedback</span>
+            <span>[SS®—REVIEWS] Verified UAE Industry Feedback</span>
           </div>
           <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
             Procurement teams love SupplySouq.
@@ -677,8 +853,8 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-8 rounded-3xl bg-slate-50 border border-slate-200 hover:border-slate-300 transition-all space-y-5 flex flex-col justify-between shadow-2xs">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+          <div className="p-8 rounded-3xl bg-white border border-slate-300/80 hover:border-slate-400 shadow-xs hover:shadow-md transition-all space-y-5 flex flex-col justify-between">
             <div className="space-y-3">
               <div className="flex items-center gap-1 text-[#cf2e46]">
                 {[...Array(5)].map((_, i) => (
@@ -701,7 +877,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             </div>
           </div>
 
-          <div className="p-8 rounded-3xl bg-white border-2 border-[#cf2e46] shadow-lg transition-all space-y-5 flex flex-col justify-between">
+          <div className="p-8 rounded-3xl bg-white border-2 border-[#cf2e46] shadow-xl transition-all space-y-5 flex flex-col justify-between">
             <div className="space-y-3">
               <div className="flex items-center gap-1 text-[#cf2e46]">
                 {[...Array(5)].map((_, i) => (
@@ -724,7 +900,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             </div>
           </div>
 
-          <div className="p-8 rounded-3xl bg-slate-50 border border-slate-200 hover:border-slate-300 transition-all space-y-5 flex flex-col justify-between shadow-2xs">
+          <div className="p-8 rounded-3xl bg-white border border-slate-300/80 hover:border-slate-400 shadow-xs hover:shadow-md transition-all space-y-5 flex flex-col justify-between">
             <div className="space-y-3">
               <div className="flex items-center gap-1 text-[#cf2e46]">
                 {[...Array(5)].map((_, i) => (
@@ -749,13 +925,13 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
         </div>
       </section>
 
-      {/* 8. TRANSPARENT LAUNCH PRICING SECTION */}
-      <section id="pricing-section" className="py-20 sm:py-28 border-t border-b border-slate-200 bg-slate-50 relative">
+      {/* 8. TRANSPARENT LAUNCH PRICING SECTION - RICH CONCRETE GRAY BAND */}
+      <section id="pricing-section" className="py-20 sm:py-28 border-t border-b border-slate-300/80 bg-[#eceef1] relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-3 mb-16 max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-rose-50 text-[#cf2e46] border border-rose-200">
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white text-[#cf2e46] border border-slate-300 shadow-2xs">
               <DollarSign className="w-3.5 h-3.5" />
-              <span>Transparent Launch Pricing</span>
+              <span>[SS®—RATES] Transparent Launch Pricing</span>
             </div>
             <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
               Simple pricing. Zero hidden fees.
@@ -768,7 +944,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
             
             {/* Tier 1: Contractors & Engineers */}
-            <div className="p-8 rounded-3xl bg-white border border-slate-200 hover:border-slate-300 shadow-sm transition-all flex flex-col justify-between space-y-8">
+            <div className="p-8 rounded-3xl bg-white border border-slate-300/80 hover:border-slate-400 shadow-sm transition-all flex flex-col justify-between space-y-8">
               <div className="space-y-4">
                 <div>
                   <span className="text-xs font-mono uppercase tracking-wider text-slate-500 font-bold">For Buyers</span>
@@ -881,7 +1057,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             </div>
 
             {/* Tier 3: Enterprise Procurement */}
-            <div className="p-8 rounded-3xl bg-white border border-slate-200 hover:border-slate-300 shadow-sm transition-all flex flex-col justify-between space-y-8">
+            <div className="p-8 rounded-3xl bg-white border border-slate-300/80 hover:border-slate-400 shadow-sm transition-all flex flex-col justify-between space-y-8">
               <div className="space-y-4">
                 <div>
                   <span className="text-xs font-mono uppercase tracking-wider text-slate-500 font-bold">For EPCs &amp; Developers</span>
@@ -933,10 +1109,10 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
       </section>
 
       {/* 9. FAQ ACCORDION */}
-      <section className="py-20 sm:py-28 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 bg-white">
+      <section className="py-20 sm:py-28 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative bg-[#f4f4f6]">
         <div className="text-center space-y-3 mb-14">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-rose-50 text-[#cf2e46] border border-rose-200">
-            <span>Frequently Asked Questions</span>
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white text-[#cf2e46] border border-slate-300 shadow-2xs">
+            <span>[SS®—FAQ] Frequently Asked Questions</span>
           </div>
           <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
             Questions? Answered.
@@ -950,14 +1126,14 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
           {faqs.map((faq, idx) => (
             <div
               key={idx}
-              className="rounded-2xl bg-slate-50 border border-slate-200 overflow-hidden transition-all duration-200"
+              className="rounded-2xl bg-white border border-slate-300/80 overflow-hidden shadow-2xs transition-all duration-200"
             >
               <button
                 onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
                 className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 focus:outline-none hover:text-[#cf2e46] transition-colors cursor-pointer"
               >
                 <span className="font-bold text-sm sm:text-base text-slate-900">{faq.q}</span>
-                <div className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center shrink-0 text-slate-600 shadow-2xs">
+                <div className="w-8 h-8 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center shrink-0 text-slate-600 shadow-2xs">
                   {openFaq === idx ? (
                     <ChevronDown className="w-4 h-4 text-[#cf2e46] rotate-180 transition-transform" />
                   ) : (
@@ -966,7 +1142,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                 </div>
               </button>
               {openFaq === idx && (
-                <div className="px-5 sm:px-6 pb-6 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-200 pt-3 bg-white">
+                <div className="px-5 sm:px-6 pb-6 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3 bg-slate-50/50">
                   {faq.a}
                 </div>
               )}

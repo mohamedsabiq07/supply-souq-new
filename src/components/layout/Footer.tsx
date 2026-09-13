@@ -7,14 +7,14 @@ interface FooterProps {
 
 export const Footer: React.FC<FooterProps> = ({ setCurrentView }) => {
   return (
-    <footer className="bg-slate-50 text-slate-600 border-t border-slate-200 pt-14 pb-10 text-sm">
+    <footer className="bg-[#eceef1] text-slate-600 border-t border-slate-300/80 pt-14 pb-10 text-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
           
           {/* Col 1: Brand & UAE Mission */}
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center gap-2.5">
-              <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-[#cf2e46] shadow-2xs">
+              <div className="w-10 h-10 rounded-xl bg-white border border-slate-300/80 flex items-center justify-center text-[#cf2e46] shadow-2xs">
                 <Layers className="w-5 h-5 text-[#cf2e46]" />
               </div>
               <span className="text-xl font-extrabold text-slate-900 tracking-tight">
@@ -24,7 +24,7 @@ export const Footer: React.FC<FooterProps> = ({ setCurrentView }) => {
             <p className="text-xs text-slate-600 leading-relaxed max-w-sm">
               The digital RFQ and multi-supplier quotation comparison network for the UAE construction and engineering sector. Streamlining procurement across Dubai, Sharjah, Abu Dhabi and the Northern Emirates.
             </p>
-            <div className="flex items-center gap-2 text-xs text-slate-700 font-medium bg-white p-2.5 rounded-xl border border-slate-200 shadow-2xs w-fit">
+            <div className="flex items-center gap-2 text-xs text-slate-800 font-medium bg-white p-2.5 rounded-xl border border-slate-300/80 shadow-2xs w-fit">
               <ShieldCheck className="w-4 h-4 text-[#cf2e46] shrink-0" />
               <span>100% UAE Trade License Verified Suppliers</span>
             </div>
@@ -134,7 +134,7 @@ export const Footer: React.FC<FooterProps> = ({ setCurrentView }) => {
 
         </div>
 
-        <div className="pt-8 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+        <div className="pt-8 border-t border-slate-300/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <p>© 2026 SupplySouq FZCO. All rights reserved. UAE B2B Procurement Technology.</p>
           <div className="flex items-center gap-4">
             <span className="hover:text-slate-900 cursor-pointer">Terms of Procurement</span>
