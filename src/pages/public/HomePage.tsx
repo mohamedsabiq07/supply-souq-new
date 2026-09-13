@@ -129,7 +129,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
 
             {/* Main Headline */}
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-950 leading-[1.1]">
-              UAE Construction Procurement,<br />
+              Procurement,<br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-rose-700 to-[#cf2e46]">
                 Simplified.
               </span>
