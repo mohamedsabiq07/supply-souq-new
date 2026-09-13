@@ -13,6 +13,7 @@ import {
   HardHat,
   Filter,
 } from 'lucide-react';
+import VariableFontCursorProximity from '../../components/fancy/text/variable-font-cursor-proximity';
 
 export const SuppliersPage: React.FC<{ onRequestQuote: (supplier?: any, category?: string) => void }> = ({ onRequestQuote }) => {
   const { companies } = useAppData();
@@ -56,10 +57,26 @@ export const SuppliersPage: React.FC<{ onRequestQuote: (supplier?: any, category
           <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200 w-fit mb-2">
             <ShieldCheck className="w-4 h-4 text-emerald-600" /> 100% UAE DET Commercial Trade License Verified
           </div>
-          <h1 className="text-3xl font-extrabold text-slate-900">Verified UAE Electrical Suppliers & Stockists</h1>
-          <p className="text-sm text-slate-500 mt-1">
+          <h1 className="text-3xl font-extrabold text-slate-900 cursor-default select-none">
+            <VariableFontCursorProximity
+              fromFontVariationSettings="'wght' 700, 'slnt' 0"
+              toFontVariationSettings="'wght' 950, 'slnt' -8"
+              radius={140}
+              falloff="gaussian"
+            >
+              Verified UAE Electrical Suppliers & Stockists
+            </VariableFontCursorProximity>
+          </h1>
+          <VariableFontCursorProximity
+            as="p"
+            className="text-sm text-slate-500 mt-1 cursor-default"
+            fromFontVariationSettings="'wght' 400, 'slnt' 0"
+            toFontVariationSettings="'wght' 700, 'slnt' -4"
+            radius={100}
+            falloff="gaussian"
+          >
             Search authorized stockists, factory importers, and distributors for LV/MV cables, switchgear, containment, LED lighting, and earthing.
-          </p>
+          </VariableFontCursorProximity>
         </div>
 
         <Button

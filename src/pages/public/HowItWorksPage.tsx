@@ -2,6 +2,7 @@ import React from 'react';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
 import { FileSpreadsheet, Search, Store, GitCompare, PackageCheck, Zap } from 'lucide-react';
+import VariableFontCursorProximity from '../../components/fancy/text/variable-font-cursor-proximity';
 
 export const HowItWorksPage: React.FC<{ onStartRFQ: () => void }> = ({ onStartRFQ }) => {
   const steps = [
@@ -41,10 +42,26 @@ export const HowItWorksPage: React.FC<{ onStartRFQ: () => void }> = ({ onStartRF
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
       <div className="text-center max-w-2xl mx-auto space-y-3">
         <span className="text-xs font-bold text-brand-600 uppercase tracking-widest">Simple 5-Step Process</span>
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900">How SupplySouq Works</h1>
-        <p className="text-sm text-slate-500">
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 cursor-default select-none">
+          <VariableFontCursorProximity
+            fromFontVariationSettings="'wght' 700, 'slnt' 0"
+            toFontVariationSettings="'wght' 950, 'slnt' -8"
+            radius={140}
+            falloff="gaussian"
+          >
+            How SupplySouq Works
+          </VariableFontCursorProximity>
+        </h1>
+        <VariableFontCursorProximity
+          as="p"
+          className="text-sm text-slate-500 cursor-default"
+          fromFontVariationSettings="'wght' 400, 'slnt' 0"
+          toFontVariationSettings="'wght' 700, 'slnt' -4"
+          radius={100}
+          falloff="gaussian"
+        >
           Transforming manual WhatsApp RFQs and endless spreadsheet comparisons into a fast, transparent digital procurement loop.
-        </p>
+        </VariableFontCursorProximity>
       </div>
 
       <div className="space-y-6">

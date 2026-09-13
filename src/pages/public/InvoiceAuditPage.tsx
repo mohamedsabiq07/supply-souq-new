@@ -15,6 +15,7 @@ import {
   Clock,
   Zap
 } from 'lucide-react';
+import VariableFontCursorProximity from '../../components/fancy/text/variable-font-cursor-proximity';
 
 interface InvoiceAuditPageProps {
   onStartRFQWithAudit: (bundle: QuickBundle) => void;
@@ -39,24 +40,37 @@ export const InvoiceAuditPage: React.FC<InvoiceAuditPageProps> = ({ onStartRFQWi
         unit: it.unit as any,
       }))
     };
-
     onStartRFQWithAudit(convertedBundle);
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
       {/* Header Banner */}
       <div className="text-center max-w-3xl mx-auto space-y-3">
         <div className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200 px-3 py-1 rounded-full text-xs font-bold">
           <Sparkles className="w-4 h-4 text-emerald-600" />
           <span>Zero-Risk Electrical Price Benchmark</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-          Electrical Procurement & Cable Invoice Audit
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight cursor-default select-none">
+          <VariableFontCursorProximity
+            fromFontVariationSettings="'wght' 700, 'slnt' 0"
+            toFontVariationSettings="'wght' 950, 'slnt' -8"
+            radius={140}
+            falloff="gaussian"
+          >
+            Electrical Procurement & Cable Invoice Audit
+          </VariableFontCursorProximity>
         </h1>
-        <p className="text-sm text-slate-600 leading-relaxed">
+        <VariableFontCursorProximity
+          as="p"
+          className="text-sm text-slate-600 leading-relaxed cursor-default"
+          fromFontVariationSettings="'wght' 400, 'slnt' 0"
+          toFontVariationSettings="'wght' 700, 'slnt' -4"
+          radius={100}
+          falloff="gaussian"
+        >
           Most UAE MEP contractors and fit-out companies can optimize 15% to 22% on copper power cables, Schneider switchgear, and commercial LED luminaires by comparing direct stockist quotations. Upload your recent bill to benchmark against competitive wholesale prices in 30 seconds.
-        </p>
+        </VariableFontCursorProximity>
       </div>
 
       {/* Interactive Scanner */}

@@ -16,6 +16,7 @@ import {
   BookOpen,
   Sparkles
 } from 'lucide-react';
+import VariableFontCursorProximity from '../fancy/text/variable-font-cursor-proximity';
 
 interface NavbarProps {
   currentView: string;
@@ -44,11 +45,35 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
               <div>
                 <div className="flex items-center gap-1.5">
                   <span className="font-extrabold text-lg text-slate-900 tracking-tight">
-                    Supply<span className="text-[#cf2e46]">Souq</span>
+                    <VariableFontCursorProximity
+                      fromFontVariationSettings="'wght' 800, 'slnt' 0"
+                      toFontVariationSettings="'wght' 950, 'slnt' -8"
+                      radius={70}
+                      falloff="gaussian"
+                    >
+                      Supply
+                    </VariableFontCursorProximity>
+                    <span className="text-[#cf2e46]">
+                      <VariableFontCursorProximity
+                        fromFontVariationSettings="'wght' 800, 'slnt' 0"
+                        toFontVariationSettings="'wght' 950, 'slnt' -8"
+                        radius={70}
+                        falloff="gaussian"
+                      >
+                        Souq
+                      </VariableFontCursorProximity>
+                    </span>
                   </span>
                 </div>
                 <span className="text-[10px] text-slate-500 font-semibold block leading-none">
-                  B2B Procurement Marketplace
+                  <VariableFontCursorProximity
+                    fromFontVariationSettings="'wght' 500, 'slnt' 0"
+                    toFontVariationSettings="'wght' 800, 'slnt' -5"
+                    radius={60}
+                    falloff="gaussian"
+                  >
+                    B2B Procurement Marketplace
+                  </VariableFontCursorProximity>
                 </span>
               </div>
             </button>
@@ -61,7 +86,14 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
                   currentView === 'home' ? 'bg-slate-100 text-slate-950 font-bold border border-slate-200' : 'hover:bg-slate-50 hover:text-slate-950'
                 }`}
               >
-                Home
+                <VariableFontCursorProximity
+                  fromFontVariationSettings="'wght' 500, 'slnt' 0"
+                  toFontVariationSettings="'wght' 800, 'slnt' -5"
+                  radius={50}
+                  falloff="gaussian"
+                >
+                  Home
+                </VariableFontCursorProximity>
               </button>
 
               <button
@@ -70,7 +102,14 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
                   currentView === 'how-it-works' ? 'bg-slate-100 text-slate-950 font-bold border border-slate-200' : 'hover:bg-slate-50 hover:text-slate-950'
                 }`}
               >
-                How It Works
+                <VariableFontCursorProximity
+                  fromFontVariationSettings="'wght' 500, 'slnt' 0"
+                  toFontVariationSettings="'wght' 800, 'slnt' -5"
+                  radius={50}
+                  falloff="gaussian"
+                >
+                  How It Works
+                </VariableFontCursorProximity>
               </button>
 
               <button
@@ -88,7 +127,14 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
                 }}
                 className="px-3 py-2 rounded-lg transition-colors hover:bg-slate-50 hover:text-slate-950"
               >
-                Pricing
+                <VariableFontCursorProximity
+                  fromFontVariationSettings="'wght' 500, 'slnt' 0"
+                  toFontVariationSettings="'wght' 800, 'slnt' -5"
+                  radius={50}
+                  falloff="gaussian"
+                >
+                  Pricing
+                </VariableFontCursorProximity>
               </button>
 
               <button
@@ -98,7 +144,14 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
                 }`}
               >
                 <BookOpen className="w-3.5 h-3.5 text-[#cf2e46]" />
-                <span>Onboarding SOP</span>
+                <VariableFontCursorProximity
+                  fromFontVariationSettings="'wght' 500, 'slnt' 0"
+                  toFontVariationSettings="'wght' 800, 'slnt' -5"
+                  radius={50}
+                  falloff="gaussian"
+                >
+                  Onboarding SOP
+                </VariableFontCursorProximity>
               </button>
 
               <button
@@ -108,7 +161,14 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
                 }`}
               >
                 <Sparkles className="w-3.5 h-3.5 text-[#cf2e46]" />
-                <span>Free Cost Audit</span>
+                <VariableFontCursorProximity
+                  fromFontVariationSettings="'wght' 600, 'slnt' 0"
+                  toFontVariationSettings="'wght' 900, 'slnt' -6"
+                  radius={50}
+                  falloff="gaussian"
+                >
+                  Free Cost Audit
+                </VariableFontCursorProximity>
               </button>
             </nav>
           </div>
@@ -121,14 +181,28 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
                   onClick={() => setCurrentView('login')}
                   className="px-3 py-2 text-xs font-bold text-slate-700 hover:text-[#cf2e46] transition-colors"
                 >
-                  Log in
+                  <VariableFontCursorProximity
+                    fromFontVariationSettings="'wght' 600, 'slnt' 0"
+                    toFontVariationSettings="'wght' 850, 'slnt' -5"
+                    radius={50}
+                    falloff="gaussian"
+                  >
+                    Log in
+                  </VariableFontCursorProximity>
                 </button>
                 <button
                   onClick={() => setCurrentView('login', { redirect: 'create-rfq' })}
                   className="px-4 py-2 rounded-full text-xs font-black bg-[#cf2e46] text-white hover:bg-[#b91c33] transition-all shadow-sm flex items-center gap-1.5 hover:scale-105"
                 >
                   <Zap className="w-3.5 h-3.5 fill-white" />
-                  <span>Post RFQ (Free)</span>
+                  <VariableFontCursorProximity
+                    fromFontVariationSettings="'wght' 700, 'slnt' 0"
+                    toFontVariationSettings="'wght' 950, 'slnt' -8"
+                    radius={60}
+                    falloff="gaussian"
+                  >
+                    Post RFQ (Free)
+                  </VariableFontCursorProximity>
                 </button>
               </div>
             ) : (

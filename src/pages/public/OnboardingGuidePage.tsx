@@ -23,6 +23,7 @@ import {
   Award,
   AlertCircle
 } from 'lucide-react';
+import VariableFontCursorProximity from '../../components/fancy/text/variable-font-cursor-proximity';
 
 interface OnboardingGuidePageProps {
   onStartBuyer: () => void;
@@ -43,12 +44,26 @@ export const OnboardingGuidePage: React.FC<OnboardingGuidePageProps> = ({
           <ShieldCheck className="w-4 h-4 text-emerald-600" />
           <span>SupplySouq Standard Operating Procedure (SOP) & Platform Workflow</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-          How the Onboarding Process Works in 4 Easy Steps
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight cursor-default select-none">
+          <VariableFontCursorProximity
+            fromFontVariationSettings="'wght' 700, 'slnt' 0"
+            toFontVariationSettings="'wght' 950, 'slnt' -8"
+            radius={140}
+            falloff="gaussian"
+          >
+            How the Onboarding Process Works in 4 Easy Steps
+          </VariableFontCursorProximity>
         </h1>
-        <p className="text-sm text-slate-600 leading-relaxed">
+        <VariableFontCursorProximity
+          as="p"
+          className="text-sm text-slate-600 leading-relaxed cursor-default"
+          fromFontVariationSettings="'wght' 400, 'slnt' 0"
+          toFontVariationSettings="'wght' 700, 'slnt' -4"
+          radius={100}
+          falloff="gaussian"
+        >
           A clear, step-by-step operational guide explaining how contractors post material requirements, how verified suppliers quote, and how orders are fulfilled across the platform.
-        </p>
+        </VariableFontCursorProximity>
 
         {/* Tab Switcher */}
         <div className="flex justify-center pt-4">

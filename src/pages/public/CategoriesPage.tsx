@@ -3,6 +3,7 @@ import { useAppData } from '../../context/AppDataContext';
 import { Card, CardContent } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { Layers, ArrowRight, CheckCircle2, Zap } from 'lucide-react';
+import VariableFontCursorProximity from '../../components/fancy/text/variable-font-cursor-proximity';
 
 export const CategoriesPage: React.FC<{ onPostRFQ: () => void }> = ({ onPostRFQ }) => {
   const { categories } = useAppData();
@@ -27,10 +28,26 @@ export const CategoriesPage: React.FC<{ onPostRFQ: () => void }> = ({ onPostRFQ 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="text-xs font-bold text-brand-600 uppercase tracking-wider">UAE Electrical Materials Directory</span>
-          <h1 className="text-3xl font-extrabold text-slate-900 mt-1">Electrical Materials & Cable Categories</h1>
-          <p className="text-sm text-slate-500 mt-1">
+          <h1 className="text-3xl font-extrabold text-slate-900 mt-1 cursor-default select-none">
+            <VariableFontCursorProximity
+              fromFontVariationSettings="'wght' 700, 'slnt' 0"
+              toFontVariationSettings="'wght' 950, 'slnt' -8"
+              radius={140}
+              falloff="gaussian"
+            >
+              Electrical Materials & Cable Categories
+            </VariableFontCursorProximity>
+          </h1>
+          <VariableFontCursorProximity
+            as="p"
+            className="text-sm text-slate-500 mt-1 cursor-default"
+            fromFontVariationSettings="'wght' 400, 'slnt' 0"
+            toFontVariationSettings="'wght' 700, 'slnt' -4"
+            radius={100}
+            falloff="gaussian"
+          >
             Browse structured electrical material categories and subcategories for multi-stockist RFQ distribution.
-          </p>
+          </VariableFontCursorProximity>
         </div>
         <Button variant="primary" onClick={onPostRFQ} leftIcon={<Zap className="w-4 h-4 text-amber-300" />}>
           Post Electrical RFQ
