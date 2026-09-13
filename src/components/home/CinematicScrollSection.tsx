@@ -29,103 +29,103 @@ export const CinematicScrollSection: React.FC<CinematicScrollSectionProps> = ({ 
   });
 
   // --- Center Image Continuous Transformations ---
-  // Hold small portrait steady while user reads all surrounding fragments (0.0 to 0.28)
-  // Expand smoothly (0.28 to 0.85)
+  // Hold small portrait steady while user reads all surrounding fragments (0.0 to 0.20)
+  // Expand smoothly (0.20 to 0.85)
   // Full edge-to-edge bleed at the end (0.85 to 1.0)
   const imageScale = useTransform(
     scrollYProgress,
-    [0.22, 0.45, 0.70, 0.90],
-    [1.0, 1.35, 2.2, shouldReduceMotion ? 1.0 : 4.0]
+    [0.18, 0.40, 0.65, 0.88],
+    [1.0, 1.35, 2.2, shouldReduceMotion ? 1.0 : 3.8]
   );
 
   const imageBorderRadius = useTransform(
     scrollYProgress,
-    [0.35, 0.65, 0.88],
+    [0.25, 0.58, 0.85],
     ['24px', '14px', '0px']
   );
 
   const imageBorderOpacity = useTransform(
     scrollYProgress,
-    [0.28, 0.55, 0.78],
+    [0.20, 0.50, 0.75],
     [1, 0.5, 0]
   );
 
   const imageOverlayDim = useTransform(
     scrollYProgress,
-    [0.80, 0.95],
+    [0.78, 0.94],
     [0.15, 0.5]
   );
 
-  // --- Staggered Floating Text Animations (Calibrated for Slow, Comfortable Reading) ---
-  // All text fragments stay fully visible and stationary through 0.0 to 0.28
+  // --- Staggered Floating Text Animations (Calibrated for Natural, Comfortable Reading) ---
+  // All text fragments stay fully visible and stationary through 0.0 to 0.20
   
   // 1. Top Left - Main Platform Title
-  const tl1_x = useTransform(scrollYProgress, [0.28, 0.62], [0, -110]);
-  const tl1_y = useTransform(scrollYProgress, [0.28, 0.62], [0, -80]);
-  const tl1_opacity = useTransform(scrollYProgress, [0.28, 0.58], [1, 0]);
-  const tl1_blur = useTransform(scrollYProgress, [0.32, 0.58], ['blur(0px)', 'blur(10px)']);
+  const tl1_x = useTransform(scrollYProgress, [0.20, 0.52], [0, -110]);
+  const tl1_y = useTransform(scrollYProgress, [0.20, 0.52], [0, -80]);
+  const tl1_opacity = useTransform(scrollYProgress, [0.20, 0.48], [1, 0]);
+  const tl1_blur = useTransform(scrollYProgress, [0.24, 0.48], ['blur(0px)', 'blur(10px)']);
 
   // 2. Top Center-Right - Compare Suppliers Pill
-  const tc_y = useTransform(scrollYProgress, [0.30, 0.64], [0, -110]);
-  const tc_opacity = useTransform(scrollYProgress, [0.30, 0.60], [1, 0]);
+  const tc_y = useTransform(scrollYProgress, [0.22, 0.54], [0, -110]);
+  const tc_opacity = useTransform(scrollYProgress, [0.22, 0.50], [1, 0]);
 
   // 3. Top Right - Upload BOQ
-  const tr_x = useTransform(scrollYProgress, [0.32, 0.66], [0, 120]);
-  const tr_y = useTransform(scrollYProgress, [0.32, 0.66], [0, -90]);
-  const tr_opacity = useTransform(scrollYProgress, [0.32, 0.62], [1, 0]);
+  const tr_x = useTransform(scrollYProgress, [0.24, 0.56], [0, 120]);
+  const tr_y = useTransform(scrollYProgress, [0.24, 0.56], [0, -90]);
+  const tr_opacity = useTransform(scrollYProgress, [0.24, 0.52], [1, 0]);
 
   // 4. Middle Far-Left - Disciplines Track
-  const ml_x = useTransform(scrollYProgress, [0.34, 0.68], [0, -140]);
-  const ml_opacity = useTransform(scrollYProgress, [0.34, 0.64], [1, 0]);
+  const ml_x = useTransform(scrollYProgress, [0.26, 0.58], [0, -140]);
+  const ml_opacity = useTransform(scrollYProgress, [0.26, 0.54], [1, 0]);
 
   // 5. Middle Left Inner - Reduce Procurement Time
-  const mli_x = useTransform(scrollYProgress, [0.36, 0.70], [0, -90]);
-  const mli_opacity = useTransform(scrollYProgress, [0.36, 0.66], [1, 0]);
+  const mli_x = useTransform(scrollYProgress, [0.28, 0.60], [0, -90]);
+  const mli_opacity = useTransform(scrollYProgress, [0.28, 0.56], [1, 0]);
 
   // 6. Middle Far-Right - Discover Verified Vendors
-  const mr_x = useTransform(scrollYProgress, [0.38, 0.72], [0, 140]);
-  const mr_opacity = useTransform(scrollYProgress, [0.38, 0.68], [1, 0]);
+  const mr_x = useTransform(scrollYProgress, [0.30, 0.62], [0, 140]);
+  const mr_opacity = useTransform(scrollYProgress, [0.30, 0.58], [1, 0]);
 
   // 7. Middle Right Inner - Real-Time Product Discovery
-  const mri_x = useTransform(scrollYProgress, [0.40, 0.74], [0, 90]);
-  const mri_opacity = useTransform(scrollYProgress, [0.40, 0.70], [1, 0]);
+  const mri_x = useTransform(scrollYProgress, [0.32, 0.64], [0, 90]);
+  const mri_opacity = useTransform(scrollYProgress, [0.32, 0.60], [1, 0]);
 
   // 8. Bottom Left - Built for Contractors
-  const bl_x = useTransform(scrollYProgress, [0.42, 0.76], [0, -110]);
-  const bl_y = useTransform(scrollYProgress, [0.42, 0.76], [0, 90]);
-  const bl_opacity = useTransform(scrollYProgress, [0.42, 0.72], [1, 0]);
+  const bl_x = useTransform(scrollYProgress, [0.34, 0.66], [0, -110]);
+  const bl_y = useTransform(scrollYProgress, [0.34, 0.66], [0, 90]);
+  const bl_opacity = useTransform(scrollYProgress, [0.34, 0.62], [1, 0]);
 
   // 9. Bottom Center-Left - Save Cost, Time, Smarter
-  const bc_y = useTransform(scrollYProgress, [0.44, 0.78], [0, 110]);
-  const bc_opacity = useTransform(scrollYProgress, [0.44, 0.74], [1, 0]);
+  const bc_y = useTransform(scrollYProgress, [0.36, 0.68], [0, 110]);
+  const bc_opacity = useTransform(scrollYProgress, [0.36, 0.64], [1, 0]);
 
   // 10. Bottom Right - From RFQ to Delivery
-  const br_x = useTransform(scrollYProgress, [0.46, 0.80], [0, 130]);
-  const br_y = useTransform(scrollYProgress, [0.46, 0.80], [0, 100]);
-  const br_opacity = useTransform(scrollYProgress, [0.46, 0.76], [1, 0]);
+  const br_x = useTransform(scrollYProgress, [0.38, 0.70], [0, 130]);
+  const br_y = useTransform(scrollYProgress, [0.38, 0.70], [0, 100]);
+  const br_opacity = useTransform(scrollYProgress, [0.38, 0.66], [1, 0]);
 
   // 11. Bottom Far-Right - Built for UAE Market
-  const bfr_x = useTransform(scrollYProgress, [0.48, 0.82], [0, 150]);
-  const bfr_opacity = useTransform(scrollYProgress, [0.48, 0.78], [1, 0]);
+  const bfr_x = useTransform(scrollYProgress, [0.40, 0.72], [0, 150]);
+  const bfr_opacity = useTransform(scrollYProgress, [0.40, 0.68], [1, 0]);
 
   // --- Background Grid & Linework Dissolve ---
-  const gridOpacity = useTransform(scrollYProgress, [0.25, 0.75], [0.8, 0.05]);
+  const gridOpacity = useTransform(scrollYProgress, [0.20, 0.70], [0.8, 0.05]);
 
   // --- Stage 4 Immersion Reveal (Full-Bleed Final State) ---
-  const finalCopyOpacity = useTransform(scrollYProgress, [0.85, 0.96], [0, 1]);
-  const finalCopyY = useTransform(scrollYProgress, [0.85, 0.96], [35, 0]);
+  const finalCopyOpacity = useTransform(scrollYProgress, [0.82, 0.94], [0, 1]);
+  const finalCopyY = useTransform(scrollYProgress, [0.82, 0.94], [35, 0]);
 
   // Stage Indicator Counter
   const stageNumber = useTransform(
     scrollYProgress,
-    [0, 0.35, 0.65, 0.88],
+    [0, 0.30, 0.60, 0.85],
     ['01 // DISCOVERY', '02 // ENGAGEMENT', '03 // CONVERGENCE', '04 // UNIFIED PLATFORM']
   );
 
   return (
     <div
       ref={containerRef}
-      className="relative w-full min-h-[620vh] bg-[#030304] text-slate-100 font-sans select-none"
+      className="relative w-full min-h-[360vh] bg-[#030304] text-slate-100 font-sans select-none"
     >
       {/* Sticky Viewport Stage */}
       <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
