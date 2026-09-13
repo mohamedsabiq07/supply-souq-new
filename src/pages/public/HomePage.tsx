@@ -113,7 +113,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
   ];
 
   return (
-    <div className="bg-[#f4f4f6] text-slate-900 selection:bg-[#cf2e46] selection:text-white overflow-hidden font-sans">
+    <div className="bg-[#f4f4f6] text-slate-900 selection:bg-[#cf2e46] selection:text-white overflow-x-clip font-sans">
       
       {/* 1. HERO SECTION - ARCHITECTURAL STUDIO GRAY & NEIDEN GRID */}
       <section className="relative pt-16 sm:pt-24 pb-20 sm:pb-32 overflow-hidden border-b border-slate-200/90 bg-[#f4f4f6]">

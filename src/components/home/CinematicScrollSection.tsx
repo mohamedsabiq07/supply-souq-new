@@ -30,31 +30,51 @@ export const CinematicScrollSection: React.FC<CinematicScrollSectionProps> = ({ 
 
   // --- Center Image Continuous Transformations ---
   // Hold small portrait steady while user reads all surrounding fragments (0.0 to 0.20)
-  // Expand smoothly (0.20 to 0.85)
-  // Full edge-to-edge bleed at the end (0.85 to 1.0)
-  const imageScale = useTransform(
-    scrollYProgress,
-    [0.18, 0.40, 0.65, 0.88],
-    [1.0, 1.35, 2.2, shouldReduceMotion ? 1.0 : 3.8]
-  );
+  // Expand smoothly (0.20 to 0.88)
+  // Full edge-to-edge bleed at the end (0.88 to 1.0)
+  const imageScale = useTransform(scrollYProgress, (v) => {
+    if (!v || isNaN(v) || v <= 0.18) return 1.0;
+    if (v >= 0.88) return 3.8;
+    return 1.0 + ((v - 0.18) / (0.88 - 0.18)) * 2.8;
+  });
 
-  const imageBorderRadius = useTransform(
-    scrollYProgress,
-    [0.25, 0.58, 0.85],
-    ['24px', '14px', '0px']
-  );
+  const imageBorderRadius = useTransform(scrollYProgress, (v) => {
+    if (!v || isNaN(v) || v <= 0.25) return '24px';
+    if (v >= 0.85) return '0px';
+    return `${Math.round(24 * (1 - (v - 0.25) / (0.85 - 0.25)))}px`;
+  });
 
-  const imageBorderOpacity = useTransform(
-    scrollYProgress,
-    [0.20, 0.50, 0.75],
-    [1, 0.5, 0]
-  );
+  const imageBorderOpacity = useTransform(scrollYProgress, (v) => {
+    if (!v || isNaN(v) || v <= 0.20) return 1;
+    if (v >= 0.75) return 0;
+    return 1 - (v - 0.20) / (0.75 - 0.20);
+  });
 
-  const imageOverlayDim = useTransform(
-    scrollYProgress,
-    [0.78, 0.94],
-    [0.15, 0.5]
-  );
+  const imageOverlayDim = useTransform(scrollYProgress, (v) => {
+    if (!v || isNaN(v) || v <= 0.75) return 0.15;
+    if (v >= 0.94) return 0.55;
+    return 0.15 + ((v - 0.75) / (0.94 - 0.75)) * 0.40;
+  });
+
+  // Strict display & group opacity controls to guarantee Stage 1 and Stage 4 never overlap
+  const fragmentsGroupOpacity = useTransform(scrollYProgress, (v) => {
+    if (!v || isNaN(v) || v <= 0.20) return 1;
+    if (v >= 0.70) return 0;
+    return 1 - (v - 0.20) / (0.70 - 0.20);
+  });
+  const fragmentsDisplay = useTransform(scrollYProgress, (v) => (v >= 0.72 ? 'none' : 'flex'));
+
+  const finalCopyOpacity = useTransform(scrollYProgress, (v) => {
+    if (!v || isNaN(v) || v <= 0.80) return 0;
+    if (v >= 0.92) return 1;
+    return (v - 0.80) / (0.92 - 0.80);
+  });
+  const finalCopyDisplay = useTransform(scrollYProgress, (v) => (v < 0.80 ? 'none' : 'flex'));
+  const finalCopyY = useTransform(scrollYProgress, (v) => {
+    if (!v || isNaN(v) || v <= 0.80) return 30;
+    if (v >= 0.92) return 0;
+    return 30 * (1 - (v - 0.80) / (0.92 - 0.80));
+  });
 
   // --- Staggered Floating Text Animations (Calibrated for Natural, Comfortable Reading) ---
   // All text fragments stay fully visible and stationary through 0.0 to 0.20
@@ -111,9 +131,7 @@ export const CinematicScrollSection: React.FC<CinematicScrollSectionProps> = ({ 
   // --- Background Grid & Linework Dissolve ---
   const gridOpacity = useTransform(scrollYProgress, [0.20, 0.70], [0.8, 0.05]);
 
-  // --- Stage 4 Immersion Reveal (Full-Bleed Final State) ---
-  const finalCopyOpacity = useTransform(scrollYProgress, [0.82, 0.94], [0, 1]);
-  const finalCopyY = useTransform(scrollYProgress, [0.82, 0.94], [35, 0]);
+
 
   // Stage Indicator Counter
   const stageNumber = useTransform(
@@ -179,7 +197,13 @@ export const CinematicScrollSection: React.FC<CinematicScrollSectionProps> = ({ 
         {/* ========================================================= */}
         {/* ASYMMETRIC FLOATING EDITORIAL TEXT FRAGMENTS (STAGE 1 & 2) */}
         {/* ========================================================= */}
-        <div className="absolute inset-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pointer-events-none z-20 flex flex-col justify-between py-12 md:py-16">
+        <motion.div
+          style={{
+            opacity: fragmentsGroupOpacity,
+            display: fragmentsDisplay as any
+          }}
+          className="absolute inset-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pointer-events-none z-20 flex flex-col justify-between py-12 md:py-16"
+        >
 
           {/* ROW 1: TOP AREA */}
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
@@ -358,7 +382,7 @@ export const CinematicScrollSection: React.FC<CinematicScrollSectionProps> = ({ 
 
           </div>
 
-        </div>
+        </motion.div>
 
         {/* ========================================================= */}
         {/* CENTER 9:16 PORTRAIT HERO VISUAL (CONTINUOUS VIEWPORT EXPANSION) */}
@@ -415,7 +439,8 @@ export const CinematicScrollSection: React.FC<CinematicScrollSectionProps> = ({ 
         <motion.div
           style={{
             opacity: finalCopyOpacity,
-            y: finalCopyY
+            y: finalCopyY,
+            display: finalCopyDisplay as any
           }}
           className="absolute inset-0 pointer-events-none z-30 flex flex-col items-center justify-center text-center px-6 max-w-3xl mx-auto"
         >
