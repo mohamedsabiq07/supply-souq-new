@@ -140,15 +140,9 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                 UAE Procurement,
               </VariableFontCursorProximity>
               <br />
-              <VariableFontCursorProximity
-                className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-rose-700 to-[#cf2e46]"
-                fromFontVariationSettings="'wght' 700, 'slnt' 0"
-                toFontVariationSettings="'wght' 950, 'slnt' -10"
-                radius={200}
-                falloff="gaussian"
-              >
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-rose-700 to-[#cf2e46]">
                 Simplified.
-              </VariableFontCursorProximity>
+              </span>
             </h1>
 
             {/* Subheadline */}
