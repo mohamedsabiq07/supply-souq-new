@@ -146,7 +146,7 @@ export const AdminAnalyticsExport: React.FC<AdminAnalyticsExportProps> = ({
             onClick={exportCustomers}
             className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs border border-slate-700 flex items-center gap-1.5 transition-all shadow-sm"
           >
-            <Download className="w-3.5 h-3.5 text-emerald-400" />
+            <Download className="w-3.5 h-3.5 text-rose-400" />
             <span>Export Customers (.csv)</span>
           </button>
 
@@ -165,9 +165,9 @@ export const AdminAnalyticsExport: React.FC<AdminAnalyticsExportProps> = ({
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
         <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-subtle space-y-1">
           <div className="text-slate-500 font-medium flex items-center gap-1">
-            <Percent className="w-3.5 h-3.5 text-emerald-600" /> Quote-to-Award Rate
+            <Percent className="w-3.5 h-3.5 text-[#cf2e46]" /> Quote-to-Award Rate
           </div>
-          <div className="text-2xl font-extrabold text-emerald-700">{quoteToAwardRate}%</div>
+          <div className="text-2xl font-extrabold text-[#cf2e46]">{quoteToAwardRate}%</div>
           <div className="text-[10px] text-slate-500 font-semibold">{awardedCount} of {rfqs.length} RFQs converted</div>
         </div>
 
@@ -176,7 +176,7 @@ export const AdminAnalyticsExport: React.FC<AdminAnalyticsExportProps> = ({
             <Clock className="w-3.5 h-3.5 text-sky-600" /> Avg. Bid Response Time
           </div>
           <div className="text-2xl font-extrabold text-slate-900">{avgResponseHours}h</div>
-          <div className="text-[10px] text-emerald-600 font-semibold">Well within 24h SLA target</div>
+          <div className="text-[10px] text-[#cf2e46] font-semibold">Well within 24h SLA target</div>
         </div>
 
         <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-subtle space-y-1">
@@ -217,7 +217,7 @@ export const AdminAnalyticsExport: React.FC<AdminAnalyticsExportProps> = ({
                 </div>
                 <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-brand-600 to-emerald-500"
+                    className="h-full rounded-full bg-gradient-to-r from-brand-600 to-rose-500"
                     style={{ width: `${percent}%` }}
                   />
                 </div>

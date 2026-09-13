@@ -126,11 +126,11 @@ export const AdminKYBDesk: React.FC<AdminKYBDeskProps> = ({
       <div className="p-5 bg-gradient-to-r from-slate-900 via-navy-950 to-slate-900 text-white rounded-2xl border border-slate-800 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-emerald-400" />
+            <ShieldCheck className="w-5 h-5 text-[#cf2e46]" />
             <h3 className="text-base sm:text-lg font-extrabold tracking-tight">
               UAE KYB & Trade License Verification Desk
             </h3>
-            <span className="bg-emerald-500/20 text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded border border-emerald-500/30">
+            <span className="bg-rose-500/20 text-rose-300 text-[10px] font-bold px-2 py-0.5 rounded border border-rose-500/30">
               DET / DED Compliant
             </span>
           </div>
@@ -204,7 +204,7 @@ export const AdminKYBDesk: React.FC<AdminKYBDeskProps> = ({
         <div className="space-y-4">
           {pendingQueue.length === 0 ? (
             <Card className="p-8 text-center bg-slate-50/50 border-dashed border-2 border-slate-200">
-              <CheckCircle2 className="w-8 h-8 text-emerald-600 mx-auto mb-2" />
+              <CheckCircle2 className="w-8 h-8 text-[#cf2e46] mx-auto mb-2" />
               <h4 className="text-sm font-bold text-slate-800">Verification Queue is Clear</h4>
               <p className="text-xs text-slate-500">All submitted UAE supplier trade licenses have been reviewed and approved.</p>
             </Card>
@@ -341,7 +341,7 @@ export const AdminKYBDesk: React.FC<AdminKYBDeskProps> = ({
                               ? 'bg-rose-50 text-rose-800 border-rose-300'
                               : isExpiringSoon
                               ? 'bg-amber-50 text-amber-900 border-amber-300'
-                              : 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                              : 'bg-rose-50 text-rose-800 border-rose-200'
                           }`}>
                             <Calendar className="w-3 h-3" />
                             {isExpired ? 'EXPIRED' : isExpiringSoon ? `${daysLeft} Days to Expiry` : 'Valid (>6 Months)'}

@@ -366,7 +366,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                 : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700/60'
             }`}
           >
-            <Camera className="w-5 h-5 text-emerald-300 shrink-0 mt-0.5" />
+            <Camera className="w-5 h-5 text-rose-300 shrink-0 mt-0.5" />
             <div>
               <span className="block font-bold">Snap Photo of BOQ / Previous Invoice</span>
               <span className="text-[10px] text-slate-300 font-normal">Handwritten cable schedule, single-line diagram, or paper bill</span>
@@ -439,7 +439,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                       className="w-36 h-28 object-cover rounded-xl border border-slate-300 shadow-sm"
                     />
                     <div className="space-y-1 text-xs flex-1">
-                      <div className="flex items-center gap-1.5 text-emerald-700 font-bold">
+                      <div className="flex items-center gap-1.5 text-[#cf2e46] font-bold">
                         <CheckCircle2 className="w-4 h-4" />
                         <span>Photo Attached Successfully</span>
                       </div>
@@ -891,23 +891,23 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
           </CardHeader>
           <CardContent className="space-y-5 text-xs">
             
-            <div className="p-4 bg-emerald-50 rounded-2xl border border-emerald-200 flex items-center justify-between">
+            <div className="p-4 bg-rose-50 rounded-2xl border border-rose-200 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center font-extrabold text-base shrink-0">
+                <div className="w-10 h-10 rounded-full bg-[#cf2e46] text-white flex items-center justify-center font-extrabold text-base shrink-0">
                   5
                 </div>
                 <div>
-                  <h4 className="font-bold text-emerald-950 text-sm">
+                  <h4 className="font-bold text-rose-950 text-sm">
                     {selectedTargetSupplier 
                       ? `Delivering Directly to ${selectedTargetSupplier.name} + 4 Matched Stockists`
                       : `5 Verified UAE Stockists Ready to Compete`}
                   </h4>
-                  <p className="text-emerald-700 text-xs">
+                  <p className="text-rose-700 text-xs">
                     Stockists in {deliveryEmirate} & Sharjah Industrial will receive your RFQ immediately on their sales desk under the <strong className="font-bold">Fastest 5 Bids Rule</strong>.
                   </p>
                 </div>
               </div>
-              <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full border border-emerald-300 shrink-0">
+              <span className="text-xs font-bold text-rose-800 bg-rose-100 px-3 py-1 rounded-full border border-rose-300 shrink-0">
                 ⚡ 24h Quoting SLA
               </span>
             </div>
@@ -982,7 +982,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                                 </span>
                               )}
                               {item.allowAlternatives && (
-                                <span className="text-[10px] text-emerald-700 font-bold self-center">
+                                <span className="text-[10px] text-[#cf2e46] font-bold self-center">
                                   (Equiv. OK)
                                 </span>
                               )}

@@ -24,8 +24,8 @@ export const DemoRoleBar: React.FC<DemoRoleBarProps> = ({ onNavigate }) => {
   return (
     <div className="bg-slate-900 text-white text-xs border-b border-slate-800 px-4 py-2 flex flex-wrap items-center justify-between gap-3 sticky top-0 z-50 shadow-md">
       <div className="flex items-center gap-2">
-        <span className="inline-flex items-center gap-1.5 bg-emerald-500/20 text-emerald-300 font-bold px-2 py-0.5 rounded border border-emerald-500/30 text-[11px]">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+        <span className="inline-flex items-center gap-1.5 bg-rose-500/20 text-rose-300 font-bold px-2 py-0.5 rounded border border-rose-500/30 text-[11px]">
+          <span className="w-2 h-2 rounded-full bg-[#cf2e46] animate-pulse" />
           <span>Live Cloud DB</span>
         </span>
 
@@ -44,8 +44,8 @@ export const DemoRoleBar: React.FC<DemoRoleBarProps> = ({ onNavigate }) => {
             <strong className="text-white font-extrabold">{currentCompany.name}</strong> ({currentCompany.emirate})
           </span>
         ) : (
-          <span className="inline-flex items-center gap-1.5 text-emerald-300 font-bold bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800">
-            <ShieldAlert className="w-3.5 h-3.5 text-emerald-400" />
+          <span className="inline-flex items-center gap-1.5 text-rose-300 font-bold bg-rose-950/60 px-2 py-0.5 rounded border border-rose-800">
+            <ShieldAlert className="w-3.5 h-3.5 text-[#cf2e46]" />
             <span>ADMIN OPERATIONS DESK</span>
           </span>
         )}

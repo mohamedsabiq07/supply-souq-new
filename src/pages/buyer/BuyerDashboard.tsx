@@ -127,7 +127,7 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
           title="Estimated Procurement Savings"
           value={formatAED(estimatedSavings)}
           subtitle={totalSpend > 0 ? "Savings across awarded POs" : "Start quoting to save"}
-          icon={<TrendingDown className="w-6 h-6 text-emerald-600" />}
+          icon={<TrendingDown className="w-6 h-6 text-[#cf2e46]" />}
         />
       </div>
 
@@ -136,7 +136,7 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
+              <div className="w-8 h-8 rounded-lg bg-rose-100 text-rose-800 flex items-center justify-center font-bold">
                 <GitCompare className="w-4 h-4" />
               </div>
               <div>
@@ -169,8 +169,8 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
                         <span className="font-mono font-bold text-xs bg-brand-50 text-brand-700 px-2.5 py-0.5 rounded border border-brand-200">
                           RFQ #{rfq.rfqNumber}
                         </span>
-                        <span className="text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 flex items-center gap-1">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                        <span className="text-xs font-bold text-rose-800 bg-rose-50 px-2.5 py-0.5 rounded-full border border-rose-200 flex items-center gap-1">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-[#cf2e46]" />
                           <span>
                             {isUnlocked ? `${quotesForThisRFQ.length} Quotations (Unlocked)` : `${Math.min(quotesForThisRFQ.length, 5)} / 5 Free Quotations`}
                           </span>
@@ -209,7 +209,7 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
                           key={quote.id}
                           className={`p-4 rounded-xl border transition-all space-y-3 flex flex-col justify-between ${
                             isLowest 
-                              ? 'bg-gradient-to-b from-emerald-50/50 to-white border-emerald-300 shadow-xs' 
+                              ? 'bg-gradient-to-b from-rose-50/50 to-white border-rose-300 shadow-xs' 
                               : 'bg-slate-50/50 border-slate-200 hover:border-slate-300'
                           }`}
                         >
@@ -223,7 +223,7 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
                                   </span>
                                 ) : null}
                                 {isLowest && (
-                                  <span className="bg-emerald-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full">
+                                  <span className="bg-[#cf2e46] text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full">
                                     Lowest Price
                                   </span>
                                 )}

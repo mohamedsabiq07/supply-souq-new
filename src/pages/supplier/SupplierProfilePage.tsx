@@ -23,7 +23,7 @@ export const SupplierProfilePage: React.FC = () => {
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-lg font-bold text-slate-900">{currentCompany.name}</h3>
-                <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300 flex items-center gap-1">
+                <span className="text-xs font-bold text-rose-800 bg-rose-100 px-2 py-0.5 rounded border border-rose-300 flex items-center gap-1">
                   <ShieldCheck className="w-3.5 h-3.5" /> DET Verified
                 </span>
               </div>
@@ -64,15 +64,15 @@ export const SupplierProfilePage: React.FC = () => {
 
           <div>
             <h4 className="font-bold text-slate-900 mb-2">Trade License & Verification Document</h4>
-            <div className="p-4 bg-emerald-50/70 rounded-xl border border-emerald-200 flex items-center justify-between">
+            <div className="p-4 bg-rose-50/70 rounded-xl border border-rose-200 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <FileText className="w-6 h-6 text-emerald-700" />
+                <FileText className="w-6 h-6 text-[#cf2e46]" />
                 <div>
-                  <p className="font-bold text-emerald-950">Commercial_Trade_License_2026.pdf</p>
-                  <p className="text-[11px] text-emerald-700">Verified by SupplySouq Compliance Desk on 15 Jan 2026</p>
+                  <p className="font-bold text-rose-950">Commercial_Trade_License_2026.pdf</p>
+                  <p className="text-[11px] text-rose-700">Verified by SupplySouq Compliance Desk on 15 Jan 2026</p>
                 </div>
               </div>
-              <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-3 py-1 rounded-md border border-emerald-300">
+              <span className="text-xs font-bold text-rose-800 bg-rose-100 px-3 py-1 rounded-md border border-rose-300">
                 Active & Verified
               </span>
             </div>

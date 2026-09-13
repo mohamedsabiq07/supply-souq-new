@@ -91,8 +91,8 @@ export const SupplierInboxPage: React.FC<SupplierInboxPageProps> = ({ onNavigate
             Direct electrical material requirements from verified UAE contractors ready for competitive quoting.
           </p>
         </div>
-        <div className="flex items-center gap-2 text-xs font-bold text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200">
-          <ShieldCheck className="w-4 h-4 text-emerald-600" />
+        <div className="flex items-center gap-2 text-xs font-bold text-rose-800 bg-rose-50 px-3 py-1.5 rounded-xl border border-rose-200">
+          <ShieldCheck className="w-4 h-4 text-[#cf2e46]" />
           <span>24-Hour SLA Quoting Active</span>
         </div>
       </div>

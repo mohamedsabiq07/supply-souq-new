@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Card } from './Card';
 import { cn } from '../../lib/utils';
 
@@ -30,7 +30,7 @@ export const StatWidget: React.FC<StatWidgetProps> = ({
         {subtitle && <p className="text-xs text-slate-500 mt-1">{subtitle}</p>}
         {trend && (
           <div className="flex items-center gap-1 mt-2 text-xs font-medium">
-            <span className={trend.isPositive ? 'text-emerald-600' : 'text-rose-600'}>
+            <span className={trend.isPositive ? 'text-[#cf2e46] font-bold' : 'text-slate-500'}>
               {trend.isPositive ? '↑' : '↓'} {trend.value}
             </span>
             <span className="text-slate-400">vs last month</span>

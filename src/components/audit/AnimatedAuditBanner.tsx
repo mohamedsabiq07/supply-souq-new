@@ -134,7 +134,7 @@ export const AnimatedAuditBanner: React.FC<AnimatedAuditBannerProps> = ({ onLaun
     <div
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
-      className="bg-gradient-to-r from-amber-500/15 via-brand-500/10 to-emerald-500/15 border border-amber-300/80 rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm relative overflow-hidden transition-all duration-300 hover:shadow-md hover:border-amber-400"
+      className="bg-gradient-to-r from-amber-500/15 via-brand-500/10 to-rose-500/15 border border-amber-300/80 rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm relative overflow-hidden transition-all duration-300 hover:shadow-md hover:border-amber-400"
     >
       {/* Background Subtle Gradient Glow */}
       <div className="absolute -top-24 -right-24 w-64 h-64 bg-amber-400/10 rounded-full blur-3xl pointer-events-none" />
@@ -148,8 +148,8 @@ export const AnimatedAuditBanner: React.FC<AnimatedAuditBannerProps> = ({ onLaun
             <span>{currentPrompt.pill}</span>
           </span>
 
-          <span className="text-xs text-emerald-800 font-extrabold bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full flex items-center gap-1">
-            <TrendingDown className="w-3.5 h-3.5 text-emerald-600" />
+          <span className="text-xs text-rose-800 font-extrabold bg-rose-50 border border-rose-200 px-2.5 py-0.5 rounded-full flex items-center gap-1">
+            <TrendingDown className="w-3.5 h-3.5 text-[#cf2e46]" />
             <span>{currentPrompt.savingsText}</span>
           </span>
 

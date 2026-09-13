@@ -157,11 +157,11 @@ export const AdminFinanceEngine: React.FC<AdminFinanceEngineProps> = ({
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2 flex-wrap">
-              <DollarSign className="w-5 h-5 text-emerald-400" />
+              <DollarSign className="w-5 h-5 text-[#cf2e46]" />
               <h3 className="text-base sm:text-lg font-black tracking-tight">
                 SupplySouq Monetization & Invoicing Engine
               </h3>
-              <span className="bg-emerald-500/20 text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded border border-emerald-500/30">
+              <span className="bg-rose-500/20 text-rose-300 text-[10px] font-bold px-2 py-0.5 rounded border border-rose-500/30">
                 1.3% Standard Rate (Launch Waived: 0%)
               </span>
               <span className="bg-amber-500/20 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded border border-amber-500/30">
@@ -179,10 +179,10 @@ export const AdminFinanceEngine: React.FC<AdminFinanceEngineProps> = ({
               <span className="text-[10px] text-slate-400 uppercase font-semibold">Total Order GMV</span>
             </div>
             <div className="p-3 bg-slate-800/90 rounded-xl border border-slate-700 text-center">
-              <span className="text-xl font-extrabold text-emerald-400 font-mono block">
+              <span className="text-xl font-extrabold text-[#cf2e46] font-mono block">
                 {isCommissionWaived ? 'AED 0.00' : formatAED(totalCommissionDue)}
               </span>
-              <span className="text-[10px] text-emerald-300 uppercase font-semibold">
+              <span className="text-[10px] text-rose-300 uppercase font-semibold">
                 {isCommissionWaived ? '0% (Waived for Launch)' : '1.3% Active Billed'}
               </span>
             </div>
@@ -192,7 +192,7 @@ export const AdminFinanceEngine: React.FC<AdminFinanceEngineProps> = ({
         {/* Live Commission Waiver Switch & Launch Controls */}
         <div className="bg-slate-950/70 p-3 rounded-xl border border-slate-700/70 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-2.5">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+            <span className="w-2 h-2 rounded-full bg-[#cf2e46] animate-ping" />
             <div>
               <span className="font-extrabold text-white block">
                 {isCommissionWaived ? '🚀 Traction Launch Phase: 1.3% Commission is 100% Waived' : '⚡ 1.3% Standard Commission Active'}
@@ -210,11 +210,11 @@ export const AdminFinanceEngine: React.FC<AdminFinanceEngineProps> = ({
             onClick={() => setIsCommissionWaived(!isCommissionWaived)}
             className={`px-3 py-1.5 rounded-lg font-bold text-xs inline-flex items-center gap-1.5 transition-all cursor-pointer ${
               isCommissionWaived
-                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-500/30'
+                ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40 hover:bg-rose-500/30'
                 : 'bg-slate-800 text-slate-300 border border-slate-600 hover:bg-slate-700'
             }`}
           >
-            {isCommissionWaived ? <ToggleLeft className="w-4 h-4 text-emerald-400" /> : <ToggleRight className="w-4 h-4 text-brand-400" />}
+            {isCommissionWaived ? <ToggleLeft className="w-4 h-4 text-[#cf2e46]" /> : <ToggleRight className="w-4 h-4 text-brand-400" />}
             <span>{isCommissionWaived ? 'Promotional Waiver: ON (0% Fee)' : 'Promotional Waiver: OFF (1.3% Active)'}</span>
           </button>
         </div>
@@ -231,7 +231,7 @@ export const AdminFinanceEngine: React.FC<AdminFinanceEngineProps> = ({
               : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
           }`}
         >
-          <DollarSign className="w-3.5 h-3.5 text-emerald-400" />
+          <DollarSign className="w-3.5 h-3.5 text-[#cf2e46]" />
           <span>PO Commission & FTA Invoices ({purchaseOrders.length})</span>
         </button>
 
@@ -257,18 +257,18 @@ export const AdminFinanceEngine: React.FC<AdminFinanceEngineProps> = ({
             <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-subtle space-y-1">
               <div className="text-slate-500 font-medium">Total B2B GMV Transacted</div>
               <div className="text-xl font-extrabold text-slate-900 font-mono">{formatAED(totalGMV)}</div>
-              <div className="text-[10px] text-emerald-600 font-semibold">Across {purchaseOrders.length} Issued POs</div>
+              <div className="text-[10px] text-slate-500 font-semibold">Across {purchaseOrders.length} Issued POs</div>
             </div>
             <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-subtle space-y-1">
               <div className="text-slate-500 font-medium">Standard 1.3% Rate Projection</div>
               <div className="text-xl font-extrabold text-slate-700 font-mono">{formatAED(projectedCommission1_3)}</div>
-              <div className="text-[10px] text-emerald-600 font-semibold">
+              <div className="text-[10px] text-slate-500 font-semibold">
                 {isCommissionWaived ? 'Waived during launch' : 'Active billing'}
               </div>
             </div>
             <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-subtle space-y-1">
               <div className="text-slate-500 font-medium">Net Commission Billed</div>
-              <div className="text-xl font-extrabold text-emerald-700 font-mono">
+              <div className="text-xl font-extrabold text-[#cf2e46] font-mono">
                 {isCommissionWaived ? 'AED 0.00' : formatAED(totalCommissionDue)}
               </div>
               <div className="text-[10px] text-slate-500 font-semibold">
@@ -362,14 +362,14 @@ export const AdminFinanceEngine: React.FC<AdminFinanceEngineProps> = ({
                               <span className="font-mono font-bold text-slate-400 line-through text-xs block">
                                 {formatAED(projected)}
                               </span>
-                              <span className="font-mono font-extrabold text-emerald-700 text-xs inline-flex items-center gap-1 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
+                              <span className="font-mono font-extrabold text-[#cf2e46] text-xs inline-flex items-center gap-1 bg-rose-50 px-1.5 py-0.5 rounded border border-rose-200">
                                 AED 0.00 (Waived)
                               </span>
                               <span className="text-[9px] text-slate-400 block font-medium">1.3% Launch Promo</span>
                             </div>
                           ) : (
                             <div>
-                              <span className="font-mono font-extrabold text-emerald-700 block text-sm">
+                              <span className="font-mono font-extrabold text-[#cf2e46] block text-sm">
                                 {formatAED(projected)}
                               </span>
                               <span className="text-[10px] text-slate-500 font-semibold">1.3% of Order</span>
@@ -383,7 +383,7 @@ export const AdminFinanceEngine: React.FC<AdminFinanceEngineProps> = ({
                             onChange={(e) => handleStatusChange(po, e.target.value as any)}
                             className={`p-1.5 rounded-lg border font-bold text-[11px] ${
                               status === 'collected'
-                                ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                                ? 'bg-rose-50 text-rose-800 border-rose-300'
                                 : status === 'invoiced'
                                 ? 'bg-sky-50 text-sky-800 border-sky-300'
                                 : status === 'overdue'
@@ -415,7 +415,7 @@ export const AdminFinanceEngine: React.FC<AdminFinanceEngineProps> = ({
                             onClick={() => setInvoiceModalPO(po)}
                             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold text-[11px] shadow-2xs transition-all"
                           >
-                            <FileText className="w-3.5 h-3.5 text-emerald-600" />
+                            <FileText className="w-3.5 h-3.5 text-[#cf2e46]" />
                             <span>Generate Tax Invoice</span>
                           </button>
                         </td>
@@ -437,7 +437,7 @@ export const AdminFinanceEngine: React.FC<AdminFinanceEngineProps> = ({
             <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-subtle space-y-1">
               <div className="text-slate-500 font-medium">Trial Policy</div>
               <div className="text-xl font-extrabold text-slate-900">First 3 Months Free</div>
-              <div className="text-[10px] text-emerald-600 font-semibold">90 days full access with 0 AED fees</div>
+              <div className="text-[10px] text-slate-500 font-semibold">90 days full access with 0 AED fees</div>
             </div>
             <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-subtle space-y-1">
               <div className="text-slate-500 font-medium">Standard Daily Membership</div>
@@ -446,8 +446,8 @@ export const AdminFinanceEngine: React.FC<AdminFinanceEngineProps> = ({
             </div>
             <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-subtle space-y-1">
               <div className="text-slate-500 font-medium">Stockists on Free Trial</div>
-              <div className="text-xl font-extrabold text-emerald-700 font-mono">{suppliersList.length} Active</div>
-              <div className="text-[10px] text-emerald-600 font-semibold">100% active trial status</div>
+              <div className="text-xl font-extrabold text-[#cf2e46] font-mono">{suppliersList.length} Active</div>
+              <div className="text-[10px] text-slate-500 font-semibold">100% active trial status</div>
             </div>
             <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-subtle space-y-1">
               <div className="text-slate-500 font-medium">Projected Annual Recurring (ARR)</div>
@@ -498,15 +498,15 @@ export const AdminFinanceEngine: React.FC<AdminFinanceEngineProps> = ({
                         <td className="p-3.5 min-w-[200px]">
                           <div className="space-y-1">
                             <div className="flex items-center justify-between text-[11px]">
-                              <span className="font-bold text-emerald-700 flex items-center gap-1">
-                                <Gift className="w-3 h-3 text-emerald-600" />
+                              <span className="font-bold text-[#cf2e46] flex items-center gap-1">
+                                <Gift className="w-3 h-3 text-[#cf2e46]" />
                                 3-Month Free Trial
                               </span>
                               <span className="font-bold text-slate-700 font-mono">{daysRemaining} Days Left</span>
                             </div>
                             <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
                               <div
-                                className="bg-emerald-500 h-full rounded-full transition-all"
+                                className="bg-[#cf2e46] h-full rounded-full transition-all"
                                 style={{ width: `${progressPercent}%` }}
                               />
                             </div>
@@ -528,9 +528,9 @@ export const AdminFinanceEngine: React.FC<AdminFinanceEngineProps> = ({
                             )}`}
                             target="_blank"
                             rel="noreferrer"
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-300 hover:bg-emerald-100 font-bold text-[11px] transition-all"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-50 text-rose-800 border border-rose-300 hover:bg-rose-100 font-bold text-[11px] transition-all"
                           >
-                            <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />
+                            <MessageSquare className="w-3.5 h-3.5 text-[#cf2e46]" />
                             <span>WhatsApp Status</span>
                           </a>
                         </td>
@@ -655,7 +655,7 @@ export const AdminFinanceEngine: React.FC<AdminFinanceEngineProps> = ({
                         {formatAED(invoiceModalPO.totalAmountAED * STANDARD_COMMISSION_RATE)}
                       </span>
                     </div>
-                    <div className="flex justify-between text-emerald-700 font-bold">
+                    <div className="flex justify-between text-[#cf2e46] font-bold">
                       <span>Founder Traction Discount (-100%):</span>
                       <span className="font-mono">
                         -{formatAED(invoiceModalPO.totalAmountAED * STANDARD_COMMISSION_RATE)}
@@ -663,7 +663,7 @@ export const AdminFinanceEngine: React.FC<AdminFinanceEngineProps> = ({
                     </div>
                     <div className="flex justify-between font-bold text-slate-900">
                       <span>Net Commission Charged:</span>
-                      <span className="font-mono text-emerald-700">AED 0.00 (Waived)</span>
+                      <span className="font-mono text-[#cf2e46]">AED 0.00 (Waived)</span>
                     </div>
                   </div>
 

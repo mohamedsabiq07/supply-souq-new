@@ -54,13 +54,13 @@ export const SubmitQuotePage: React.FC<SubmitQuotePageProps> = ({ rfqId, onNavig
 
   if (alreadyQuoted) {
     return (
-      <div className="text-center py-16 bg-white rounded-2xl border border-emerald-200 p-8 space-y-4 max-w-xl mx-auto shadow-sm my-12">
-        <div className="w-14 h-14 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto">
-          <CheckCircle2 className="w-8 h-8 text-emerald-600" />
+      <div className="text-center py-16 bg-white rounded-2xl border border-rose-200 p-8 space-y-4 max-w-xl mx-auto shadow-sm my-12">
+        <div className="w-14 h-14 rounded-full bg-rose-50 text-[#cf2e46] flex items-center justify-center mx-auto">
+          <CheckCircle2 className="w-8 h-8 text-[#cf2e46]" />
         </div>
         <div className="space-y-2">
-          <div className="inline-flex items-center gap-1 bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded-full border border-emerald-300">
-            ✅ Quotation Already Submitted
+          <div className="inline-flex items-center gap-1 bg-rose-100 text-rose-800 text-xs font-bold px-2.5 py-1 rounded-full border border-rose-300">
+            ✓ Quotation Already Submitted
           </div>
           <h2 className="text-xl font-extrabold text-slate-900">
             You Already Quoted for {targetRFQ.rfqNumber}

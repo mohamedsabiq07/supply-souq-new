@@ -127,7 +127,7 @@ export const AdminDealProtection: React.FC<AdminDealProtectionProps> = ({
         <div className="bg-slate-800/90 p-3.5 rounded-xl border border-slate-700 flex items-center justify-between gap-4 shrink-0">
           <div>
             <div className="text-xs font-extrabold text-white flex items-center gap-1.5">
-              {isMaskingEnabled ? <EyeOff className="w-4 h-4 text-emerald-400" /> : <Eye className="w-4 h-4 text-rose-400" />}
+              {isMaskingEnabled ? <EyeOff className="w-4 h-4 text-[#cf2e46]" /> : <Eye className="w-4 h-4 text-slate-400" />}
               Contact Masking
             </div>
             <div className="text-[10px] text-slate-400">
@@ -138,7 +138,7 @@ export const AdminDealProtection: React.FC<AdminDealProtectionProps> = ({
             type="button"
             onClick={onToggleMasking}
             className={`w-12 h-6 flex items-center rounded-full p-1 transition-colors ${
-              isMaskingEnabled ? 'bg-emerald-600' : 'bg-slate-600'
+              isMaskingEnabled ? 'bg-[#cf2e46]' : 'bg-slate-600'
             }`}
           >
             <div
@@ -162,7 +162,7 @@ export const AdminDealProtection: React.FC<AdminDealProtectionProps> = ({
 
         {suspiciousRFQs.length === 0 ? (
           <Card className="p-6 text-center bg-slate-50/60 border-slate-200">
-            <CheckCircle2 className="w-6 h-6 text-emerald-600 mx-auto mb-1.5" />
+            <CheckCircle2 className="w-6 h-6 text-[#cf2e46] mx-auto mb-1.5" />
             <h5 className="text-xs font-bold text-slate-800">No Offline Deal Leakage Detected</h5>
             <p className="text-[11px] text-slate-500">All submitted quotes and RFQ lifecycle states are following standard awarded pathways.</p>
           </Card>

@@ -172,7 +172,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
                 value={resumePIN}
                 onChange={(e) => setResumePIN(e.target.value.replace(/\D/g, '').slice(0, 6))}
                 placeholder="••••••"
-                className="w-full p-3 rounded-xl border border-slate-700 bg-slate-950 text-emerald-400 text-center font-mono font-black text-2xl tracking-[0.5em] focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all placeholder:text-slate-700"
+                className="w-full p-3 rounded-xl border border-slate-700 bg-slate-950 text-[#cf2e46] text-center font-mono font-black text-2xl tracking-[0.5em] focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all placeholder:text-slate-700"
               />
               <span className="text-[11px] text-slate-500 block mt-1">Default PIN: 070707</span>
             </div>
@@ -181,7 +181,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
               type="submit"
               variant="primary"
               disabled={resumePIN.length !== 6}
-              className="w-full py-3 font-extrabold bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg"
+              className="w-full py-3 font-extrabold bg-brand-600 hover:bg-brand-700 text-white shadow-lg"
             >
               Resume Control Tower Session
             </Button>
@@ -213,7 +213,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
     return (
       <div className="max-w-md mx-auto py-16 px-4">
         <Card className="p-8 space-y-6 shadow-2xl border-slate-200 text-center bg-white">
-          <div className="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center mx-auto shadow-inner border border-emerald-300">
+          <div className="w-14 h-14 rounded-2xl bg-rose-100 text-[#cf2e46] flex items-center justify-center mx-auto shadow-inner border border-rose-300">
             <Lock className="w-7 h-7" />
           </div>
           <div className="space-y-1">
@@ -239,10 +239,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
                   placeholder="Enter Master Admin Passkey"
                   value={adminPass}
                   onChange={(e) => setAdminPass(e.target.value)}
-                  className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 text-center font-bold text-slate-900"
+                  className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-500 text-center font-bold text-slate-900"
                 />
               </div>
-              <Button type="submit" variant="primary" className="w-full py-3 font-bold bg-emerald-600 hover:bg-emerald-700">
+              <Button type="submit" variant="primary" className="w-full py-3 font-bold bg-brand-600 hover:bg-brand-700">
                 Verify Passkey & Continue →
               </Button>
             </form>
@@ -262,11 +262,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
                   placeholder="••••••"
                   value={adminPINInput}
                   onChange={(e) => setAdminPINInput(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                  className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 text-center font-mono font-black text-2xl tracking-[0.5em] text-slate-900"
+                  className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-500 text-center font-mono font-black text-2xl tracking-[0.5em] text-slate-900"
                 />
                 <span className="text-[11px] text-slate-400 block mt-1">Default: 070707</span>
               </div>
-              <Button type="submit" variant="primary" className="w-full py-3 font-bold bg-emerald-600 hover:bg-emerald-700">
+              <Button type="submit" variant="primary" className="w-full py-3 font-bold bg-brand-600 hover:bg-brand-700">
                 Authenticate Clearance
               </Button>
               <button
@@ -358,11 +358,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2.5 flex-wrap">
-              <span className="w-3 h-3 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="w-3 h-3 rounded-full bg-[#cf2e46] animate-pulse" />
               <h1 className="text-xl sm:text-2xl font-black tracking-tight">
                 SupplySouq Operations Control Tower
               </h1>
-              <span className="bg-emerald-500/20 text-emerald-300 font-bold px-2.5 py-0.5 rounded text-[10px] border border-emerald-500/30">
+              <span className="bg-rose-500/20 text-rose-300 font-bold px-2.5 py-0.5 rounded text-[10px] border border-rose-500/30">
                 Live UAE Radar Active
               </span>
               {isSupabaseConnected && (
@@ -379,7 +379,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
           <div className="flex items-center gap-2 shrink-0 self-start">
             <div className="hidden sm:block bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-700 text-right">
               <span className="text-[10px] text-slate-400 block font-bold uppercase tracking-wider">Session Authority</span>
-              <span className="font-mono font-bold text-emerald-400 text-xs">admin@supplysouq.ae</span>
+              <span className="font-mono font-bold text-[#cf2e46] text-xs">admin@supplysouq.ae</span>
             </div>
             <button
               type="button"
@@ -434,7 +434,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
           title="Total Platform GMV"
           value={formatAED(totalGMV || 43920)}
           subtitle="1.3% Waived (Launch 0%)"
-          icon={<DollarSign className="w-6 h-6 text-emerald-600" />}
+          icon={<DollarSign className="w-6 h-6 text-[#cf2e46]" />}
           trend={{ value: '+24%', isPositive: true }}
         />
         <StatWidget
@@ -487,7 +487,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
           onClick={() => setActiveTab('finance')}
           className={`py-2.5 px-4 rounded-xl flex items-center gap-2 transition-all shrink-0 ${
             activeTab === 'finance'
-              ? 'bg-emerald-600 text-white shadow-md'
+              ? 'bg-brand-600 text-white shadow-md'
               : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
           }`}
         >
@@ -739,8 +739,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
                             <Store className="w-3 h-3 text-amber-600" /> Supplier
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-800 font-bold px-2 py-0.5 rounded border border-emerald-300">
-                            <ShieldAlert className="w-3 h-3" /> Admin
+                          <span className="inline-flex items-center gap-1 bg-rose-50 text-rose-800 font-bold px-2 py-0.5 rounded border border-rose-300">
+                            <ShieldAlert className="w-3.5 h-3.5" /> Admin
                           </span>
                         )}
                       </td>
@@ -759,8 +759,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
                       </td>
                       <td className="p-3.5">
                         {u.verificationStatus === 'verified' ? (
-                          <span className="inline-flex items-center gap-1 bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full text-[10px]">
-                            <CheckCircle2 className="w-3 h-3" /> Verified
+                          <span className="inline-flex items-center gap-1 bg-rose-100 text-rose-800 font-bold px-2 py-0.5 rounded-full text-[10px]">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-[#cf2e46]" /> Verified
                           </span>
                         ) : (
                           <span className="inline-flex items-center gap-1 bg-amber-100 text-amber-900 font-bold px-2 py-0.5 rounded-full text-[10px]">
@@ -846,7 +846,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
                     <td className="p-3">
                       {r.matchedSupplierNames && r.matchedSupplierNames.length > 0 ? (
                         <div className="space-y-0.5">
-                          <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
+                          <span className="text-[10px] font-bold text-rose-700 bg-rose-50 px-1.5 py-0.5 rounded border border-rose-200">
                             ⏱ 24h SLA Active (5 Stockists)
                           </span>
                           <p className="text-[11px] text-slate-600 truncate max-w-xs font-medium">
@@ -953,7 +953,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
 
                 <div className="flex items-center justify-between py-1.5">
                   <span className="text-slate-500 font-medium">Account Status:</span>
-                  <span className="font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                  <span className="font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">
                     {selectedCustomer.verificationStatus || 'Active'}
                   </span>
                 </div>
@@ -982,7 +982,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
                   href={`https://wa.me/${selectedCustomer.phone.replace(/[^0-9]/g, '')}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold text-xs inline-flex items-center gap-1.5 transition-colors shadow-sm"
+                  className="px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white rounded-lg font-bold text-xs inline-flex items-center gap-1.5 transition-colors shadow-sm"
                 >
                   Contact via WhatsApp
                 </a>

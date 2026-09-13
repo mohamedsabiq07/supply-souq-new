@@ -23,7 +23,7 @@ export const AdminRBACSelector: React.FC<AdminRBACSelectorProps> = ({
       shortTitle: 'Super Admin',
       desc: 'Master clearance: Full control over finances, commissions, KYB, user management & system settings.',
       icon: Lock,
-      color: 'bg-emerald-500 text-slate-950 font-black shadow-sm',
+      color: 'bg-white text-slate-950 font-black shadow-sm',
     },
     procurement_ops: {
       title: 'Procurement Operations Agent',
@@ -53,7 +53,7 @@ export const AdminRBACSelector: React.FC<AdminRBACSelectorProps> = ({
       <div className="flex flex-wrap items-center justify-between gap-2.5">
         <div className="flex items-center gap-2">
           <span className="text-[11px] font-extrabold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-            <UserCheck className="w-3.5 h-3.5 text-emerald-400" />
+            <UserCheck className="w-3.5 h-3.5 text-rose-400" />
             Operator Clearance:
           </span>
         </div>
@@ -63,15 +63,16 @@ export const AdminRBACSelector: React.FC<AdminRBACSelectorProps> = ({
             const cfg = rolesConfig[rKey];
             const isSelected = currentRole === rKey;
             const Icon = cfg.icon;
+
             return (
               <button
                 key={rKey}
                 type="button"
                 onClick={() => onChangeRole(rKey)}
-                className={`px-3 py-1.5 rounded-md font-bold transition-all text-xs flex items-center gap-1.5 cursor-pointer ${
+                className={`px-3 py-1.5 rounded-md font-bold transition-all flex items-center gap-1.5 ${
                   isSelected
                     ? cfg.color
-                    : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-800'
                 }`}
                 title={cfg.desc}
               >
@@ -84,7 +85,7 @@ export const AdminRBACSelector: React.FC<AdminRBACSelectorProps> = ({
       </div>
 
       <div className="flex items-center gap-1.5 text-[11px] text-slate-400 pt-1 border-t border-slate-700/40">
-        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
+        <span className="w-1.5 h-1.5 rounded-full bg-[#cf2e46] shrink-0" />
         <span className="truncate">{rolesConfig[currentRole].desc}</span>
       </div>
     </div>

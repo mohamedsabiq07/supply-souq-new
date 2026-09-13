@@ -219,7 +219,7 @@ export const AdminMarketDesk: React.FC = () => {
                     <span
                       className={`text-[10px] px-1.5 py-0.2 rounded font-bold ${
                         item.isPositive
-                          ? 'text-[#fb7187] bg-emerald-950/60 border border-[#cf2e46]/30'
+                          ? 'text-[#fb7187] bg-rose-950/60 border border-[#cf2e46]/30'
                           : 'text-rose-400 bg-rose-950/60 border border-rose-500/30'
                       }`}
                     >
@@ -236,14 +236,14 @@ export const AdminMarketDesk: React.FC = () => {
       {/* 4 Dynamic Platform Telemetry KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Card 1: Dynamic Savings */}
-        <Card className="border-emerald-200 bg-emerald-50/40">
+        <Card className="border-rose-200 bg-rose-50/40">
           <CardContent className="p-4 space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-emerald-800 uppercase tracking-wider flex items-center gap-1.5">
-                <Sparkles className="w-4 h-4 text-emerald-600" />
+              <span className="text-xs font-bold text-rose-800 uppercase tracking-wider flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-[#cf2e46]" />
                 Contractor Savings
               </span>
-              <span className="bg-emerald-200 text-emerald-900 text-[10px] font-extrabold px-1.5 py-0.5 rounded">
+              <span className="bg-rose-200 text-rose-900 text-[10px] font-extrabold px-1.5 py-0.5 rounded">
                 Live Auto-Calc
               </span>
             </div>
@@ -365,7 +365,7 @@ export const AdminMarketDesk: React.FC = () => {
             >
               <div className="flex items-center justify-between mb-1">
                 <span className="font-bold text-xs text-slate-900 group-hover:text-brand-600">🏗️ Emirates Steel Rebar</span>
-                <span className="text-[10px] font-mono text-emerald-600 font-bold">AED 2,450 / MT</span>
+                <span className="text-[10px] font-mono text-slate-900 font-bold">AED 2,450 / MT</span>
               </div>
               <p className="text-[10px] text-slate-500">BS4449 Grade 500B / CARES Certified</p>
             </button>
@@ -387,7 +387,7 @@ export const AdminMarketDesk: React.FC = () => {
             >
               <div className="flex items-center justify-between mb-1">
                 <span className="font-bold text-xs text-slate-900 group-hover:text-brand-600">⚡ Ducab 4-Core Cable</span>
-                <span className="text-[10px] font-mono text-emerald-600 font-bold">AED 38.50 / M</span>
+                <span className="text-[10px] font-mono text-slate-900 font-bold">AED 38.50 / M</span>
               </div>
               <p className="text-[10px] text-slate-500">DEWA / SEWA Spec 600/1000V Armoured</p>
             </button>
@@ -409,7 +409,7 @@ export const AdminMarketDesk: React.FC = () => {
             >
               <div className="flex items-center justify-between mb-1">
                 <span className="font-bold text-xs text-slate-900 group-hover:text-brand-600">🧱 National OPC Cement</span>
-                <span className="text-[10px] font-mono text-emerald-600 font-bold">AED 14.20 / Bag</span>
+                <span className="text-[10px] font-mono text-slate-900 font-bold">AED 14.20 / Bag</span>
               </div>
               <p className="text-[10px] text-slate-500">Ordinary Portland Cement 50kg Bags</p>
             </button>
@@ -453,7 +453,7 @@ export const AdminMarketDesk: React.FC = () => {
             >
               <div className="flex items-center justify-between mb-1">
                 <span className="font-bold text-xs text-slate-900 group-hover:text-brand-600">📐 Knauf Gypsum Board</span>
-                <span className="text-[10px] font-mono text-emerald-600 font-bold">AED 18.50 / Sheet</span>
+                <span className="text-[10px] font-mono text-slate-900 font-bold">AED 18.50 / Sheet</span>
               </div>
               <p className="text-[10px] text-slate-500">1.2m x 2.4m Standard Drywall Partition</p>
             </button>
@@ -475,7 +475,7 @@ export const AdminMarketDesk: React.FC = () => {
             >
               <div className="flex items-center justify-between mb-1">
                 <span className="font-bold text-xs text-slate-900 group-hover:text-brand-600">🌲 White Wood Timber</span>
-                <span className="text-[10px] font-mono text-emerald-600 font-bold">AED 880 / M3</span>
+                <span className="text-[10px] font-mono text-slate-900 font-bold">AED 880 / M3</span>
               </div>
               <p className="text-[10px] text-slate-500">Romanian / European Softwood Formwork</p>
             </button>
@@ -547,11 +547,11 @@ export const AdminMarketDesk: React.FC = () => {
                       onClick={() => toggleTelemetryActive(item.id)}
                       className={`px-2.5 py-1 rounded-full text-[10px] font-extrabold flex items-center gap-1 transition-all ${
                         item.isActive
-                          ? 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200'
+                          ? 'bg-rose-100 text-rose-800 hover:bg-rose-200'
                           : 'bg-slate-200 text-slate-600 hover:bg-slate-300'
                       }`}
                     >
-                      <span className={`w-1.5 h-1.5 rounded-full ${item.isActive ? 'bg-emerald-600 animate-pulse' : 'bg-slate-500'}`} />
+                      <span className={`w-1.5 h-1.5 rounded-full ${item.isActive ? 'bg-[#cf2e46] animate-pulse' : 'bg-slate-500'}`} />
                       {item.isActive ? 'ON AIR' : 'HIDDEN'}
                     </button>
                   </td>
@@ -567,7 +567,7 @@ export const AdminMarketDesk: React.FC = () => {
                     <span
                       className={`inline-flex items-center gap-1 text-[10px] font-extrabold px-2 py-0.5 rounded ${
                         item.isPositive
-                          ? 'text-emerald-700 bg-emerald-50 border border-emerald-200'
+                          ? 'text-rose-700 bg-rose-50 border border-rose-200'
                           : 'text-rose-700 bg-rose-50 border border-rose-200'
                       }`}
                     >
@@ -719,11 +719,11 @@ export const AdminMarketDesk: React.FC = () => {
                     onClick={() => setIsPositive(true)}
                     className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-bold border transition-all ${
                       isPositive
-                        ? 'bg-emerald-500 text-white border-emerald-600'
+                        ? 'bg-[#cf2e46] text-white border-red-700'
                         : 'bg-slate-50 text-slate-600 border-slate-200'
                     }`}
                   >
-                    Positive (Green)
+                    Positive / Gain
                   </button>
                   <button
                     type="button"

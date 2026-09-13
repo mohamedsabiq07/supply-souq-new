@@ -293,7 +293,7 @@ export const QuotationForm: React.FC<QuotationFormProps> = ({
                           </span>
                         )}
                         {rfqItem?.allowAlternatives && (
-                          <span className="text-[9px] text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
+                          <span className="text-[9px] text-rose-800 font-bold bg-rose-50 px-1.5 py-0.5 rounded border border-rose-200">
                             Equivalents Welcome
                           </span>
                         )}
@@ -381,7 +381,7 @@ export const QuotationForm: React.FC<QuotationFormProps> = ({
                       <div>
                         <div className="font-bold text-xs text-slate-900 flex items-center gap-1.5">
                           SupplySouq Delivery
-                          <span className="text-[9px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.2 rounded">Recommended</span>
+                          <span className="text-[9px] bg-rose-100 text-rose-800 font-bold px-1.5 py-0.2 rounded">Recommended</span>
                         </div>
                         <div className="text-[11px] text-slate-500">No vehicle? We pick up & deliver</div>
                       </div>
@@ -452,13 +452,13 @@ export const QuotationForm: React.FC<QuotationFormProps> = ({
                     <div className="bg-white/90 p-2 rounded-lg border border-slate-100">
                       <div className="text-[10px] text-slate-400 font-medium">Assigned Vehicle</div>
                       <div className="font-bold text-brand-700 truncate" title={spotLogistics.vehicleType}>{spotLogistics.vehicleType}</div>
-                      <div className="text-[9px] text-emerald-600 font-bold">{formatAED(spotLogistics.spotDeliveryFeeAED)} Spot Fee</div>
+                      <div className="text-[9px] text-[#cf2e46] font-bold">{formatAED(spotLogistics.spotDeliveryFeeAED)} Spot Fee</div>
                     </div>
                   </div>
 
                   <div className="text-[10px] text-slate-600 flex items-center justify-between pt-1">
                     <span className="flex items-center gap-1">
-                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                      <ShieldCheck className="w-3.5 h-3.5 text-[#cf2e46]" />
                       SupplySouq driver handles warehouse collection, site access pass & offloading.
                     </span>
                     <span className="font-bold text-brand-900 bg-brand-100/70 px-1.5 py-0.5 rounded text-[10px]">
@@ -572,7 +572,7 @@ export const QuotationForm: React.FC<QuotationFormProps> = ({
                 min="0"
                 value={discountAED}
                 onChange={(e) => setDiscountAED(parseFloat(e.target.value) || 0)}
-                className="w-28 text-right p-1 rounded border border-slate-200 text-xs font-bold text-emerald-700 focus:ring-brand-500"
+                className="w-28 text-right p-1 rounded border border-slate-200 text-xs font-bold text-[#cf2e46] focus:ring-brand-500"
               />
             </div>
 
@@ -783,7 +783,7 @@ export const QuotationForm: React.FC<QuotationFormProps> = ({
                   <span className="text-[10px] text-slate-400 uppercase tracking-wider block font-semibold">Total Quoted Amount</span>
                   <span className="text-xl font-extrabold text-brand-400 font-mono">{formatAED(grandTotal)}</span>
                 </div>
-                <span className="text-xs bg-[#cf2e46]/20 text-emerald-300 px-2.5 py-1 rounded font-semibold border border-[#cf2e46]/30">
+                <span className="text-xs bg-[#cf2e46]/20 text-rose-200 px-2.5 py-1 rounded font-semibold border border-[#cf2e46]/30">
                   5% VAT Included
                 </span>
               </div>
@@ -803,7 +803,7 @@ export const QuotationForm: React.FC<QuotationFormProps> = ({
                 variant="amber"
                 size="lg"
                 onClick={handleFinalSubmit}
-                leftIcon={<CheckCircle2 className="w-4 h-4 text-emerald-800" />}
+                leftIcon={<CheckCircle2 className="w-4 h-4 text-slate-900" />}
               >
                 Confirm & Submit Formal Quotation
               </Button>

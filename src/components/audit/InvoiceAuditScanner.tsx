@@ -226,7 +226,7 @@ export const InvoiceAuditScanner: React.FC<InvoiceAuditScannerProps> = ({ onSwit
       <div className="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-xl space-y-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1 max-w-xl">
-            <div className="inline-flex items-center gap-1.5 bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-3 py-1 rounded-full text-xs font-bold">
+            <div className="inline-flex items-center gap-1.5 bg-rose-500/20 text-rose-300 border border-rose-400/30 px-3 py-1 rounded-full text-xs font-bold">
               <Sparkles className="w-3.5 h-3.5" />
               <span>Free 30-Second Electrical Cost Audit</span>
             </div>
@@ -274,7 +274,7 @@ export const InvoiceAuditScanner: React.FC<InvoiceAuditScannerProps> = ({ onSwit
                   <span className="text-[10px] uppercase tracking-wider text-amber-300 font-mono">
                     {inv.facilityType}
                   </span>
-                  <span className="text-[10px] text-emerald-400 font-extrabold">
+                  <span className="text-[10px] text-rose-400 font-extrabold">
                     Save {inv.savingsPercent}%
                   </span>
                 </div>
@@ -312,13 +312,13 @@ export const InvoiceAuditScanner: React.FC<InvoiceAuditScannerProps> = ({ onSwit
               </CardContent>
             </Card>
 
-            <Card className="border-emerald-200 bg-emerald-50/40">
+            <Card className="border-rose-200 bg-rose-50/40">
               <CardContent className="p-5 space-y-1">
-                <span className="text-xs font-semibold text-emerald-800">SupplySouq Verified Price</span>
-                <div className="text-2xl font-extrabold text-emerald-950">
+                <span className="text-xs font-semibold text-rose-800">SupplySouq Verified Price</span>
+                <div className="text-2xl font-extrabold text-rose-950">
                   {formatAED(activeInvoice.supplySouqTotalAED)}
                 </div>
-                <span className="text-[11px] text-emerald-700 block">Direct stockist wholesale rate</span>
+                <span className="text-[11px] text-rose-700 block">Direct stockist wholesale rate</span>
               </CardContent>
             </Card>
 
@@ -326,7 +326,7 @@ export const InvoiceAuditScanner: React.FC<InvoiceAuditScannerProps> = ({ onSwit
               <CardContent className="p-5 space-y-1">
                 <span className="text-xs font-semibold text-amber-900">Your Project Savings</span>
                 <div className="text-2xl font-extrabold text-amber-950 flex items-center gap-1.5">
-                  <TrendingDown className="w-6 h-6 text-emerald-600" />
+                  <TrendingDown className="w-6 h-6 text-[#cf2e46]" />
                   <span>{formatAED(activeInvoice.totalSavingsAED)}</span>
                 </div>
                 <span className="text-[11px] text-amber-800 font-bold block">
@@ -400,20 +400,20 @@ export const InvoiceAuditScanner: React.FC<InvoiceAuditScannerProps> = ({ onSwit
                         <span className="text-[10px] text-slate-400">{formatAED(item.currentUnitPriceAED, true)} / {item.unit}</span>
                       </td>
 
-                      <td className="p-3 text-right text-emerald-700 bg-emerald-50/30">
-                        <span className="font-extrabold text-emerald-950 block">{formatAED(item.supplySouqTotalPriceAED)}</span>
-                        <span className="text-[10px] text-emerald-700 font-medium">{formatAED(item.supplySouqUnitPriceAED, true)} / {item.unit}</span>
+                      <td className="p-3 text-right text-rose-700 bg-rose-50/30">
+                        <span className="font-extrabold text-rose-950 block">{formatAED(item.supplySouqTotalPriceAED)}</span>
+                        <span className="text-[10px] text-rose-700 font-medium">{formatAED(item.supplySouqUnitPriceAED, true)} / {item.unit}</span>
                       </td>
 
                       <td className="p-3 text-right">
-                        <span className="font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-200 inline-block">
+                        <span className="font-bold text-rose-700 bg-rose-100 px-2 py-0.5 rounded border border-rose-200 inline-block">
                           - {formatAED(item.savingsAED)} ({item.savingsPercent}%)
                         </span>
                       </td>
 
                       <td className="p-3 text-[11px]">
                         <div className="flex items-center gap-1 text-slate-900 font-bold">
-                          <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                          <ShieldCheck className="w-3.5 h-3.5 text-[#cf2e46]" />
                           <span>{item.matchedSupplierName}</span>
                         </div>
                         <span className="text-slate-500 text-[10px] block">{item.matchedSupplierZone}</span>

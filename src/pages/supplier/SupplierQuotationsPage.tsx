@@ -32,7 +32,7 @@ export const SupplierQuotationsPage: React.FC = () => {
                       </span>
                       <span className="text-xs font-mono text-slate-500">RFQ: {quote.rfqNumber}</span>
                       {quote.status === 'awarded' ? (
-                        <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300">
+                        <span className="text-xs font-bold text-rose-800 bg-rose-100 px-2 py-0.5 rounded border border-rose-300">
                           ✓ Won & Awarded
                         </span>
                       ) : (
