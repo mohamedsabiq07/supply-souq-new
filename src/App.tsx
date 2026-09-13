@@ -41,6 +41,9 @@ import { ProfilePage } from './pages/profile/ProfilePage';
 import { LoginPage } from './pages/auth/LoginPage';
 import { RegisterPage } from './pages/auth/RegisterPage';
 
+// Shader Pages
+import { HalftoneShader } from './components/shader/HalftoneShader';
+
 const checkIsAdminSecretRoute = () => {
   try {
     const pathname = window.location.pathname.toLowerCase().replace(/^\/+|\/+$/g, '');
@@ -61,11 +64,26 @@ const checkIsAdminSecretRoute = () => {
   }
 };
 
+const checkIsHalftoneRoute = () => {
+  try {
+    const pathname = window.location.pathname.toLowerCase().replace(/^\/+|\/+$/g, '');
+    const hash = window.location.hash.replace('#', '').toLowerCase().replace(/^\/+|\/+$/g, '');
+    const search = new URLSearchParams(window.location.search);
+    const viewParam = (search.get('view') || search.get('page') || '').toLowerCase();
+    return pathname === 'halftone' || hash === 'halftone' || viewParam === 'halftone';
+  } catch (e) {
+    return false;
+  }
+};
+
 const AppContent: React.FC = () => {
   const { role, setRole, isAuthenticated, isImpersonating, impersonatedUser, stopImpersonating, panicLock } = useAuth();
   const [currentView, setCurrentView] = useState<string>(() => {
     if (checkIsAdminSecretRoute()) {
       return 'admin-login';
+    }
+    if (checkIsHalftoneRoute()) {
+      return 'halftone';
     }
     return 'home';
   });
@@ -80,6 +98,11 @@ const AppContent: React.FC = () => {
         } else {
           setCurrentView('admin-login');
         }
+        return;
+      }
+      if (checkIsHalftoneRoute()) {
+        setCurrentView('halftone');
+        return;
       }
     };
 
@@ -192,6 +215,11 @@ const AppContent: React.FC = () => {
         <Footer setCurrentView={handleNavigate} />
       </div>
     );
+  }
+
+  // Full-bleed Halftone WebGL Shader View (Zero Chrome, Pure Canvas)
+  if (currentView === 'halftone') {
+    return <HalftoneShader />;
   }
 
   return (
