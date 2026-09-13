@@ -122,12 +122,6 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-4xl mx-auto text-center space-y-6">
             
-            {/* Neiden Technical Pill Badge */}
-            <div className="inline-flex items-center gap-2 bg-white border border-slate-300 px-4 py-1.5 rounded-full text-xs font-mono font-bold tracking-wider text-slate-800 shadow-2xs">
-              <span className="w-2 h-2 rounded-full bg-[#cf2e46] animate-pulse" />
-              <span className="text-[#cf2e46] font-extrabold">[SS®—PROCUREMENT]</span>
-              <span className="text-slate-700">UAE'S VERIFIED B2B SOURCING NETWORK</span>
-            </div>
 
             {/* Main Headline */}
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-950 leading-[1.1] cursor-default select-none">
