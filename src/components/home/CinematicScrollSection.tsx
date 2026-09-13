@@ -144,18 +144,10 @@ export const CinematicScrollSection: React.FC<CinematicScrollSectionProps> = ({ 
   return (
     <div
       ref={containerRef}
-      className="relative w-full min-h-[360vh] bg-[#030304] text-slate-100 font-sans select-none"
+      className="relative w-full min-h-[360vh] bg-transparent text-slate-100 font-sans select-none"
     >
       {/* Sticky Viewport Stage */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
-
-        {/* Live WebGL Halftone Fragment Shader Canvas (34-cell lattice, FBM domain warp) */}
-        <motion.div
-          style={{ opacity: gridOpacity }}
-          className="absolute inset-0 z-0 pointer-events-auto"
-        >
-          <HalftoneShader embedded={true} className="opacity-80" />
-        </motion.div>
+      <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center bg-transparent">
 
         {/* Ambient Dark Blueprint Grid & Structural Column Guide Lines */}
         <motion.div

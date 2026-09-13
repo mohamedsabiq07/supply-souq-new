@@ -355,7 +355,7 @@ export const HalftoneShader: React.FC<HalftoneShaderProps> = ({
       {/* Full-bleed Canvas - Shader is the entire surface, no typography, no chrome */}
       <canvas
         ref={canvasRef}
-        className={`${positionClass} w-full h-full block z-10 ${hasWebGL ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+        className={`${positionClass} w-full h-full block ${hasWebGL ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
       />
     </div>
   );

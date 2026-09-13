@@ -253,7 +253,7 @@ const AppContent: React.FC = () => {
       <Navbar currentView={currentView} setCurrentView={handleNavigate} />
 
       {/* Live Market Telemetry Ticker - Sleek Sub-Navbar Ribbon */}
-      <MarketTicker />
+      <MarketTicker isHome={currentView === 'home'} />
 
       {/* Main Content Body */}
       {isPublicPage ? (
