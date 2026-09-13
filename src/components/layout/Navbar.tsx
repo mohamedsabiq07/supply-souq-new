@@ -110,19 +110,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
                 <Sparkles className="w-3.5 h-3.5 text-[#cf2e46]" />
                 <span>Free Cost Audit</span>
               </button>
-
-              <button
-                onClick={() => setCurrentView('halftone')}
-                className={`px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 text-xs font-bold ${
-                  currentView === 'halftone'
-                    ? 'bg-[#08090D] text-[#DBE0EB] border border-[#DBE0EB]/40 shadow-xs'
-                    : 'bg-[#08090D] hover:bg-black text-[#DBE0EB] hover:text-white border border-slate-800 shadow-2xs'
-                }`}
-                title="Full-Viewport WebGL Fragment Shader"
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-[#cf2e46] animate-pulse" />
-                <span>Halftone Shader</span>
-              </button>
             </nav>
           </div>
 
@@ -244,16 +231,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
               className="p-2.5 text-left text-[#cf2e46] bg-rose-50 font-bold rounded-lg border border-rose-200"
             >
               Free Cost Audit (Save 15%+)
-            </button>
-            <button
-              onClick={() => {
-                setCurrentView('halftone');
-                setMobileMenuOpen(false);
-              }}
-              className="p-2.5 text-left text-[#DBE0EB] bg-[#08090D] font-bold rounded-lg border border-[#DBE0EB]/20 flex items-center gap-2"
-            >
-              <span className="w-2 h-2 rounded-full bg-[#cf2e46] animate-pulse" />
-              <span>Halftone Shader (WebGL Canvas)</span>
             </button>
           </div>
 

@@ -1014,19 +1014,6 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
         </div>
       </section>
 
-      {/* Floating Quick-Access Launcher for Halftone WebGL Shader */}
-      <div className="fixed bottom-6 right-6 z-40">
-        <button
-          onClick={() => setCurrentView('halftone')}
-          className="flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-[#08090D] hover:bg-black text-[#DBE0EB] hover:text-white border border-[#DBE0EB]/30 hover:border-[#cf2e46] shadow-2xl backdrop-blur-md transition-all duration-300 hover:scale-105 group cursor-pointer"
-          title="Launch Full-Viewport WebGL Fragment Shader"
-        >
-          <span className="w-2 h-2 rounded-full bg-[#cf2e46] group-hover:animate-ping" />
-          <span className="text-xs font-mono font-bold tracking-wide">WebGL Halftone Shader</span>
-          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white/10 text-slate-300">EXPLORE</span>
-        </button>
-      </div>
-
     </div>
   );
 };
