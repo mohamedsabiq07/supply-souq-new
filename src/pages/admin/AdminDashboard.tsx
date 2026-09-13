@@ -47,6 +47,7 @@ import { AdminDealProtection } from '../../components/admin/AdminDealProtection'
 import { AdminLogisticsDispute } from '../../components/admin/AdminLogisticsDispute';
 import { AdminAnalyticsExport } from '../../components/admin/AdminAnalyticsExport';
 import { AdminRBACSelector } from '../../components/admin/AdminRBACSelector';
+import { AdminSecurityDesk } from '../../components/admin/AdminSecurityDesk';
 
 interface AdminDashboardProps {
   onNavigate: (view: string, params?: any) => void;
@@ -67,14 +68,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
     role, 
     registeredUsers, 
     adminLogin,
+    adminLoginWith2FA,
     isImpersonating,
     impersonatedUser,
     impersonateUser,
-    stopImpersonating
+    stopImpersonating,
+    isDeskLocked,
+    lockDesk,
+    unlockDeskWithPIN,
+    panicLock,
+    triggerCloak
   } = useAuth();
 
   // Tab State
-  type AdminTab = 'sla' | 'telemetry' | 'kyb' | 'finance' | 'protection' | 'logistics' | 'analytics' | 'users' | 'rfqs';
+  type AdminTab = 'sla' | 'telemetry' | 'kyb' | 'finance' | 'protection' | 'logistics' | 'analytics' | 'users' | 'rfqs' | 'security';
   const [activeTab, setActiveTab] = useState<AdminTab>('sla');
   const [adminRole, setAdminRole] = useState<AdminRole>('super_admin');
   const [isMaskingEnabled, setIsMaskingEnabled] = useState<boolean>(true);
@@ -85,26 +92,127 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCustomer, setSelectedCustomer] = useState<UserProfile | null>(null);
 
+  // Resume PIN state for locked screen
+  const [resumePIN, setResumePIN] = useState('');
+  const [resumeError, setResumeError] = useState('');
+
   // Security gate if not authenticated as admin
   const [adminPass, setAdminPass] = useState('');
+  const [adminPINInput, setAdminPINInput] = useState('');
   const [adminUnlocked, setAdminUnlocked] = useState(role === 'admin');
   const [passError, setPassError] = useState('');
+  const [gateStep, setGateStep] = useState<1 | 2>(1);
 
-  const handleUnlock = (e: React.FormEvent) => {
+  const handleGatePasskey = (e: React.FormEvent) => {
     e.preventDefault();
-    if (adminLogin(adminPass)) {
+    if (adminPass.trim() === 'Sabiq123') {
+      setPassError('');
+      setGateStep(2);
+    } else {
+      setPassError('Invalid Master Admin Passkey. Clearance denied.');
+    }
+  };
+
+  const handleGate2FA = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const res = await adminLoginWith2FA(adminPass.trim(), adminPINInput.trim());
+    if (res.success) {
       setAdminUnlocked(true);
       setPassError('');
     } else {
-      setPassError('Invalid Master Admin Key. Clearance required.');
+      setPassError(res.error || 'Invalid 2FA Master PIN.');
     }
   };
+
+  const handleResumeUnlock = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (unlockDeskWithPIN(resumePIN.trim())) {
+      setResumePIN('');
+      setResumeError('');
+    } else {
+      setResumeError('Incorrect 6-digit Master PIN. Entry denied.');
+    }
+  };
+
+  // Screen auto-lock challenge overlay
+  if (isDeskLocked) {
+    return (
+      <div className="fixed inset-0 z-[9999] bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4">
+        <Card className="max-w-md w-full p-8 space-y-6 shadow-2xl border-slate-800 bg-slate-900 text-white text-center">
+          <div className="w-16 h-16 rounded-3xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center mx-auto shadow-inner">
+            <Lock className="w-8 h-8 animate-pulse" />
+          </div>
+
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-bold border border-amber-500/30">
+              <Clock className="w-3.5 h-3.5" /> Auto-Lock Guard Active
+            </div>
+            <h2 className="text-2xl font-black tracking-tight text-white">Operations Desk Locked</h2>
+            <p className="text-xs text-slate-400">
+              Session locked to safeguard confidential UAE contractor pricing and supplier bids. Enter your 6-digit Master PIN to resume.
+            </p>
+          </div>
+
+          {resumeError && (
+            <div className="p-3 bg-rose-500/20 border border-rose-500/40 text-rose-300 text-xs font-semibold rounded-xl flex items-center gap-2 text-left">
+              <ShieldAlert className="w-4 h-4 shrink-0" />
+              <span>{resumeError}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleResumeUnlock} className="space-y-4">
+            <div>
+              <input
+                type="password"
+                required
+                autoFocus
+                maxLength={6}
+                pattern="[0-9]*"
+                inputMode="numeric"
+                value={resumePIN}
+                onChange={(e) => setResumePIN(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                placeholder="••••••"
+                className="w-full p-3 rounded-xl border border-slate-700 bg-slate-950 text-emerald-400 text-center font-mono font-black text-2xl tracking-[0.5em] focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all placeholder:text-slate-700"
+              />
+              <span className="text-[11px] text-slate-500 block mt-1">Default PIN: 070707</span>
+            </div>
+
+            <Button
+              type="submit"
+              variant="primary"
+              disabled={resumePIN.length !== 6}
+              className="w-full py-3 font-extrabold bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg"
+            >
+              Resume Control Tower Session
+            </Button>
+          </form>
+
+          <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs">
+            <button
+              type="button"
+              onClick={panicLock}
+              className="text-rose-400 hover:text-rose-300 font-bold transition-colors flex items-center gap-1.5 cursor-pointer"
+            >
+              <ShieldAlert className="w-3.5 h-3.5" /> Panic Lock & Evacuate
+            </button>
+            <button
+              type="button"
+              onClick={() => onNavigate('home')}
+              className="text-slate-400 hover:text-white transition-colors cursor-pointer"
+            >
+              Exit to Homepage →
+            </button>
+          </div>
+        </Card>
+      </div>
+    );
+  }
 
   // If locked, show security passkey screen
   if (!adminUnlocked && role !== 'admin') {
     return (
       <div className="max-w-md mx-auto py-16 px-4">
-        <Card className="p-8 space-y-6 shadow-2xl border-slate-200 text-center">
+        <Card className="p-8 space-y-6 shadow-2xl border-slate-200 text-center bg-white">
           <div className="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center mx-auto shadow-inner border border-emerald-300">
             <Lock className="w-7 h-7" />
           </div>
@@ -121,21 +229,58 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
             </div>
           )}
 
-          <form onSubmit={handleUnlock} className="space-y-4 text-xs">
-            <div>
-              <input
-                type="password"
-                required
-                placeholder="Enter Master Admin Passkey"
-                value={adminPass}
-                onChange={(e) => setAdminPass(e.target.value)}
-                className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 text-center font-bold text-slate-900"
-              />
-            </div>
-            <Button type="submit" variant="primary" className="w-full py-3 font-bold bg-emerald-600 hover:bg-emerald-700">
-              Authenticate & Unlock Admin Desk
-            </Button>
-          </form>
+          {gateStep === 1 ? (
+            <form onSubmit={handleGatePasskey} className="space-y-4 text-xs">
+              <div>
+                <input
+                  type="password"
+                  required
+                  autoFocus
+                  placeholder="Enter Master Admin Passkey"
+                  value={adminPass}
+                  onChange={(e) => setAdminPass(e.target.value)}
+                  className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 text-center font-bold text-slate-900"
+                />
+              </div>
+              <Button type="submit" variant="primary" className="w-full py-3 font-bold bg-emerald-600 hover:bg-emerald-700">
+                Verify Passkey & Continue →
+              </Button>
+            </form>
+          ) : (
+            <form onSubmit={handleGate2FA} className="space-y-4 text-xs">
+              <div>
+                <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                  Enter 6-Digit Master 2FA PIN
+                </label>
+                <input
+                  type="password"
+                  required
+                  autoFocus
+                  maxLength={6}
+                  pattern="[0-9]*"
+                  inputMode="numeric"
+                  placeholder="••••••"
+                  value={adminPINInput}
+                  onChange={(e) => setAdminPINInput(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                  className="w-full p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 text-center font-mono font-black text-2xl tracking-[0.5em] text-slate-900"
+                />
+                <span className="text-[11px] text-slate-400 block mt-1">Default: 070707</span>
+              </div>
+              <Button type="submit" variant="primary" className="w-full py-3 font-bold bg-emerald-600 hover:bg-emerald-700">
+                Authenticate Clearance
+              </Button>
+              <button
+                type="button"
+                onClick={() => {
+                  setGateStep(1);
+                  setPassError('');
+                }}
+                className="text-xs text-slate-500 hover:underline block mx-auto cursor-pointer"
+              >
+                ← Back to Passkey
+              </button>
+            </form>
+          )}
         </Card>
       </div>
     );
@@ -231,11 +376,29 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
             </p>
           </div>
 
-          <div className="hidden sm:flex items-center gap-2 text-right text-xs shrink-0 self-start">
-            <div className="bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-700">
+          <div className="flex items-center gap-2 shrink-0 self-start">
+            <div className="hidden sm:block bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-700 text-right">
               <span className="text-[10px] text-slate-400 block font-bold uppercase tracking-wider">Session Authority</span>
-              <span className="font-mono font-bold text-emerald-400">admin@supplysouq.ae</span>
+              <span className="font-mono font-bold text-emerald-400 text-xs">admin@supplysouq.ae</span>
             </div>
+            <button
+              type="button"
+              onClick={lockDesk}
+              title="Lock Screen Immediately"
+              className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg border border-slate-700 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+            >
+              <Lock className="w-3.5 h-3.5 text-amber-400" />
+              <span className="hidden sm:inline">Lock Desk</span>
+            </button>
+            <button
+              type="button"
+              onClick={panicLock}
+              title="Emergency Panic Evacuate"
+              className="px-3 py-1.5 bg-rose-950/80 hover:bg-rose-900 text-rose-300 hover:text-white rounded-lg border border-rose-800 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+            >
+              <ShieldAlert className="w-3.5 h-3.5 text-rose-400" />
+              <span className="hidden sm:inline">Panic Lock</span>
+            </button>
           </div>
         </div>
 
@@ -390,6 +553,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
         >
           <FileText className="w-4 h-4" />
           <span>📋 RFQ & Bids Matrix</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('security')}
+          className={`py-2.5 px-4 rounded-xl flex items-center gap-2 transition-all shrink-0 ${
+            activeTab === 'security'
+              ? 'bg-rose-700 text-white shadow-md font-black'
+              : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+          }`}
+        >
+          <ShieldAlert className="w-4 h-4 text-rose-500" />
+          <span>🛡️ Fortress & Security Logs</span>
         </button>
       </div>
 
@@ -697,6 +872,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
             </table>
           </CardContent>
         </Card>
+      )}
+
+      {/* ---------------- TAB 9: FORTRESS SECURITY & AUDIT DESK ---------------- */}
+      {activeTab === 'security' && (
+        <AdminSecurityDesk />
       )}
 
       {/* ---------------- CUSTOMER DETAILS MODAL ---------------- */}

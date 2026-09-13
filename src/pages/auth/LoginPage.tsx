@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
+import { NotFoundPage } from '../public/NotFoundPage';
 import { UserRole } from '../../types';
 import { 
   Layers, 
@@ -15,7 +16,8 @@ import {
   ShieldCheck, 
   Clock, 
   KeyRound, 
-  Sparkles 
+  Sparkles,
+  ShieldAlert
 } from 'lucide-react';
 
 interface LoginPageProps {
@@ -29,13 +31,16 @@ const MAX_FAILED_ATTEMPTS = 5;
 const LOCKOUT_DURATION_SECONDS = 60;
 
 export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToRegister, isAdminMode = false }) => {
-  const { signIn, adminLogin } = useAuth();
+  const { signIn, adminLogin, adminLoginWith2FA, triggerCloak, isCloaked } = useAuth();
   const [role, setRole] = useState<UserRole>(isAdminMode ? 'admin' : 'buyer');
   const [identifier, setIdentifier] = useState(isAdminMode ? 'admin' : '');
   const [password, setPassword] = useState('');
   const [adminPassword, setAdminPassword] = useState('');
+  const [adminPin, setAdminPin] = useState('');
+  const [adminStep, setAdminStep] = useState<1 | 2>(1);
   const [showPassword, setShowPassword] = useState(false);
   const [showAdminPassword, setShowAdminPassword] = useState(false);
+  const [showAdminPin, setShowAdminPin] = useState(false);
   const [rememberMe, setRememberMe] = useState<boolean>(true);
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
@@ -97,16 +102,39 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
 
   const isActuallyAdmin = role === 'admin' || isAdminMode;
 
+  // If cloaked honeypot active, display genuine 404 page
+  if (isAdminMode && isCloaked) {
+    return (
+      <NotFoundPage
+        attemptedPath="/admin07"
+        onNavigateHome={() => {
+          window.location.href = '/';
+        }}
+        onUncloaked={() => {
+          setFailedAttempts(0);
+          setAdminStep(1);
+        }}
+      />
+    );
+  }
+
   const handleFailedAttempt = (reason: string) => {
     const nextAttempts = failedAttempts + 1;
     setFailedAttempts(nextAttempts);
 
-    if (nextAttempts >= MAX_FAILED_ATTEMPTS) {
-      setLockoutSeconds(LOCKOUT_DURATION_SECONDS);
-      setErrorMsg(`Security Lockout: Too many failed attempts. Login is temporarily locked for ${LOCKOUT_DURATION_SECONDS} seconds.`);
+    const maxAllowed = isActuallyAdmin ? 3 : MAX_FAILED_ATTEMPTS;
+
+    if (nextAttempts >= maxAllowed) {
+      if (isActuallyAdmin) {
+        triggerCloak();
+        setErrorMsg('Security Lockout: 3 Failed attempts reached. Fortress Cloak activated.');
+      } else {
+        setLockoutSeconds(LOCKOUT_DURATION_SECONDS);
+        setErrorMsg(`Security Lockout: Too many failed attempts. Login is temporarily locked for ${LOCKOUT_DURATION_SECONDS} seconds.`);
+      }
     } else {
-      const remaining = MAX_FAILED_ATTEMPTS - nextAttempts;
-      setErrorMsg(`${reason} (${remaining} attempt${remaining === 1 ? '' : 's'} remaining before temporary lockout)`);
+      const remaining = maxAllowed - nextAttempts;
+      setErrorMsg(`${reason} (${remaining} attempt${remaining === 1 ? '' : 's'} remaining before system lockdown)`);
     }
   };
 
@@ -118,16 +146,29 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
     setLoading(true);
 
     if (isActuallyAdmin) {
-      const enteredPass = (adminPassword || password).trim();
-      const ok = adminLogin(enteredPass);
-      setLoading(false);
-      if (ok) {
-        setFailedAttempts(0);
-        onSuccess('admin-dashboard');
+      if (adminStep === 1) {
+        const enteredPass = (adminPassword || password).trim();
+        if (enteredPass === 'Sabiq123') {
+          setErrorMsg('');
+          setLoading(false);
+          setAdminStep(2);
+          return;
+        } else {
+          setLoading(false);
+          handleFailedAttempt('Invalid Master Admin Passkey.');
+          return;
+        }
       } else {
-        handleFailedAttempt('Invalid Master Admin Passkey. Only authorized operators may access the Admin Desk.');
+        const res = await adminLoginWith2FA((adminPassword || password).trim(), adminPin.trim());
+        setLoading(false);
+        if (res.success) {
+          setFailedAttempts(0);
+          onSuccess('admin-dashboard');
+        } else {
+          handleFailedAttempt(res.error || 'Invalid 2FA Master Security PIN.');
+        }
+        return;
       }
-      return;
     }
 
     const cleanId = (identifier || '').trim();
@@ -351,87 +392,174 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
                   : `Login to ${role === 'buyer' ? 'Contractor Portal' : 'Supplier Portal'}`}
               </Button>
             </>
-          ) : (
+          ) : adminStep === 1 ? (
             <>
-              <div>
-                <label className="font-bold text-slate-700 block mb-1 flex items-center justify-between">
-                  <span className="flex items-center gap-1">
-                    <Lock className="w-3.5 h-3.5 text-slate-400" /> Master Admin Passkey
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => setShowAdminPassword(!showAdminPassword)}
-                    className="text-slate-400 hover:text-slate-700 transition-colors flex items-center gap-1 text-[11px] font-normal"
-                    tabIndex={-1}
-                  >
-                    {showAdminPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-                    <span>{showAdminPassword ? 'Hide' : 'Show'}</span>
-                  </button>
-                </label>
-                <div className="relative">
-                  <input
-                    type={showAdminPassword ? 'text' : 'password'}
-                    required
-                    autoFocus
-                    disabled={lockoutSeconds > 0 || loading}
-                    value={adminPassword}
-                    onChange={(e) => setAdminPassword(e.target.value)}
-                    placeholder="Enter administrator passkey"
-                    className="w-full p-2.5 pr-10 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 font-bold text-slate-900 disabled:bg-slate-100"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowAdminPassword(!showAdminPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                    tabIndex={-1}
-                  >
-                    {showAdminPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
-                </div>
-              </div>
+                  <div className="p-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center gap-2">
+                    <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <span className="text-[11px] font-bold text-emerald-900">
+                      Step 1 of 2: Master Administrator Passkey
+                    </span>
+                  </div>
 
-              <Button
-                type="submit"
-                variant="primary"
-                disabled={loading || lockoutSeconds > 0}
-                className="w-full py-3 font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-md"
-              >
-                {loading ? 'Verifying clearance...' : lockoutSeconds > 0 ? `Locked (${lockoutSeconds}s)` : 'Unlock Admin Operations Desk'}
-              </Button>
-            </>
-          )}
+                  <div>
+                    <label className="font-bold text-slate-700 block mb-1 flex items-center justify-between">
+                      <span className="flex items-center gap-1">
+                        <Lock className="w-3.5 h-3.5 text-slate-400" /> Master Admin Passkey
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setShowAdminPassword(!showAdminPassword)}
+                        className="text-slate-400 hover:text-slate-700 transition-colors flex items-center gap-1 text-[11px] font-normal"
+                        tabIndex={-1}
+                      >
+                        {showAdminPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                        <span>{showAdminPassword ? 'Hide' : 'Show'}</span>
+                      </button>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type={showAdminPassword ? 'text' : 'password'}
+                        required
+                        autoFocus
+                        disabled={lockoutSeconds > 0 || loading}
+                        value={adminPassword}
+                        onChange={(e) => setAdminPassword(e.target.value)}
+                        placeholder="Enter administrator passkey"
+                        className="w-full p-2.5 pr-10 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 font-bold text-slate-900 disabled:bg-slate-100"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowAdminPassword(!showAdminPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                        tabIndex={-1}
+                      >
+                        {showAdminPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    disabled={loading || lockoutSeconds > 0}
+                    className="w-full py-3 font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-md flex items-center justify-center gap-2"
+                  >
+                    {loading ? 'Verifying clearance...' : lockoutSeconds > 0 ? `Locked (${lockoutSeconds}s)` : 'Verify Passkey & Proceed to PIN →'}
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl space-y-1">
+                    <div className="flex items-center gap-2">
+                      <KeyRound className="w-4 h-4 text-amber-600 shrink-0" />
+                      <span className="text-xs font-black text-amber-900">
+                        Step 2 of 2: 2FA Master Security PIN
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-amber-800">
+                      Passkey verified. Enter your confidential 6-digit Master PIN to unlock the control tower.
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="font-bold text-slate-700 block mb-1 flex items-center justify-between">
+                      <span className="flex items-center gap-1">
+                        <Lock className="w-3.5 h-3.5 text-slate-400" /> 6-Digit Master Security PIN
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setShowAdminPin(!showAdminPin)}
+                        className="text-slate-400 hover:text-slate-700 transition-colors flex items-center gap-1 text-[11px] font-normal"
+                        tabIndex={-1}
+                      >
+                        {showAdminPin ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                        <span>{showAdminPin ? 'Hide' : 'Show'}</span>
+                      </button>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type={showAdminPin ? 'text' : 'password'}
+                        required
+                        autoFocus
+                        maxLength={6}
+                        pattern="[0-9]*"
+                        inputMode="numeric"
+                        disabled={lockoutSeconds > 0 || loading}
+                        value={adminPin}
+                        onChange={(e) => setAdminPin(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                        placeholder="••••••"
+                        className="w-full p-3 pr-10 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 text-center font-mono font-black text-2xl tracking-[0.5em] text-slate-900 disabled:bg-slate-100"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowAdminPin(!showAdminPin)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                        tabIndex={-1}
+                      >
+                        {showAdminPin ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                    <p className="text-[11px] text-slate-500 mt-1 text-center">
+                      Default Master PIN: <span className="font-mono font-bold text-slate-700">070707</span>
+                    </p>
+                  </div>
+
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    disabled={loading || lockoutSeconds > 0 || adminPin.length !== 6}
+                    className="w-full py-3 font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-md flex items-center justify-center gap-2"
+                  >
+                    {loading ? 'Authenticating Fort Knox clearance...' : lockoutSeconds > 0 ? `Locked (${lockoutSeconds}s)` : 'Unlock Admin Operations Desk'}
+                  </Button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setAdminStep(1);
+                      setAdminPin('');
+                      setErrorMsg('');
+                    }}
+                    className="w-full text-center text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors py-1"
+                  >
+                    ← Back to Step 1 (Change Passkey)
+                  </button>
+                </>
+              )}
         </form>
 
         {/* Quick Test Accounts Pill Bar */}
-        <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-1.5">
-          <div className="flex items-center gap-1 text-[11px] font-bold text-slate-600">
-            <Sparkles className="w-3 h-3 text-brand-600" />
-            <span>Quick Test Accounts:</span>
+        {!isActuallyAdmin && (
+          <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-1.5">
+            <div className="flex items-center gap-1 text-[11px] font-bold text-slate-600">
+              <Sparkles className="w-3 h-3 text-brand-600" />
+              <span>Quick Test Accounts:</span>
+            </div>
+            <div className="flex flex-wrap gap-1.5 text-[11px]">
+              <button
+                type="button"
+                onClick={() => quickFill('facade', '123456789', 'buyer')}
+                className="px-2 py-1 bg-white border border-slate-200 hover:border-brand-500 hover:text-brand-700 rounded-md font-medium transition-all shadow-2xs"
+              >
+                🏢 Facade Lighting (Buyer)
+              </button>
+              <button
+                type="button"
+                onClick={() => quickFill('ridout', '123456789', 'supplier')}
+                className="px-2 py-1 bg-white border border-slate-200 hover:border-amber-500 hover:text-amber-800 rounded-md font-medium transition-all shadow-2xs"
+              >
+                🏭 Ridout Pest (Supplier)
+              </button>
+              <button
+                type="button"
+                onClick={() => quickFill('tariq', 'password123', 'buyer')}
+                className="px-2 py-1 bg-white border border-slate-200 hover:border-brand-500 hover:text-brand-700 rounded-md font-medium transition-all shadow-2xs text-slate-500"
+              >
+                ⚡ Apex MEP
+              </button>
+            </div>
           </div>
-          <div className="flex flex-wrap gap-1.5 text-[11px]">
-            <button
-              type="button"
-              onClick={() => quickFill('facade', '123456789', 'buyer')}
-              className="px-2 py-1 bg-white border border-slate-200 hover:border-brand-500 hover:text-brand-700 rounded-md font-medium transition-all shadow-2xs"
-            >
-              🏢 Facade Lighting (Buyer)
-            </button>
-            <button
-              type="button"
-              onClick={() => quickFill('ridout', '123456789', 'supplier')}
-              className="px-2 py-1 bg-white border border-slate-200 hover:border-amber-500 hover:text-amber-800 rounded-md font-medium transition-all shadow-2xs"
-            >
-              🏭 Ridout Pest (Supplier)
-            </button>
-            <button
-              type="button"
-              onClick={() => quickFill('tariq', 'password123', 'buyer')}
-              className="px-2 py-1 bg-white border border-slate-200 hover:border-brand-500 hover:text-brand-700 rounded-md font-medium transition-all shadow-2xs text-slate-500"
-            >
-              ⚡ Apex MEP
-            </button>
-          </div>
-        </div>
+        )}
 
         {/* Security Trust Badge */}
         <div className="flex items-center justify-center gap-1.5 text-[11px] text-slate-400">

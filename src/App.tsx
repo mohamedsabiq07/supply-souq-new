@@ -62,7 +62,7 @@ const checkIsAdminSecretRoute = () => {
 };
 
 const AppContent: React.FC = () => {
-  const { role, setRole, isAuthenticated, isImpersonating, impersonatedUser, stopImpersonating } = useAuth();
+  const { role, setRole, isAuthenticated, isImpersonating, impersonatedUser, stopImpersonating, panicLock } = useAuth();
   const [currentView, setCurrentView] = useState<string>(() => {
     if (checkIsAdminSecretRoute()) {
       return 'admin-login';
@@ -71,7 +71,7 @@ const AppContent: React.FC = () => {
   });
   const [viewParams, setViewParams] = useState<any>({});
 
-  // Listen to path / hash / URL changes for secret /admin07 access & Ctrl+Shift+A shortcut
+  // Listen to path / hash / URL changes for secret /admin07 access & shortcuts
   React.useEffect(() => {
     const handleURLChange = () => {
       if (checkIsAdminSecretRoute()) {
@@ -83,6 +83,8 @@ const AppContent: React.FC = () => {
       }
     };
 
+    let lastEscapeTime = 0;
+
     const handleGlobalShortcuts = (e: KeyboardEvent) => {
       // Secret operator shortcut: Ctrl + Shift + A to instantly access Admin Operations Desk
       if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
@@ -92,6 +94,23 @@ const AppContent: React.FC = () => {
         } else {
           setCurrentView('admin-login');
         }
+      }
+
+      // Emergency Panic Hotkey: Ctrl + Shift + L to purge session and cloak immediately
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'L' || e.key === 'l')) {
+        e.preventDefault();
+        panicLock();
+        setCurrentView('home');
+      }
+
+      // Quick Double Escape Panic when viewing Admin desk
+      if (e.key === 'Escape' && role === 'admin') {
+        const now = Date.now();
+        if (now - lastEscapeTime < 500) {
+          panicLock();
+          setCurrentView('home');
+        }
+        lastEscapeTime = now;
       }
     };
 
@@ -103,7 +122,7 @@ const AppContent: React.FC = () => {
       window.removeEventListener('hashchange', handleURLChange);
       window.removeEventListener('keydown', handleGlobalShortcuts);
     };
-  }, [isAuthenticated, role]);
+  }, [isAuthenticated, role, panicLock]);
 
   // Auto-redirect to dashboard when authenticated on login/register pages
   React.useEffect(() => {

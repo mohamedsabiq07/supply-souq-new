@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { UserRole, UserProfile, Company, Emirate, VerificationRequest } from '../types';
+import { UserRole, UserProfile, Company, Emirate, VerificationRequest, AdminAuditLog } from '../types';
 import { initialCompanies } from '../data/seedData';
 import { supabaseService } from '../services/supabaseService';
 
@@ -86,6 +86,23 @@ interface AuthContextType {
   login: (email: string, role: UserRole) => void;
   signIn: (identifier: string, password?: string) => Promise<{ success: boolean; user?: UserProfile; role?: UserRole; error?: string }>;
   adminLogin: (password: string) => boolean;
+
+  // Fort Knox Security Suite
+  masterPIN: string;
+  updateMasterPIN: (oldPin: string, newPin: string) => { success: boolean; error?: string };
+  verifyMasterPIN: (pin: string) => boolean;
+  adminLoginWith2FA: (password: string, pin: string) => Promise<{ success: boolean; error?: string }>;
+  isDeskLocked: boolean;
+  lockDesk: () => void;
+  unlockDeskWithPIN: (pin: string) => boolean;
+  panicLock: () => void;
+  securityLogs: AdminAuditLog[];
+  logSecurityEvent: (action: string, details: string, severity?: 'info' | 'warning' | 'critical') => void;
+  clearSecurityLogs: () => void;
+  isCloaked: boolean;
+  triggerCloak: () => void;
+  uncloak: (pass: string, pin: string) => boolean;
+
   signUpBuyer: (data: BuyerSignupData) => Promise<{ success: boolean; user?: UserProfile; error?: string }>;
   signUpSupplier: (data: SupplierSignupData) => Promise<{ success: boolean; user?: UserProfile; error?: string }>;
   updateProfile: (updatedUser: Partial<UserProfile>, updatedCompany?: Partial<Company>) => Promise<{ success: boolean; error?: string }>;
@@ -201,6 +218,214 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (e) {}
     return defaultUsers;
   });
+
+  // Fort Knox Security Suite State & Keys
+  const MASTER_PIN_KEY = 'supplysouq_admin_master_pin_v2';
+  const SECURITY_LOGS_KEY = 'supplysouq_security_audit_logs_v1';
+  const CLOAK_KEY = 'supplysouq_admin_cloaked_until_v1';
+
+  // 1. Master Security 2FA PIN (6 Digits, Default: 070707)
+  const [masterPIN, setMasterPIN] = useState<string>(() => {
+    try {
+      const saved = localStorage.getItem(MASTER_PIN_KEY);
+      if (saved && saved.length === 6) return saved;
+    } catch (e) {}
+    return '070707';
+  });
+
+  // 2. Cloaking / Honeypot Defense State
+  const [isCloaked, setIsCloaked] = useState<boolean>(() => {
+    try {
+      const until = localStorage.getItem(CLOAK_KEY);
+      if (until) {
+        const ts = parseInt(until, 10);
+        if (ts > Date.now()) return true;
+      }
+    } catch (e) {}
+    return false;
+  });
+
+  // 3. Desk Lock State (Inactivity or Panic)
+  const [isDeskLocked, setIsDeskLocked] = useState<boolean>(false);
+
+  // 4. Security Audit Logs
+  const [securityLogs, setSecurityLogs] = useState<AdminAuditLog[]>(() => {
+    try {
+      const saved = localStorage.getItem(SECURITY_LOGS_KEY);
+      if (saved) return JSON.parse(saved);
+    } catch (e) {}
+    return [
+      {
+        id: 'sec-init',
+        timestamp: new Date().toISOString(),
+        operatorName: 'Security Sentinel',
+        action: 'SECURITY_SUBSYSTEM_ONLINE',
+        targetType: 'security',
+        targetId: 'admin07',
+        details: 'Fort Knox Multi-layer defense initialized: 2FA PIN active, Cloak Honeypot armed, Inactivity Guard online.',
+        severity: 'info',
+      },
+    ];
+  });
+
+  const logSecurityEvent = (action: string, details: string, severity: 'info' | 'warning' | 'critical' = 'info') => {
+    const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : 'Unknown';
+    const entry: AdminAuditLog = {
+      id: `sec-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
+      timestamp: new Date().toISOString(),
+      operatorName: 'Security Sentinel',
+      action,
+      targetType: 'security',
+      targetId: 'admin07',
+      details: `${details} [UA: ${userAgent.slice(0, 60)}...]`,
+      severity,
+    };
+    setSecurityLogs((prev) => {
+      const updated = [entry, ...prev.slice(0, 99)];
+      try {
+        localStorage.setItem(SECURITY_LOGS_KEY, JSON.stringify(updated));
+      } catch (e) {}
+      return updated;
+    });
+  };
+
+  const clearSecurityLogs = () => {
+    const cleared: AdminAuditLog[] = [{
+      id: `sec-${Date.now()}`,
+      timestamp: new Date().toISOString(),
+      operatorName: 'Security Sentinel',
+      action: 'LOGS_CLEARED',
+      targetType: 'security',
+      targetId: 'admin07',
+      details: 'Security logs purged by authorized administrator.',
+      severity: 'info',
+    }];
+    setSecurityLogs(cleared);
+    try {
+      localStorage.setItem(SECURITY_LOGS_KEY, JSON.stringify(cleared));
+    } catch (e) {}
+  };
+
+  const updateMasterPIN = (oldPin: string, newPin: string): { success: boolean; error?: string } => {
+    if (oldPin !== masterPIN) {
+      logSecurityEvent('PIN_CHANGE_FAILED', 'Incorrect current PIN entered during PIN change attempt', 'warning');
+      return { success: false, error: 'Current PIN is incorrect.' };
+    }
+    if (!/^\d{6}$/.test(newPin)) {
+      return { success: false, error: 'New PIN must be exactly 6 numeric digits.' };
+    }
+    setMasterPIN(newPin);
+    try {
+      localStorage.setItem(MASTER_PIN_KEY, newPin);
+    } catch (e) {}
+    logSecurityEvent('PIN_CHANGE_SUCCESS', 'Master Security 2FA PIN was updated successfully', 'info');
+    return { success: true };
+  };
+
+  const verifyMasterPIN = (pin: string): boolean => {
+    return pin.trim() === masterPIN;
+  };
+
+  const triggerCloak = () => {
+    const lockUntil = Date.now() + 30 * 60 * 1000;
+    setIsCloaked(true);
+    try {
+      localStorage.setItem(CLOAK_KEY, String(lockUntil));
+    } catch (e) {}
+    logSecurityEvent('CLOAK_ACTIVATED', '3 Failed attempts reached. Fake 404 Cloak activated for 30 minutes', 'critical');
+  };
+
+  const uncloak = (pass: string, pin: string): boolean => {
+    if (pass === 'Sabiq123' && pin === masterPIN) {
+      setIsCloaked(false);
+      try {
+        localStorage.removeItem(CLOAK_KEY);
+      } catch (e) {}
+      logSecurityEvent('MANUAL_UNCLOAK_SUCCESS', 'Authorized operator uncloaked portal via 2FA verification', 'info');
+      return true;
+    }
+    return false;
+  };
+
+  const lockDesk = () => {
+    setIsDeskLocked(true);
+    logSecurityEvent('DESK_LOCKED', 'Operations Desk locked due to timeout or operator command', 'info');
+  };
+
+  const unlockDeskWithPIN = (pin: string): boolean => {
+    if (verifyMasterPIN(pin)) {
+      setIsDeskLocked(false);
+      logSecurityEvent('DESK_UNLOCKED', 'Operations Desk unlocked using Master PIN', 'info');
+      return true;
+    }
+    logSecurityEvent('DESK_UNLOCK_FAILED', 'Failed PIN entered on Desk Unlock Challenge', 'warning');
+    return false;
+  };
+
+  const panicLock = () => {
+    setIsDeskLocked(true);
+    logSecurityEvent('PANIC_LOCK_TRIGGERED', 'Panic / Emergency Lock triggered. Admin session cleared immediately.', 'critical');
+    setIsAuthenticated(false);
+    setCurrentUser(guestUser);
+    setCurrentCompany(guestCompany);
+    setRoleState('buyer');
+    try {
+      localStorage.removeItem(`${AUTH_STORAGE_KEY}_is_auth`);
+      localStorage.removeItem(`${AUTH_STORAGE_KEY}_role`);
+      localStorage.removeItem(`${AUTH_STORAGE_KEY}_user`);
+      localStorage.removeItem(`${AUTH_STORAGE_KEY}_company`);
+    } catch (e) {}
+    if (typeof window !== 'undefined') {
+      window.location.href = '/';
+    }
+  };
+
+  const adminLoginWith2FA = async (password: string, pin: string): Promise<{ success: boolean; error?: string }> => {
+    // Artificial 600ms delay to defeat automated script brute-force
+    await new Promise((resolve) => setTimeout(resolve, 600));
+
+    if (password !== 'Sabiq123') {
+      logSecurityEvent('ADMIN_LOGIN_BAD_PASSWORD', 'Invalid password attempted on Admin clearance', 'warning');
+      return { success: false, error: 'Invalid Master Admin Passkey.' };
+    }
+
+    if (!verifyMasterPIN(pin)) {
+      logSecurityEvent('ADMIN_LOGIN_BAD_PIN', 'Password accepted but 2FA Master PIN was incorrect', 'critical');
+      return { success: false, error: 'Invalid 6-Digit Master Security PIN.' };
+    }
+
+    switchDemoUser('admin');
+    setIsDeskLocked(false);
+    logSecurityEvent('ADMIN_LOGIN_SUCCESS', 'Authorized operator passed 2FA clearance into Operations Desk', 'info');
+    return { success: true };
+  };
+
+  // Inactivity Auto-Lockout Guard (15 minutes idle time)
+  useEffect(() => {
+    if (!isAuthenticated || role !== 'admin' || isDeskLocked) return;
+
+    let lastActive = Date.now();
+    const markActive = () => {
+      lastActive = Date.now();
+    };
+
+    const events = ['mousedown', 'keydown', 'scroll', 'touchstart', 'click'];
+    events.forEach((ev) => window.addEventListener(ev, markActive, { passive: true }));
+
+    const checkInterval = setInterval(() => {
+      const idleTime = Date.now() - lastActive;
+      const MAX_IDLE_MS = 15 * 60 * 1000;
+      if (idleTime > MAX_IDLE_MS) {
+        setIsDeskLocked(true);
+        logSecurityEvent('INACTIVITY_LOCKOUT', 'Session automatically locked after 15 minutes of inactivity', 'warning');
+      }
+    }, 15000);
+
+    return () => {
+      events.forEach((ev) => window.removeEventListener(ev, markActive));
+      clearInterval(checkInterval);
+    };
+  }, [isAuthenticated, role, isDeskLocked]);
 
   // Sync users from Supabase on mount
   useEffect(() => {
@@ -442,10 +667,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return { success: true, user: mockSupplierUser, role: 'supplier' };
     }
     if (cleanId === 'admin' || cleanId === 'admin@supplysouq.ae') {
-      if (cleanPassword && cleanPassword !== 'Sabiq123' && cleanPassword !== 'supplysouq2026') {
+      if (cleanPassword && cleanPassword !== 'Sabiq123') {
+        logSecurityEvent('ADMIN_SIGNIN_BAD_PASS', 'Incorrect passkey entered on admin account sign-in', 'warning');
         return { success: false, error: 'Incorrect master passkey.' };
       }
       switchDemoUser('admin');
+      setIsDeskLocked(false);
+      logSecurityEvent('ADMIN_SIGNIN_SUCCESS', 'Master admin signed in successfully', 'info');
       return { success: true, user: mockAdminUser, role: 'admin' };
     }
 
@@ -453,10 +681,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const adminLogin = (password: string): boolean => {
-    if (password === 'Sabiq123' || password === 'supplysouq2026') {
+    if (password === 'Sabiq123') {
       switchDemoUser('admin');
+      setIsDeskLocked(false);
+      logSecurityEvent('ADMIN_LOGIN_PASS_ONLY', 'Admin passkey authenticated', 'info');
       return true;
     }
+    logSecurityEvent('ADMIN_LOGIN_FAILED', 'Invalid passkey attempted on adminLogin', 'warning');
     return false;
   };
 
@@ -734,6 +965,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         login,
         signIn,
         adminLogin,
+        masterPIN,
+        updateMasterPIN,
+        verifyMasterPIN,
+        adminLoginWith2FA,
+        isDeskLocked,
+        lockDesk,
+        unlockDeskWithPIN,
+        panicLock,
+        securityLogs,
+        logSecurityEvent,
+        clearSecurityLogs,
+        isCloaked,
+        triggerCloak,
+        uncloak,
         signUpBuyer,
         signUpSupplier,
         updateProfile,
