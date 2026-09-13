@@ -39,11 +39,11 @@ export const MarketTicker: React.FC = () => {
   };
 
   return (
-    <div className="bg-[#020f0c] border-b border-[#00ffae]/15 text-white overflow-hidden select-none py-1.5 px-3 relative z-30 font-sans text-[11px] font-medium tracking-wide">
+    <div className="bg-[#050505] border-b border-[#cf2e46]/15 text-white overflow-hidden select-none py-1.5 px-3 relative z-30 font-sans text-[11px] font-medium tracking-wide">
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
         {/* Live Badge Indicator */}
-        <div className="flex items-center gap-2 shrink-0 bg-[#002116cc] text-[#00ffae] px-2.5 py-0.5 rounded-full border border-[#00ffae]/30 shadow-glow-mint">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#00ffae] animate-ping" />
+        <div className="flex items-center gap-2 shrink-0 bg-[#2a050dcc] text-[#cf2e46] px-2.5 py-0.5 rounded-full border border-[#cf2e46]/30 shadow-glow-red">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#cf2e46] animate-ping" />
           <span className="font-bold tracking-wider uppercase text-[10px]">LIVE TELEMETRY</span>
         </div>
 
@@ -54,25 +54,25 @@ export const MarketTicker: React.FC = () => {
               const Icon = getItemIcon(item.category, item.isPositive);
               return (
                 <div key={`${item.id}-${idx}`} className="inline-flex items-center gap-2 text-slate-300">
-                  <Icon className="w-3 h-3 text-[#00ffae] shrink-0" />
+                  <Icon className="w-3 h-3 text-[#cf2e46] shrink-0" />
                   <span className="text-slate-400 font-semibold">{item.label}:</span>
                   <span className="font-mono font-bold text-white tracking-wide">{item.value}</span>
                   <span
                     className={`text-[10px] px-1.5 py-0.5 rounded font-bold ${
                       item.isPositive
-                        ? 'text-emerald-400 bg-emerald-950/60 border border-emerald-500/30'
+                        ? 'text-rose-200 bg-rose-950/60 border border-rose-500/30'
                         : 'text-rose-400 bg-rose-950/60 border border-rose-500/30'
                     }`}
                   >
                     {item.change}
                   </span>
                   {item.source === 'dynamic_platform' && (
-                    <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-cyan-950 text-cyan-300 border border-cyan-800/40">
+                    <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-rose-950 text-rose-200 border border-rose-800/40">
                       LIVE RFQ
                     </span>
                   )}
                   {item.source === 'financial_feed' && (
-                    <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-amber-950 text-amber-300 border border-amber-800/40">
+                    <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-slate-900 text-slate-300 border border-slate-700/60">
                       LME
                     </span>
                   )}
@@ -85,7 +85,7 @@ export const MarketTicker: React.FC = () => {
 
         {/* Dubai Local Clock */}
         <div className="hidden lg:flex items-center gap-1.5 text-[10px] text-slate-400 shrink-0 bg-slate-900/80 px-2 py-0.5 rounded border border-slate-800">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+          <span className="w-1.5 h-1.5 rounded-full bg-[#cf2e46]" />
           <span>GST (DUBAI): UTC+4</span>
         </div>
       </div>

@@ -162,12 +162,12 @@ export const AdminMarketDesk: React.FC = () => {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2.5">
-              <span className="w-3 h-3 rounded-full bg-[#00ffae] animate-ping" />
+              <span className="w-3 h-3 rounded-full bg-[#cf2e46] animate-ping" />
               <h2 className="text-xl sm:text-2xl font-black tracking-tight flex items-center gap-2">
-                <Radio className="w-6 h-6 text-[#00ffae]" />
+                <Radio className="w-6 h-6 text-[#cf2e46]" />
                 Live Market Telemetry & Intelligence Desk
               </h2>
-              <span className="bg-[#00ffae]/20 text-[#00ffae] font-bold text-[10px] px-2.5 py-0.5 rounded border border-[#00ffae]/30">
+              <span className="bg-[#cf2e46]/20 text-[#cf2e46] font-bold text-[10px] px-2.5 py-0.5 rounded border border-[#cf2e46]/30">
                 Active Ribbon Controller
               </span>
             </div>
@@ -190,7 +190,7 @@ export const AdminMarketDesk: React.FC = () => {
               variant="primary"
               size="sm"
               onClick={handleOpenAdd}
-              className="bg-[#00ffae] text-slate-950 hover:bg-[#00e099] font-black text-xs shadow-glow-mint"
+              className="bg-[#cf2e46] text-slate-950 hover:bg-[#b91c33] font-black text-xs shadow-glow-red"
             >
               <Plus className="w-4 h-4 mr-1.5" />
               Add Benchmark Item
@@ -201,14 +201,14 @@ export const AdminMarketDesk: React.FC = () => {
         {/* Live Top Ribbon Preview */}
         <div className="pt-3 border-t border-slate-800">
           <div className="flex items-center justify-between text-[11px] text-slate-400 mb-1.5">
-            <span className="font-mono font-bold flex items-center gap-1.5 text-[#00ffae]">
-              <span className="w-2 h-2 rounded-full bg-[#00ffae] inline-block animate-pulse" />
+            <span className="font-mono font-bold flex items-center gap-1.5 text-[#cf2e46]">
+              <span className="w-2 h-2 rounded-full bg-[#cf2e46] inline-block animate-pulse" />
               LIVE SITE PREVIEW ({activeCount} items active in top ribbon)
             </span>
             <span className="text-slate-500 font-mono text-[10px]">Changes appear instantly on the live website</span>
           </div>
 
-          <div className="bg-[#020f0c] border border-[#00ffae]/20 rounded-xl p-2.5 overflow-hidden shadow-inner">
+          <div className="bg-[#050505] border border-[#cf2e46]/20 rounded-xl p-2.5 overflow-hidden shadow-inner">
             <div className="flex items-center gap-6 overflow-x-auto py-1 scrollbar-none">
               {telemetryItems
                 .filter((i) => i.isActive)
@@ -219,7 +219,7 @@ export const AdminMarketDesk: React.FC = () => {
                     <span
                       className={`text-[10px] px-1.5 py-0.2 rounded font-bold ${
                         item.isPositive
-                          ? 'text-emerald-400 bg-emerald-950/60 border border-emerald-500/30'
+                          ? 'text-[#fb7187] bg-emerald-950/60 border border-[#cf2e46]/30'
                           : 'text-rose-400 bg-rose-950/60 border border-rose-500/30'
                       }`}
                     >
@@ -257,14 +257,14 @@ export const AdminMarketDesk: React.FC = () => {
         </Card>
 
         {/* Card 2: Verified Stockists */}
-        <Card className="border-cyan-200 bg-cyan-50/40">
+        <Card className="border-rose-200 bg-rose-50/40">
           <CardContent className="p-4 space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-cyan-800 uppercase tracking-wider flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-cyan-600" />
+              <span className="text-xs font-bold text-rose-800 uppercase tracking-wider flex items-center gap-1.5">
+                <ShieldCheck className="w-4 h-4 text-rose-600" />
                 Verified Stockists
               </span>
-              <span className="bg-cyan-200 text-cyan-900 text-[10px] font-extrabold px-1.5 py-0.5 rounded">
+              <span className="bg-rose-200 text-rose-900 text-[10px] font-extrabold px-1.5 py-0.5 rounded">
                 DET / DED
               </span>
             </div>

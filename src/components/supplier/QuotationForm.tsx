@@ -190,7 +190,7 @@ export const QuotationForm: React.FC<QuotationFormProps> = ({
               {rfq.rfqNumber}
             </span>
             {rfq.authorityApproval && (
-              <span className="text-[10px] font-bold text-cyan-800 bg-cyan-100/70 px-2 py-0.5 rounded border border-cyan-300">
+              <span className="text-[10px] font-bold text-rose-800 bg-rose-100/70 px-2 py-0.5 rounded border border-rose-300">
                 {rfq.authorityApproval}
               </span>
             )}
@@ -616,7 +616,7 @@ export const QuotationForm: React.FC<QuotationFormProps> = ({
                   {formatAED(grandTotal)}
                 </span>
               </div>
-              <span className="text-xs bg-emerald-500/20 text-emerald-400 px-2 py-1 rounded border border-emerald-500/30 font-semibold">
+              <span className="text-xs bg-[#cf2e46]/20 text-[#fb7187] px-2 py-1 rounded border border-[#cf2e46]/30 font-semibold">
                 5% VAT Included
               </span>
             </div>
@@ -765,7 +765,7 @@ export const QuotationForm: React.FC<QuotationFormProps> = ({
                 <span className="font-mono">{formatAED(subtotal)}</span>
               </div>
               {discountAED > 0 && (
-                <div className="flex justify-between text-[11px] text-emerald-400">
+                <div className="flex justify-between text-[11px] text-[#fb7187]">
                   <span>Special Discount:</span>
                   <span className="font-mono">-{formatAED(discountAED)}</span>
                 </div>
@@ -783,7 +783,7 @@ export const QuotationForm: React.FC<QuotationFormProps> = ({
                   <span className="text-[10px] text-slate-400 uppercase tracking-wider block font-semibold">Total Quoted Amount</span>
                   <span className="text-xl font-extrabold text-brand-400 font-mono">{formatAED(grandTotal)}</span>
                 </div>
-                <span className="text-xs bg-emerald-500/20 text-emerald-300 px-2.5 py-1 rounded font-semibold border border-emerald-500/30">
+                <span className="text-xs bg-[#cf2e46]/20 text-emerald-300 px-2.5 py-1 rounded font-semibold border border-[#cf2e46]/30">
                   5% VAT Included
                 </span>
               </div>

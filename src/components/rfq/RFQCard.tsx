@@ -62,7 +62,7 @@ export const RFQCard: React.FC<RFQCardProps> = ({
                 <Clock className="w-3 h-3 text-emerald-600" /> 24-Hour SLA
               </span>
               {rfq.authorityApproval && (
-                <span className="text-[11px] font-bold text-cyan-800 bg-cyan-50 px-2 py-0.5 rounded border border-cyan-200">
+                <span className="text-[11px] font-bold text-rose-800 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">
                   {rfq.authorityApproval.split('(')[0].trim()}
                 </span>
               )}
