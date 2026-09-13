@@ -2,9 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 
 export interface HalftoneShaderProps {
   className?: string;
+  onBack?: () => void;
 }
 
-export const HalftoneShader: React.FC<HalftoneShaderProps> = ({ className = '' }) => {
+export const HalftoneShader: React.FC<HalftoneShaderProps> = ({ className = '', onBack }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hasWebGL, setHasWebGL] = useState(true);
 
@@ -332,6 +333,30 @@ export const HalftoneShader: React.FC<HalftoneShaderProps> = ({ className = '' }
           </div>
         </div>
       )}
+
+      {/* Floating Return Controls Overlay */}
+      <div className="fixed top-5 left-5 z-30 pointer-events-auto">
+        <button
+          onClick={() => {
+            if (onBack) {
+              onBack();
+            } else {
+              window.location.href = '/';
+            }
+          }}
+          className="px-4 py-2 rounded-full bg-[#080A0D]/85 hover:bg-[#080A0D] text-[#DBE0EB] hover:text-white border border-[#DBE0EB]/20 hover:border-[#cf2e46] backdrop-blur-md font-mono text-xs font-bold transition-all duration-200 shadow-2xl flex items-center gap-2 cursor-pointer group"
+        >
+          <span className="text-[#cf2e46] group-hover:-translate-x-0.5 transition-transform">←</span>
+          <span>Return to SupplySouq</span>
+        </button>
+      </div>
+
+      <div className="fixed top-5 right-5 z-30 pointer-events-none hidden sm:flex items-center gap-2.5 px-3.5 py-2 rounded-full bg-[#080A0D]/80 border border-[#DBE0EB]/15 text-[11px] font-mono text-[#8A92A6] backdrop-blur-md shadow-xl">
+        <span className="w-2 h-2 rounded-full bg-[#cf2e46] animate-pulse" />
+        <span className="text-[#DBE0EB] font-bold">HALFTONE WEBGL SHADER</span>
+        <span>•</span>
+        <span>34-CELL LATTICE</span>
+      </div>
 
       {/* Full-bleed Canvas */}
       <canvas

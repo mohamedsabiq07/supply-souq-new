@@ -80,6 +80,10 @@ export const AnimatedH3: React.FC<AnimatedH3Props> = ({
   // Split text by words first to preserve natural word boundary wrapping on mobile devices
   const words = text.split(' ');
 
+  // Check if custom text sizing is provided via className
+  const hasCustomSize = /\btext-(xs|sm|base|lg|[0-9]?xl)\b/.test(className);
+  const baseSize = hasCustomSize ? '' : 'text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold';
+
   return (
     <motion.h3
       initial="hidden"
@@ -87,7 +91,7 @@ export const AnimatedH3: React.FC<AnimatedH3Props> = ({
       viewport={{ once, margin: '-40px' }}
       variants={containerVariants}
       aria-label={text}
-      className={`font-sans text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight sm:tracking-tighter leading-tight sm:leading-snug ${variantStyles[colorVariant]} ${className}`}
+      className={`font-sans tracking-tight sm:tracking-tighter leading-tight sm:leading-snug ${baseSize} ${variantStyles[colorVariant]} ${className}`}
     >
       {words.map((word, wordIndex) => (
         <span

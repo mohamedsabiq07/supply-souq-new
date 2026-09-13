@@ -219,7 +219,7 @@ const AppContent: React.FC = () => {
 
   // Full-bleed Halftone WebGL Shader View (Zero Chrome, Pure Canvas)
   if (currentView === 'halftone') {
-    return <HalftoneShader />;
+    return <HalftoneShader onBack={() => handleNavigate('home')} />;
   }
 
   return (

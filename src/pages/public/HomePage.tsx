@@ -5,6 +5,7 @@ import { StatCounter } from '../../components/ui/StatCounter';
 import { QuickBundle } from '../../types';
 import { CinematicScrollSection } from '../../components/home/CinematicScrollSection';
 import { ProblemScrollSection } from '../../components/home/ProblemScrollSection';
+import { AnimatedH3 } from '../../components/ui/AnimatedHeading';
 import {
   Zap,
   Building2,
@@ -363,9 +364,15 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
               <ShieldCheck className="w-3.5 h-3.5" />
               <span>[SS®—ARCHITECTURE] The Next-Gen B2B Solution</span>
             </div>
-            <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
-              Every feature shows its work.
-            </h2>
+            <div className="flex justify-center">
+              <AnimatedH3
+                text="Every feature shows its work."
+                className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight text-center"
+                blurAmount={12}
+                slideDistance={20}
+                staggerDelay={0.025}
+              />
+            </div>
             <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
               Not just claims — purpose-built procurement technology engineered to guarantee quotes in 24 hours with complete price transparency.
             </p>
@@ -517,9 +524,15 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             <Sparkles className="w-3.5 h-3.5" />
             <span>[SS®—WORKFLOW] Fast &amp; Transparent Execution</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
-            How SupplySouq Works in 3 Steps
-          </h2>
+          <div className="flex justify-center">
+            <AnimatedH3
+              text="How SupplySouq Works in 3 Steps"
+              className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight text-center"
+              blurAmount={12}
+              slideDistance={20}
+              staggerDelay={0.025}
+            />
+          </div>
           <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
             No endless sales calls. No manual spreadsheets. From BOQ to job site delivery in 24 hours.
           </p>
@@ -902,9 +915,15 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white text-[#cf2e46] border border-slate-300 shadow-2xs">
             <span>[SS®—FAQ] Frequently Asked Questions</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
-            Questions? Answered.
-          </h2>
+          <div className="flex justify-center">
+            <AnimatedH3
+              text="Questions? Answered."
+              className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight text-center"
+              blurAmount={12}
+              slideDistance={20}
+              staggerDelay={0.025}
+            />
+          </div>
           <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
             Everything you need to know about buying or selling materials on SupplySouq.
           </p>
@@ -994,6 +1013,19 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
           </div>
         </div>
       </section>
+
+      {/* Floating Quick-Access Launcher for Halftone WebGL Shader */}
+      <div className="fixed bottom-6 right-6 z-40">
+        <button
+          onClick={() => setCurrentView('halftone')}
+          className="flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-[#08090D] hover:bg-black text-[#DBE0EB] hover:text-white border border-[#DBE0EB]/30 hover:border-[#cf2e46] shadow-2xl backdrop-blur-md transition-all duration-300 hover:scale-105 group cursor-pointer"
+          title="Launch Full-Viewport WebGL Fragment Shader"
+        >
+          <span className="w-2 h-2 rounded-full bg-[#cf2e46] group-hover:animate-ping" />
+          <span className="text-xs font-mono font-bold tracking-wide">WebGL Halftone Shader</span>
+          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white/10 text-slate-300">EXPLORE</span>
+        </button>
+      </div>
 
     </div>
   );

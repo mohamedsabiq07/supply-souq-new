@@ -11,6 +11,7 @@ import {
   Pause,
   ArrowDown
 } from 'lucide-react';
+import { AnimatedH3 } from '../ui/AnimatedHeading';
 
 interface ProblemCardData {
   id: number;
@@ -133,10 +134,17 @@ export const ProblemScrollSection: React.FC = () => {
               <span>[SS®—CHALLENGE] THE TRADITIONAL PROCUREMENT BOTTLENECK</span>
             </div>
 
-            {/* ENLARGED HEADLINE */}
-            <h2 className="text-3xl sm:text-5xl md:text-6xl font-black text-slate-950 tracking-tight leading-[1.08]">
-              Material procurement shouldn't take days of follow-ups.
-            </h2>
+            {/* ENLARGED HEADLINE WITH PER-LETTER BLUR/SLIDE/FADE ANIMATION */}
+            <div className="flex justify-center">
+              <AnimatedH3
+                text="Material procurement shouldn't take days of follow-ups."
+                className="text-3xl sm:text-5xl md:text-6xl font-black text-slate-950 tracking-tight leading-[1.08] text-center max-w-4xl"
+                blurAmount={12}
+                slideDistance={22}
+                staggerDelay={0.02}
+                duration={0.45}
+              />
+            </div>
 
             {/* ENLARGED SUBTITLE */}
             <p className="text-base sm:text-lg md:text-xl text-slate-600 leading-relaxed font-normal max-w-3xl mx-auto">
@@ -229,10 +237,16 @@ export const ProblemScrollSection: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Title */}
-                  <h3 className="text-2xl sm:text-3xl font-black text-slate-950 tracking-tight mb-3">
-                    {item.title}
-                  </h3>
+                  {/* Title with letter-by-letter blur reduction animation */}
+                  <AnimatedH3
+                    text={item.title}
+                    className="text-2xl sm:text-3xl font-black text-slate-950 tracking-tight mb-3"
+                    colorVariant={isActive ? 'crimson' : 'default'}
+                    blurAmount={10}
+                    slideDistance={16}
+                    staggerDelay={0.025}
+                    duration={0.4}
+                  />
 
                   {/* Description */}
                   <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal mb-6">
