@@ -4,6 +4,7 @@ import { useAppData } from '../../context/AppDataContext';
 import { StatCounter } from '../../components/ui/StatCounter';
 import { QuickBundle } from '../../types';
 import { CinematicScrollSection } from '../../components/home/CinematicScrollSection';
+import { ProblemScrollSection } from '../../components/home/ProblemScrollSection';
 import {
   Zap,
   Building2,
@@ -346,81 +347,8 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
         </div>
       </section>
 
-      {/* 3. THE PROBLEM SECTION */}
-      <section className="py-20 sm:py-28 relative bg-[#f4f4f6] border-b border-slate-200/90">
-        {/* Subtle column guide lines */}
-        <div className="absolute inset-0 pointer-events-none max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between z-0">
-          <div className="w-px h-full bg-slate-300/30" />
-          <div className="w-px h-full bg-slate-300/20 hidden md:block" />
-          <div className="w-px h-full bg-slate-300/20 hidden lg:block" />
-          <div className="w-px h-full bg-slate-300/30" />
-        </div>
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center space-y-3 mb-14 max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white text-[#cf2e46] border border-slate-300 shadow-2xs">
-              <AlertTriangle className="w-3.5 h-3.5" />
-              <span>[SS®—CHALLENGE] The Traditional Procurement Bottleneck</span>
-            </div>
-            <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
-              Material procurement shouldn't take days of follow-ups.
-            </h2>
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
-              Manual phone calls, scattered WhatsApp messages, and waiting days for quotes — procurement teams spend hours chasing individual suppliers instead of focusing on project execution.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            <div className="p-6 sm:p-7 rounded-3xl bg-white border border-slate-300/80 space-y-4 hover:border-slate-400 hover:shadow-md transition-all group shadow-xs">
-              <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
-                <PhoneOff className="w-6 h-6" />
-              </div>
-              <h3 className="text-lg font-bold text-slate-900 group-hover:text-[#cf2e46] transition-colors">
-                Manual Follow-Ups
-              </h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Contacting multiple suppliers individually just to check stock availability, specifications, and delivery schedules.
-              </p>
-            </div>
-
-            <div className="p-6 sm:p-7 rounded-3xl bg-white border border-slate-300/80 space-y-4 hover:border-slate-400 hover:shadow-md transition-all group shadow-xs">
-              <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
-                <Clock className="w-6 h-6" />
-              </div>
-              <h3 className="text-lg font-bold text-slate-900 group-hover:text-[#cf2e46] transition-colors">
-                Delayed Quotations
-              </h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Waiting days for responses and price updates while site work pauses and project deadlines approach.
-              </p>
-            </div>
-
-            <div className="p-6 sm:p-7 rounded-3xl bg-white border border-slate-300/80 space-y-4 hover:border-slate-400 hover:shadow-md transition-all group shadow-xs">
-              <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
-                <AlertTriangle className="w-6 h-6" />
-              </div>
-              <h3 className="text-lg font-bold text-slate-900 group-hover:text-[#cf2e46] transition-colors">
-                Inconsistent Specifications
-              </h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Dealing with mismatched product standards, unverified compliance, or missing technical data sheets.
-              </p>
-            </div>
-
-            <div className="p-6 sm:p-7 rounded-3xl bg-white border border-slate-300/80 space-y-4 hover:border-slate-400 hover:shadow-md transition-all group shadow-xs">
-              <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
-                <FileSpreadsheet className="w-6 h-6" />
-              </div>
-              <h3 className="text-lg font-bold text-slate-900 group-hover:text-[#cf2e46] transition-colors">
-                Scattered Comparisons
-              </h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Juggling dozens of different PDF quotes across emails and chats with no easy way to compare rates side-by-side.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* 3. THE PROBLEM SECTION - SCROLL-DRIVEN WITH PERSISTENT VIDEO & SEQUENTIAL CARDS */}
+      <ProblemScrollSection />
 
       {/* 3.5 EDITORIAL SOURCING DISCIPLINES & VISUAL GRID (Neiden Screenshot Layout) */}
       <section className="py-20 sm:py-28 relative bg-[#f4f4f6] border-b border-slate-300/80 overflow-hidden">
