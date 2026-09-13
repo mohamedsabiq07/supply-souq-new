@@ -13,6 +13,7 @@ import {
   TrendingDown,
   Layers
 } from 'lucide-react';
+import VariableFontCursorProximity from '@/components/fancy/text/variable-font-cursor-proximity';
 
 interface CinematicScrollSectionProps {
   setCurrentView?: (view: string) => void;
@@ -26,12 +27,24 @@ export const CinematicScrollSection: React.FC<CinematicScrollSectionProps> = ({ 
           <Sparkles className="w-3.5 h-3.5" />
           Procurement Intelligence
         </div>
-        <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight mb-4">
-          UAE B2B Construction Marketplace
+        <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight mb-4 cursor-default select-none">
+          <VariableFontCursorProximity
+            fromFontVariationSettings="'wght' 700, 'slnt' 0"
+            toFontVariationSettings="'wght' 950, 'slnt' -8"
+            radius={160}
+          >
+            UAE B2B Construction Marketplace
+          </VariableFontCursorProximity>
         </h2>
-        <p className="text-slate-500 text-lg max-w-2xl mx-auto">
+        <VariableFontCursorProximity
+          as="p"
+          className="text-slate-500 text-lg max-w-2xl mx-auto cursor-default"
+          fromFontVariationSettings="'wght' 400, 'slnt' 0"
+          toFontVariationSettings="'wght' 700, 'slnt' -4"
+          radius={120}
+        >
           The next-generation digital clearinghouse connecting UAE EPC contractors directly to verified stockists.
-        </p>
+        </VariableFontCursorProximity>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[280px]">
@@ -48,7 +61,15 @@ export const CinematicScrollSection: React.FC<CinematicScrollSectionProps> = ({ 
             <div className="w-12 h-12 bg-rose-100 text-[#cf2e46] rounded-2xl flex items-center justify-center mb-6">
               <Layers className="w-6 h-6" />
             </div>
-            <h3 className="text-2xl font-bold text-slate-900 mb-2">Upload BOQ. Receive Competitive Quotes.</h3>
+            <h3 className="text-2xl font-bold text-slate-900 mb-2 cursor-default select-none">
+              <VariableFontCursorProximity
+                fromFontVariationSettings="'wght' 600, 'slnt' 0"
+                toFontVariationSettings="'wght' 950, 'slnt' -8"
+                radius={140}
+              >
+                Upload BOQ. Receive Competitive Quotes.
+              </VariableFontCursorProximity>
+            </h3>
             <p className="text-slate-500 max-w-md">
               Standardized line items mapped intelligently. Compare multiple suppliers side-by-side with mill test sheets included.
             </p>
@@ -73,7 +94,15 @@ export const CinematicScrollSection: React.FC<CinematicScrollSectionProps> = ({ 
             <div className="w-10 h-10 bg-white/10 text-sky-400 rounded-xl flex items-center justify-center mb-6">
               <Clock className="w-5 h-5" />
             </div>
-            <h3 className="text-xl font-bold mb-2">Reduce Procurement Time</h3>
+            <h3 className="text-xl font-bold mb-2 cursor-default select-none text-white">
+              <VariableFontCursorProximity
+                fromFontVariationSettings="'wght' 600, 'slnt' 0"
+                toFontVariationSettings="'wght' 950, 'slnt' -8"
+                radius={130}
+              >
+                Reduce Procurement Time
+              </VariableFontCursorProximity>
+            </h3>
             <p className="text-slate-400 text-sm">
               Drastically cut down your sourcing cycle.
             </p>
@@ -101,7 +130,15 @@ export const CinematicScrollSection: React.FC<CinematicScrollSectionProps> = ({ 
             <div className="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center mb-6">
               <ShieldCheck className="w-5 h-5" />
             </div>
-            <h3 className="text-xl font-bold text-slate-900 mb-2">Discover Verified Vendors</h3>
+            <h3 className="text-xl font-bold text-slate-900 mb-2 cursor-default select-none">
+              <VariableFontCursorProximity
+                fromFontVariationSettings="'wght' 600, 'slnt' 0"
+                toFontVariationSettings="'wght' 950, 'slnt' -8"
+                radius={130}
+              >
+                Discover Verified Vendors
+              </VariableFontCursorProximity>
+            </h3>
             <p className="text-slate-500 text-sm">
               Direct physical stock in Al Quoz, Sharjah Industrial & Mussafah.
             </p>
@@ -130,7 +167,15 @@ export const CinematicScrollSection: React.FC<CinematicScrollSectionProps> = ({ 
               <div className="w-12 h-12 bg-sky-100 text-sky-600 rounded-2xl flex items-center justify-center mb-6">
                 <Building2 className="w-6 h-6" />
               </div>
-              <h3 className="text-2xl font-bold text-slate-900 mb-2">Built for Contractors & Procurement Teams</h3>
+              <h3 className="text-2xl font-bold text-slate-900 mb-2 cursor-default select-none">
+                <VariableFontCursorProximity
+                  fromFontVariationSettings="'wght' 600, 'slnt' 0"
+                  toFontVariationSettings="'wght' 950, 'slnt' -8"
+                  radius={140}
+                >
+                  Built for Contractors & Procurement Teams
+                </VariableFontCursorProximity>
+              </h3>
               <p className="text-slate-500 max-w-sm mb-6">
                 Engineered for EPCs. Transparent side-by-side matrices, digital POs, and 5% VAT invoicing.
               </p>

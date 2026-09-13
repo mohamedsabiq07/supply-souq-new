@@ -5,7 +5,8 @@ import { StatCounter } from '../../components/ui/StatCounter';
 import { QuickBundle } from '../../types';
 import { CinematicScrollSection } from '../../components/home/CinematicScrollSection';
 import { ProblemScrollSection } from '../../components/home/ProblemScrollSection';
-import { AnimatedH3 } from '../../components/ui/AnimatedHeading';
+import { AnimatedH3, ProximityText } from '../../components/ui/AnimatedHeading';
+import VariableFontCursorProximity from '../../components/fancy/text/variable-font-cursor-proximity';
 import {
   Zap,
   Building2,
@@ -128,17 +129,39 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             </div>
 
             {/* Main Headline */}
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-950 leading-[1.1]">
-              Procurement,<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-rose-700 to-[#cf2e46]">
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-950 leading-[1.1] cursor-default select-none">
+              <VariableFontCursorProximity
+                className="inline-block"
+                fromFontVariationSettings="'wght' 700, 'slnt' 0"
+                toFontVariationSettings="'wght' 950, 'slnt' -10"
+                radius={200}
+                falloff="gaussian"
+              >
+                Procurement,
+              </VariableFontCursorProximity>
+              <br />
+              <VariableFontCursorProximity
+                className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-rose-700 to-[#cf2e46]"
+                fromFontVariationSettings="'wght' 700, 'slnt' 0"
+                toFontVariationSettings="'wght' 950, 'slnt' -10"
+                radius={200}
+                falloff="gaussian"
+              >
                 Simplified.
-              </span>
+              </VariableFontCursorProximity>
             </h1>
 
             {/* Subheadline */}
-            <p className="text-sm sm:text-base md:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed font-normal">
+            <VariableFontCursorProximity
+              as="p"
+              className="text-sm sm:text-base md:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed font-normal cursor-default"
+              fromFontVariationSettings="'wght' 400, 'slnt' 0"
+              toFontVariationSettings="'wght' 700, 'slnt' -6"
+              radius={150}
+              falloff="gaussian"
+            >
               Upload your material list or BOQ in 60 seconds. Top verified UAE stockists compete to give you the best wholesale prices within 24 hours.
-            </p>
+            </VariableFontCursorProximity>
 
             {/* Dual CTAs */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">

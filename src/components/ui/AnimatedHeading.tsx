@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, Variants } from 'framer-motion';
+import VariableFontCursorProximity from '@/components/fancy/text/variable-font-cursor-proximity';
 
 export interface AnimatedH3Props {
   /** Text content to be animated letter by letter */
@@ -20,18 +20,15 @@ export interface AnimatedH3Props {
   once?: boolean;
   /** Visual style preset for color transitions */
   colorVariant?: 'default' | 'crimson' | 'gradient' | 'dark' | 'white';
+  /** Reference to optional container for mouse tracking */
+  containerRef?: React.RefObject<HTMLElement | null>;
 }
 
 export const AnimatedH3: React.FC<AnimatedH3Props> = ({
   text,
   className = '',
-  staggerDelay = 0.025,
-  duration = 0.5,
-  delay = 0.1,
-  blurAmount = 10,
-  slideDistance = 20,
-  once = true,
-  colorVariant = 'default'
+  colorVariant = 'default',
+  containerRef,
 }) => {
   // Pre-configured styling presets featuring responsive sizing, tight letter tracking, and smooth color transitions
   const variantStyles = {
@@ -47,74 +44,56 @@ export const AnimatedH3: React.FC<AnimatedH3Props> = ({
       'text-white hover:text-rose-200 transition-colors duration-300'
   };
 
-  // Container motion variant controlling staggered letter entrance
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: staggerDelay,
-        delayChildren: delay
-      }
-    }
-  };
-
-  // Letter motion variant: fades in, slides up, and reduces blur
-  const letterVariants: Variants = {
-    hidden: {
-      opacity: 0,
-      y: slideDistance,
-      filter: `blur(${blurAmount}px)`
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      filter: 'blur(0px)',
-      transition: {
-        duration,
-        ease: [0.22, 1, 0.36, 1] // Custom cubic-bezier for snappy, premium deceleration
-      }
-    }
-  };
-
-  // Split text by words first to preserve natural word boundary wrapping on mobile devices
-  const words = text.split(' ');
-
   // Check if custom text sizing is provided via className
   const hasCustomSize = /\btext-(xs|sm|base|lg|[0-9]?xl)\b/.test(className);
   const baseSize = hasCustomSize ? '' : 'text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold';
 
   return (
-    <motion.h3
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once, margin: '-40px' }}
-      variants={containerVariants}
-      aria-label={text}
-      className={`font-sans tracking-tight sm:tracking-tighter leading-tight sm:leading-snug ${baseSize} ${variantStyles[colorVariant]} ${className}`}
+    <VariableFontCursorProximity
+      as="h3"
+      fromFontVariationSettings="'wght' 600, 'slnt' 0"
+      toFontVariationSettings="'wght' 950, 'slnt' -8"
+      radius={130}
+      falloff="gaussian"
+      containerRef={containerRef}
+      className={`font-sans tracking-tight leading-tight cursor-default ${baseSize} ${variantStyles[colorVariant]} ${className}`}
     >
-      {words.map((word, wordIndex) => (
-        <span
-          key={`word-${wordIndex}-${word}`}
-          className="inline-block whitespace-nowrap"
-        >
-          {Array.from(word).map((char, charIndex) => (
-            <motion.span
-              key={`char-${wordIndex}-${charIndex}-${char}`}
-              variants={letterVariants}
-              aria-hidden="true"
-              className="inline-block will-change-[transform,opacity,filter]"
-            >
-              {char}
-            </motion.span>
-          ))}
-          {/* Add a space after the word unless it's the last word */}
-          {wordIndex < words.length - 1 && (
-            <span aria-hidden="true" className="inline-block">&nbsp;</span>
-          )}
-        </span>
-      ))}
-    </motion.h3>
+      {text}
+    </VariableFontCursorProximity>
+  );
+};
+
+export interface ProximityTextProps {
+  text: string;
+  className?: string;
+  as?: React.ElementType;
+  fromFontVariationSettings?: string;
+  toFontVariationSettings?: string;
+  radius?: number;
+  containerRef?: React.RefObject<HTMLElement | null>;
+}
+
+export const ProximityText: React.FC<ProximityTextProps> = ({
+  text,
+  className = '',
+  as = 'p',
+  fromFontVariationSettings = "'wght' 400, 'slnt' 0",
+  toFontVariationSettings = "'wght' 800, 'slnt' -6",
+  radius = 120,
+  containerRef,
+}) => {
+  return (
+    <VariableFontCursorProximity
+      as={as}
+      fromFontVariationSettings={fromFontVariationSettings}
+      toFontVariationSettings={toFontVariationSettings}
+      radius={radius}
+      falloff="gaussian"
+      containerRef={containerRef}
+      className={className}
+    >
+      {text}
+    </VariableFontCursorProximity>
   );
 };
 
