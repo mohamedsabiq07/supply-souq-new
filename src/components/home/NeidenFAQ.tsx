@@ -34,12 +34,12 @@ export const NeidenFAQ: React.FC = () => {
   ];
 
   return (
-    <section className="py-24 md:py-32 bg-[#020706] text-white border-b border-white/10 relative">
+    <section className="py-24 md:py-32 bg-[#050505] text-white border-b border-white/10 relative">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="flex items-center justify-between flex-wrap gap-4 pb-8 border-b border-white/10 mb-12">
           <div>
-            <span className="text-xs font-mono text-emerald-400 block mb-1">
+            <span className="text-xs font-mono text-rose-400 block mb-1">
               [ SS® ‒ FAQ / 質問と理解 / الأسئلة الشائعة ]
             </span>
             <h2 className="text-3xl sm:text-5xl font-display font-extrabold text-white">
@@ -53,7 +53,7 @@ export const NeidenFAQ: React.FC = () => {
               href="https://wa.me/971500000000?text=Hello%20SupplySouq%20Support"
               target="_blank"
               rel="noreferrer"
-              className="text-emerald-400 font-bold hover:underline inline-flex items-center gap-1"
+              className="text-rose-400 font-bold hover:underline inline-flex items-center gap-1"
             >
               <span>Talk to procurement</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
@@ -72,10 +72,10 @@ export const NeidenFAQ: React.FC = () => {
                   className="w-full text-left flex items-start justify-between gap-4 group cursor-pointer"
                 >
                   <div className="flex items-baseline gap-4 sm:gap-6">
-                    <span className="font-mono text-xs text-emerald-400 font-bold">
+                    <span className="font-mono text-xs text-rose-400 font-bold">
                       {faq.code}.
                     </span>
-                    <span className="text-base sm:text-xl font-display font-bold text-white group-hover:text-emerald-300 transition-colors">
+                    <span className="text-base sm:text-xl font-display font-bold text-white group-hover:text-rose-300 transition-colors">
                       {faq.q}
                     </span>
                   </div>

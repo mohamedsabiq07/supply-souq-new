@@ -162,12 +162,12 @@ export const AdminMarketDesk: React.FC = () => {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2.5">
-              <span className="w-3 h-3 rounded-full bg-[#00ffae] animate-ping" />
+              <span className="w-3 h-3 rounded-full bg-[#cf2e46] animate-ping" />
               <h2 className="text-xl sm:text-2xl font-black tracking-tight flex items-center gap-2">
-                <Radio className="w-6 h-6 text-[#00ffae]" />
+                <Radio className="w-6 h-6 text-[#cf2e46]" />
                 Live Market Telemetry & Intelligence Desk
               </h2>
-              <span className="bg-[#00ffae]/20 text-[#00ffae] font-bold text-[10px] px-2.5 py-0.5 rounded border border-[#00ffae]/30">
+              <span className="bg-[#cf2e46]/20 text-[#cf2e46] font-bold text-[10px] px-2.5 py-0.5 rounded border border-[#cf2e46]/30">
                 Active Ribbon Controller
               </span>
             </div>
@@ -190,7 +190,7 @@ export const AdminMarketDesk: React.FC = () => {
               variant="primary"
               size="sm"
               onClick={handleOpenAdd}
-              className="bg-[#00ffae] text-slate-950 hover:bg-[#00e099] font-black text-xs shadow-glow-mint"
+              className="bg-[#cf2e46] text-slate-950 hover:bg-[#b91c33] font-black text-xs shadow-glow-red"
             >
               <Plus className="w-4 h-4 mr-1.5" />
               Add Benchmark Item
@@ -201,14 +201,14 @@ export const AdminMarketDesk: React.FC = () => {
         {/* Live Top Ribbon Preview */}
         <div className="pt-3 border-t border-slate-800">
           <div className="flex items-center justify-between text-[11px] text-slate-400 mb-1.5">
-            <span className="font-mono font-bold flex items-center gap-1.5 text-[#00ffae]">
-              <span className="w-2 h-2 rounded-full bg-[#00ffae] inline-block animate-pulse" />
+            <span className="font-mono font-bold flex items-center gap-1.5 text-[#cf2e46]">
+              <span className="w-2 h-2 rounded-full bg-[#cf2e46] inline-block animate-pulse" />
               LIVE SITE PREVIEW ({activeCount} items active in top ribbon)
             </span>
             <span className="text-slate-500 font-mono text-[10px]">Changes appear instantly on the live website</span>
           </div>
 
-          <div className="bg-[#020f0c] border border-[#00ffae]/20 rounded-xl p-2.5 overflow-hidden shadow-inner">
+          <div className="bg-[#050505] border border-[#cf2e46]/20 rounded-xl p-2.5 overflow-hidden shadow-inner">
             <div className="flex items-center gap-6 overflow-x-auto py-1 scrollbar-none">
               {telemetryItems
                 .filter((i) => i.isActive)

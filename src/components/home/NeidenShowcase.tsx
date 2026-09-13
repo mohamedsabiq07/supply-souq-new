@@ -77,12 +77,12 @@ export const NeidenShowcase: React.FC<NeidenShowcaseProps> = ({ onStartRFQ }) =>
   };
 
   return (
-    <section className="py-24 md:py-32 bg-[#020706] text-white border-b border-white/10 relative overflow-hidden">
+    <section className="py-24 md:py-32 bg-[#050505] text-white border-b border-white/10 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="flex items-center justify-between flex-wrap gap-4 pb-8 border-b border-white/10 mb-12">
           <div>
-            <span className="text-xs font-mono text-emerald-400 block mb-1">
+            <span className="text-xs font-mono text-rose-400 block mb-1">
               [ SS® ‒ SELECTED PROCUREMENTS / 制作事例 ]
             </span>
             <h2 className="text-3xl sm:text-5xl font-display font-extrabold text-white">
@@ -117,7 +117,7 @@ export const NeidenShowcase: React.FC<NeidenShowcaseProps> = ({ onStartRFQ }) =>
           {cases.map((c) => (
             <div
               key={c.code}
-              className="snap-start shrink-0 w-[340px] sm:w-[440px] lg:w-[480px] rounded-3xl bg-[#06100d] border border-white/10 overflow-hidden flex flex-col justify-between group hover:border-emerald-500/40 transition-all duration-300 shadow-xl"
+              className="snap-start shrink-0 w-[340px] sm:w-[440px] lg:w-[480px] rounded-3xl bg-[#120508] border border-white/10 overflow-hidden flex flex-col justify-between group hover:border-rose-500/40 transition-all duration-300 shadow-xl"
             >
               {/* Visual Header with Image Overlay */}
               <div className="h-56 relative overflow-hidden">
@@ -126,13 +126,13 @@ export const NeidenShowcase: React.FC<NeidenShowcaseProps> = ({ onStartRFQ }) =>
                   alt={c.project}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-50"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#06100d] via-transparent to-black/60" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#120508] via-transparent to-black/60" />
 
                 <div className="absolute top-4 left-4 right-4 flex items-center justify-between text-xs font-mono">
-                  <span className="px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-emerald-400 font-bold">
+                  <span className="px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-rose-400 font-bold">
                     {c.code}. / {c.category}
                   </span>
-                  <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-bold text-[11px] border border-emerald-500/30">
+                  <span className="px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-300 font-bold text-[11px] border border-rose-500/30">
                     ✓ {c.turnaround}
                   </span>
                 </div>
@@ -170,7 +170,7 @@ export const NeidenShowcase: React.FC<NeidenShowcaseProps> = ({ onStartRFQ }) =>
                   </div>
                   <div className="text-right">
                     <span className="text-[10px] text-slate-500 block uppercase">Contractor Savings</span>
-                    <span className="text-sm font-bold text-emerald-400">{c.savings}</span>
+                    <span className="text-sm font-bold text-rose-400">{c.savings}</span>
                   </div>
                 </div>
 
@@ -188,7 +188,7 @@ export const NeidenShowcase: React.FC<NeidenShowcaseProps> = ({ onStartRFQ }) =>
 
                 <button
                   onClick={onStartRFQ}
-                  className="w-full mt-2 py-2.5 px-4 rounded-xl bg-white/5 hover:bg-emerald-400 hover:text-slate-950 text-white font-bold text-xs font-mono transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer border border-white/10"
+                  className="w-full mt-2 py-2.5 px-4 rounded-xl bg-white/5 hover:bg-[#cf2e46] hover:text-white text-white font-bold text-xs font-mono transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer border border-white/10"
                 >
                   <span>Post Similar BOQ</span>
                   <ArrowUpRight className="w-3.5 h-3.5" />

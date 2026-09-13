@@ -36,8 +36,8 @@ export const NeidenFooter: React.FC<NeidenFooterProps> = ({ onNavigate }) => {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 pb-16 border-b border-white/10">
           {/* Col 1: Brand Philosophy */}
           <div className="md:col-span-5 space-y-5">
-            <div className="inline-flex items-center gap-2 text-xs font-mono text-emerald-400">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <div className="inline-flex items-center gap-2 text-xs font-mono text-rose-400">
+              <span className="w-2 h-2 rounded-full bg-rose-400 animate-pulse" />
               <span>[ SS® ‒ CONTACTS & DESK / 対話と連絡 ]</span>
             </div>
 
@@ -51,9 +51,9 @@ export const NeidenFooter: React.FC<NeidenFooterProps> = ({ onNavigate }) => {
 
             {/* Live Clock Capsule */}
             <div className="inline-flex items-center gap-3 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-xs font-mono">
-              <Clock className="w-3.5 h-3.5 text-emerald-400" />
+              <Clock className="w-3.5 h-3.5 text-rose-400" />
               <span className="text-slate-400">Dubai Local Time:</span>
-              <span className="font-bold text-emerald-400">{dubaiTime || '10:30 AM GST'}</span>
+              <span className="font-bold text-rose-400">{dubaiTime || '10:30 AM GST'}</span>
             </div>
           </div>
 
@@ -66,7 +66,7 @@ export const NeidenFooter: React.FC<NeidenFooterProps> = ({ onNavigate }) => {
               <li>
                 <button
                   onClick={() => onNavigate('categories')}
-                  className="hover:text-emerald-400 transition-colors cursor-pointer flex items-center gap-1.5"
+                  className="hover:text-rose-400 transition-colors cursor-pointer flex items-center gap-1.5"
                 >
                   <span>Material Categories (12 Sectors)</span>
                   <ArrowUpRight className="w-3 h-3 text-slate-500" />
@@ -75,7 +75,7 @@ export const NeidenFooter: React.FC<NeidenFooterProps> = ({ onNavigate }) => {
               <li>
                 <button
                   onClick={() => onNavigate('suppliers')}
-                  className="hover:text-emerald-400 transition-colors cursor-pointer flex items-center gap-1.5"
+                  className="hover:text-rose-400 transition-colors cursor-pointer flex items-center gap-1.5"
                 >
                   <span>Verified UAE Stockists Directory</span>
                   <ArrowUpRight className="w-3 h-3 text-slate-500" />
@@ -84,7 +84,7 @@ export const NeidenFooter: React.FC<NeidenFooterProps> = ({ onNavigate }) => {
               <li>
                 <button
                   onClick={() => onNavigate('create-rfq')}
-                  className="hover:text-emerald-400 transition-colors cursor-pointer flex items-center gap-1.5"
+                  className="hover:text-rose-400 transition-colors cursor-pointer flex items-center gap-1.5"
                 >
                   <span>Post BOQ / Request Quotation</span>
                   <ArrowUpRight className="w-3 h-3 text-slate-500" />
@@ -93,7 +93,7 @@ export const NeidenFooter: React.FC<NeidenFooterProps> = ({ onNavigate }) => {
               <li>
                 <button
                   onClick={() => onNavigate('how-it-works')}
-                  className="hover:text-emerald-400 transition-colors cursor-pointer flex items-center gap-1.5"
+                  className="hover:text-rose-400 transition-colors cursor-pointer flex items-center gap-1.5"
                 >
                   <span>How It Works & Fast 5 SLA</span>
                   <ArrowUpRight className="w-3 h-3 text-slate-500" />
@@ -102,7 +102,7 @@ export const NeidenFooter: React.FC<NeidenFooterProps> = ({ onNavigate }) => {
               <li>
                 <button
                   onClick={() => onNavigate('invoice-audit')}
-                  className="hover:text-emerald-400 transition-colors cursor-pointer flex items-center gap-1.5"
+                  className="hover:text-rose-400 transition-colors cursor-pointer flex items-center gap-1.5"
                 >
                   <span>Wholesale Invoice Price Auditor</span>
                   <ArrowUpRight className="w-3 h-3 text-slate-500" />
@@ -119,20 +119,20 @@ export const NeidenFooter: React.FC<NeidenFooterProps> = ({ onNavigate }) => {
 
             <div className="space-y-2.5 text-slate-300">
               <div className="flex items-start gap-2.5">
-                <MapPin className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                <MapPin className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
                 <span>Al Quoz Industrial Area 3 & Bay Square Building 7, Business Bay, Dubai, UAE</span>
               </div>
 
               <div className="flex items-center gap-2.5">
-                <Mail className="w-4 h-4 text-emerald-400 shrink-0" />
+                <Mail className="w-4 h-4 text-rose-400 shrink-0" />
                 <a href="mailto:procurement@supplysouq.ae" className="hover:text-white transition-colors">
                   procurement@supplysouq.ae
                 </a>
               </div>
 
               <div className="flex items-center gap-2.5">
-                <Phone className="w-4 h-4 text-emerald-400 shrink-0" />
-                <a href="https://wa.me/971504928812" target="_blank" rel="noreferrer" className="hover:text-emerald-400 transition-colors">
+                <Phone className="w-4 h-4 text-rose-400 shrink-0" />
+                <a href="https://wa.me/971504928812" target="_blank" rel="noreferrer" className="hover:text-rose-400 transition-colors">
                   +971 50 492 8812 (WhatsApp Desk)
                 </a>
               </div>
@@ -156,7 +156,7 @@ export const NeidenFooter: React.FC<NeidenFooterProps> = ({ onNavigate }) => {
           <div className="flex items-center gap-3">
             <span>© 2026 SupplySouq Technologies FZ-LLC</span>
             <span>•</span>
-            <span className="text-emerald-400">DET Licensed Network</span>
+            <span className="text-rose-400">DET Licensed Network</span>
           </div>
 
           <div className="flex items-center gap-4">

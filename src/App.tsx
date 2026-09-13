@@ -195,12 +195,12 @@ const AppContent: React.FC = () => {
   }
 
   return (
-    <div className={`min-h-screen flex flex-col ${currentView === 'home' ? 'bg-[#020f0c] text-white selection:bg-[#00ffae] selection:text-[#020f0c]' : 'bg-slate-50 text-slate-900 selection:bg-brand-500 selection:text-white'}`}>
+    <div className={`min-h-screen flex flex-col ${currentView === 'home' ? 'bg-[#050505] text-white selection:bg-[#cf2e46] selection:text-white' : 'bg-slate-50 text-slate-900 selection:bg-brand-500 selection:text-white'}`}>
       {/* Ghost Impersonation Mode Banner */}
       {isImpersonating && impersonatedUser && (
-        <div className="bg-amber-500 text-slate-950 px-4 py-2 flex flex-wrap items-center justify-between text-xs sticky top-0 z-[100] shadow-md border-b border-amber-600">
+        <div className="bg-rose-500 text-slate-950 px-4 py-2 flex flex-wrap items-center justify-between text-xs sticky top-0 z-[100] shadow-md border-b border-rose-600">
           <div className="flex items-center gap-2">
-            <span className="bg-slate-950 text-amber-400 px-2 py-0.5 rounded text-[10px] uppercase tracking-wider font-black">
+            <span className="bg-slate-950 text-rose-400 px-2 py-0.5 rounded text-[10px] uppercase tracking-wider font-black">
               Ghost Mode Active
             </span>
             <span>

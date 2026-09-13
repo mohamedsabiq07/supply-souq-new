@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const ELECTRICAL_CATEGORIES = [
-  { text: 'Ducab LV & MV Power Cables', tag: 'DEWA / SEWA Approved', color: 'from-cyan-400 via-sky-200 to-blue-400' },
-  { text: 'Schneider 3-Phase Switchgear & DBs', tag: 'Form 2/4 Panels', color: 'from-amber-300 via-yellow-100 to-amber-500' },
-  { text: 'Decoduct Conduits & GI Cable Trays', tag: 'Class 4 GI & PVC', color: 'from-emerald-400 via-teal-200 to-cyan-400' },
-  { text: 'Furse Earthing & Lightning Systems', tag: 'Bare Copper & Rods', color: 'from-orange-400 via-amber-200 to-yellow-400' },
-  { text: 'Philips & Osram Commercial LED Panels', tag: '60x60 Recessed / IP65', color: 'from-violet-400 via-purple-200 to-pink-400' }
+  { text: 'Ducab LV & MV Power Cables', tag: 'DEWA / SEWA Approved', color: 'from-white via-rose-100 to-rose-500' },
+  { text: 'Schneider 3-Phase Switchgear & DBs', tag: 'Form 2/4 Panels', color: 'from-white via-rose-100 to-[#cf2e46]' },
+  { text: 'Decoduct Conduits & GI Cable Trays', tag: 'Class 4 GI & PVC', color: 'from-white via-rose-200 to-rose-600' },
+  { text: 'Furse Earthing & Lightning Systems', tag: 'Bare Copper & Rods', color: 'from-white via-neutral-200 to-rose-500' },
+  { text: 'Philips & Osram Commercial LED Panels', tag: '60x60 Recessed / IP65', color: 'from-white via-rose-100 to-[#b91c33]' }
 ];
 
 export const KineticHeadline: React.FC = () => {
@@ -33,7 +33,7 @@ export const KineticHeadline: React.FC = () => {
           className="text-center"
         >
           <span
-            className={`block text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight font-sans bg-clip-text text-transparent bg-gradient-to-r ${currentItem.color} drop-shadow-[0_0_30px_rgba(56,189,248,0.25)]`}
+            className={`block text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight font-sans bg-clip-text text-transparent bg-gradient-to-r ${currentItem.color} drop-shadow-[0_0_30px_rgba(207,46,70,0.28)]`}
           >
             {currentItem.text}
           </span>
@@ -43,7 +43,7 @@ export const KineticHeadline: React.FC = () => {
             transition={{ delay: 0.25, duration: 0.4 }}
             className="inline-flex items-center gap-2 mt-2.5 bg-slate-800/90 border border-slate-700/80 text-slate-300 px-3 py-0.5 rounded-full text-[11px] sm:text-xs font-sans font-medium"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[#cf2e46] animate-pulse" />
             <span>Standard: <strong className="text-white font-semibold">{currentItem.tag}</strong></span>
           </motion.div>
         </motion.div>

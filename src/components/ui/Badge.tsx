@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { cn } from '../../lib/utils';
 import { RFQStatus, OrderStatus, VerificationStatus } from '../../types';
 import { CheckCircle2, Clock, AlertCircle, ShieldCheck, Flame, Zap, Award, Truck } from 'lucide-react';
@@ -18,13 +18,13 @@ export const Badge: React.FC<BadgeProps> = ({
 }) => {
   const variants = {
     default: 'bg-slate-100 text-slate-800 border-slate-200',
-    success: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+    success: 'bg-rose-50 text-rose-800 border-rose-200',
     warning: 'bg-amber-50 text-amber-800 border-amber-200',
     danger: 'bg-rose-50 text-rose-700 border-rose-200',
     info: 'bg-sky-50 text-sky-700 border-sky-200',
     purple: 'bg-purple-50 text-purple-700 border-purple-200',
     amber: 'bg-amber-100 text-amber-900 border-amber-300 font-semibold',
-    verified: 'bg-emerald-500 text-white border-emerald-600 font-medium',
+    verified: 'bg-[#e61937] text-white border-red-700 font-medium',
   };
 
   const sizes = {
@@ -78,7 +78,7 @@ export const StatusBadge: React.FC<{ status: RFQStatus | OrderStatus | Verificat
 
     // Verification Statuses
     case 'verified':
-      return <Badge variant="success"><ShieldCheck className="w-3 h-3 text-emerald-600" /> Verified UAE Trader</Badge>;
+      return <Badge variant="success"><ShieldCheck className="w-3 h-3 text-[#e61937]" /> Verified UAE Trader</Badge>;
     case 'pending':
       return <Badge variant="warning"><Clock className="w-3 h-3 text-amber-600" /> Verification Pending</Badge>;
     case 'rejected':
@@ -93,7 +93,7 @@ export const HighlightBadge: React.FC<{ type: 'best_price' | 'fastest' | 'top_ra
   switch (type) {
     case 'best_price':
       return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-600 text-white shadow-sm">
+        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold bg-[#e61937] text-white shadow-sm">
           <Zap className="w-3 h-3" /> BEST PRICE
         </span>
       );

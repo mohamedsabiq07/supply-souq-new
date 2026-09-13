@@ -11,12 +11,12 @@ export const NeidenPricing: React.FC<NeidenPricingProps> = ({ onStartBuyer, onSt
   const [billingCycle, setBillingCycle] = useState<'launch' | 'standard'>('launch');
 
   return (
-    <section className="py-24 md:py-32 bg-[#040908] text-white border-b border-white/10 relative overflow-hidden">
+    <section id="pricing-section" className="py-24 md:py-32 bg-[#0b0b0b] text-white border-b border-white/10 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="flex items-center justify-between flex-wrap gap-4 pb-8 border-b border-white/10 mb-16">
           <div>
-            <span className="text-xs font-mono text-emerald-400 block mb-1">
+            <span className="text-xs font-mono text-rose-400 block mb-1">
               [ SS® ‒ PACKAGES & PRICING / 料金プラン / باقات الأسعار ]
             </span>
             <h2 className="text-3xl sm:text-5xl font-display font-extrabold text-white">
@@ -28,15 +28,15 @@ export const NeidenPricing: React.FC<NeidenPricingProps> = ({ onStartBuyer, onSt
             <button
               onClick={() => setBillingCycle('launch')}
               className={`px-3 py-1.5 rounded-full transition-colors cursor-pointer ${
-                billingCycle === 'launch' ? 'bg-emerald-400 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
+                billingCycle === 'launch' ? 'bg-[#cf2e46] text-white font-bold' : 'text-slate-400 hover:text-white'
               }`}
             >
-              🚀 Launch Promo (0% Commission)
+              Launch Promo (0% Commission)
             </button>
             <button
               onClick={() => setBillingCycle('standard')}
               className={`px-3 py-1.5 rounded-full transition-colors cursor-pointer ${
-                billingCycle === 'standard' ? 'bg-emerald-400 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
+                billingCycle === 'standard' ? 'bg-[#cf2e46] text-white font-bold' : 'text-slate-400 hover:text-white'
               }`}
             >
               Standard Model
@@ -78,7 +78,7 @@ export const NeidenPricing: React.FC<NeidenPricingProps> = ({ onStartBuyer, onSt
                   <span className="text-4xl font-mono font-black text-white">AED 0</span>
                   <span className="text-xs font-mono text-slate-400">/ forever</span>
                 </div>
-                <span className="text-[11px] font-mono text-emerald-400 mt-1 block">
+                <span className="text-[11px] font-mono text-rose-400 mt-1 block">
                   ✓ Unlimited RFQs with zero fees
                 </span>
               </div>
@@ -93,7 +93,7 @@ export const NeidenPricing: React.FC<NeidenPricingProps> = ({ onStartBuyer, onSt
                   'Buyer supplier ratings & reviews'
                 ].map((f, i) => (
                   <div key={i} className="flex items-center gap-2.5">
-                    <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                    <Check className="w-3.5 h-3.5 text-rose-400 shrink-0" />
                     <span>{f}</span>
                   </div>
                 ))}
@@ -115,18 +115,18 @@ export const NeidenPricing: React.FC<NeidenPricingProps> = ({ onStartBuyer, onSt
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="p-8 rounded-3xl bg-[#081813] border-2 border-emerald-400 shadow-glow-mint flex flex-col justify-between space-y-8 relative"
+            className="p-8 rounded-3xl bg-[#19070d] border-2 border-rose-400 shadow-glow-red flex flex-col justify-between space-y-8 relative"
           >
-            <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-emerald-400 text-slate-950 text-[10px] font-mono font-black uppercase tracking-wider shadow-md">
+            <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-[#cf2e46] text-white text-[10px] font-mono font-black uppercase tracking-wider shadow-md">
               Most Popular • UAE Stockists
             </div>
 
             <div className="space-y-6">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono uppercase tracking-widest text-emerald-400 font-bold">
+                <span className="text-xs font-mono uppercase tracking-widest text-rose-400 font-bold">
                   For Verified UAE Suppliers
                 </span>
-                <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-[10px] font-mono text-emerald-300 font-bold">
+                <span className="px-2.5 py-0.5 rounded-full bg-rose-500/20 border border-rose-500/30 text-[10px] font-mono text-rose-300 font-bold">
                   {billingCycle === 'launch' ? '3-Month Free Trial' : 'AED 1 / Day'}
                 </span>
               </div>
@@ -142,19 +142,19 @@ export const NeidenPricing: React.FC<NeidenPricingProps> = ({ onStartBuyer, onSt
 
               <div className="pt-2">
                 <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-mono font-black text-emerald-400">
+                  <span className="text-4xl font-mono font-black text-rose-400">
                     {billingCycle === 'launch' ? 'AED 0' : 'AED 30'}
                   </span>
                   <span className="text-xs font-mono text-slate-400">
                     {billingCycle === 'launch' ? '/ 3 months free trial' : '/ month (AED 1/day)'}
                   </span>
                 </div>
-                <span className="text-[11px] font-mono text-emerald-300 mt-1 block font-semibold">
+                <span className="text-[11px] font-mono text-rose-300 mt-1 block font-semibold">
                   0% Commission during launch promotion
                 </span>
               </div>
 
-              <div className="space-y-3 pt-4 border-t border-emerald-500/20 text-xs text-slate-200 font-mono">
+              <div className="space-y-3 pt-4 border-t border-rose-500/20 text-xs text-slate-200 font-mono">
                 {[
                   'Instant WhatsApp & Email RFQ alerts',
                   'Only 5 stockists compete per RFQ',
@@ -164,7 +164,7 @@ export const NeidenPricing: React.FC<NeidenPricingProps> = ({ onStartBuyer, onSt
                   'Unlimited quotation submissions'
                 ].map((f, i) => (
                   <div key={i} className="flex items-center gap-2.5">
-                    <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                    <Check className="w-3.5 h-3.5 text-rose-400 shrink-0" />
                     <span>{f}</span>
                   </div>
                 ))}
@@ -173,7 +173,7 @@ export const NeidenPricing: React.FC<NeidenPricingProps> = ({ onStartBuyer, onSt
 
             <button
               onClick={onStartSupplier}
-              className="w-full py-3.5 px-4 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-black text-xs font-mono transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md"
+              className="w-full py-3.5 px-4 rounded-xl bg-[#cf2e46] hover:bg-[#b91c33] text-white font-black text-xs font-mono transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md"
             >
               <span>Claim Stockist Free Trial</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -212,7 +212,7 @@ export const NeidenPricing: React.FC<NeidenPricingProps> = ({ onStartBuyer, onSt
                   <span className="text-4xl font-mono font-black text-white">Custom</span>
                   <span className="text-xs font-mono text-slate-400">/ tailored volume</span>
                 </div>
-                <span className="text-[11px] font-mono text-purple-400 mt-1 block">
+                <span className="text-[11px] font-mono text-rose-400 mt-1 block">
                   Dedicated Account Manager
                 </span>
               </div>
@@ -227,7 +227,7 @@ export const NeidenPricing: React.FC<NeidenPricingProps> = ({ onStartBuyer, onSt
                   'VIP 4-hour SLA expedited turnaround'
                 ].map((f, i) => (
                   <div key={i} className="flex items-center gap-2.5">
-                    <Check className="w-3.5 h-3.5 text-purple-400 shrink-0" />
+                    <Check className="w-3.5 h-3.5 text-rose-400 shrink-0" />
                     <span>{f}</span>
                   </div>
                 ))}

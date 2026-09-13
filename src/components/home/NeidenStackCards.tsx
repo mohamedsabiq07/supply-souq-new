@@ -16,10 +16,10 @@ export const NeidenStackCards: React.FC<NeidenStackCardsProps> = ({ onStartRFQ }
       subtitle: 'Eliminate 50-supplier quote fatigue with keen, disciplined price competition.',
       description: 'When you upload an RFQ, SupplySouq broadcasts the requirement across verified UAE stockists. Only the first 5 itemized, compliant bids are accepted. This forces suppliers to submit their lowest wholesale rate immediately, giving contractors quick clarity without drowning in 50 random calls.',
       pills: ['Broadcast to 380+ Stockists', 'Only 5 Spots Accepted', '24h Strict Countdown', 'Itemized Line Breakdown'],
-      accentColor: 'from-amber-500/20 to-transparent',
-      borderColor: 'border-amber-500/30',
-      badgeBg: 'bg-amber-500/10 text-amber-300 border-amber-500/30',
-      icon: <Clock className="w-8 h-8 text-amber-400" />,
+      accentColor: 'from-rose-500/20 to-transparent',
+      borderColor: 'border-rose-500/30',
+      badgeBg: 'bg-rose-500/10 text-rose-300 border-rose-500/30',
+      icon: <Clock className="w-8 h-8 text-rose-400" />,
       metric: '5 Bids Max',
       metricLabel: 'Guaranteed 24h SLA'
     },
@@ -31,10 +31,10 @@ export const NeidenStackCards: React.FC<NeidenStackCardsProps> = ({ onStartRFQ }
       subtitle: 'Every stockist is authenticated via Dubai Economy & Tourism and Federal Tax Authority.',
       description: 'Never risk project delays with phantom brokers who don\'t hold inventory. Our verification desk checks registered commercial activities ("Building Materials Trading", "Electrical Equipment Trading"), warehouse addresses in Al Quoz & Deira, and active TRN tax certificates before a vendor can bid.',
       pills: ['DET License Verification', 'TRN Tax ID Validated', 'Warehouse Physical Audit', 'DEWA / SEWA Compliance'],
-      accentColor: 'from-emerald-500/20 to-transparent',
-      borderColor: 'border-emerald-500/30',
-      badgeBg: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30',
-      icon: <ShieldCheck className="w-8 h-8 text-emerald-400" />,
+      accentColor: 'from-rose-500/20 to-transparent',
+      borderColor: 'border-rose-500/30',
+      badgeBg: 'bg-rose-500/10 text-rose-300 border-rose-500/30',
+      icon: <ShieldCheck className="w-8 h-8 text-rose-400" />,
       metric: '100% Vetted',
       metricLabel: 'Zero Fake Stockists'
     },
@@ -46,10 +46,10 @@ export const NeidenStackCards: React.FC<NeidenStackCardsProps> = ({ onStartRFQ }
       subtitle: 'Upload site photos, consultant schedules, or Excel spreadsheets in under 60 seconds.',
       description: 'No more typing out 150 line items manually. Drag and drop your consultant BOQ, engineer site note, or WhatsApp material list. Our procurement parser automatically normalizes cable sizes, conduits, circuit breakers, and quantities into standardized items ready for instant wholesale pricing.',
       pills: ['Multi-Format (XLSX, PDF, JPG)', 'Auto-Normalized Sizes', 'Fast Line Item Matching', '1-Click RFQ Distribution'],
-      accentColor: 'from-blue-500/20 to-transparent',
-      borderColor: 'border-blue-500/30',
-      badgeBg: 'bg-blue-500/10 text-blue-300 border-blue-500/30',
-      icon: <FileSpreadsheet className="w-8 h-8 text-blue-400" />,
+      accentColor: 'from-rose-500/20 to-transparent',
+      borderColor: 'border-rose-500/30',
+      badgeBg: 'bg-rose-500/10 text-rose-300 border-rose-500/30',
+      icon: <FileSpreadsheet className="w-8 h-8 text-rose-400" />,
       metric: '60 Seconds',
       metricLabel: 'From BOQ to Live RFQ'
     },
@@ -61,22 +61,22 @@ export const NeidenStackCards: React.FC<NeidenStackCardsProps> = ({ onStartRFQ }
       subtitle: 'Original manufacturer inspection certificates with transparent dispute resolution.',
       description: 'Substandard materials cause immediate site rejections from DEWA and project consultants. All orders dispatched through SupplySouq verified partners carry stamped factory mill test certificates and original batch inspection reports. Escrow milestone safeguards protect your capital until goods arrive on site.',
       pills: ['Manufacturer Mill Certs', 'DEWA Approved Batches', 'Milestone Escrow Safeguards', 'On-Site Quality Checks'],
-      accentColor: 'from-purple-500/20 to-transparent',
-      borderColor: 'border-purple-500/30',
-      badgeBg: 'bg-purple-500/10 text-purple-300 border-purple-500/30',
-      icon: <Award className="w-8 h-8 text-purple-400" />,
+      accentColor: 'from-rose-500/20 to-transparent',
+      borderColor: 'border-rose-500/30',
+      badgeBg: 'bg-rose-500/10 text-rose-300 border-rose-500/30',
+      icon: <Award className="w-8 h-8 text-rose-400" />,
       metric: '100% Certified',
       metricLabel: 'DEWA / SEWA Approved'
     }
   ];
 
   return (
-    <section className="py-24 md:py-32 bg-[#030807] text-white border-b border-white/10 relative">
+    <section className="py-24 md:py-32 bg-[#070707] text-white border-b border-white/10 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="flex items-center justify-between flex-wrap gap-4 pb-8 border-b border-white/10 mb-16">
           <div>
-            <span className="text-xs font-mono text-emerald-400 block mb-1">
+            <span className="text-xs font-mono text-rose-400 block mb-1">
               [ SS® ‒ SERVICES & DISCIPLINES / 思想と実行 ]
             </span>
             <h2 className="text-3xl sm:text-5xl font-display font-extrabold text-white">
@@ -101,7 +101,7 @@ export const NeidenStackCards: React.FC<NeidenStackCardsProps> = ({ onStartRFQ }
               style={{
                 top: `${80 + idx * 24}px`
               }}
-              className={`sticky p-8 sm:p-12 rounded-3xl bg-[#081310]/95 backdrop-blur-2xl border ${card.borderColor} shadow-2xl overflow-hidden transition-transform duration-300`}
+              className={`sticky p-8 sm:p-12 rounded-3xl bg-[#16080d]/95 backdrop-blur-2xl border ${card.borderColor} shadow-2xl overflow-hidden transition-transform duration-300`}
             >
               {/* Background gradient splash */}
               <div className={`absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl ${card.accentColor} blur-3xl -z-10 pointer-events-none`} />
@@ -110,7 +110,7 @@ export const NeidenStackCards: React.FC<NeidenStackCardsProps> = ({ onStartRFQ }
                 {/* Left Content */}
                 <div className="lg:col-span-8 space-y-5">
                   <div className="flex items-center gap-3">
-                    <span className="text-sm font-mono font-bold text-emerald-400">
+                    <span className="text-sm font-mono font-bold text-rose-400">
                       {card.index}. /
                     </span>
                     <span className={`px-3 py-1 rounded-full text-xs font-mono font-bold border ${card.badgeBg}`}>
@@ -140,7 +140,7 @@ export const NeidenStackCards: React.FC<NeidenStackCardsProps> = ({ onStartRFQ }
                         key={pIdx}
                         className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs text-slate-300 font-mono flex items-center gap-1.5"
                       >
-                        <CheckCircle2 className="w-3 h-3 text-emerald-400 shrink-0" />
+                        <CheckCircle2 className="w-3 h-3 text-rose-400 shrink-0" />
                         <span>{pill}</span>
                       </span>
                     ))}
@@ -164,7 +164,7 @@ export const NeidenStackCards: React.FC<NeidenStackCardsProps> = ({ onStartRFQ }
 
                   <button
                     onClick={onStartRFQ}
-                    className="w-full py-3 px-4 rounded-xl bg-white/10 hover:bg-emerald-400 hover:text-slate-950 text-white font-bold text-xs font-mono transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer border border-white/10"
+                    className="w-full py-3 px-4 rounded-xl bg-white/10 hover:bg-[#cf2e46] hover:text-white text-white font-bold text-xs font-mono transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer border border-white/10"
                   >
                     <span>Launch RFQ Now</span>
                     <ArrowUpRight className="w-4 h-4" />
