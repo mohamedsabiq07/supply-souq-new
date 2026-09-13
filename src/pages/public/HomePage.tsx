@@ -44,8 +44,6 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
   const { isAuthenticated } = useAuth();
   const { categories, companies, rfqs } = useAppData();
 
-  // State for interactive prompt chips
-  const [selectedPrompt, setSelectedPrompt] = useState<string>('cables');
   // State for FAQ accordion
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
@@ -64,16 +62,6 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
     }
     setCurrentView('supplier-inbox');
   };
-
-  const prompts = [
-    { id: 'cables', label: '⚡ LV & MV Power Cables', query: 'Find verified UAE stockists for 4C x 16mm² XLPE/SWA/PVC Ducab cable (500m) with 24h delivery to Al Quoz', match: 'Found 5 verified stockists. Lowest bid: AED 38.50/m (Apex Cables, Al Quoz, DET Verified). Guaranteed 24h delivery. Savings: 18.4% vs retail.' },
-    { id: 'ducab', label: '🏢 Ducab & Riyadh Stockists', query: 'Compare wholesale prices for Riyadh Cables single core 2.5mm² (100m coils, 40 boxes) with mill test certificates', match: 'Found 4 authorized Riyadh Cables distributors in Sharjah Industrial Area. Bulk quote: AED 142.00/box. Immediate dispatch.' },
-    { id: 'trays', label: '📦 Cable Trays & GI Conduits', query: 'Source 300mm GI Perforated Cable Tray 2.0mm thickness (120 meters) + bend accessories for Dubai South project', match: 'Decoduct & Metsec fabricators responded. Lowest quote: AED 48.00/m. Stamped mill inspection sheets included.' },
-    { id: 'switchgear', label: '🔌 Switchgear & DBs', query: 'Need 12-way TPN Distribution Board with 100A 30mA RCCB Schneider Electric Acti9 for retail fitout in Business Bay', match: 'Schneider certified panel builder bid: AED 2,150.00 complete with type test certificate & DEWA compliance note.' },
-    { id: 'lighting', label: '💡 Commercial LED Lighting', query: '600x600 LED Panel 40W 4000K IP44 (250 pcs) for commercial tower retrofit in JLT', match: 'Philips & Osram stockists submitted quotes. Lowest bid: AED 42.00/pc. 5-year replacement warranty confirmed.' },
-  ];
-
-  const currentPromptData = prompts.find(p => p.id === selectedPrompt) || prompts[0];
 
   const brands = [
     { name: 'DUCAB', tag: 'Certified Copper & XLPE' },
@@ -172,101 +160,6 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
               </button>
             </div>
 
-            {/* Interactive Prompt Chips (Gent AI Prompt Bar Style) */}
-            <div className="pt-6">
-              <span className="text-[11px] uppercase tracking-widest text-slate-500 font-bold block mb-3 font-mono">
-                Quick Category Sourcing Simulation:
-              </span>
-              <div className="flex flex-wrap items-center justify-center gap-2">
-                {prompts.map((p) => (
-                  <button
-                    key={p.id}
-                    onClick={() => setSelectedPrompt(p.id)}
-                    className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
-                      selectedPrompt === p.id
-                        ? 'bg-slate-950 text-white font-bold shadow-sm scale-105 border border-slate-950'
-                        : 'bg-white text-slate-700 border border-slate-300 hover:border-slate-400 hover:text-slate-950 shadow-2xs'
-                    }`}
-                  >
-                    {p.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Central Interactive Terminal Mockup sitting on gray canvas */}
-            <div className="pt-6 max-w-3xl mx-auto text-left">
-              <div className="rounded-3xl bg-white border border-slate-300/80 p-5 sm:p-7 shadow-lg relative overflow-hidden group hover:border-slate-400 transition-all duration-300">
-                {/* Subtle top light bar */}
-                <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#cf2e46] to-transparent" />
-                
-                {/* Terminal Header */}
-                <div className="flex items-center justify-between border-b border-slate-200 pb-4 mb-4 text-xs font-mono text-slate-500">
-                  <div className="flex items-center gap-2">
-                    <span className="w-3 h-3 rounded-full bg-[#cf2e46] inline-block" />
-                    <span className="w-3 h-3 rounded-full bg-slate-300 inline-block" />
-                    <span className="w-3 h-3 rounded-full bg-slate-300 inline-block" />
-                    <span className="ml-2 text-slate-800 font-bold">SupplySouq B2B Procurement Engine v2.4</span>
-                  </div>
-                  <span className="text-[#cf2e46] font-bold flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-[#cf2e46] animate-ping" />
-                    24h SLA Active
-                  </span>
-                </div>
-
-                {/* Simulated Contractor Input */}
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3 bg-slate-50 p-3.5 rounded-2xl border border-slate-200">
-                    <div className="w-8 h-8 rounded-xl bg-rose-100 text-[#cf2e46] flex items-center justify-center font-bold shrink-0 text-xs">
-                      RFQ
-                    </div>
-                    <div>
-                      <div className="text-[11px] font-mono text-slate-500 uppercase tracking-wider">Active Contractor Query</div>
-                      <div className="text-sm font-semibold text-slate-900 mt-0.5">{currentPromptData.query}</div>
-                    </div>
-                  </div>
-
-                  {/* Engine Live Response */}
-                  <div className="flex items-start gap-3 bg-rose-50/50 p-4 rounded-2xl border border-rose-200/80">
-                    <div className="w-8 h-8 rounded-xl bg-rose-100 text-[#cf2e46] flex items-center justify-center font-bold shrink-0 text-xs">
-                      <CheckCircle2 className="w-4 h-4 text-[#cf2e46]" />
-                    </div>
-                    <div className="space-y-2 flex-1">
-                      <div className="flex items-center justify-between flex-wrap gap-2">
-                        <span className="text-xs font-bold text-[#cf2e46] font-mono uppercase tracking-wider">Fastest 5 Bids Rule: 5 Verified Quotes In</span>
-                        <span className="text-[11px] text-slate-600 bg-white px-2.5 py-0.5 rounded-full border border-slate-200 font-mono shadow-2xs">Average Turnaround: 2h 45m</span>
-                      </div>
-                      <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-normal">
-                        {currentPromptData.match}
-                      </p>
-                      <div className="flex flex-wrap items-center gap-2 pt-1 text-[11px]">
-                        <span className="inline-flex items-center gap-1 text-[#cf2e46] bg-white px-2.5 py-0.5 rounded-full border border-rose-200 shadow-2xs">
-                          <BadgeCheck className="w-3.5 h-3.5" /> DET Trade License Verified
-                        </span>
-                        <span className="inline-flex items-center gap-1 text-slate-700 bg-white px-2.5 py-0.5 rounded-full border border-slate-200 shadow-2xs">
-                          <Clock className="w-3.5 h-3.5 text-[#cf2e46]" /> 24h Site Delivery
-                        </span>
-                        <span className="inline-flex items-center gap-1 text-slate-700 bg-white px-2.5 py-0.5 rounded-full border border-slate-200 shadow-2xs">
-                          <FileCheck2 className="w-3.5 h-3.5 text-[#cf2e46]" /> 5% UAE VAT FTA Ready
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Instant Action Footer */}
-                <div className="mt-5 pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
-                  <span className="text-slate-500">Want to test this on your project BOQ?</span>
-                  <button
-                    onClick={() => handleStartBuyer()}
-                    className="w-full sm:w-auto px-4 py-2 rounded-xl bg-[#cf2e46] hover:bg-[#b91c33] text-white font-black transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer"
-                  >
-                    <span>Post Real RFQ Now</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-            </div>
 
             {/* Live Metrics Grid (Gent 4-Column Stat Cards with crisp definition) */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 pt-8 max-w-4xl mx-auto text-left font-sans">
