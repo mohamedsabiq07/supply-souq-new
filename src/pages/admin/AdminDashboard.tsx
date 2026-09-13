@@ -463,11 +463,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
           onClick={() => setActiveTab('telemetry')}
           className={`py-2.5 px-4 rounded-xl flex items-center gap-2 transition-all shrink-0 ${
             activeTab === 'telemetry'
-              ? 'bg-[#2a050d] text-[#cf2e46] font-extrabold border border-[#cf2e46]/40 shadow-glow-red'
+              ? 'bg-[#002116] text-[#00ffae] font-extrabold border border-[#00ffae]/40 shadow-glow-mint'
               : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
           }`}
         >
-          <Radio className="w-4 h-4 text-[#cf2e46]" />
+          <Radio className="w-4 h-4 text-[#00ffae]" />
           <span>📡 Live Market Desk</span>
         </button>
 

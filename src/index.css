@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply bg-souq-paper text-souq-ink min-h-screen antialiased;
+    @apply bg-slate-50 text-slate-900 min-h-screen antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 }
@@ -16,16 +16,16 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #050505;
+  background: #0b1322;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cf2e46;
+  background: #334155;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #9f1230;
+  background: #0284c7;
 }
 
 /* Futuristic Cyber Grid & Glassmorphism Utilities */
@@ -38,8 +38,8 @@
 
 .cyber-grid-cyan {
   background-image: 
-    linear-gradient(to right, rgba(207, 46, 70, 0.08) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(207, 46, 70, 0.08) 1px, transparent 1px);
+    linear-gradient(to right, rgba(0, 240, 255, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 240, 255, 0.07) 1px, transparent 1px);
   background-size: 40px 40px;
 }
 
@@ -51,15 +51,15 @@
 }
 
 .cyber-glass-glow {
-  background: rgba(12, 7, 8, 0.86);
+  background: rgba(11, 19, 34, 0.85);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(207, 46, 70, 0.26);
-  box-shadow: 0 0 25px -5px rgba(207, 46, 70, 0.22);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  box-shadow: 0 0 25px -5px rgba(0, 240, 255, 0.15);
 }
 
 .text-gradient-cyan {
-  background: linear-gradient(135deg, #ffffff 0%, #fb7187 50%, #cf2e46 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #38bdf8 50%, #00f0ff 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -71,7 +71,7 @@
 }
 
 .text-shimmer {
-  background: linear-gradient(90deg, #ffffff 0%, #fb7187 50%, #ffffff 100%);
+  background: linear-gradient(90deg, #ffffff 0%, #38bdf8 50%, #ffffff 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -81,32 +81,32 @@
 /* Gent Cyber-Mint Utilities */
 .cyber-grid-mint {
   background-image: 
-    linear-gradient(to right, rgba(207, 46, 70, 0.06) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(207, 46, 70, 0.06) 1px, transparent 1px);
+    linear-gradient(to right, rgba(0, 255, 174, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 255, 174, 0.05) 1px, transparent 1px);
   background-size: 36px 36px;
 }
 
 .gent-glass {
-  background: rgba(42, 5, 13, 0.68);
+  background: rgba(0, 33, 22, 0.65);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(207, 46, 70, 0.2);
+  border: 1px solid rgba(0, 255, 174, 0.15);
 }
 
 .gent-glass-card {
-  background: rgba(8, 8, 8, 0.78);
+  background: rgba(2, 15, 12, 0.75);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .gent-glass-card:hover {
-  border-color: rgba(207, 46, 70, 0.42);
-  box-shadow: 0 0 25px -5px rgba(207, 46, 70, 0.26);
+  border-color: rgba(0, 255, 174, 0.35);
+  box-shadow: 0 0 25px -5px rgba(0, 255, 174, 0.18);
 }
 
 .text-gradient-mint {
-  background: linear-gradient(135deg, #ffffff 0%, #ffb3bf 50%, #cf2e46 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #a4ffe2 50%, #00ffae 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

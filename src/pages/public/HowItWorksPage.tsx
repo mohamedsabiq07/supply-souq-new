@@ -74,7 +74,7 @@ export const HowItWorksPage: React.FC<{ onStartRFQ: () => void }> = ({ onStartRF
       {/* Transparent Pricing Model */}
       <div className="bg-gradient-to-br from-slate-900 to-slate-950 text-white rounded-3xl p-8 border border-slate-800 shadow-xl space-y-6">
         <div className="text-center max-w-xl mx-auto space-y-2">
-          <span className="text-xs font-bold text-[#e61937] uppercase tracking-widest">Transparent UAE Pricing</span>
+          <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest">Transparent UAE Pricing</span>
           <h2 className="text-2xl font-black">Zero Commissions During Launch</h2>
           <p className="text-xs text-slate-400 leading-relaxed">
             We are dedicated to building liquidity in the UAE construction and MEP wholesale market. Our standard 1.3% transaction commission is <strong>100% waived</strong> during our founder growth phase.
@@ -84,7 +84,7 @@ export const HowItWorksPage: React.FC<{ onStartRFQ: () => void }> = ({ onStartRF
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
           {/* Contractors */}
           <div className="bg-slate-800/80 p-6 rounded-2xl border border-slate-700/80 space-y-3">
-            <span className="text-xs font-extrabold uppercase tracking-wider text-[#e61937]">For MEP & Civil Contractors</span>
+            <span className="text-xs font-extrabold uppercase tracking-wider text-brand-400">For MEP & Civil Contractors</span>
             <div className="text-2xl font-black text-white">100% Free Forever</div>
             <ul className="space-y-2 text-xs text-slate-300">
               <li className="flex items-center gap-2">✓ Unlimited RFQ & BOQ Uploads</li>
@@ -95,14 +95,14 @@ export const HowItWorksPage: React.FC<{ onStartRFQ: () => void }> = ({ onStartRF
           </div>
 
           {/* Suppliers */}
-          <div className="bg-slate-800/80 p-6 rounded-2xl border border-[#e61937]/40 space-y-3 relative overflow-hidden">
-            <div className="absolute top-3 right-3 bg-[#e61937] text-white text-[10px] font-black uppercase px-2 py-0.5 rounded">
+          <div className="bg-slate-800/80 p-6 rounded-2xl border border-emerald-500/40 space-y-3 relative overflow-hidden">
+            <div className="absolute top-3 right-3 bg-emerald-500 text-slate-950 text-[10px] font-black uppercase px-2 py-0.5 rounded">
               Launch Special
             </div>
-            <span className="text-xs font-extrabold uppercase tracking-wider text-[#e61937]">For Stockists & Distributors</span>
+            <span className="text-xs font-extrabold uppercase tracking-wider text-emerald-400">For Stockists & Distributors</span>
             <div>
               <div className="text-2xl font-black text-white">First 3 Months Free</div>
-              <div className="text-xs text-[#e61937] font-bold mt-0.5">Then only AED 1 / Day (AED 30 / month)</div>
+              <div className="text-xs text-emerald-400 font-bold mt-0.5">Then only AED 1 / Day (AED 30 / month)</div>
             </div>
             <ul className="space-y-2 text-xs text-slate-300">
               <li className="flex items-center gap-2">✓ Receive direct matched contractor schedules</li>
