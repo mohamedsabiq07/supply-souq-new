@@ -137,7 +137,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                 radius={200}
                 falloff="gaussian"
               >
-                Procurement,
+                UAE Procurement,
               </VariableFontCursorProximity>
               <br />
               <VariableFontCursorProximity
