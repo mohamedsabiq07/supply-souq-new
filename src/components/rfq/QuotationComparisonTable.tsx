@@ -132,7 +132,7 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
           <div>
             <div className="flex items-center gap-2">
               <span className="font-extrabold text-amber-300 text-sm">Direct Supplier Invoicing & PO Delivery</span>
-              <span className="bg-emerald-500/20 text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded border border-emerald-400/30">
+              <span className="bg-rose-500/20 text-rose-200 text-[10px] font-bold px-2 py-0.5 rounded border border-rose-400/30">
                 100% Verified Commercial Offers
               </span>
               {isUnlocked && (
@@ -147,8 +147,8 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
           </div>
         </div>
 
-        <span className="inline-flex items-center gap-1.5 bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 px-3 py-1.5 rounded-xl font-bold whitespace-nowrap">
-          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+        <span className="inline-flex items-center gap-1.5 bg-rose-500/20 text-rose-200 border border-rose-400/40 px-3 py-1.5 rounded-xl font-bold whitespace-nowrap">
+          <CheckCircle2 className="w-4 h-4 text-[#cf2e46]" />
           <span>
             {isUnlocked ? `${quotations.length} Quotations Unlocked` : `${Math.min(quotations.length, 5)} of 5 Free Quotations`}
           </span>
@@ -162,8 +162,8 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
             <h3 className="text-base font-bold text-slate-900">
               Quotation Comparison Matrix
             </h3>
-            <span className="text-xs font-extrabold bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-0.5 rounded-full flex items-center gap-1">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+            <span className="text-xs font-extrabold bg-rose-50 text-rose-800 border border-rose-200 px-2.5 py-0.5 rounded-full flex items-center gap-1">
+              <CheckCircle2 className="w-3.5 h-3.5 text-[#cf2e46]" />
               <span>{visibleQuotes.length} {visibleQuotes.length === 1 ? 'Quote' : 'Quotes'} Displayed{isUnlocked ? ' (Extended Pack Active)' : quotations.length >= 5 ? ' (Free Limit: 5)' : ''}</span>
             </span>
           </div>
@@ -230,9 +230,9 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
               key={quote.id}
               className={`bg-white rounded-2xl border transition-all duration-200 flex flex-col justify-between overflow-hidden shadow-subtle ${
                 isAwarded
-                  ? 'border-emerald-500 ring-2 ring-emerald-500/20'
+                  ? 'border-[#cf2e46] ring-2 ring-[#cf2e46]/20'
                   : isBestPrice
-                  ? 'border-emerald-400 shadow-md'
+                  ? 'border-rose-400 shadow-md'
                   : 'border-slate-200 hover:border-slate-300 hover:shadow-card'
               }`}
             >
@@ -240,7 +240,7 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
                 {/* Supplier Header Banner */}
                 <div className={`p-4 border-b ${
                   isAwarded
-                    ? 'bg-emerald-50/80 border-emerald-200'
+                    ? 'bg-rose-50/80 border-rose-200'
                     : 'bg-slate-50/60 border-slate-100'
                 }`}>
                   <div className="flex items-center justify-between gap-2 mb-2">
@@ -248,14 +248,14 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
                       <span className="text-[11px] font-mono font-bold text-slate-600 bg-white px-2 py-0.5 rounded border border-slate-200">
                         {quote.quotationNumber}
                       </span>
-                      <span className="text-[10px] font-bold bg-emerald-50 text-emerald-800 px-1.5 py-0.5 rounded border border-emerald-200">
+                      <span className="text-[10px] font-bold bg-rose-50 text-rose-800 px-1.5 py-0.5 rounded border border-rose-200">
                         Quote {index + 1} of {visibleQuotes.length}
                       </span>
                     </div>
 
                     <div className="flex items-center gap-1">
                       {isAwarded && (
-                        <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300">
+                        <span className="inline-flex items-center gap-1 text-xs font-bold text-rose-800 bg-rose-100 px-2 py-0.5 rounded border border-rose-300">
                           <CheckCircle2 className="w-3.5 h-3.5" /> AWARDED
                         </span>
                       )}
