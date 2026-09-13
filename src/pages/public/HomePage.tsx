@@ -111,37 +111,37 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
   ];
 
   return (
-    <div className="bg-[#050505] text-white selection:bg-[#cf2e46] selection:text-white overflow-hidden font-sans">
+    <div className="bg-white text-slate-900 selection:bg-[#cf2e46] selection:text-white overflow-hidden font-sans">
       
-      {/* 1. HERO SECTION - GENT CYBER-MINT THEME */}
-      <section className="relative pt-16 sm:pt-24 pb-20 sm:pb-32 overflow-hidden border-b border-[#cf2e46]/10">
+      {/* 1. HERO SECTION - CLEAN WHITE & RED PALETTE */}
+      <section className="relative pt-16 sm:pt-24 pb-20 sm:pb-32 overflow-hidden border-b border-slate-200 bg-white">
         {/* Subtle editorial grid background */}
-        <div className="absolute inset-0 cyber-grid-red opacity-40 pointer-events-none" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#f1f5f9_1px,transparent_1px),linear-gradient(to_bottom,#f1f5f9_1px,transparent_1px)] bg-[size:40px_40px] opacity-70 pointer-events-none" />
         
         {/* Ambient Radial Spotlights */}
-        <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[850px] h-[450px] bg-gradient-to-b from-[#cf2e46]/20 via-[#7a0716]/10 to-transparent blur-[120px] pointer-events-none" />
-        <div className="absolute top-1/2 -left-40 w-[400px] h-[400px] bg-[#cf2e46]/10 blur-[140px] pointer-events-none" />
-        <div className="absolute top-1/3 -right-40 w-[450px] h-[450px] bg-[#cf2e46]/10 blur-[140px] pointer-events-none" />
+        <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[850px] h-[450px] bg-gradient-to-b from-rose-100/60 via-rose-50/20 to-transparent blur-[120px] pointer-events-none" />
+        <div className="absolute top-1/2 -left-40 w-[400px] h-[400px] bg-rose-100/40 blur-[140px] pointer-events-none" />
+        <div className="absolute top-1/3 -right-40 w-[450px] h-[450px] bg-rose-100/40 blur-[140px] pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-4xl mx-auto text-center space-y-6">
             
             {/* Glowing Pill Badge */}
-            <div className="inline-flex items-center gap-2 bg-[#2a050dcc] border border-[#cf2e46]/35 text-[#cf2e46] px-4 py-1.5 rounded-full text-xs font-mono font-bold tracking-wider uppercase shadow-glow-red backdrop-blur-xl">
+            <div className="inline-flex items-center gap-2 bg-rose-50 border border-rose-200 text-[#cf2e46] px-4 py-1.5 rounded-full text-xs font-mono font-bold tracking-wider uppercase backdrop-blur-xl shadow-xs">
               <span className="w-2 h-2 rounded-full bg-[#cf2e46] animate-ping" />
               <span>UAE'S TRUSTED B2B PROCUREMENT MARKETPLACE</span>
             </div>
 
             {/* Main Headline */}
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white leading-[1.1]">
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-950 leading-[1.1]">
               UAE Construction Procurement,<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#ffb3bf] to-[#cf2e46]">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-rose-600 to-[#cf2e46]">
                 Simplified.
               </span>
             </h1>
 
             {/* Subheadline */}
-            <p className="text-sm sm:text-base md:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed font-normal">
+            <p className="text-sm sm:text-base md:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed font-normal">
               Upload your material list or BOQ in 60 seconds. Top verified UAE stockists compete to give you the best wholesale prices within 24 hours.
             </p>
 
@@ -149,7 +149,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
               <button
                 onClick={() => handleStartBuyer()}
-                className="w-full sm:w-auto px-8 py-4 rounded-full text-sm font-black bg-[#cf2e46] text-white hover:bg-[#b91c33] transition-all duration-300 shadow-glow-red hover:scale-105 flex items-center justify-center gap-2 group cursor-pointer"
+                className="w-full sm:w-auto px-8 py-4 rounded-full text-sm font-black bg-[#cf2e46] text-white hover:bg-[#b91c33] transition-all duration-300 shadow-md hover:scale-105 flex items-center justify-center gap-2 group cursor-pointer"
               >
                 <Zap className="w-4 h-4 fill-white" />
                 <span>Post Live RFQ (100% Free)</span>
@@ -158,16 +158,16 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
 
               <button
                 onClick={() => setCurrentView('invoice-audit')}
-                className="w-full sm:w-auto px-8 py-4 rounded-full text-sm font-bold bg-white/5 hover:bg-white/10 text-white border border-white/15 backdrop-blur-md transition-all duration-300 hover:border-[#cf2e46]/40 flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full sm:w-auto px-8 py-4 rounded-full text-sm font-bold bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 shadow-xs transition-all duration-300 hover:border-slate-400 flex items-center justify-center gap-2 cursor-pointer"
               >
-                <Sparkles className="w-4 h-4 text-[#fb7187]" />
+                <Sparkles className="w-4 h-4 text-[#cf2e46]" />
                 <span>Free Cable Cost Audit (Save 15%+)</span>
               </button>
             </div>
 
             {/* Interactive Prompt Chips (Gent AI Prompt Bar Style) */}
             <div className="pt-6">
-              <span className="text-[11px] uppercase tracking-widest text-slate-400 font-bold block mb-3 font-mono">
+              <span className="text-[11px] uppercase tracking-widest text-slate-500 font-bold block mb-3 font-mono">
                 Quick Category Sourcing Simulation:
               </span>
               <div className="flex flex-wrap items-center justify-center gap-2">
@@ -177,8 +177,8 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                     onClick={() => setSelectedPrompt(p.id)}
                     className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
                       selectedPrompt === p.id
-                        ? 'bg-[#cf2e46] text-white font-bold shadow-glow-red scale-105'
-                        : 'bg-[#2a050dcc] text-slate-300 border border-[#cf2e46]/20 hover:border-[#cf2e46]/50 hover:text-white'
+                        ? 'bg-[#cf2e46] text-white font-bold shadow-md scale-105'
+                        : 'bg-slate-100 text-slate-700 border border-slate-200 hover:border-slate-300 hover:text-slate-900'
                     }`}
                   >
                     {p.label}
@@ -189,17 +189,17 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
 
             {/* Central Interactive Terminal Mockup (Gent Flagship Card) */}
             <div className="pt-6 max-w-3xl mx-auto text-left">
-              <div className="rounded-3xl bg-[#140306d9] border border-[#cf2e46]/25 p-5 sm:p-7 shadow-2xl backdrop-blur-2xl relative overflow-hidden group hover:border-[#cf2e46]/40 transition-all duration-300">
+              <div className="rounded-3xl bg-white border border-slate-200 p-5 sm:p-7 shadow-xl relative overflow-hidden group hover:border-slate-300 transition-all duration-300">
                 {/* Subtle top light bar */}
-                <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#cf2e46]/60 to-transparent" />
+                <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#cf2e46] to-transparent" />
                 
                 {/* Terminal Header */}
-                <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-4 text-xs font-mono text-slate-400">
+                <div className="flex items-center justify-between border-b border-slate-200 pb-4 mb-4 text-xs font-mono text-slate-500">
                   <div className="flex items-center gap-2">
-                    <span className="w-3 h-3 rounded-full bg-red-500/80 inline-block" />
-                    <span className="w-3 h-3 rounded-full bg-[#cf2e46]/80 inline-block" />
-                    <span className="w-3 h-3 rounded-full bg-[#cf2e46]/80 inline-block" />
-                    <span className="ml-2 text-slate-300 font-bold">SupplySouq B2B Procurement Engine v2.4</span>
+                    <span className="w-3 h-3 rounded-full bg-rose-500 inline-block" />
+                    <span className="w-3 h-3 rounded-full bg-slate-300 inline-block" />
+                    <span className="w-3 h-3 rounded-full bg-slate-300 inline-block" />
+                    <span className="ml-2 text-slate-700 font-bold">SupplySouq B2B Procurement Engine v2.4</span>
                   </div>
                   <span className="text-[#cf2e46] font-bold flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-[#cf2e46] animate-ping" />
@@ -209,38 +209,38 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
 
                 {/* Simulated Contractor Input */}
                 <div className="space-y-4">
-                  <div className="flex items-start gap-3 bg-[#2a050dcc] p-3.5 rounded-2xl border border-[#cf2e46]/20">
-                    <div className="w-8 h-8 rounded-xl bg-[#cf2e46]/20 text-[#cf2e46] flex items-center justify-center font-bold shrink-0 text-xs">
+                  <div className="flex items-start gap-3 bg-slate-50 p-3.5 rounded-2xl border border-slate-200">
+                    <div className="w-8 h-8 rounded-xl bg-rose-100 text-[#cf2e46] flex items-center justify-center font-bold shrink-0 text-xs">
                       RFQ
                     </div>
                     <div>
-                      <div className="text-[11px] font-mono text-slate-400 uppercase tracking-wider">Active Contractor Query</div>
-                      <div className="text-sm font-semibold text-white mt-0.5">{currentPromptData.query}</div>
+                      <div className="text-[11px] font-mono text-slate-500 uppercase tracking-wider">Active Contractor Query</div>
+                      <div className="text-sm font-semibold text-slate-900 mt-0.5">{currentPromptData.query}</div>
                     </div>
                   </div>
 
                   {/* Engine Live Response */}
-                  <div className="flex items-start gap-3 bg-white/[0.03] p-4 rounded-2xl border border-white/10">
-                    <div className="w-8 h-8 rounded-xl bg-[#cf2e46]/20 text-[#fb7187] flex items-center justify-center font-bold shrink-0 text-xs">
+                  <div className="flex items-start gap-3 bg-rose-50/40 p-4 rounded-2xl border border-rose-100">
+                    <div className="w-8 h-8 rounded-xl bg-rose-100 text-[#cf2e46] flex items-center justify-center font-bold shrink-0 text-xs">
                       <CheckCircle2 className="w-4 h-4 text-[#cf2e46]" />
                     </div>
                     <div className="space-y-2 flex-1">
                       <div className="flex items-center justify-between flex-wrap gap-2">
                         <span className="text-xs font-bold text-[#cf2e46] font-mono uppercase tracking-wider">Fastest 5 Bids Rule: 5 Verified Quotes In</span>
-                        <span className="text-[11px] text-slate-400 bg-white/5 px-2.5 py-0.5 rounded-full border border-white/10 font-mono">Average Turnaround: 2h 45m</span>
+                        <span className="text-[11px] text-slate-600 bg-white px-2.5 py-0.5 rounded-full border border-slate-200 font-mono shadow-2xs">Average Turnaround: 2h 45m</span>
                       </div>
-                      <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-normal">
+                      <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-normal">
                         {currentPromptData.match}
                       </p>
                       <div className="flex flex-wrap items-center gap-2 pt-1 text-[11px]">
-                        <span className="inline-flex items-center gap-1 text-[#cf2e46] bg-[#2a050dcc] px-2.5 py-0.5 rounded-full border border-[#cf2e46]/30">
+                        <span className="inline-flex items-center gap-1 text-[#cf2e46] bg-rose-50 px-2.5 py-0.5 rounded-full border border-rose-200">
                           <BadgeCheck className="w-3.5 h-3.5" /> DET Trade License Verified
                         </span>
-                        <span className="inline-flex items-center gap-1 text-slate-300 bg-white/5 px-2.5 py-0.5 rounded-full border border-white/10">
-                          <Clock className="w-3.5 h-3.5 text-[#fb7187]" /> 24h Site Delivery
+                        <span className="inline-flex items-center gap-1 text-slate-700 bg-white px-2.5 py-0.5 rounded-full border border-slate-200">
+                          <Clock className="w-3.5 h-3.5 text-[#cf2e46]" /> 24h Site Delivery
                         </span>
-                        <span className="inline-flex items-center gap-1 text-slate-300 bg-white/5 px-2.5 py-0.5 rounded-full border border-white/10">
-                          <FileCheck2 className="w-3.5 h-3.5 text-[#fb7187]" /> 5% UAE VAT FTA Ready
+                        <span className="inline-flex items-center gap-1 text-slate-700 bg-white px-2.5 py-0.5 rounded-full border border-slate-200">
+                          <FileCheck2 className="w-3.5 h-3.5 text-[#cf2e46]" /> 5% UAE VAT FTA Ready
                         </span>
                       </div>
                     </div>
@@ -248,11 +248,11 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                 </div>
 
                 {/* Instant Action Footer */}
-                <div className="mt-5 pt-4 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
-                  <span className="text-slate-400">Want to test this on your project BOQ?</span>
+                <div className="mt-5 pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+                  <span className="text-slate-500">Want to test this on your project BOQ?</span>
                   <button
                     onClick={() => handleStartBuyer()}
-                    className="w-full sm:w-auto px-4 py-2 rounded-xl bg-[#cf2e46] hover:bg-[#b91c33] text-white font-black transition-all shadow-glow-red flex items-center justify-center gap-1.5 cursor-pointer"
+                    className="w-full sm:w-auto px-4 py-2 rounded-xl bg-[#cf2e46] hover:bg-[#b91c33] text-white font-black transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     <span>Post Real RFQ Now</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -263,50 +263,50 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
 
             {/* Live Metrics Grid (Gent 4-Column Stat Cards) */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 pt-8 max-w-4xl mx-auto text-left font-sans">
-              <div className="p-4 rounded-2xl bg-[#140306d9] border border-[#cf2e46]/20 backdrop-blur-xl hover:border-[#cf2e46]/50 hover:shadow-glow-red transition-all duration-300 group">
+              <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs hover:border-slate-300 hover:shadow-md transition-all duration-300 group">
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-[11px] uppercase tracking-wider font-bold text-slate-400 font-mono">Avg Savings</span>
+                  <span className="text-[11px] uppercase tracking-wider font-bold text-slate-500 font-mono">Avg Savings</span>
                   <span className="w-2 h-2 rounded-full bg-[#cf2e46] group-hover:animate-ping" />
                 </div>
                 <div className="text-2xl sm:text-3xl font-black text-[#cf2e46] tracking-tight flex items-baseline">
                   <StatCounter target={18.4} decimals={1} suffix="%" />
                 </div>
-                <span className="text-[11px] text-slate-400 block mt-1">vs standard offline quotes</span>
+                <span className="text-[11px] text-slate-500 block mt-1">vs standard offline quotes</span>
               </div>
 
-              <div className="p-4 rounded-2xl bg-[#140306d9] border border-[#cf2e46]/20 backdrop-blur-xl hover:border-[#cf2e46]/50 hover:shadow-glow-red transition-all duration-300 group">
+              <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs hover:border-slate-300 hover:shadow-md transition-all duration-300 group">
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-[11px] uppercase tracking-wider font-bold text-slate-400 font-mono">Response SLA</span>
+                  <span className="text-[11px] uppercase tracking-wider font-bold text-slate-500 font-mono">Response SLA</span>
                   <span className="w-2 h-2 rounded-full bg-[#cf2e46] group-hover:animate-ping" />
                 </div>
-                <div className="text-2xl sm:text-3xl font-black text-[#fb7187] tracking-tight flex items-baseline gap-1 whitespace-nowrap">
+                <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight flex items-baseline gap-1 whitespace-nowrap">
                   <StatCounter target={24} />
-                  <span className="text-sm font-bold text-rose-100/80">Hours</span>
+                  <span className="text-sm font-bold text-slate-600">Hours</span>
                 </div>
-                <span className="text-[11px] text-slate-400 block mt-1">Guaranteed turnaround</span>
+                <span className="text-[11px] text-slate-500 block mt-1">Guaranteed turnaround</span>
               </div>
 
-              <div className="p-4 rounded-2xl bg-[#140306d9] border border-[#cf2e46]/20 backdrop-blur-xl hover:border-[#cf2e46]/50 hover:shadow-glow-red transition-all duration-300 group">
+              <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs hover:border-slate-300 hover:shadow-md transition-all duration-300 group">
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-[11px] uppercase tracking-wider font-bold text-slate-400 font-mono">Fastest Bids Cap</span>
+                  <span className="text-[11px] uppercase tracking-wider font-bold text-slate-500 font-mono">Fastest Bids Cap</span>
                   <span className="w-2 h-2 rounded-full bg-[#cf2e46] group-hover:animate-ping" />
                 </div>
-                <div className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-baseline gap-1 whitespace-nowrap">
+                <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight flex items-baseline gap-1 whitespace-nowrap">
                   <StatCounter target={5} />
-                  <span className="text-sm font-bold text-slate-300">Stockists</span>
+                  <span className="text-sm font-bold text-slate-600">Stockists</span>
                 </div>
-                <span className="text-[11px] text-slate-400 block mt-1">First-to-quote priority</span>
+                <span className="text-[11px] text-slate-500 block mt-1">First-to-quote priority</span>
               </div>
 
-              <div className="p-4 rounded-2xl bg-[#140306d9] border border-[#cf2e46]/20 backdrop-blur-xl hover:border-[#cf2e46]/50 transition-all duration-300 group">
+              <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs hover:border-slate-300 hover:shadow-md transition-all duration-300 group">
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-[11px] uppercase tracking-wider font-bold text-slate-400 font-mono">Trade License</span>
+                  <span className="text-[11px] uppercase tracking-wider font-bold text-slate-500 font-mono">Trade License</span>
                   <span className="w-2 h-2 rounded-full bg-[#cf2e46] group-hover:animate-ping" />
                 </div>
-                <div className="text-2xl sm:text-3xl font-black text-[#fb7187] tracking-tight flex items-baseline">
+                <div className="text-2xl sm:text-3xl font-black text-[#cf2e46] tracking-tight flex items-baseline">
                   <StatCounter target={100} suffix="%" />
                 </div>
-                <span className="text-[11px] text-slate-400 block mt-1">UAE DET / DED verified</span>
+                <span className="text-[11px] text-slate-500 block mt-1">UAE DET / DED verified</span>
               </div>
             </div>
 
@@ -315,9 +315,9 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
       </section>
 
       {/* 2. PARTNER / STOCKIST BRAND MARQUEE */}
-      <section className="py-12 border-b border-white/5 bg-[#140306d9] relative overflow-hidden">
+      <section className="py-12 border-b border-slate-200 bg-slate-50 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-6">
-          <p className="text-xs uppercase tracking-widest text-slate-400 font-bold font-mono">
+          <p className="text-xs uppercase tracking-widest text-slate-500 font-bold font-mono">
             Trusted by 250+ UAE Contractors &amp; Certified Stockists across Dubai, Sharjah &amp; Abu Dhabi
           </p>
         </div>
@@ -327,77 +327,77 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             {[...brands, ...brands].map((brand, idx) => (
               <div
                 key={idx}
-                className="inline-flex items-center gap-3 px-5 py-2.5 rounded-2xl bg-[#2a050dcc] border border-[#cf2e46]/20 text-slate-200 hover:border-[#cf2e46]/50 transition-colors"
+                className="inline-flex items-center gap-3 px-5 py-2.5 rounded-2xl bg-white border border-slate-200 text-slate-800 hover:border-slate-300 shadow-2xs transition-colors"
               >
                 <div className="w-2 h-2 rounded-full bg-[#cf2e46]" />
-                <span className="font-extrabold text-sm tracking-wider text-white">{brand.name}</span>
-                <span className="text-[11px] text-[#ffb3bf] font-mono">• {brand.tag}</span>
+                <span className="font-extrabold text-sm tracking-wider text-slate-900">{brand.name}</span>
+                <span className="text-[11px] text-[#cf2e46] font-mono">• {brand.tag}</span>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 3. THE PROBLEM SECTION (Gent Contrast Architecture) */}
-      <section className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      {/* 3. THE PROBLEM SECTION */}
+      <section className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative bg-white">
         <div className="text-center space-y-3 mb-14 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-red-500/10 text-red-400 border border-red-500/30">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-rose-50 text-[#cf2e46] border border-rose-200">
             <AlertTriangle className="w-3.5 h-3.5" />
             <span>The Traditional Procurement Challenge</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+          <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
             Material procurement shouldn't take days of follow-ups.
           </h2>
-          <p className="text-sm sm:text-base text-slate-400 leading-relaxed font-normal">
+          <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
             Manual phone calls, scattered WhatsApp messages, and waiting days for quotes — procurement teams spend hours chasing individual suppliers instead of focusing on project execution.
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          <div className="p-6 rounded-3xl bg-[#140306d9] border border-red-500/20 space-y-4 hover:border-red-500/40 transition-all group">
-            <div className="w-12 h-12 rounded-2xl bg-red-500/10 text-red-400 flex items-center justify-center font-black group-hover:scale-110 transition-transform">
+          <div className="p-6 rounded-3xl bg-white border border-slate-200 space-y-4 hover:border-rose-300 hover:shadow-md transition-all group">
+            <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
               <PhoneOff className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-bold text-white group-hover:text-red-300 transition-colors">
+            <h3 className="text-lg font-bold text-slate-900 group-hover:text-[#cf2e46] transition-colors">
               Manual Follow-Ups
             </h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <p className="text-xs text-slate-600 leading-relaxed">
               Contacting multiple suppliers individually just to check stock availability, specifications, and delivery schedules.
             </p>
           </div>
 
-          <div className="p-6 rounded-3xl bg-[#140306d9] border border-red-500/20 space-y-4 hover:border-red-500/40 transition-all group">
-            <div className="w-12 h-12 rounded-2xl bg-red-500/10 text-red-400 flex items-center justify-center font-black group-hover:scale-110 transition-transform">
+          <div className="p-6 rounded-3xl bg-white border border-slate-200 space-y-4 hover:border-rose-300 hover:shadow-md transition-all group">
+            <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
               <Clock className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-bold text-white group-hover:text-red-300 transition-colors">
+            <h3 className="text-lg font-bold text-slate-900 group-hover:text-[#cf2e46] transition-colors">
               Delayed Quotations
             </h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <p className="text-xs text-slate-600 leading-relaxed">
               Waiting days for responses and price updates while site work pauses and project deadlines approach.
             </p>
           </div>
 
-          <div className="p-6 rounded-3xl bg-[#140306d9] border border-red-500/20 space-y-4 hover:border-red-500/40 transition-all group">
-            <div className="w-12 h-12 rounded-2xl bg-red-500/10 text-red-400 flex items-center justify-center font-black group-hover:scale-110 transition-transform">
+          <div className="p-6 rounded-3xl bg-white border border-slate-200 space-y-4 hover:border-rose-300 hover:shadow-md transition-all group">
+            <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
               <AlertTriangle className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-bold text-white group-hover:text-red-300 transition-colors">
+            <h3 className="text-lg font-bold text-slate-900 group-hover:text-[#cf2e46] transition-colors">
               Inconsistent Specifications
             </h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <p className="text-xs text-slate-600 leading-relaxed">
               Dealing with mismatched product standards, unverified compliance, or missing technical data sheets.
             </p>
           </div>
 
-          <div className="p-6 rounded-3xl bg-[#140306d9] border border-red-500/20 space-y-4 hover:border-red-500/40 transition-all group">
-            <div className="w-12 h-12 rounded-2xl bg-red-500/10 text-red-400 flex items-center justify-center font-black group-hover:scale-110 transition-transform">
+          <div className="p-6 rounded-3xl bg-white border border-slate-200 space-y-4 hover:border-rose-300 hover:shadow-md transition-all group">
+            <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
               <FileSpreadsheet className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-bold text-white group-hover:text-red-300 transition-colors">
+            <h3 className="text-lg font-bold text-slate-900 group-hover:text-[#cf2e46] transition-colors">
               Scattered Comparisons
             </h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <p className="text-xs text-slate-600 leading-relaxed">
               Juggling dozens of different PDF quotes across emails and chats with no easy way to compare rates side-by-side.
             </p>
           </div>
@@ -405,20 +405,20 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
       </section>
 
       {/* 4. THE SOLUTION BENTO GRID (Gent Flagship: "Every feature shows its work") */}
-      <section className="py-20 sm:py-28 border-t border-b border-[#cf2e46]/10 bg-[#140306d9] relative overflow-hidden">
+      <section className="py-20 sm:py-28 border-t border-b border-slate-200 bg-slate-50 relative overflow-hidden">
         {/* Ambient background glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-[#cf2e46]/10 blur-[150px] pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-rose-100/40 blur-[150px] pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center space-y-3 mb-16 max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-[#2a050dcc] text-[#cf2e46] border border-[#cf2e46]/35 shadow-glow-red">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-rose-50 text-[#cf2e46] border border-rose-200">
               <ShieldCheck className="w-3.5 h-3.5" />
               <span>The Next-Gen B2B Solution</span>
             </div>
-            <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+            <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
               Every feature shows its work.
             </h2>
-            <p className="text-sm sm:text-base text-slate-400 leading-relaxed font-normal">
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
               Not just claims — purpose-built procurement technology engineered to guarantee quotes in 24 hours with complete price transparency.
             </p>
           </div>
@@ -427,45 +427,45 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
             {/* Bento Card 1: Multi-Vendor Bidding & 24H SLA */}
-            <div className="p-7 sm:p-9 rounded-3xl bg-[#050505] border border-[#cf2e46]/20 hover:border-[#cf2e46]/50 transition-all duration-300 space-y-6 flex flex-col justify-between group">
+            <div className="p-7 sm:p-9 rounded-3xl bg-white border border-slate-200 hover:border-slate-300 shadow-sm hover:shadow-md transition-all duration-300 space-y-6 flex flex-col justify-between group">
               <div className="space-y-3">
-                <div className="w-12 h-12 rounded-2xl bg-[#cf2e46]/10 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
                   <Zap className="w-6 h-6" />
                 </div>
-                <h3 className="text-xl sm:text-2xl font-black text-white">
+                <h3 className="text-xl sm:text-2xl font-black text-slate-900">
                   Multi-Vendor Bidding with Guaranteed 24H SLA
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                   Post your material requirement once. Verified UAE stockists receive immediate WhatsApp &amp; dashboard alerts to submit wholesale pricing before the 24-hour countdown expires.
                 </p>
               </div>
 
               {/* Interactive Visual Element */}
-              <div className="p-4 rounded-2xl bg-[#140306d9] border border-white/10 space-y-3">
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
                 <div className="flex items-center justify-between text-xs font-mono">
-                  <span className="text-slate-400 uppercase">SLA Clock: RFQ #SS-2026-089</span>
+                  <span className="text-slate-500 uppercase">SLA Clock: RFQ #SS-2026-089</span>
                   <span className="text-[#cf2e46] font-bold">14h 22m Remaining</span>
                 </div>
-                <div className="w-full bg-white/10 h-2 rounded-full overflow-hidden">
+                <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
                   <div className="bg-[#cf2e46] h-full rounded-full w-[65%]" />
                 </div>
-                <div className="flex items-center justify-between text-[11px] text-slate-400 pt-1 font-mono">
+                <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1 font-mono">
                   <span>Posted: 09:30 AM (Sharjah)</span>
-                  <span className="text-[#fb7187] font-bold">3 Quotes Submitted</span>
+                  <span className="text-[#cf2e46] font-bold">3 Quotes Submitted</span>
                 </div>
               </div>
             </div>
 
             {/* Bento Card 2: Fastest 5 Bids Rule */}
-            <div className="p-7 sm:p-9 rounded-3xl bg-[#050505] border border-[#cf2e46]/20 hover:border-[#cf2e46]/50 transition-all duration-300 space-y-6 flex flex-col justify-between group">
+            <div className="p-7 sm:p-9 rounded-3xl bg-white border border-slate-200 hover:border-slate-300 shadow-sm hover:shadow-md transition-all duration-300 space-y-6 flex flex-col justify-between group">
               <div className="space-y-3">
-                <div className="w-12 h-12 rounded-2xl bg-[#cf2e46]/10 text-[#fb7187] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
                   <Activity className="w-6 h-6" />
                 </div>
-                <h3 className="text-xl sm:text-2xl font-black text-white">
+                <h3 className="text-xl sm:text-2xl font-black text-slate-900">
                   Guaranteed Fastest 5 Bids Rule
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                   Only the first 5 verified stockists can submit quotes. This motivates suppliers to bid their lowest price immediately, while saving contractors from drowning in 50 spam emails.
                 </p>
               </div>
@@ -483,11 +483,11 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                     key={idx}
                     className={`p-2.5 rounded-xl border ${
                       s.status === 'Open'
-                        ? 'bg-[#2a050dcc] border-[#cf2e46]/40 animate-pulse text-[#cf2e46]'
-                        : 'bg-white/5 border-white/10 text-slate-300'
+                        ? 'bg-rose-50 border-rose-300 text-[#cf2e46] animate-pulse'
+                        : 'bg-slate-50 border-slate-200 text-slate-800'
                     }`}
                   >
-                    <div className="text-[10px] font-mono uppercase text-slate-400">Slot {s.slot}</div>
+                    <div className="text-[10px] font-mono uppercase text-slate-500">Slot {s.slot}</div>
                     <div className="text-xs font-black mt-0.5 truncate">{s.name}</div>
                     <div className="text-[10px] font-mono mt-1 text-[#cf2e46] font-bold">{s.price}</div>
                   </div>
@@ -496,28 +496,28 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             </div>
 
             {/* Bento Card 3: Automated BOQ & Schedule Standardizer */}
-            <div className="p-7 sm:p-9 rounded-3xl bg-[#050505] border border-[#cf2e46]/20 hover:border-[#cf2e46]/50 transition-all duration-300 space-y-6 flex flex-col justify-between group">
+            <div className="p-7 sm:p-9 rounded-3xl bg-white border border-slate-200 hover:border-slate-300 shadow-sm hover:shadow-md transition-all duration-300 space-y-6 flex flex-col justify-between group">
               <div className="space-y-3">
-                <div className="w-12 h-12 rounded-2xl bg-[#cf2e46]/10 text-[#fb7187] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
                   <FileSpreadsheet className="w-6 h-6" />
                 </div>
-                <h3 className="text-xl sm:text-2xl font-black text-white">
+                <h3 className="text-xl sm:text-2xl font-black text-slate-900">
                   Automated BOQ &amp; Cable Schedule Cleansing
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                   Upload any format — Excel schedules, PDF requisition sheets, or smartphone photos of site notes. Our engine parses specs, standardizes cable codes, and matches stockists instantly.
                 </p>
               </div>
 
               {/* Visual Element */}
-              <div className="p-4 rounded-2xl bg-[#140306d9] border border-white/10 flex items-center justify-between text-xs">
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-[#cf2e46]/20 text-[#fb7187] flex items-center justify-center font-bold">
+                  <div className="w-9 h-9 rounded-xl bg-rose-100 text-[#cf2e46] flex items-center justify-center font-bold">
                     XLS
                   </div>
                   <div>
-                    <div className="font-bold text-white">Cable_Schedule_Tower_B.xlsx</div>
-                    <div className="text-[11px] text-slate-400 font-mono">18 Line Items • Standardized to BS 5467</div>
+                    <div className="font-bold text-slate-900">Cable_Schedule_Tower_B.xlsx</div>
+                    <div className="text-[11px] text-slate-500 font-mono">18 Line Items • Standardized to BS 5467</div>
                   </div>
                 </div>
                 <span className="text-[#cf2e46] font-bold text-xs font-mono">✓ Ready to Quote</span>
@@ -525,26 +525,26 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             </div>
 
             {/* Bento Card 4: UAE DET KYB & FTA VAT Compliance */}
-            <div className="p-7 sm:p-9 rounded-3xl bg-[#050505] border border-[#cf2e46]/20 hover:border-[#cf2e46]/50 transition-all duration-300 space-y-6 flex flex-col justify-between group">
+            <div className="p-7 sm:p-9 rounded-3xl bg-white border border-slate-200 hover:border-slate-300 shadow-sm hover:shadow-md transition-all duration-300 space-y-6 flex flex-col justify-between group">
               <div className="space-y-3">
-                <div className="w-12 h-12 rounded-2xl bg-[#cf2e46]/10 text-[#fb7187] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
                   <BadgeCheck className="w-6 h-6" />
                 </div>
-                <h3 className="text-xl sm:text-2xl font-black text-white">
+                <h3 className="text-xl sm:text-2xl font-black text-slate-900">
                   100% UAE DET KYB &amp; FTA Tax Compliance
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                   Every supplier is verified with genuine UAE Commercial Registration, 15-digit TRN, and physical stock in Dubai or Sharjah. Complete with 5% UAE VAT invoices and digital POs.
                 </p>
               </div>
 
               {/* Visual Element */}
-              <div className="p-4 rounded-2xl bg-[#140306d9] border border-white/10 flex items-center justify-between text-xs font-mono">
-                <div className="flex items-center gap-2 text-slate-300">
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs font-mono">
+                <div className="flex items-center gap-2 text-slate-800">
                   <ShieldCheck className="w-5 h-5 text-[#cf2e46]" />
                   <span>TRN: 100482938400003</span>
                 </div>
-                <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase bg-[#cf2e46]/20 text-[#fb7187] border border-[#cf2e46]/30">
+                <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase bg-rose-50 text-[#cf2e46] border border-rose-200">
                   FTA Verified
                 </span>
               </div>
@@ -555,16 +555,16 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
       </section>
 
       {/* 5. HOW IT WORKS 3-STEP MODERN WORKFLOW */}
-      <section className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-white">
         <div className="text-center space-y-3 mb-16 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-[#2a050dcc] text-[#cf2e46] border border-[#cf2e46]/35">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-rose-50 text-[#cf2e46] border border-rose-200">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Fast &amp; Transparent Workflow</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+          <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
             How SupplySouq Works in 3 Steps
           </h2>
-          <p className="text-sm sm:text-base text-slate-400 leading-relaxed font-normal">
+          <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
             No endless sales calls. No manual spreadsheets. From BOQ to job site delivery in 24 hours.
           </p>
         </div>
@@ -594,18 +594,18 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             return (
               <div
                 key={idx}
-                className="p-8 rounded-3xl bg-[#140306d9] border border-white/10 hover:border-[#cf2e46]/40 transition-all duration-300 space-y-5 group"
+                className="p-8 rounded-3xl bg-white border border-slate-200 hover:border-slate-300 shadow-xs hover:shadow-md transition-all duration-300 space-y-5 group"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-3xl font-black font-mono text-[#cf2e46] opacity-80 group-hover:opacity-100 transition-opacity">
+                  <span className="text-3xl font-black font-mono text-[#cf2e46] opacity-90 group-hover:opacity-100 transition-opacity">
                     {item.step}
                   </span>
-                  <div className="w-12 h-12 rounded-2xl bg-[#2a050dcc] border border-[#cf2e46]/30 text-[#cf2e46] flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <div className="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-200 text-[#cf2e46] flex items-center justify-center group-hover:scale-110 transition-transform">
                     <Icon className="w-6 h-6" />
                   </div>
                 </div>
-                <h3 className="text-xl font-bold text-white">{item.title}</h3>
-                <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">{item.desc}</p>
+                <h3 className="text-xl font-bold text-slate-900">{item.title}</h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{item.desc}</p>
               </div>
             );
           })}
@@ -613,7 +613,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
       </section>
 
       {/* 6. BIG TELEMETRY & IMPACT STATS */}
-      <section className="py-16 border-t border-b border-[#cf2e46]/10 bg-[#2a050dcc]">
+      <section className="py-16 border-t border-b border-slate-800 bg-[#0a0a0a] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
             <div className="space-y-1">
@@ -662,105 +662,105 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
         </div>
       </section>
 
-      {/* 7. CONTRACTOR & STOCKIST REVIEWS (Gent Testimonial Layout) */}
-      <section className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* 7. CONTRACTOR & STOCKIST REVIEWS */}
+      <section className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-white">
         <div className="text-center space-y-3 mb-16 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-[#2a050dcc] text-[#cf2e46] border border-[#cf2e46]/35">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-rose-50 text-[#cf2e46] border border-rose-200">
             <Star className="w-3.5 h-3.5 fill-[#cf2e46]" />
             <span>Verified UAE Feedback</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+          <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
             Procurement teams love SupplySouq.
           </h2>
-          <p className="text-sm sm:text-base text-slate-400 leading-relaxed font-normal">
+          <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
             Hear from commercial managers, MEP project directors, and authorized distributors across the Emirates.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-8 rounded-3xl bg-[#140306d9] border border-white/10 hover:border-[#cf2e46]/40 transition-all space-y-5 flex flex-col justify-between">
+          <div className="p-8 rounded-3xl bg-slate-50 border border-slate-200 hover:border-slate-300 transition-all space-y-5 flex flex-col justify-between shadow-2xs">
             <div className="space-y-3">
               <div className="flex items-center gap-1 text-[#cf2e46]">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-[#cf2e46]" />
                 ))}
               </div>
-              <h4 className="text-lg font-bold text-white">"Cut cable sourcing from 4 days to 4 hours."</h4>
-              <p className="text-xs text-slate-300 leading-relaxed">
+              <h4 className="text-lg font-bold text-slate-900">"Cut cable sourcing from 4 days to 4 hours."</h4>
+              <p className="text-xs text-slate-600 leading-relaxed">
                 "We replaced endless supplier phone calls with SupplySouq. Posting an RFQ takes minutes, and receiving itemized bids directly from verified stockists saved us AED 34,000 on our substation order alone."
               </p>
             </div>
-            <div className="pt-4 border-t border-white/10 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[#cf2e46]/20 text-[#cf2e46] font-bold flex items-center justify-center text-xs">
+            <div className="pt-4 border-t border-slate-200 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-rose-100 text-[#cf2e46] font-bold flex items-center justify-center text-xs">
                 MK
               </div>
               <div>
-                <div className="text-xs font-bold text-white">Maya K.</div>
-                <div className="text-[11px] text-slate-400">Head of Procurement, Apex MEP Contracting</div>
+                <div className="text-xs font-bold text-slate-900">Maya K.</div>
+                <div className="text-[11px] text-slate-500">Head of Procurement, Apex MEP Contracting</div>
               </div>
             </div>
           </div>
 
-          <div className="p-8 rounded-3xl bg-[#140306d9] border border-[#cf2e46]/30 hover:border-[#cf2e46]/60 shadow-glow-red transition-all space-y-5 flex flex-col justify-between">
+          <div className="p-8 rounded-3xl bg-white border-2 border-[#cf2e46] shadow-lg transition-all space-y-5 flex flex-col justify-between">
             <div className="space-y-3">
               <div className="flex items-center gap-1 text-[#cf2e46]">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-[#cf2e46]" />
                 ))}
               </div>
-              <h4 className="text-lg font-bold text-white">"Setup took 5 minutes. 5 bids in 3 hours."</h4>
-              <p className="text-xs text-slate-300 leading-relaxed">
+              <h4 className="text-lg font-bold text-slate-900">"Setup took 5 minutes. 5 bids in 3 hours."</h4>
+              <p className="text-xs text-slate-700 leading-relaxed">
                 "I uploaded a photo of my site foreman's handwritten requisition sheet. Within 3 hours I had 5 itemized quotes with mill test certificates ready to download. Genuinely revolutionary for UAE construction."
               </p>
             </div>
-            <div className="pt-4 border-t border-white/10 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[#cf2e46]/20 text-[#cf2e46] font-bold flex items-center justify-center text-xs">
+            <div className="pt-4 border-t border-slate-200 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-[#cf2e46] text-white font-bold flex items-center justify-center text-xs">
                 AR
               </div>
               <div>
-                <div className="text-xs font-bold text-white">Alex Rivera</div>
-                <div className="text-[11px] text-slate-400">Project Director, Gulf Infrastructure LLC</div>
+                <div className="text-xs font-bold text-slate-900">Alex Rivera</div>
+                <div className="text-[11px] text-slate-500">Project Director, Gulf Infrastructure LLC</div>
               </div>
             </div>
           </div>
 
-          <div className="p-8 rounded-3xl bg-[#140306d9] border border-white/10 hover:border-[#cf2e46]/40 transition-all space-y-5 flex flex-col justify-between">
+          <div className="p-8 rounded-3xl bg-slate-50 border border-slate-200 hover:border-slate-300 transition-all space-y-5 flex flex-col justify-between shadow-2xs">
             <div className="space-y-3">
               <div className="flex items-center gap-1 text-[#cf2e46]">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-[#cf2e46]" />
                 ))}
               </div>
-              <h4 className="text-lg font-bold text-white">"Sharjah warehouse stock moves 3x faster."</h4>
-              <p className="text-xs text-slate-300 leading-relaxed">
+              <h4 className="text-lg font-bold text-slate-900">"Sharjah warehouse stock moves 3x faster."</h4>
+              <p className="text-xs text-slate-600 leading-relaxed">
                 "As an authorized cable stockist in Sharjah Industrial Area 13, SupplySouq sends pre-qualified RFQs straight to our sales desk. We quote directly to contractors with guaranteed 24h turnaround."
               </p>
             </div>
-            <div className="pt-4 border-t border-white/10 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[#cf2e46]/20 text-[#cf2e46] font-bold flex items-center justify-center text-xs">
+            <div className="pt-4 border-t border-slate-200 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-rose-100 text-[#cf2e46] font-bold flex items-center justify-center text-xs">
                 TW
               </div>
               <div>
-                <div className="text-xs font-bold text-white">Tom Wilson</div>
-                <div className="text-[11px] text-slate-400">Managing Director, Emirates Cable Supplies</div>
+                <div className="text-xs font-bold text-slate-900">Tom Wilson</div>
+                <div className="text-[11px] text-slate-500">Managing Director, Emirates Cable Supplies</div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 8. TRANSPARENT LAUNCH PRICING SECTION (Tailored to User Rules) */}
-      <section id="pricing-section" className="py-20 sm:py-28 border-t border-b border-[#cf2e46]/10 bg-[#140306d9] relative">
+      {/* 8. TRANSPARENT LAUNCH PRICING SECTION */}
+      <section id="pricing-section" className="py-20 sm:py-28 border-t border-b border-slate-200 bg-slate-50 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-3 mb-16 max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-[#2a050dcc] text-[#cf2e46] border border-[#cf2e46]/35">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-rose-50 text-[#cf2e46] border border-rose-200">
               <DollarSign className="w-3.5 h-3.5" />
               <span>Transparent Launch Pricing</span>
             </div>
-            <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+            <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
               Simple pricing. Zero hidden fees.
             </h2>
-            <p className="text-sm sm:text-base text-slate-400 leading-relaxed font-normal">
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
               100% free forever for contractors. First 3 months free trial for suppliers, then AED 1 per day. 0% platform commission during launch.
             </p>
           </div>
@@ -768,22 +768,22 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
             
             {/* Tier 1: Contractors & Engineers */}
-            <div className="p-8 rounded-3xl bg-[#050505] border border-white/10 hover:border-[#cf2e46]/30 transition-all flex flex-col justify-between space-y-8">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200 hover:border-slate-300 shadow-sm transition-all flex flex-col justify-between space-y-8">
               <div className="space-y-4">
                 <div>
-                  <span className="text-xs font-mono uppercase tracking-wider text-slate-400 font-bold">For Buyers</span>
-                  <h3 className="text-2xl font-black text-white mt-1">Contractor Free</h3>
-                  <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                  <span className="text-xs font-mono uppercase tracking-wider text-slate-500 font-bold">For Buyers</span>
+                  <h3 className="text-2xl font-black text-slate-900 mt-1">Contractor Free</h3>
+                  <p className="text-xs text-slate-600 mt-2 leading-relaxed">
                     For UAE electrical contractors, engineers, estimators, and facility managers.
                   </p>
                 </div>
 
                 <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-black text-white">AED 0</span>
-                  <span className="text-xs text-slate-400 font-semibold">/ Free Forever</span>
+                  <span className="text-4xl font-black text-slate-900">AED 0</span>
+                  <span className="text-xs text-slate-500 font-semibold">/ Free Forever</span>
                 </div>
 
-                <ul className="space-y-3 text-xs text-slate-300 pt-4 border-t border-white/10">
+                <ul className="space-y-3 text-xs text-slate-700 pt-4 border-t border-slate-200">
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 text-[#cf2e46] shrink-0" />
                     <span>Unlimited RFQ &amp; BOQ Postings</span>
@@ -813,14 +813,14 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
 
               <button
                 onClick={() => handleStartBuyer()}
-                className="w-full py-3.5 rounded-full text-xs font-bold text-white bg-white/5 hover:bg-white/10 border border-white/15 hover:border-[#cf2e46]/40 transition-all cursor-pointer"
+                className="w-full py-3.5 rounded-full text-xs font-bold text-slate-900 bg-slate-50 hover:bg-slate-100 border border-slate-300 hover:border-slate-400 transition-all cursor-pointer"
               >
                 Post Live RFQ (Free)
               </button>
             </div>
 
-            {/* Tier 2: Verified Stockists (Gent Highlighted Card) */}
-            <div className="p-8 rounded-3xl bg-[#2a050dcc] border-2 border-[#cf2e46] shadow-glow-red flex flex-col justify-between space-y-8 relative group">
+            {/* Tier 2: Verified Stockists */}
+            <div className="p-8 rounded-3xl bg-white border-2 border-[#cf2e46] shadow-xl flex flex-col justify-between space-y-8 relative group">
               <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#cf2e46] text-white text-[10px] font-black uppercase tracking-wider py-1 px-4 rounded-full shadow-md font-mono">
                 Launch Phase • 3 Months Free Trial
               </div>
@@ -828,8 +828,8 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
               <div className="space-y-4 pt-2">
                 <div>
                   <span className="text-xs font-mono uppercase tracking-wider text-[#cf2e46] font-bold">For Stockists &amp; Traders</span>
-                  <h3 className="text-2xl font-black text-white mt-1">Verified Supplier</h3>
-                  <p className="text-xs text-slate-300 mt-2 leading-relaxed">
+                  <h3 className="text-2xl font-black text-slate-900 mt-1">Verified Supplier</h3>
+                  <p className="text-xs text-slate-600 mt-2 leading-relaxed">
                     Direct access to live contractor RFQs in Dubai, Sharjah, and Abu Dhabi.
                   </p>
                 </div>
@@ -837,14 +837,14 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                 <div>
                   <div className="flex items-baseline gap-1">
                     <span className="text-4xl font-black text-[#cf2e46]">AED 0</span>
-                    <span className="text-xs text-slate-300 font-semibold">/ First 3 Months</span>
+                    <span className="text-xs text-slate-600 font-semibold">/ First 3 Months</span>
                   </div>
-                  <div className="text-[11px] text-[#ffb3bf] font-mono mt-1">
+                  <div className="text-[11px] text-slate-600 font-mono mt-1">
                     Then AED 1 / day (AED 30/mo) after trial • 0% Commission
                   </div>
                 </div>
 
-                <ul className="space-y-3 text-xs text-slate-200 pt-4 border-t border-[#cf2e46]/20">
+                <ul className="space-y-3 text-xs text-slate-700 pt-4 border-t border-rose-100">
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 text-[#cf2e46] shrink-0" />
                     <span>Unlimited Quotation Submissions</span>
@@ -874,29 +874,29 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
 
               <button
                 onClick={() => handleStartSupplier()}
-                className="w-full py-4 rounded-full text-xs font-black bg-[#cf2e46] text-white hover:bg-[#b91c33] shadow-glow-red transition-all hover:scale-105 cursor-pointer"
+                className="w-full py-4 rounded-full text-xs font-black bg-[#cf2e46] text-white hover:bg-[#b91c33] shadow-md transition-all hover:scale-105 cursor-pointer"
               >
                 Claim 3-Month Free Trial
               </button>
             </div>
 
             {/* Tier 3: Enterprise Procurement */}
-            <div className="p-8 rounded-3xl bg-[#050505] border border-white/10 hover:border-[#cf2e46]/30 transition-all flex flex-col justify-between space-y-8">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200 hover:border-slate-300 shadow-sm transition-all flex flex-col justify-between space-y-8">
               <div className="space-y-4">
                 <div>
-                  <span className="text-xs font-mono uppercase tracking-wider text-slate-400 font-bold">For EPCs &amp; Developers</span>
-                  <h3 className="text-2xl font-black text-white mt-1">Enterprise Desk</h3>
-                  <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                  <span className="text-xs font-mono uppercase tracking-wider text-slate-500 font-bold">For EPCs &amp; Developers</span>
+                  <h3 className="text-2xl font-black text-slate-900 mt-1">Enterprise Desk</h3>
+                  <p className="text-xs text-slate-600 mt-2 leading-relaxed">
                     Custom procurement infrastructure for Tier-1 contractors and large project portfolios.
                   </p>
                 </div>
 
                 <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-black text-white">Custom</span>
-                  <span className="text-xs text-slate-400 font-semibold">/ Tailored SLA</span>
+                  <span className="text-4xl font-black text-slate-900">Custom</span>
+                  <span className="text-xs text-slate-500 font-semibold">/ Tailored SLA</span>
                 </div>
 
-                <ul className="space-y-3 text-xs text-slate-300 pt-4 border-t border-white/10">
+                <ul className="space-y-3 text-xs text-slate-700 pt-4 border-t border-slate-200">
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 text-[#cf2e46] shrink-0" />
                     <span>Dedicated Procurement Operations Desk</span>
@@ -922,7 +922,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
 
               <button
                 onClick={() => setCurrentView('onboarding-guide')}
-                className="w-full py-3.5 rounded-full text-xs font-bold text-white bg-white/5 hover:bg-white/10 border border-white/15 hover:border-[#cf2e46]/40 transition-all cursor-pointer"
+                className="w-full py-3.5 rounded-full text-xs font-bold text-slate-900 bg-slate-50 hover:bg-slate-100 border border-slate-300 hover:border-slate-400 transition-all cursor-pointer"
               >
                 Contact Enterprise Desk
               </button>
@@ -932,16 +932,16 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
         </div>
       </section>
 
-      {/* 9. FAQ ACCORDION (Gent Q&A Layout) */}
-      <section className="py-20 sm:py-28 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* 9. FAQ ACCORDION */}
+      <section className="py-20 sm:py-28 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 bg-white">
         <div className="text-center space-y-3 mb-14">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-[#2a050dcc] text-[#cf2e46] border border-[#cf2e46]/35">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-rose-50 text-[#cf2e46] border border-rose-200">
             <span>Frequently Asked Questions</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+          <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
             Questions? Answered.
           </h2>
-          <p className="text-sm sm:text-base text-slate-400 leading-relaxed font-normal">
+          <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
             Everything you need to know about buying or selling materials on SupplySouq.
           </p>
         </div>
@@ -950,14 +950,14 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
           {faqs.map((faq, idx) => (
             <div
               key={idx}
-              className="rounded-2xl bg-[#140306d9] border border-white/10 overflow-hidden transition-all duration-200"
+              className="rounded-2xl bg-slate-50 border border-slate-200 overflow-hidden transition-all duration-200"
             >
               <button
                 onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
                 className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 focus:outline-none hover:text-[#cf2e46] transition-colors cursor-pointer"
               >
-                <span className="font-bold text-sm sm:text-base text-white">{faq.q}</span>
-                <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center shrink-0 text-slate-400">
+                <span className="font-bold text-sm sm:text-base text-slate-900">{faq.q}</span>
+                <div className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center shrink-0 text-slate-600 shadow-2xs">
                   {openFaq === idx ? (
                     <ChevronDown className="w-4 h-4 text-[#cf2e46] rotate-180 transition-transform" />
                   ) : (
@@ -966,7 +966,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                 </div>
               </button>
               {openFaq === idx && (
-                <div className="px-5 sm:px-6 pb-6 text-xs sm:text-sm text-slate-300 leading-relaxed border-t border-white/5 pt-3">
+                <div className="px-5 sm:px-6 pb-6 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-200 pt-3 bg-white">
                   {faq.a}
                 </div>
               )}
@@ -975,13 +975,13 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
         </div>
       </section>
 
-      {/* 10. HIGH-IMPACT BOTTOM CLOSING CTA BANNER (Gent "Stop prospecting. Start closing.") */}
-      <section className="py-20 sm:py-28 border-t border-[#cf2e46]/15 relative overflow-hidden bg-gradient-to-b from-[#140306d9] to-[#050505]">
+      {/* 10. HIGH-IMPACT BOTTOM CLOSING CTA BANNER */}
+      <section className="py-20 sm:py-28 border-t border-slate-800 relative overflow-hidden bg-[#0a0a0a] text-white">
         {/* Radial ambient glow */}
         <div className="absolute -bottom-40 left-1/2 -translate-x-1/2 w-[850px] h-[400px] bg-[#cf2e46]/20 blur-[140px] pointer-events-none" />
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6 relative z-10">
-          <div className="inline-flex items-center gap-2 bg-[#2a050dcc] border border-[#cf2e46]/35 text-[#cf2e46] px-4 py-1.5 rounded-full text-xs font-mono font-bold tracking-wider uppercase shadow-glow-red">
+          <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-[#ffb3bf] px-4 py-1.5 rounded-full text-xs font-mono font-bold tracking-wider uppercase shadow-xs">
             <span className="w-2 h-2 rounded-full bg-[#cf2e46] animate-ping" />
             <span>Ready for 24-Hour Procurement?</span>
           </div>
@@ -1000,7 +1000,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
             <button
               onClick={() => handleStartBuyer()}
-              className="w-full sm:w-auto px-8 py-4 rounded-full text-sm font-black bg-[#cf2e46] text-white hover:bg-[#b91c33] transition-all shadow-glow-red hover:scale-105 flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full sm:w-auto px-8 py-4 rounded-full text-sm font-black bg-[#cf2e46] text-white hover:bg-[#b91c33] transition-all shadow-md hover:scale-105 flex items-center justify-center gap-2 cursor-pointer"
             >
               <Zap className="w-4 h-4 fill-white" />
               <span>Post Live RFQ (100% Free)</span>
@@ -1009,7 +1009,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
 
             <button
               onClick={() => setCurrentView('onboarding-guide')}
-              className="w-full sm:w-auto px-8 py-4 rounded-full text-sm font-bold bg-white/5 hover:bg-white/10 text-white border border-white/15 backdrop-blur-md transition-all cursor-pointer"
+              className="w-full sm:w-auto px-8 py-4 rounded-full text-sm font-bold bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md transition-all cursor-pointer"
             >
               View Onboarding SOP
             </button>
