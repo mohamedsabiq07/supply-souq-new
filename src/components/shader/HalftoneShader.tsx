@@ -204,13 +204,42 @@ export const HalftoneShader: React.FC<HalftoneShaderProps> = ({
     const uPointerLocation = gl.getUniformLocation(program, 'u_pointer');
     const uPointerIntensityLocation = gl.getUniformLocation(program, 'u_pointer_intensity');
 
-    // Pointer state
+    // 1. Pointer & Animation State
     const pointer = { x: 0.5, y: 0.5 };
     let targetIntensity = 0.0;
     let currentIntensity = 0.0;
     let pointerActive = false;
     let lastMoveTime = 0;
+    let animationFrameId = 0;
 
+    // 2. Reduced motion detection
+    const prefersReducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let isReducedMotion = prefersReducedMotionQuery.matches;
+
+    // 3. Render frame function
+    const renderFrame = (timeSec: number) => {
+      const decaySpeed = pointerActive ? 0.08 : 0.03;
+      currentIntensity += (targetIntensity - currentIntensity) * decaySpeed;
+
+      if (pointerActive && performance.now() - lastMoveTime > 1800) {
+        targetIntensity = 0.0;
+        pointerActive = false;
+      }
+
+      gl.uniform1f(uTimeLocation, timeSec);
+      gl.uniform2f(uPointerLocation, pointer.x, pointer.y);
+      gl.uniform1f(uPointerIntensityLocation, currentIntensity);
+
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    };
+
+    // 4. Animation loop
+    const renderLoop = (timestamp: number) => {
+      renderFrame(timestamp * 0.001);
+      animationFrameId = requestAnimationFrame(renderLoop);
+    };
+
+    // 5. Pointer update
     const updatePointer = (clientX: number, clientY: number) => {
       const rect = canvas.getBoundingClientRect();
       pointer.x = (clientX - rect.left) / rect.width;
@@ -228,19 +257,12 @@ export const HalftoneShader: React.FC<HalftoneShaderProps> = ({
     const handleTouchMove = (e: TouchEvent) => {
       if (e.touches[0]) updatePointer(e.touches[0].clientX, e.touches[0].clientY);
     };
-
     const handleMouseLeave = () => {
       targetIntensity = 0.0;
       pointerActive = false;
     };
 
-    window.addEventListener('mousemove', handleMouseMove, { passive: true });
-    window.addEventListener('touchmove', handleTouchMove, { passive: true });
-    window.addEventListener('touchstart', handleTouchMove, { passive: true });
-    window.addEventListener('mouseleave', handleMouseLeave);
-    window.addEventListener('touchend', handleMouseLeave);
-
-    // Resize handling
+    // 6. Resize handling
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       const width = embedded && canvas.parentElement ? canvas.parentElement.clientWidth : window.innerWidth;
@@ -257,47 +279,28 @@ export const HalftoneShader: React.FC<HalftoneShaderProps> = ({
       }
     };
 
-    window.addEventListener('resize', resize);
-    resize();
-
-    // Reduced motion handling
-    const prefersReducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    let isReducedMotion = prefersReducedMotionQuery.matches;
-
+    // 7. Reduced motion change listener
     const handleReducedMotionChange = (e: MediaQueryListEvent) => {
       isReducedMotion = e.matches;
       if (!isReducedMotion) {
         animationFrameId = requestAnimationFrame(renderLoop);
       } else {
+        cancelAnimationFrame(animationFrameId);
         renderFrame(0.0);
       }
     };
+
+    // 8. Register listeners
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+    window.addEventListener('touchstart', handleTouchMove, { passive: true });
+    window.addEventListener('mouseleave', handleMouseLeave);
+    window.addEventListener('touchend', handleMouseLeave);
+    window.addEventListener('resize', resize);
     prefersReducedMotionQuery.addEventListener('change', handleReducedMotionChange);
 
-    // Render frame
-    const renderFrame = (timeSec: number) => {
-      const decaySpeed = pointerActive ? 0.08 : 0.03;
-      currentIntensity += (targetIntensity - currentIntensity) * decaySpeed;
-
-      if (pointerActive && performance.now() - lastMoveTime > 1800) {
-        targetIntensity = 0.0;
-        pointerActive = false;
-      }
-
-      gl.uniform1f(uTimeLocation, timeSec);
-      gl.uniform2f(uPointerLocation, pointer.x, pointer.y);
-      gl.uniform1f(uPointerIntensityLocation, currentIntensity);
-
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-    };
-
-    let animationFrameId: number;
-
-    // Animation render loop
-    const renderLoop = (timestamp: number) => {
-      renderFrame(timestamp * 0.001);
-      animationFrameId = requestAnimationFrame(renderLoop);
-    };
+    // 9. Initial setup
+    resize();
 
     if (!isReducedMotion) {
       animationFrameId = requestAnimationFrame(renderLoop);
