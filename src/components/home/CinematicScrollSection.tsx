@@ -10,10 +10,8 @@ import {
   Compass,
   CheckCircle2,
   FileCheck2,
-  Activity,
-  Maximize2
+  Activity
 } from 'lucide-react';
-import { HalftoneShader } from '../shader/HalftoneShader';
 
 interface CinematicScrollSectionProps {
   setCurrentView?: (view: string) => void;
@@ -144,10 +142,10 @@ export const CinematicScrollSection: React.FC<CinematicScrollSectionProps> = ({ 
   return (
     <div
       ref={containerRef}
-      className="relative w-full min-h-[360vh] bg-transparent text-slate-100 font-sans select-none"
+      className="relative w-full min-h-[360vh] bg-[#030304] text-slate-100 font-sans select-none"
     >
       {/* Sticky Viewport Stage */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center bg-transparent">
+      <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
 
         {/* Ambient Dark Blueprint Grid & Structural Column Guide Lines */}
         <motion.div
@@ -188,23 +186,10 @@ export const CinematicScrollSection: React.FC<CinematicScrollSectionProps> = ({ 
             <span>B2B DIGITAL INFRASTRUCTURE</span>
           </div>
 
-          <div className="absolute top-8 right-14 hidden md:flex items-center gap-3 font-mono text-[10px] text-slate-400 tracking-wider uppercase pointer-events-auto">
+          <div className="absolute top-8 right-14 hidden md:flex items-center gap-3 font-mono text-[10px] text-slate-400 tracking-wider uppercase">
             <motion.span>{stageNumber}</motion.span>
             <span className="text-slate-600">|</span>
             <span className="text-rose-400">24H SLA ACTIVE</span>
-            {setCurrentView && (
-              <>
-                <span className="text-slate-600">|</span>
-                <button
-                  onClick={() => setCurrentView('halftone')}
-                  className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-white/10 hover:bg-white/20 text-white font-mono text-[10px] font-bold transition-colors cursor-pointer border border-white/20"
-                  title="Open Fullscreen Halftone WebGL Shader Canvas"
-                >
-                  <Maximize2 className="w-3 h-3 text-[#cf2e46]" />
-                  <span>FULLSCREEN SHADER</span>
-                </button>
-              </>
-            )}
           </div>
         </motion.div>
 

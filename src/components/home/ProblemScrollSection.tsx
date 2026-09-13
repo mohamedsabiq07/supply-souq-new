@@ -156,13 +156,13 @@ export const ProblemScrollSection: React.FC = () => {
   };
 
   return (
-    <section className="relative bg-transparent border-b border-white/10 pt-20 sm:pt-28 pb-32 text-white">
+    <section className="relative bg-[#f4f4f6] border-b border-slate-300/80 pt-20 sm:pt-28 pb-32">
       {/* Background Architectural Column Guide Lines (Neiden Studio Aesthetic) */}
       <div className="absolute inset-0 pointer-events-none max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between z-0">
-        <div className="w-px h-full bg-white/[0.04]" />
-        <div className="w-px h-full bg-white/[0.03] hidden md:block" />
-        <div className="w-px h-full bg-white/[0.03] hidden lg:block" />
-        <div className="w-px h-full bg-white/[0.04]" />
+        <div className="w-px h-full bg-slate-300/35" />
+        <div className="w-px h-full bg-slate-300/20 hidden md:block" />
+        <div className="w-px h-full bg-slate-300/20 hidden lg:block" />
+        <div className="w-px h-full bg-slate-300/35" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -179,7 +179,7 @@ export const ProblemScrollSection: React.FC = () => {
             className="space-y-6"
           >
             {/* Challenge Tag */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-[#080A0D]/80 text-[#cf2e46] border border-white/15 backdrop-blur-md shadow-2xs">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white text-[#cf2e46] border border-slate-300 shadow-2xs">
               <AlertTriangle className="w-4 h-4 text-[#cf2e46]" />
               <span>[SS®—CHALLENGE] THE TRADITIONAL PROCUREMENT BOTTLENECK</span>
             </div>
@@ -188,8 +188,7 @@ export const ProblemScrollSection: React.FC = () => {
             <div className="flex justify-center">
               <AnimatedH3
                 text="Material procurement shouldn't take days of follow-ups."
-                className="text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-[1.08] text-center max-w-4xl"
-                colorVariant="white"
+                className="text-3xl sm:text-5xl md:text-6xl font-black text-slate-950 tracking-tight leading-[1.08] text-center max-w-4xl"
                 blurAmount={12}
                 slideDistance={22}
                 staggerDelay={0.02}
@@ -198,16 +197,16 @@ export const ProblemScrollSection: React.FC = () => {
             </div>
 
             {/* ENLARGED SUBTITLE */}
-            <p className="text-base sm:text-lg md:text-xl text-slate-300 leading-relaxed font-normal max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-slate-600 leading-relaxed font-normal max-w-3xl mx-auto">
               Manual phone calls, scattered WhatsApp messages, and waiting days for quotes — procurement teams spend hours chasing individual suppliers instead of focusing on project execution.
             </p>
 
             {/* Downward Cue */}
             <div className="pt-4 flex flex-col items-center gap-2 text-slate-400">
-              <span className="text-[11px] font-mono tracking-widest uppercase font-semibold text-slate-400">
+              <span className="text-[11px] font-mono tracking-widest uppercase font-semibold text-slate-500">
                 Explore the 4 Bottlenecks Below
               </span>
-              <div className="w-7 h-7 rounded-full border border-white/20 bg-white/10 flex items-center justify-center text-[#cf2e46] shadow-2xs">
+              <div className="w-7 h-7 rounded-full border border-slate-300 bg-white flex items-center justify-center text-[#cf2e46] shadow-2xs">
                 <ArrowDown className="w-3.5 h-3.5" />
               </div>
             </div>
@@ -225,9 +224,9 @@ export const ProblemScrollSection: React.FC = () => {
           <div className="lg:col-span-5 space-y-16 sm:space-y-24 py-4">
             
             {/* Step Progress Tracker */}
-            <div className="sticky top-20 z-20 bg-[#08090D]/90 backdrop-blur-md py-3 border-b border-white/10 mb-6">
+            <div className="sticky top-20 z-20 bg-[#f4f4f6]/95 backdrop-blur-md py-3 border-b border-slate-300/80 mb-6">
               <div className="flex items-center justify-between text-xs font-mono mb-2">
-                <span className="text-slate-400 uppercase font-bold">PROCUREMENT BOTTLENECK</span>
+                <span className="text-slate-500 uppercase font-bold">PROCUREMENT BOTTLENECK</span>
                 <span className="font-bold text-[#cf2e46]">STEP 0{activeStep + 1} / 04</span>
               </div>
               <div className="flex gap-2">
@@ -235,7 +234,7 @@ export const ProblemScrollSection: React.FC = () => {
                   <div
                     key={idx}
                     className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${
-                      idx === activeStep ? 'bg-[#cf2e46]' : idx < activeStep ? 'bg-white/40' : 'bg-white/15'
+                      idx === activeStep ? 'bg-[#cf2e46]' : idx < activeStep ? 'bg-slate-800' : 'bg-slate-300'
                     }`}
                   />
                 ))}
@@ -255,16 +254,16 @@ export const ProblemScrollSection: React.FC = () => {
                   onViewportEnter={() => setActiveStep(idx)}
                   viewport={{ amount: 0.6, margin: "-10% 0px -10% 0px" }}
                   transition={{ duration: 0.45, ease: "easeOut" }}
-                  className={`rounded-3xl p-7 sm:p-9 shadow-2xl relative overflow-hidden transition-all duration-300 ${
+                  className={`bg-white rounded-3xl p-7 sm:p-9 shadow-lg relative overflow-hidden transition-all duration-300 ${
                     isActive
-                      ? 'bg-[#0d0f17]/95 backdrop-blur-xl border-2 border-[#cf2e46] shadow-[#cf2e46]/10 scale-[1.02]'
-                      : 'bg-[#0d0f17]/75 backdrop-blur-md border border-white/10 hover:border-white/25'
+                      ? 'border-2 border-[#cf2e46] shadow-2xl scale-[1.02]'
+                      : 'border border-slate-300/80 hover:border-slate-400'
                   }`}
                 >
                   {/* Top Red Accent Bar for Active Card */}
                   <div
                     className={`absolute top-0 left-0 right-0 h-1.5 transition-colors duration-300 ${
-                      isActive ? 'bg-[#cf2e46]' : 'bg-white/10'
+                      isActive ? 'bg-[#cf2e46]' : 'bg-slate-200'
                     }`}
                   />
 
@@ -272,14 +271,14 @@ export const ProblemScrollSection: React.FC = () => {
                   <div className="flex items-start justify-between gap-4 mb-6">
                     <div
                       className={`w-14 h-14 rounded-2xl flex items-center justify-center font-black transition-colors ${
-                        isActive ? 'bg-rose-950/80 text-[#cf2e46] border border-rose-500/30' : 'bg-white/10 text-slate-300'
+                        isActive ? 'bg-rose-50 text-[#cf2e46]' : 'bg-slate-100 text-slate-600'
                       }`}
                     >
                       <IconComponent className="w-7 h-7" />
                     </div>
 
                     <div className="flex flex-col items-end">
-                      <span className="font-mono font-bold text-xs px-3 py-1 rounded-full bg-white/10 text-slate-200 border border-white/15">
+                      <span className="font-mono font-bold text-xs px-3 py-1 rounded-full bg-slate-100 text-slate-800 border border-slate-200">
                         STEP {item.step} / 04
                       </span>
                       <span className="text-[11px] font-mono text-[#cf2e46] font-bold mt-1 tracking-wider uppercase">
@@ -291,8 +290,8 @@ export const ProblemScrollSection: React.FC = () => {
                   {/* Title with letter-by-letter blur reduction animation */}
                   <AnimatedH3
                     text={item.title}
-                    className="text-2xl sm:text-3xl font-black text-white tracking-tight mb-3"
-                    colorVariant={isActive ? 'crimson' : 'white'}
+                    className="text-2xl sm:text-3xl font-black text-slate-950 tracking-tight mb-3"
+                    colorVariant={isActive ? 'crimson' : 'default'}
                     blurAmount={10}
                     slideDistance={16}
                     staggerDelay={0.025}
@@ -300,14 +299,14 @@ export const ProblemScrollSection: React.FC = () => {
                   />
 
                   {/* Description */}
-                  <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-normal mb-6">
+                  <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal mb-6">
                     {item.description}
                   </p>
 
                   {/* Impact Tag */}
-                  <div className="p-4 rounded-2xl bg-white/5 border border-white/10 flex items-center gap-3">
+                  <div className="p-4 rounded-2xl bg-[#f4f4f6] border border-slate-200 flex items-center gap-3">
                     <div className="w-2.5 h-2.5 rounded-full bg-[#cf2e46] shrink-0 animate-pulse" />
-                    <div className="text-xs font-mono font-bold text-slate-200">
+                    <div className="text-xs font-mono font-bold text-slate-900">
                       {item.impactTag}
                     </div>
                   </div>
@@ -320,7 +319,7 @@ export const ProblemScrollSection: React.FC = () => {
           {/* RIGHT COLUMN: PERSISTENT STICKY VIDEO                                   */}
           {/* ----------------------------------------------------------------------- */}
           <div className="lg:col-span-7 lg:sticky lg:top-24 self-start py-4">
-            <div className="relative rounded-3xl border-2 border-white/20 bg-slate-950 shadow-2xl overflow-hidden aspect-[16/10] sm:aspect-[16/9] group">
+            <div className="relative rounded-3xl border-2 border-slate-300/90 bg-slate-950 shadow-2xl overflow-hidden aspect-[16/10] sm:aspect-[16/9] group">
               
               {/* Video Element - Plays only once, with full customer replay options */}
               <video
