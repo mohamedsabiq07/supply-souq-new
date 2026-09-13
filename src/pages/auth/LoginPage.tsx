@@ -274,9 +274,9 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
             </button>
           </div>
         ) : (
-          <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-2.5 text-center">
-            <span className="text-xs font-bold text-emerald-900 flex items-center justify-center gap-1.5">
-              <Lock className="w-3.5 h-3.5 text-emerald-700" />
+          <div className="bg-rose-50 border border-rose-200 rounded-xl p-2.5 text-center">
+            <span className="text-xs font-bold text-rose-900 flex items-center justify-center gap-1.5">
+              <Lock className="w-3.5 h-3.5 text-[#cf2e46]" />
               Master Operations Clearance Desk
             </span>
           </div>
@@ -394,9 +394,9 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
             </>
           ) : adminStep === 1 ? (
             <>
-                  <div className="p-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center gap-2">
-                    <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span className="text-[11px] font-bold text-emerald-900">
+                  <div className="p-2.5 bg-rose-500/10 border border-rose-500/20 rounded-xl flex items-center gap-2">
+                    <ShieldCheck className="w-4 h-4 text-[#cf2e46] shrink-0" />
+                    <span className="text-[11px] font-bold text-rose-900">
                       Step 1 of 2: Master Administrator Passkey
                     </span>
                   </div>
@@ -425,7 +425,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
                         value={adminPassword}
                         onChange={(e) => setAdminPassword(e.target.value)}
                         placeholder="Enter administrator passkey"
-                        className="w-full p-2.5 pr-10 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 font-bold text-slate-900 disabled:bg-slate-100"
+                        className="w-full p-2.5 pr-10 rounded-lg border border-slate-300 focus:ring-2 focus:ring-rose-500 font-bold text-slate-900 disabled:bg-slate-100"
                       />
                       <button
                         type="button"
@@ -442,7 +442,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
                     type="submit"
                     variant="primary"
                     disabled={loading || lockoutSeconds > 0}
-                    className="w-full py-3 font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-md flex items-center justify-center gap-2"
+                    className="w-full py-3 font-bold bg-[#cf2e46] hover:bg-[#b91c33] text-white shadow-md flex items-center justify-center gap-2"
                   >
                     {loading ? 'Verifying clearance...' : lockoutSeconds > 0 ? `Locked (${lockoutSeconds}s)` : 'Verify Passkey & Proceed to PIN →'}
                   </Button>
@@ -488,7 +488,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
                         value={adminPin}
                         onChange={(e) => setAdminPin(e.target.value.replace(/\D/g, '').slice(0, 6))}
                         placeholder="••••••"
-                        className="w-full p-3 pr-10 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 text-center font-mono font-black text-2xl tracking-[0.5em] text-slate-900 disabled:bg-slate-100"
+                        className="w-full p-3 pr-10 rounded-lg border border-slate-300 focus:ring-2 focus:ring-rose-500 text-center font-mono font-black text-2xl tracking-[0.5em] text-slate-900 disabled:bg-slate-100"
                       />
                       <button
                         type="button"
@@ -508,7 +508,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
                     type="submit"
                     variant="primary"
                     disabled={loading || lockoutSeconds > 0 || adminPin.length !== 6}
-                    className="w-full py-3 font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-md flex items-center justify-center gap-2"
+                    className="w-full py-3 font-bold bg-[#cf2e46] hover:bg-[#b91c33] text-white shadow-md flex items-center justify-center gap-2"
                   >
                     {loading ? 'Authenticating Fort Knox clearance...' : lockoutSeconds > 0 ? `Locked (${lockoutSeconds}s)` : 'Unlock Admin Operations Desk'}
                   </Button>
@@ -563,7 +563,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
 
         {/* Security Trust Badge */}
         <div className="flex items-center justify-center gap-1.5 text-[11px] text-slate-400">
-          <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+          <ShieldCheck className="w-3.5 h-3.5 text-[#cf2e46]" />
           <span>256-bit TLS Encrypted Session • UAE Compliance Standards</span>
         </div>
 

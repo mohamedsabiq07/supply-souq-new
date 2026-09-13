@@ -58,8 +58,8 @@ export const RFQCard: React.FC<RFQCardProps> = ({
                 {rfq.rfqNumber}
               </span>
               <StatusBadge status={rfq.status} />
-              <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 inline-flex items-center gap-1">
-                <Clock className="w-3 h-3 text-emerald-600" /> 24-Hour SLA
+              <span className="text-[11px] font-bold text-rose-800 bg-rose-50 px-2 py-0.5 rounded border border-rose-200 inline-flex items-center gap-1">
+                <Clock className="w-3.5 h-3.5 text-[#cf2e46]" /> 24-Hour SLA
               </span>
               {rfq.authorityApproval && (
                 <span className="text-[11px] font-bold text-rose-800 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">
@@ -96,8 +96,8 @@ export const RFQCard: React.FC<RFQCardProps> = ({
                   <Lock className="w-3 h-3 text-slate-500" /> {maxQuotes} / {maxQuotes} Full
                 </span>
               ) : currentQuotesCount === 0 ? (
-                <span className="text-xs font-extrabold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200 inline-flex items-center gap-1">
-                  <Zap className="w-3 h-3 text-emerald-600" /> 0 / {maxQuotes} Quotes (5 Open)
+                <span className="text-xs font-extrabold text-[#cf2e46] bg-rose-50 px-2.5 py-1 rounded-md border border-rose-200 inline-flex items-center gap-1">
+                  <Zap className="w-3 h-3 text-[#cf2e46]" /> 0 / {maxQuotes} Quotes (5 Open)
                 </span>
               ) : (
                 <span className="text-xs font-extrabold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-md border border-amber-300 inline-flex items-center gap-1">
@@ -183,8 +183,8 @@ export const RFQCard: React.FC<RFQCardProps> = ({
                 Declined by You
               </span>
             ) : supplierHasQuoted ? (
-              <span className="text-xs font-bold text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-300 inline-flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+              <span className="text-xs font-bold text-rose-800 bg-rose-50 px-3 py-1.5 rounded-lg border border-rose-300 inline-flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#cf2e46]" />
                 Quote Submitted
               </span>
             ) : isCapacityFull ? (

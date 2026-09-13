@@ -79,7 +79,7 @@ export const CategoriesPage: React.FC<{ onPostRFQ: () => void }> = ({ onPostRFQ 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {category.subcategories.map((sub, idx) => (
                     <div key={idx} className="flex items-center gap-1.5 text-xs text-slate-600">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[#cf2e46] shrink-0" />
                       <span className="truncate">{sub}</span>
                     </div>
                   ))}

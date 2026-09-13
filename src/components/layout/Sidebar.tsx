@@ -101,7 +101,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView })
               </div>
               <p className="text-[11px] text-slate-500 truncate">{currentCompany.name}</p>
               <span className={`inline-block text-[10px] font-bold px-1.5 py-0.2 rounded mt-0.5 ${
-                role === 'buyer' ? 'bg-brand-100 text-brand-800' : role === 'supplier' ? 'bg-amber-100 text-amber-900' : 'bg-emerald-100 text-emerald-800'
+                role === 'buyer' ? 'bg-brand-100 text-brand-800' : role === 'supplier' ? 'bg-amber-100 text-amber-900' : 'bg-rose-100 text-rose-800'
               }`}>
                 {role === 'buyer' ? 'Contractor Buyer' : role === 'supplier' ? 'Verified Trader' : 'Marketplace Admin'}
               </span>
