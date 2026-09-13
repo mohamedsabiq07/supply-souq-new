@@ -387,9 +387,13 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                 <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
                   <Zap className="w-6 h-6" />
                 </div>
-                <h3 className="text-xl sm:text-2xl font-black text-slate-900">
-                  Multi-Vendor Bidding with Guaranteed 24H SLA
-                </h3>
+                <AnimatedH3
+                  text="Multi-Vendor Bidding with Guaranteed 24H SLA"
+                  className="text-xl sm:text-2xl font-black text-slate-900"
+                  blurAmount={10}
+                  slideDistance={16}
+                  staggerDelay={0.02}
+                />
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                   Post your material requirement once. Verified UAE stockists receive immediate WhatsApp &amp; dashboard alerts to submit wholesale pricing before the 24-hour countdown expires.
                 </p>
@@ -417,9 +421,13 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                 <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
                   <Activity className="w-6 h-6" />
                 </div>
-                <h3 className="text-xl sm:text-2xl font-black text-slate-900">
-                  Guaranteed Fastest 5 Bids Rule
-                </h3>
+                <AnimatedH3
+                  text="Guaranteed Fastest 5 Bids Rule"
+                  className="text-xl sm:text-2xl font-black text-slate-900"
+                  blurAmount={10}
+                  slideDistance={16}
+                  staggerDelay={0.02}
+                />
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                   Only the first 5 verified stockists can submit quotes. This motivates suppliers to bid their lowest price immediately, while saving contractors from drowning in 50 spam emails.
                 </p>
@@ -456,9 +464,13 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                 <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
                   <FileSpreadsheet className="w-6 h-6" />
                 </div>
-                <h3 className="text-xl sm:text-2xl font-black text-slate-900">
-                  Automated BOQ &amp; Cable Schedule Cleansing
-                </h3>
+                <AnimatedH3
+                  text="Automated BOQ & Cable Schedule Cleansing"
+                  className="text-xl sm:text-2xl font-black text-slate-900"
+                  blurAmount={10}
+                  slideDistance={16}
+                  staggerDelay={0.02}
+                />
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                   Upload any format — Excel schedules, PDF requisition sheets, or smartphone photos of site notes. Our engine parses specs, standardizes cable codes, and matches stockists instantly.
                 </p>
@@ -485,9 +497,13 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                 <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
                   <BadgeCheck className="w-6 h-6" />
                 </div>
-                <h3 className="text-xl sm:text-2xl font-black text-slate-900">
-                  100% UAE DET KYB &amp; FTA Tax Compliance
-                </h3>
+                <AnimatedH3
+                  text="100% UAE DET KYB & FTA Tax Compliance"
+                  className="text-xl sm:text-2xl font-black text-slate-900"
+                  blurAmount={10}
+                  slideDistance={16}
+                  staggerDelay={0.02}
+                />
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                   Every supplier is verified with genuine UAE Commercial Registration, 15-digit TRN, and physical stock in Dubai or Sharjah. Complete with 5% UAE VAT invoices and digital POs.
                 </p>
@@ -573,7 +589,13 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                     <Icon className="w-6 h-6" />
                   </div>
                 </div>
-                <h3 className="text-xl font-bold text-slate-900">{item.title}</h3>
+                <AnimatedH3
+                  text={item.title}
+                  className="text-xl font-bold text-slate-900"
+                  blurAmount={8}
+                  slideDistance={14}
+                  staggerDelay={0.02}
+                />
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{item.desc}</p>
               </div>
             );
@@ -646,9 +668,15 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             <Star className="w-3.5 h-3.5 fill-[#cf2e46]" />
             <span>[SS®—REVIEWS] Verified UAE Industry Feedback</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
-            Procurement teams love SupplySouq.
-          </h2>
+          <div className="flex justify-center">
+            <AnimatedH3
+              text="Procurement teams love SupplySouq."
+              className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight text-center"
+              blurAmount={12}
+              slideDistance={20}
+              staggerDelay={0.025}
+            />
+          </div>
           <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
             Hear from commercial managers, MEP project directors, and authorized distributors across the Emirates.
           </p>
@@ -662,7 +690,12 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                   <Star key={i} className="w-4 h-4 fill-[#cf2e46]" />
                 ))}
               </div>
-              <h4 className="text-lg font-bold text-slate-900">"Cut cable sourcing from 4 days to 4 hours."</h4>
+              <AnimatedH3
+                text='"Cut cable sourcing from 4 days to 4 hours."'
+                className="text-lg font-bold text-slate-900"
+                blurAmount={8}
+                slideDistance={12}
+              />
               <p className="text-xs text-slate-600 leading-relaxed">
                 "We replaced endless supplier phone calls with SupplySouq. Posting an RFQ takes minutes, and receiving itemized bids directly from verified stockists saved us AED 34,000 on our substation order alone."
               </p>
@@ -685,7 +718,12 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                   <Star key={i} className="w-4 h-4 fill-[#cf2e46]" />
                 ))}
               </div>
-              <h4 className="text-lg font-bold text-slate-900">"Setup took 5 minutes. 5 bids in 3 hours."</h4>
+              <AnimatedH3
+                text='"Setup took 5 minutes. 5 bids in 3 hours."'
+                className="text-lg font-bold text-slate-900"
+                blurAmount={8}
+                slideDistance={12}
+              />
               <p className="text-xs text-slate-700 leading-relaxed">
                 "I uploaded a photo of my site foreman's handwritten requisition sheet. Within 3 hours I had 5 itemized quotes with mill test certificates ready to download. Genuinely revolutionary for UAE construction."
               </p>
@@ -708,7 +746,12 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                   <Star key={i} className="w-4 h-4 fill-[#cf2e46]" />
                 ))}
               </div>
-              <h4 className="text-lg font-bold text-slate-900">"Sharjah warehouse stock moves 3x faster."</h4>
+              <AnimatedH3
+                text='"Sharjah warehouse stock moves 3x faster."'
+                className="text-lg font-bold text-slate-900"
+                blurAmount={8}
+                slideDistance={12}
+              />
               <p className="text-xs text-slate-600 leading-relaxed">
                 "As an authorized cable stockist in Sharjah Industrial Area 13, SupplySouq sends pre-qualified RFQs straight to our sales desk. We quote directly to contractors with guaranteed 24h turnaround."
               </p>
@@ -734,9 +777,15 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
               <DollarSign className="w-3.5 h-3.5" />
               <span>[SS®—RATES] Transparent Launch Pricing</span>
             </div>
-            <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
-              Simple pricing. Zero hidden fees.
-            </h2>
+            <div className="flex justify-center">
+              <AnimatedH3
+                text="Simple pricing. Zero hidden fees."
+                className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight text-center"
+                blurAmount={12}
+                slideDistance={20}
+                staggerDelay={0.025}
+              />
+            </div>
             <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
               100% free forever for contractors. First 3 months free trial for suppliers, then AED 1 per day. 0% platform commission during launch.
             </p>
@@ -749,7 +798,13 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
               <div className="space-y-4">
                 <div>
                   <span className="text-xs font-mono uppercase tracking-wider text-slate-500 font-bold">For Buyers</span>
-                  <h3 className="text-2xl font-black text-slate-900 mt-1">Contractor Free</h3>
+                  <AnimatedH3
+                    text="Contractor Free"
+                    className="text-2xl font-black text-slate-900 mt-1"
+                    blurAmount={8}
+                    slideDistance={14}
+                    staggerDelay={0.02}
+                  />
                   <p className="text-xs text-slate-600 mt-2 leading-relaxed">
                     For UAE electrical contractors, engineers, estimators, and facility managers.
                   </p>
@@ -805,7 +860,14 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
               <div className="space-y-4 pt-2">
                 <div>
                   <span className="text-xs font-mono uppercase tracking-wider text-[#cf2e46] font-bold">For Stockists &amp; Traders</span>
-                  <h3 className="text-2xl font-black text-slate-900 mt-1">Verified Supplier</h3>
+                  <AnimatedH3
+                    text="Verified Supplier"
+                    className="text-2xl font-black text-slate-900 mt-1"
+                    colorVariant="crimson"
+                    blurAmount={8}
+                    slideDistance={14}
+                    staggerDelay={0.02}
+                  />
                   <p className="text-xs text-slate-600 mt-2 leading-relaxed">
                     Direct access to live contractor RFQs in Dubai, Sharjah, and Abu Dhabi.
                   </p>
@@ -862,7 +924,13 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
               <div className="space-y-4">
                 <div>
                   <span className="text-xs font-mono uppercase tracking-wider text-slate-500 font-bold">For EPCs &amp; Developers</span>
-                  <h3 className="text-2xl font-black text-slate-900 mt-1">Enterprise Desk</h3>
+                  <AnimatedH3
+                    text="Enterprise Desk"
+                    className="text-2xl font-black text-slate-900 mt-1"
+                    blurAmount={8}
+                    slideDistance={14}
+                    staggerDelay={0.02}
+                  />
                   <p className="text-xs text-slate-600 mt-2 leading-relaxed">
                     Custom procurement infrastructure for Tier-1 contractors and large project portfolios.
                   </p>
@@ -969,12 +1037,25 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             <span>Ready for 24-Hour Procurement?</span>
           </div>
 
-          <h2 className="text-4xl sm:text-6xl font-black text-white tracking-tight leading-tight">
-            Spend less time sourcing.<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#ffb3bf] to-[#cf2e46]">
-              More time building.
-            </span>
-          </h2>
+          <div className="flex flex-col items-center justify-center space-y-1">
+            <AnimatedH3
+              text="Spend less time sourcing."
+              className="text-4xl sm:text-6xl font-black text-white tracking-tight leading-tight text-center"
+              colorVariant="white"
+              blurAmount={12}
+              slideDistance={22}
+              staggerDelay={0.025}
+            />
+            <AnimatedH3
+              text="More time building."
+              className="text-4xl sm:text-6xl font-black tracking-tight leading-tight text-center"
+              colorVariant="gradient"
+              blurAmount={12}
+              slideDistance={22}
+              delay={0.35}
+              staggerDelay={0.025}
+            />
+          </div>
 
           <p className="text-sm sm:text-base text-slate-300 max-w-xl mx-auto leading-relaxed">
             Connect directly with verified UAE suppliers ready to quote on your project needs. Post your material list in 60 seconds — 100% free for buyers.

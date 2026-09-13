@@ -3,9 +3,14 @@ import React, { useEffect, useRef, useState } from 'react';
 export interface HalftoneShaderProps {
   className?: string;
   onBack?: () => void;
+  embedded?: boolean;
 }
 
-export const HalftoneShader: React.FC<HalftoneShaderProps> = ({ className = '', onBack }) => {
+export const HalftoneShader: React.FC<HalftoneShaderProps> = ({
+  className = '',
+  onBack,
+  embedded = false
+}) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hasWebGL, setHasWebGL] = useState(true);
 
@@ -238,8 +243,8 @@ export const HalftoneShader: React.FC<HalftoneShaderProps> = ({ className = '', 
     // Resize handling
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const width = window.innerWidth;
-      const height = window.innerHeight;
+      const width = embedded && canvas.parentElement ? canvas.parentElement.clientWidth : window.innerWidth;
+      const height = embedded && canvas.parentElement ? canvas.parentElement.clientHeight : window.innerHeight;
 
       canvas.width = Math.floor(width * dpr);
       canvas.height = Math.floor(height * dpr);
@@ -287,14 +292,10 @@ export const HalftoneShader: React.FC<HalftoneShaderProps> = ({ className = '', 
     };
 
     let animationFrameId: number;
-    const startTime = performance.now();
 
-    const renderLoop = (now: number) => {
-      if (isReducedMotion && currentIntensity < 0.005 && !pointerActive) {
-        return;
-      }
-      const elapsedSec = (now - startTime) * 0.001;
-      renderFrame(elapsedSec);
+    // Animation render loop
+    const renderLoop = (timestamp: number) => {
+      renderFrame(timestamp * 0.001);
       animationFrameId = requestAnimationFrame(renderLoop);
     };
 
@@ -318,13 +319,15 @@ export const HalftoneShader: React.FC<HalftoneShaderProps> = ({ className = '', 
       gl.deleteShader(fragmentShader);
       gl.deleteBuffer(positionBuffer);
     };
-  }, []);
+  }, [embedded]);
+
+  const positionClass = embedded ? 'absolute inset-0' : 'fixed inset-0';
 
   return (
-    <div className={`fixed inset-0 w-full h-full overflow-hidden bg-[#08090D] select-none ${className}`}>
+    <div className={`${positionClass} w-full h-full overflow-hidden bg-[#08090D] select-none ${className}`}>
       {/* Hidden Fallback Panel behind canvas (shown only when WebGL is unavailable) */}
       {!hasWebGL && (
-        <div className="fixed inset-0 flex items-center justify-center p-6 bg-[#08090D] text-[#DBE0EB] z-0">
+        <div className={`${positionClass} flex items-center justify-center p-6 bg-[#08090D] text-[#DBE0EB] z-0`}>
           <div className="max-w-md p-8 rounded-2xl bg-[#080A0D] border border-[#DBE0EB]/20 shadow-2xl text-center">
             <h2 className="text-lg font-bold tracking-wide mb-2 text-[#DBE0EB]">WebGL Required</h2>
             <p className="text-sm text-slate-400 leading-relaxed">
@@ -334,34 +337,38 @@ export const HalftoneShader: React.FC<HalftoneShaderProps> = ({ className = '', 
         </div>
       )}
 
-      {/* Floating Return Controls Overlay */}
-      <div className="fixed top-5 left-5 z-30 pointer-events-auto">
-        <button
-          onClick={() => {
-            if (onBack) {
-              onBack();
-            } else {
-              window.location.href = '/';
-            }
-          }}
-          className="px-4 py-2 rounded-full bg-[#080A0D]/85 hover:bg-[#080A0D] text-[#DBE0EB] hover:text-white border border-[#DBE0EB]/20 hover:border-[#cf2e46] backdrop-blur-md font-mono text-xs font-bold transition-all duration-200 shadow-2xl flex items-center gap-2 cursor-pointer group"
-        >
-          <span className="text-[#cf2e46] group-hover:-translate-x-0.5 transition-transform">←</span>
-          <span>Return to SupplySouq</span>
-        </button>
-      </div>
+      {/* Floating Return Controls Overlay - Only when in standalone full-viewport mode */}
+      {!embedded && (
+        <>
+          <div className="fixed top-5 left-5 z-30 pointer-events-auto">
+            <button
+              onClick={() => {
+                if (onBack) {
+                  onBack();
+                } else {
+                  window.location.href = '/';
+                }
+              }}
+              className="px-4 py-2 rounded-full bg-[#080A0D]/85 hover:bg-[#080A0D] text-[#DBE0EB] hover:text-white border border-[#DBE0EB]/20 hover:border-[#cf2e46] backdrop-blur-md font-mono text-xs font-bold transition-all duration-200 shadow-2xl flex items-center gap-2 cursor-pointer group"
+            >
+              <span className="text-[#cf2e46] group-hover:-translate-x-0.5 transition-transform">←</span>
+              <span>Return to SupplySouq</span>
+            </button>
+          </div>
 
-      <div className="fixed top-5 right-5 z-30 pointer-events-none hidden sm:flex items-center gap-2.5 px-3.5 py-2 rounded-full bg-[#080A0D]/80 border border-[#DBE0EB]/15 text-[11px] font-mono text-[#8A92A6] backdrop-blur-md shadow-xl">
-        <span className="w-2 h-2 rounded-full bg-[#cf2e46] animate-pulse" />
-        <span className="text-[#DBE0EB] font-bold">HALFTONE WEBGL SHADER</span>
-        <span>•</span>
-        <span>34-CELL LATTICE</span>
-      </div>
+          <div className="fixed top-5 right-5 z-30 pointer-events-none hidden sm:flex items-center gap-2.5 px-3.5 py-2 rounded-full bg-[#080A0D]/80 border border-[#DBE0EB]/15 text-[11px] font-mono text-[#8A92A6] backdrop-blur-md shadow-xl">
+            <span className="w-2 h-2 rounded-full bg-[#cf2e46] animate-pulse" />
+            <span className="text-[#DBE0EB] font-bold">HALFTONE WEBGL SHADER</span>
+            <span>•</span>
+            <span>34-CELL LATTICE</span>
+          </div>
+        </>
+      )}
 
       {/* Full-bleed Canvas */}
       <canvas
         ref={canvasRef}
-        className={`fixed inset-0 w-full h-full block z-10 ${hasWebGL ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+        className={`${positionClass} w-full h-full block z-0 ${hasWebGL ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
       />
     </div>
   );

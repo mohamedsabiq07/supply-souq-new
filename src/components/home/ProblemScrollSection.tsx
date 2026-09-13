@@ -9,7 +9,8 @@ import {
   VolumeX,
   Play,
   Pause,
-  ArrowDown
+  ArrowDown,
+  RotateCcw
 } from 'lucide-react';
 import { AnimatedH3 } from '../ui/AnimatedHeading';
 
@@ -75,13 +76,17 @@ export const ProblemScrollSection: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(true);
   const [isPlaying, setIsPlaying] = useState(true);
+  const [hasEnded, setHasEnded] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
   const [activeStep, setActiveStep] = useState(0);
 
-  // Play video continuously
+  // Play video once on load
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.play().catch(() => {
-        // Handled gracefully if browser requires interaction
+        // Handled gracefully if browser requires user gesture
+        setIsPlaying(false);
       });
     }
   }, []);
@@ -95,6 +100,10 @@ export const ProblemScrollSection: React.FC = () => {
 
   const togglePlayback = () => {
     if (videoRef.current) {
+      if (hasEnded) {
+        handleReplay();
+        return;
+      }
       if (videoRef.current.paused) {
         videoRef.current.play();
         setIsPlaying(true);
@@ -102,6 +111,47 @@ export const ProblemScrollSection: React.FC = () => {
         videoRef.current.pause();
         setIsPlaying(false);
       }
+    }
+  };
+
+  const handleVideoEnded = () => {
+    setHasEnded(true);
+    setIsPlaying(false);
+  };
+
+  const handleReplay = () => {
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.play().then(() => {
+        setIsPlaying(true);
+        setHasEnded(false);
+      }).catch(() => {});
+    }
+  };
+
+  const handleTimeUpdate = () => {
+    if (videoRef.current) {
+      setCurrentTime(videoRef.current.currentTime);
+    }
+  };
+
+  const handleLoadedMetadata = () => {
+    if (videoRef.current) {
+      setDuration(videoRef.current.duration);
+    }
+  };
+
+  const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!videoRef.current || !duration) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const pos = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    const newTime = pos * duration;
+    videoRef.current.currentTime = newTime;
+    setCurrentTime(newTime);
+    if (hasEnded) {
+      setHasEnded(false);
+      videoRef.current.play().catch(() => {});
+      setIsPlaying(true);
     }
   };
 
@@ -271,41 +321,66 @@ export const ProblemScrollSection: React.FC = () => {
           <div className="lg:col-span-7 lg:sticky lg:top-24 self-start py-4">
             <div className="relative rounded-3xl border-2 border-slate-300/90 bg-slate-950 shadow-2xl overflow-hidden aspect-[16/10] sm:aspect-[16/9] group">
               
-              {/* Video Element */}
+              {/* Video Element - Plays only once, with full customer replay options */}
               <video
                 ref={videoRef}
                 src="/brand-assets/Untitled%20video%20(2).mp4"
                 poster="/brand-assets/supplysouq-concept-visual.jpg"
                 autoPlay
-                loop
                 muted={isMuted}
                 playsInline
+                onEnded={handleVideoEnded}
+                onTimeUpdate={handleTimeUpdate}
+                onLoadedMetadata={handleLoadedMetadata}
                 className="w-full h-full object-cover"
               />
 
               {/* Ambient High-Tech Scanline Overlay */}
               <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%)] bg-[length:100%_4px] opacity-25" />
 
+              {/* End of Video Customer Options Overlay */}
+              {hasEnded && (
+                <div className="absolute inset-0 z-30 bg-slate-950/85 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center animate-fade-in">
+                  <div className="w-14 h-14 rounded-2xl bg-rose-950/80 border border-rose-500/40 flex items-center justify-center text-[#cf2e46] mb-3 shadow-xl">
+                    <RotateCcw className="w-7 h-7 text-[#cf2e46] animate-spin-slow" />
+                  </div>
+                  <h4 className="text-lg sm:text-xl font-black text-white tracking-tight mb-1.5">
+                    Demo Completed
+                  </h4>
+                  <p className="text-xs sm:text-sm text-slate-300 max-w-sm mb-5 leading-relaxed font-normal">
+                    You watched the full procurement workflow demo. Choose an option below to replay or unmute audio.
+                  </p>
+                  <div className="flex flex-wrap items-center justify-center gap-3">
+                    <button
+                      onClick={handleReplay}
+                      className="px-6 py-3 rounded-full bg-[#cf2e46] hover:bg-[#b91c33] text-white text-xs font-black tracking-wide uppercase transition-all shadow-lg flex items-center gap-2 hover:scale-105 cursor-pointer"
+                    >
+                      <RotateCcw className="w-4 h-4" />
+                      <span>Replay Video</span>
+                    </button>
+                    <button
+                      onClick={toggleAudio}
+                      className="px-4 py-3 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 transition-colors flex items-center gap-2 cursor-pointer"
+                    >
+                      {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4 text-emerald-400" />}
+                      <span>{isMuted ? 'Unmute Audio' : 'Audio On'}</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {/* Corner Crosshair Accents */}
-              <div className="absolute top-3 left-3 text-white/50 font-mono text-xs select-none pointer-events-none">
-                +
-              </div>
-              <div className="absolute top-3 right-3 text-white/50 font-mono text-xs select-none pointer-events-none">
-                +
-              </div>
-              <div className="absolute bottom-3 left-3 text-white/50 font-mono text-xs select-none pointer-events-none">
-                +
-              </div>
-              <div className="absolute bottom-3 right-3 text-white/50 font-mono text-xs select-none pointer-events-none">
-                +
-              </div>
+              <div className="absolute top-3 left-3 text-white/50 font-mono text-xs select-none pointer-events-none">+</div>
+              <div className="absolute top-3 right-3 text-white/50 font-mono text-xs select-none pointer-events-none">+</div>
+              <div className="absolute bottom-3 left-3 text-white/50 font-mono text-xs select-none pointer-events-none">+</div>
+              <div className="absolute bottom-3 right-3 text-white/50 font-mono text-xs select-none pointer-events-none">+</div>
 
               {/* Top Video Telemetry Bar */}
               <div className="absolute top-0 left-0 right-0 p-4 bg-gradient-to-b from-black/80 via-black/40 to-transparent flex items-center justify-between text-white z-20">
                 <div className="flex items-center gap-2.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping" />
+                  <span className={`w-2.5 h-2.5 rounded-full ${hasEnded ? 'bg-amber-400' : 'bg-red-500 animate-ping'}`} />
                   <span className="text-[11px] font-mono font-black tracking-wider uppercase text-white drop-shadow">
-                    LIVE RFQ WORKFLOW • UAE PLATFORM
+                    {hasEnded ? 'PLAYBACK FINISHED // REPLAY READY' : 'LIVE RFQ WORKFLOW • UAE PLATFORM'}
                   </span>
                 </div>
 
@@ -318,12 +393,32 @@ export const ProblemScrollSection: React.FC = () => {
                     {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4 text-emerald-400" />}
                   </button>
                   <button
-                    onClick={togglePlayback}
+                    onClick={hasEnded ? handleReplay : togglePlayback}
                     className="p-2 rounded-xl bg-black/60 hover:bg-black/80 backdrop-blur-md text-white border border-white/20 transition-colors cursor-pointer"
-                    title={isPlaying ? 'Pause Video' : 'Play Video'}
+                    title={hasEnded ? 'Replay Video' : isPlaying ? 'Pause Video' : 'Play Video'}
                   >
-                    {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 text-emerald-400" />}
+                    {hasEnded ? (
+                      <RotateCcw className="w-4 h-4 text-[#cf2e46]" />
+                    ) : isPlaying ? (
+                      <Pause className="w-4 h-4" />
+                    ) : (
+                      <Play className="w-4 h-4 text-emerald-400" />
+                    )}
                   </button>
+                </div>
+              </div>
+
+              {/* Interactive Video Progress Scrubber Bar */}
+              <div
+                onClick={handleSeek}
+                className="absolute bottom-[68px] left-0 right-0 h-2 bg-white/15 hover:bg-white/25 cursor-pointer z-20 transition-all group/seek"
+                title="Click timeline to seek"
+              >
+                <div
+                  className="bg-[#cf2e46] h-full relative transition-[width] duration-100"
+                  style={{ width: duration ? `${(currentTime / duration) * 100}%` : '0%' }}
+                >
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-white shadow-md" />
                 </div>
               </div>
 
