@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { BorderBeam } from 'border-beam';
 import { useAuth } from '../../context/AuthContext';
 import { useAppData } from '../../context/AppDataContext';
 import { Card, CardHeader, CardContent } from '../../components/ui/Card';
@@ -368,13 +369,15 @@ export const BuyerMessagesPage: React.FC = () => {
                   <span className="hidden sm:inline">Voice Note</span>
                 </button>
 
-                <input
-                  type="text"
-                  value={inputText}
-                  onChange={(e) => setInputText(e.target.value)}
-                  placeholder="Type message or click Voice Note to record..."
-                  className="flex-1 text-xs p-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-500 focus:outline-none"
-                />
+                <BorderBeam size="line" theme="light" className="flex-1">
+                  <input
+                    type="text"
+                    value={inputText}
+                    onChange={(e) => setInputText(e.target.value)}
+                    placeholder="Type message or click Voice Note to record..."
+                    className="w-full text-xs p-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-500 focus:outline-none"
+                  />
+                </BorderBeam>
 
                 <Button variant="primary" size="sm" type="submit" leftIcon={<Send className="w-4 h-4" />}>
                   Send

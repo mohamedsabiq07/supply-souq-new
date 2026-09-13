@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
+import { BorderBeam } from 'border-beam';
+import { useAppData } from '../../context/AppDataContext';
 import { Company, UserProfile, VerificationRequest } from '../../types';
 import { Card, CardHeader, CardContent } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -187,16 +189,18 @@ export const AdminKYBDesk: React.FC<AdminKYBDeskProps> = ({
           </button>
         </div>
 
-        <div className="relative">
-          <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-          <input
-            type="text"
-            placeholder="Search company, trade license #..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-8 pr-3 py-1.5 rounded-lg border border-slate-300 text-xs w-full sm:w-60 focus:ring-2 focus:ring-brand-500 font-medium"
-          />
-        </div>
+        <BorderBeam size="line" theme="light">
+          <div className="relative">
+            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <input
+              type="text"
+              placeholder="Search company, trade license #..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-8 pr-3 py-1.5 rounded-lg border border-slate-300 text-xs w-full sm:w-60 focus:ring-2 focus:ring-brand-500 font-medium"
+            />
+          </div>
+        </BorderBeam>
       </div>
 
       {/* ---------------- SUB-TAB 1: PENDING VERIFICATIONS QUEUE ---------------- */}

@@ -1,4 +1,6 @@
 import React, { useState, useMemo } from 'react';
+import { BorderBeam } from 'border-beam';
+import { useAppData } from '../../context/AppDataContext';
 import { PurchaseOrder, Company } from '../../types';
 import { Card, CardContent } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -303,16 +305,18 @@ export const AdminFinanceEngine: React.FC<AdminFinanceEngineProps> = ({
               ))}
             </div>
 
-            <div className="relative">
-              <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-              <input
-                type="text"
-                placeholder="Search PO #, buyer, stockist..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-8 pr-3 py-1.5 rounded-lg border border-slate-300 text-xs w-full sm:w-60 focus:ring-2 focus:ring-brand-500 font-medium"
-              />
-            </div>
+            <BorderBeam size="line" theme="light">
+              <div className="relative">
+                <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <input
+                  type="text"
+                  placeholder="Search PO #, buyer, stockist..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-8 pr-3 py-1.5 rounded-lg border border-slate-300 text-xs w-full sm:w-60 focus:ring-2 focus:ring-brand-500 font-medium"
+                />
+              </div>
+            </BorderBeam>
           </div>
 
           {/* Orders Commission Ledger Table */}

@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { BorderBeam } from 'border-beam';
+import { useAuth } from '../../context/AuthContext';
 import { useAppData } from '../../context/AppDataContext';
 import { RFQItem, RFQDocument, Emirate, QuickBundle } from '../../types';
 import { initialQuickBundles } from '../../data/seedData';
@@ -781,26 +783,28 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                           {/* Searchable Brand Input & Add Button */}
                           <div className="relative pt-0.5">
                             <div className="flex items-center gap-2 max-w-md">
-                              <div className="relative flex-1">
-                                <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" />
-                                <input
-                                  type="text"
-                                  value={searchVal}
-                                  onChange={(e) => {
-                                    setBrandSearchQueries(prev => ({ ...prev, [idx]: e.target.value }));
-                                    setActiveDropdownIndex(idx);
-                                  }}
-                                  onFocus={() => setActiveDropdownIndex(idx)}
-                                  onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                      e.preventDefault();
-                                      handleAddBrand(idx, searchVal);
-                                    }
-                                  }}
-                                  placeholder="Search brand name... (e.g. Ducab, Schneider, Decoduct)"
-                                  className="w-full pl-8 pr-3 py-1.5 text-xs rounded-lg border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500"
-                                />
-                              </div>
+                              <BorderBeam size="line" theme="light" className="flex-1">
+                                <div className="relative w-full">
+                                  <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" />
+                                  <input
+                                    type="text"
+                                    value={searchVal}
+                                    onChange={(e) => {
+                                      setBrandSearchQueries(prev => ({ ...prev, [idx]: e.target.value }));
+                                      setActiveDropdownIndex(idx);
+                                    }}
+                                    onFocus={() => setActiveDropdownIndex(idx)}
+                                    onKeyDown={(e) => {
+                                      if (e.key === 'Enter') {
+                                        e.preventDefault();
+                                        handleAddBrand(idx, searchVal);
+                                      }
+                                    }}
+                                    placeholder="Search brand name... (e.g. Ducab, Schneider, Decoduct)"
+                                    className="w-full pl-8 pr-3 py-1.5 text-xs rounded-lg border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500"
+                                  />
+                                </div>
+                              </BorderBeam>
                               <Button
                                 type="button"
                                 variant="outline"

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { BorderBeam } from 'border-beam';
 import { useAppData } from '../../context/AppDataContext';
 import { SupplierCard } from '../../components/supplier/SupplierCard';
 import { Button } from '../../components/ui/Button';
@@ -116,16 +117,18 @@ export const SuppliersPage: React.FC<{ onRequestQuote: (supplier?: any, category
 
       {/* Search & Location Filters */}
       <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-subtle">
-        <div className="relative flex-1">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search by company name, material (cables, pipes, duct, chemicals), or industrial zone (Al Quoz, Sharjah, Mussafah)..."
-            className="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-brand-500 focus:outline-none placeholder:text-slate-400"
-          />
-        </div>
+        <BorderBeam size="line" theme="light" className="flex-1">
+          <div className="relative w-full">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search by company name, material (cables, pipes, duct, chemicals), or industrial zone (Al Quoz, Sharjah, Mussafah)..."
+              className="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-brand-500 focus:outline-none placeholder:text-slate-400"
+            />
+          </div>
+        </BorderBeam>
 
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 text-xs">
           <span className="text-slate-500 font-semibold whitespace-nowrap">Emirate:</span>

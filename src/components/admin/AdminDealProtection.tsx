@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { BorderBeam } from 'border-beam';
 import { RFQ, AdminAuditLog } from '../../types';
 import { Card, CardContent } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -224,16 +225,18 @@ export const AdminDealProtection: React.FC<AdminDealProtectionProps> = ({
               ))}
             </div>
 
-            <div className="relative">
-              <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
-              <input
-                type="text"
-                placeholder="Search logs..."
-                value={auditSearch}
-                onChange={(e) => setAuditSearch(e.target.value)}
-                className="pl-7 pr-2 py-1 rounded-lg border border-slate-300 text-xs w-36 focus:ring-1 focus:ring-brand-500"
-              />
-            </div>
+            <BorderBeam size="line" theme="light">
+              <div className="relative">
+                <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                <input
+                  type="text"
+                  placeholder="Search logs..."
+                  value={auditSearch}
+                  onChange={(e) => setAuditSearch(e.target.value)}
+                  className="pl-7 pr-2 py-1 rounded-lg border border-slate-300 text-xs w-36 focus:ring-1 focus:ring-brand-500"
+                />
+              </div>
+            </BorderBeam>
           </div>
         </div>
 
