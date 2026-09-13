@@ -3,6 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useAppData } from '../../context/AppDataContext';
 import { StatCounter } from '../../components/ui/StatCounter';
 import { QuickBundle } from '../../types';
+import { CinematicScrollSection } from '../../components/home/CinematicScrollSection';
 import {
   Zap,
   Building2,
@@ -317,6 +318,9 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
           </div>
         </div>
       </section>
+
+      {/* 1.5 CINEMATIC SCROLL-DRIVEN STORYTELLING SECTION */}
+      <CinematicScrollSection setCurrentView={setCurrentView} />
 
       {/* 2. PARTNER / STOCKIST BRAND MARQUEE - RICH CONCRETE GRAY BAND */}
       <section className="py-12 border-b border-slate-300/80 bg-[#eceef1] relative overflow-hidden">
