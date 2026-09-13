@@ -20,6 +20,7 @@ import {
   ArrowRight,
   Trash2
 } from 'lucide-react';
+import { MetalFx, MetalBadge } from 'metal-fx';
 
 interface RFQDetailPageProps {
   rfqId: string;
@@ -96,14 +97,16 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
           )}
 
           {rfqQuotes.length > 0 && rfq.status !== 'cancelled' && (
-            <Button
-              variant="primary"
-              onClick={() => onNavigate('buyer-compare', { rfqId: rfq.id })}
-              leftIcon={<GitCompare className="w-4 h-4" />}
-              className="font-bold shadow-sm"
-            >
-              Compare {visibleQuotes.length} Quotations in Matrix
-            </Button>
+            <MetalFx preset="chromatic" strength={0.85} theme="light">
+              <Button
+                variant="primary"
+                onClick={() => onNavigate('buyer-compare', { rfqId: rfq.id })}
+                leftIcon={<GitCompare className="w-4 h-4" />}
+                className="font-bold shadow-sm"
+              >
+                Compare {visibleQuotes.length} Quotations in Matrix
+              </Button>
+            </MetalFx>
           )}
         </div>
       </div>
@@ -292,9 +295,14 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
       {/* Materials Schedule Table */}
       <Card>
         <CardHeader>
-          <div>
-            <h3 className="text-base font-bold text-slate-900">Materials Schedule (BOQ)</h3>
-            <p className="text-xs text-slate-500">{rfq.items.length} line items specified for procurement.</p>
+          <div className="flex items-center justify-between w-full">
+            <div>
+              <div className="flex items-center gap-2.5">
+                <h3 className="text-base font-bold text-slate-900">Materials Schedule (BOQ)</h3>
+                <MetalBadge theme="light" strength={0.85}>Verified BOQ</MetalBadge>
+              </div>
+              <p className="text-xs text-slate-500 mt-0.5">{rfq.items.length} line items specified for procurement.</p>
+            </div>
           </div>
         </CardHeader>
         <CardContent className="p-0 overflow-x-auto">

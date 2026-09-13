@@ -20,6 +20,7 @@ import {
   Zap,
   CheckCircle2
 } from 'lucide-react';
+import { MetalFx } from 'metal-fx';
 
 interface BuyerDashboardProps {
   onNavigate: (view: string, params?: any) => void;
@@ -65,14 +66,16 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
           </p>
         </div>
 
-        <Button
-          variant="primary"
-          onClick={() => onNavigate('create-rfq')}
-          leftIcon={<PlusCircle className="w-4 h-4" />}
-          className="shadow-sm font-bold"
-        >
-          Create New RFQ
-        </Button>
+        <MetalFx preset="chromatic" strength={0.85} theme="light">
+          <Button
+            variant="primary"
+            onClick={() => onNavigate('create-rfq')}
+            leftIcon={<PlusCircle className="w-4 h-4" />}
+            className="shadow-sm font-bold"
+          >
+            Create New RFQ
+          </Button>
+        </MetalFx>
       </div>
 
       {/* Action Alert for Evaluating Quotes */}
@@ -91,15 +94,17 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
               </p>
             </div>
           </div>
-          <Button
-            variant="amber"
-            size="sm"
-            onClick={() => onNavigate('buyer-compare', { rfqId: evaluatingRFQs[0].id })}
-            rightIcon={<ArrowRight className="w-4 h-4" />}
-            className="font-bold"
-          >
-            Open Comparison Matrix
-          </Button>
+          <MetalFx preset="gold" strength={0.85} theme="dark">
+            <Button
+              variant="amber"
+              size="sm"
+              onClick={() => onNavigate('buyer-compare', { rfqId: evaluatingRFQs[0].id })}
+              rightIcon={<ArrowRight className="w-4 h-4" />}
+              className="font-bold"
+            >
+              Open Comparison Matrix
+            </Button>
+          </MetalFx>
         </div>
       )}
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { BorderBeam } from 'border-beam';
+import { MetalFx } from 'metal-fx';
 import { useAuth } from '../../context/AuthContext';
 import { useAppData } from '../../context/AppDataContext';
 import { RFQItem, RFQDocument, Emirate, QuickBundle } from '../../types';
@@ -871,15 +872,17 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
           </CardContent>
           <CardFooter className="justify-between">
             <Button variant="outline" onClick={onCancel}>Cancel</Button>
-            <Button 
-              variant="primary" 
-              size="lg" 
-              onClick={() => setStep(2)} 
-              rightIcon={<ArrowRight className="w-4 h-4" />}
-              className="font-bold"
-            >
-              Continue to Supplier Matching
-            </Button>
+            <MetalFx preset="chromatic" strength={0.85} theme="light">
+              <Button 
+                variant="primary" 
+                size="lg" 
+                onClick={() => setStep(2)} 
+                rightIcon={<ArrowRight className="w-4 h-4" />}
+                className="font-bold"
+              >
+                Continue to Supplier Matching
+              </Button>
+            </MetalFx>
           </CardFooter>
         </Card>
       )}
@@ -1013,15 +1016,17 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
             <Button variant="outline" onClick={() => setStep(1)} leftIcon={<ArrowLeft className="w-4 h-4" />}>
               Back to Edit
             </Button>
-            <Button
-              variant="primary"
-              size="lg"
-              onClick={handleFinalPublish}
-              leftIcon={<Zap className="w-5 h-5 text-amber-300 fill-amber-300" />}
-              className="bg-brand-600 hover:bg-brand-700 shadow-md font-bold px-6"
-            >
-              Broadcast RFQ to Suppliers
-            </Button>
+            <MetalFx preset="chromatic" strength={0.9} theme="light">
+              <Button
+                variant="primary"
+                size="lg"
+                onClick={handleFinalPublish}
+                leftIcon={<Zap className="w-5 h-5 text-amber-300 fill-amber-300" />}
+                className="bg-brand-600 hover:bg-brand-700 shadow-md font-bold px-6"
+              >
+                Broadcast RFQ to Suppliers
+              </Button>
+            </MetalFx>
           </CardFooter>
         </Card>
       )}

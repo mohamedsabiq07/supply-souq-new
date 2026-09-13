@@ -7,6 +7,7 @@ import { CinematicScrollSection } from '../../components/home/CinematicScrollSec
 import { ProblemScrollSection } from '../../components/home/ProblemScrollSection';
 import { AnimatedH3, ProximityText } from '../../components/ui/AnimatedHeading';
 import VariableFontCursorProximity from '../../components/fancy/text/variable-font-cursor-proximity';
+import { MetalFx } from 'metal-fx';
 import {
   Zap,
   Building2,
@@ -159,22 +160,26 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
 
             {/* Dual CTAs */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-              <button
-                onClick={() => handleStartBuyer()}
-                className="w-full sm:w-auto px-8 py-4 rounded-full text-sm font-black bg-[#cf2e46] text-white hover:bg-[#b91c33] transition-all duration-300 shadow-md hover:scale-105 flex items-center justify-center gap-2 group cursor-pointer"
-              >
-                <Zap className="w-4 h-4 fill-white" />
-                <span>Post Live RFQ (100% Free)</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </button>
+              <MetalFx preset="chromatic" strength={0.85} theme="light" borderRadius={9999}>
+                <button
+                  onClick={() => handleStartBuyer()}
+                  className="w-full sm:w-auto px-8 py-4 rounded-full text-sm font-black bg-[#cf2e46] text-white hover:bg-[#b91c33] transition-all duration-300 shadow-md hover:scale-105 flex items-center justify-center gap-2 group cursor-pointer"
+                >
+                  <Zap className="w-4 h-4 fill-white" />
+                  <span>Post Live RFQ (100% Free)</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </button>
+              </MetalFx>
 
-              <button
-                onClick={() => setCurrentView('invoice-audit')}
-                className="w-full sm:w-auto px-8 py-4 rounded-full text-sm font-bold bg-white hover:bg-slate-50 text-slate-900 border border-slate-300 shadow-xs transition-all duration-300 hover:border-slate-400 flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <Sparkles className="w-4 h-4 text-[#cf2e46]" />
-                <span>Free Cable Cost Audit (Save 15%+)</span>
-              </button>
+              <MetalFx preset="silver" strength={0.65} theme="light" borderRadius={9999}>
+                <button
+                  onClick={() => setCurrentView('invoice-audit')}
+                  className="w-full sm:w-auto px-8 py-4 rounded-full text-sm font-bold bg-white hover:bg-slate-50 text-slate-900 border border-slate-300 shadow-xs transition-all duration-300 hover:border-slate-400 flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <Sparkles className="w-4 h-4 text-[#cf2e46]" />
+                  <span>Free Cable Cost Audit (Save 15%+)</span>
+                </button>
+              </MetalFx>
             </div>
 
 
@@ -972,14 +977,16 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-            <button
-              onClick={() => handleStartBuyer()}
-              className="w-full sm:w-auto px-8 py-4 rounded-full text-sm font-black bg-[#cf2e46] text-white hover:bg-[#b91c33] transition-all shadow-md hover:scale-105 flex items-center justify-center gap-2 cursor-pointer"
-            >
-              <Zap className="w-4 h-4 fill-white" />
-              <span>Post Live RFQ (100% Free)</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
+            <MetalFx preset="chromatic" strength={0.9} theme="dark" borderRadius={9999}>
+              <button
+                onClick={() => handleStartBuyer()}
+                className="w-full sm:w-auto px-8 py-4 rounded-full text-sm font-black bg-[#cf2e46] text-white hover:bg-[#b91c33] transition-all shadow-md hover:scale-105 flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <Zap className="w-4 h-4 fill-white" />
+                <span>Post Live RFQ (100% Free)</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </MetalFx>
 
             <button
               onClick={() => setCurrentView('onboarding-guide')}
