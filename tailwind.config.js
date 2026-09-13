@@ -58,7 +58,9 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
+        sans: ['Plus Jakarta Sans', 'DM Sans', 'Inter', 'system-ui', 'sans-serif'],
+        display: ['Syne', 'DM Sans', 'Plus Jakarta Sans', 'sans-serif'],
+        dm: ['DM Sans', 'Inter', 'sans-serif'],
         mono: ['JetBrains Mono', 'Fira Code', 'Courier New', 'monospace'],
       },
       boxShadow: {
