@@ -190,7 +190,7 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
               <button
                 onClick={() => setSortBy('price_asc')}
                 className={`px-2 py-1 rounded font-medium transition-all ${
-                  sortBy === 'price_asc' ? 'bg-white shadow-sm font-bold text-emerald-700' : 'text-slate-600'
+                  sortBy === 'price_asc' ? 'bg-white shadow-sm font-bold text-[#cf2e46]' : 'text-slate-600'
                 }`}
               >
                 Lowest Price
@@ -400,7 +400,7 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
                 </div>
 
                 {isAwarded ? (
-                  <div className="w-full text-center py-2.5 bg-emerald-100 text-emerald-800 font-bold text-xs rounded-lg border border-emerald-200">
+                  <div className="w-full text-center py-2.5 bg-rose-100 text-rose-800 font-bold text-xs rounded-lg border border-rose-200">
                     ✓ Awarded & Purchase Order Issued
                   </div>
                 ) : (
@@ -440,7 +440,7 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
               </div>
 
               <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 space-y-1.5 text-xs">
-                <div className="flex items-center gap-2 text-emerald-400 font-semibold">
+                <div className="flex items-center gap-2 text-rose-400 font-semibold">
                   <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
                   <span>Reveals 5 additional verified supplier quotations</span>
                 </div>
@@ -497,15 +497,15 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
             <h5 className="font-bold text-slate-900">Included in this Extended Pack:</h5>
             <ul className="space-y-2 text-slate-600">
               <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                <CheckCircle2 className="w-4 h-4 text-[#cf2e46] shrink-0" />
                 <span><strong>5 Additional Commercial Quotations:</strong> Full itemized price breakdown.</span>
               </li>
               <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                <CheckCircle2 className="w-4 h-4 text-[#cf2e46] shrink-0" />
                 <span><strong>Flexible Credit Terms:</strong> Extended 30 to 45-day PDC payment options.</span>
               </li>
               <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                <CheckCircle2 className="w-4 h-4 text-[#cf2e46] shrink-0" />
                 <span><strong>Complete 10-Way Comparison Matrix:</strong> Compare all offers side-by-side.</span>
               </li>
             </ul>
@@ -516,7 +516,7 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
               <span className="text-[10px] text-slate-400 block font-semibold">One-Time RFQ Unlock Fee</span>
               <span className="text-lg font-extrabold text-amber-300 font-mono">AED 49.00</span>
             </div>
-            <span className="text-[10px] text-emerald-400 bg-slate-800 px-2.5 py-1 rounded border border-slate-700 font-bold">
+            <span className="text-[10px] text-rose-300 bg-slate-800 px-2.5 py-1 rounded border border-slate-700 font-bold">
               Instant Activation
             </span>
           </div>
@@ -550,12 +550,12 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
       >
         {selectedAwardQuote && (
           <div className="space-y-4 text-xs">
-            <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-200 space-y-1">
-              <div className="flex items-center gap-2 text-emerald-900 font-bold text-sm">
-                <Gift className="w-4 h-4 text-emerald-700" />
+            <div className="p-4 bg-rose-50 rounded-xl border border-rose-200 space-y-1">
+              <div className="flex items-center gap-2 text-rose-950 font-bold text-sm">
+                <Gift className="w-4 h-4 text-[#cf2e46]" />
                 <span>SupplySouq 10% Platform Protection Active</span>
               </div>
-              <p className="text-[11px] text-emerald-700">
+              <p className="text-[11px] text-rose-800">
                 You are covered by SupplySouq's 100% Quality & DEWA Certified Replacement Guarantee with full FTA digital VAT compliance.
               </p>
             </div>
@@ -706,8 +706,8 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
             </div>
 
             {/* Trust Notice explaining how rating impacts supplier rank */}
-            <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-[11px] text-emerald-900 flex items-start gap-2">
-              <Sparkles className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+            <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl text-[11px] text-rose-950 flex items-start gap-2">
+              <Sparkles className="w-4 h-4 text-[#cf2e46] shrink-0 mt-0.5" />
               <div>
                 <strong>Merit-Based Supplier Rankings:</strong> Your rating updates this supplier's overall profile rating in real-time. Suppliers with higher ratings are prioritized at the top of the supplier directory and receive first access to contractor RFQ broadcasts.
               </div>
