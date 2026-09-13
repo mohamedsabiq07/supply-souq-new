@@ -321,11 +321,23 @@ export const HalftoneShader: React.FC<HalftoneShaderProps> = ({
     };
   }, [embedded]);
 
+  // Handle Escape key to return when standalone
+  useEffect(() => {
+    if (embedded) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && onBack) {
+        onBack();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [embedded, onBack]);
+
   const positionClass = embedded ? 'absolute inset-0' : 'fixed inset-0';
 
   return (
     <div className={`${positionClass} w-full h-full overflow-hidden bg-[#08090D] select-none ${className}`}>
-      {/* Hidden Fallback Panel behind canvas (shown only when WebGL is unavailable) */}
+      {/* Hidden Fallback Panel behind canvas (shown only when no WebGL context can be created) */}
       {!hasWebGL && (
         <div className={`${positionClass} flex items-center justify-center p-6 bg-[#08090D] text-[#DBE0EB] z-0`}>
           <div className="max-w-md p-8 rounded-2xl bg-[#080A0D] border border-[#DBE0EB]/20 shadow-2xl text-center">
@@ -337,38 +349,10 @@ export const HalftoneShader: React.FC<HalftoneShaderProps> = ({
         </div>
       )}
 
-      {/* Floating Return Controls Overlay - Only when in standalone full-viewport mode */}
-      {!embedded && (
-        <>
-          <div className="fixed top-5 left-5 z-30 pointer-events-auto">
-            <button
-              onClick={() => {
-                if (onBack) {
-                  onBack();
-                } else {
-                  window.location.href = '/';
-                }
-              }}
-              className="px-4 py-2 rounded-full bg-[#080A0D]/85 hover:bg-[#080A0D] text-[#DBE0EB] hover:text-white border border-[#DBE0EB]/20 hover:border-[#cf2e46] backdrop-blur-md font-mono text-xs font-bold transition-all duration-200 shadow-2xl flex items-center gap-2 cursor-pointer group"
-            >
-              <span className="text-[#cf2e46] group-hover:-translate-x-0.5 transition-transform">←</span>
-              <span>Return to SupplySouq</span>
-            </button>
-          </div>
-
-          <div className="fixed top-5 right-5 z-30 pointer-events-none hidden sm:flex items-center gap-2.5 px-3.5 py-2 rounded-full bg-[#080A0D]/80 border border-[#DBE0EB]/15 text-[11px] font-mono text-[#8A92A6] backdrop-blur-md shadow-xl">
-            <span className="w-2 h-2 rounded-full bg-[#cf2e46] animate-pulse" />
-            <span className="text-[#DBE0EB] font-bold">HALFTONE WEBGL SHADER</span>
-            <span>•</span>
-            <span>34-CELL LATTICE</span>
-          </div>
-        </>
-      )}
-
-      {/* Full-bleed Canvas */}
+      {/* Full-bleed Canvas - Shader is the entire surface, no typography, no chrome */}
       <canvas
         ref={canvasRef}
-        className={`${positionClass} w-full h-full block z-0 ${hasWebGL ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+        className={`${positionClass} w-full h-full block z-10 ${hasWebGL ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
       />
     </div>
   );

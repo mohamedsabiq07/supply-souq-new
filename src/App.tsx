@@ -168,7 +168,8 @@ const AppContent: React.FC = () => {
       'invoice-audit', 
       'login', 
       'admin-login',
-      'register'
+      'register',
+      'halftone'
     ];
 
     if (!isAuthenticated && !allowBypass && !publicViews.includes(view)) {
@@ -193,8 +194,14 @@ const AppContent: React.FC = () => {
     'invoice-audit', 
     'login', 
     'admin-login',
-    'register'
+    'register',
+    'halftone'
   ].includes(currentView);
+
+  // Full-bleed Halftone WebGL Shader View (Zero Chrome, Pure Canvas, No Typography)
+  if (currentView === 'halftone') {
+    return <HalftoneShader onBack={() => handleNavigate('home')} />;
+  }
 
   // If user is logged out and tries to access private workspace, redirect to public login
   if (!isAuthenticated && !isPublicPage) {
@@ -215,11 +222,6 @@ const AppContent: React.FC = () => {
         <Footer setCurrentView={handleNavigate} />
       </div>
     );
-  }
-
-  // Full-bleed Halftone WebGL Shader View (Zero Chrome, Pure Canvas)
-  if (currentView === 'halftone') {
-    return <HalftoneShader onBack={() => handleNavigate('home')} />;
   }
 
   return (
