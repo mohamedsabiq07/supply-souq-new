@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { AppDataProvider } from './context/AppDataContext';
 import { MarketTicker } from './components/ui/MarketTicker';
@@ -225,7 +226,7 @@ const AppContent: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-[#cf2e46] selection:text-white">
+    <div className="min-h-screen flex flex-col bg-[#f4f4f6] dark:bg-slate-950 text-slate-900 dark:text-slate-100 selection:bg-[#cf2e46] selection:text-white transition-colors duration-200">
       {/* Ghost Impersonation Mode Banner */}
       {isImpersonating && impersonatedUser && (
         <div className="bg-amber-500 text-slate-950 px-4 py-2 flex flex-wrap items-center justify-between text-xs sticky top-0 z-[100] shadow-md border-b border-amber-600">
@@ -402,10 +403,12 @@ const AppContent: React.FC = () => {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <AppDataProvider>
-        <AppContent />
-      </AppDataProvider>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <AppDataProvider>
+          <AppContent />
+        </AppDataProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }

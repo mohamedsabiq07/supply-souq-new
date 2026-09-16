@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 import { useAppData } from '../../context/AppDataContext';
 import { StatCounter } from '../../components/ui/StatCounter';
 import { QuickBundle } from '../../types';
@@ -44,6 +45,7 @@ interface HomePageProps {
 
 export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
   const { isAuthenticated } = useAuth();
+  const { isDark } = useTheme();
   const { categories, companies, rfqs } = useAppData();
 
   // State for FAQ accordion
@@ -104,27 +106,27 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
   ];
 
   return (
-    <div className="bg-[#f4f4f6] text-slate-900 selection:bg-[#cf2e46] selection:text-white overflow-x-clip font-sans">
+    <div className="bg-[#f4f4f6] dark:bg-slate-950 text-slate-900 dark:text-slate-100 selection:bg-[#cf2e46] selection:text-white overflow-x-clip font-sans transition-colors duration-200">
       
       {/* 1. HERO SECTION - ARCHITECTURAL STUDIO GRAY & NEIDEN GRID */}
-      <section className="relative pt-16 sm:pt-24 pb-20 sm:pb-32 overflow-hidden border-b border-slate-200/90 bg-[#f4f4f6]">
+      <section className="relative pt-16 sm:pt-24 pb-20 sm:pb-32 overflow-hidden border-b border-slate-200/90 dark:border-slate-800/80 bg-[#f4f4f6] dark:bg-slate-950">
         {/* Architectural Column Guide Lines (Neiden style) */}
         <div className="absolute inset-0 pointer-events-none max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between z-0">
-          <div className="w-px h-full bg-slate-300/40" />
-          <div className="w-px h-full bg-slate-300/30 hidden md:block" />
-          <div className="w-px h-full bg-slate-300/30 hidden lg:block" />
-          <div className="w-px h-full bg-slate-300/40" />
+          <div className="w-px h-full bg-slate-300/40 dark:bg-slate-800/60" />
+          <div className="w-px h-full bg-slate-300/30 dark:bg-slate-800/40 hidden md:block" />
+          <div className="w-px h-full bg-slate-300/30 dark:bg-slate-800/40 hidden lg:block" />
+          <div className="w-px h-full bg-slate-300/40 dark:bg-slate-800/60" />
         </div>
 
         {/* Subtle Architectural Grid with graceful radial mask */}
-        <div className="absolute inset-0 architectural-grid opacity-70 [mask-image:radial-gradient(ellipse_70%_70%_at_50%_20%,black_30%,transparent_90%)] pointer-events-none z-0" />
+        <div className="absolute inset-0 architectural-grid opacity-70 dark:opacity-30 [mask-image:radial-gradient(ellipse_70%_70%_at_50%_20%,black_30%,transparent_90%)] pointer-events-none z-0" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-4xl mx-auto text-center space-y-6">
             
 
             {/* Main Headline */}
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-950 leading-[1.1] cursor-default select-none">
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-950 dark:text-white leading-[1.1] cursor-default select-none">
               <VariableFontCursorProximity
                 className="inline-block"
                 fromFontVariationSettings="'wght' 700, 'slnt' 0"
@@ -135,7 +137,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                 UAE Procurement,
               </VariableFontCursorProximity>
               <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-rose-700 to-[#cf2e46]">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-rose-700 to-[#cf2e46] dark:from-white dark:via-rose-400 dark:to-[#cf2e46]">
                 Simplified.
               </span>
             </h1>
@@ -143,7 +145,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             {/* Subheadline */}
             <VariableFontCursorProximity
               as="p"
-              className="text-sm sm:text-base md:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed font-normal cursor-default"
+              className="text-sm sm:text-base md:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed font-normal cursor-default"
               fromFontVariationSettings="'wght' 400, 'slnt' 0"
               toFontVariationSettings="'wght' 700, 'slnt' -6"
               radius={150}
@@ -154,10 +156,17 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
 
             {/* Dual CTAs */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-              <MetalFx preset="chromatic" strength={0.85} theme="light" borderRadius={9999}>
+              <MetalFx
+                preset="chromatic"
+                strength={0.85}
+                theme={isDark ? 'dark' : 'light'}
+                borderRadius={9999}
+                style={{ background: '#cf2e46' }}
+                className="rounded-full shadow-lg shadow-[#cf2e46]/25 hover:shadow-[#cf2e46]/40 hover:scale-105 transition-all duration-300 cursor-pointer"
+              >
                 <button
                   onClick={() => handleStartBuyer()}
-                  className="w-full sm:w-auto px-8 py-4 rounded-full text-sm font-black bg-[#cf2e46] text-white hover:bg-[#b91c33] transition-all duration-300 shadow-md hover:scale-105 flex items-center justify-center gap-2 group cursor-pointer"
+                  className="w-full sm:w-auto px-8 py-4 rounded-full text-sm font-black text-white flex items-center justify-center gap-2 group cursor-pointer border-none bg-transparent"
                 >
                   <Zap className="w-4 h-4 fill-white" />
                   <span>Post Live RFQ (100% Free)</span>
@@ -165,10 +174,17 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                 </button>
               </MetalFx>
 
-              <MetalFx preset="silver" strength={0.65} theme="light" borderRadius={9999}>
+              <MetalFx
+                preset="silver"
+                strength={0.65}
+                theme={isDark ? 'dark' : 'light'}
+                borderRadius={9999}
+                style={{ background: isDark ? '#1e293b' : '#ffffff' }}
+                className="rounded-full shadow-xs hover:shadow-md transition-all duration-300 cursor-pointer border border-slate-300 dark:border-slate-700"
+              >
                 <button
                   onClick={() => setCurrentView('invoice-audit')}
-                  className="w-full sm:w-auto px-8 py-4 rounded-full text-sm font-bold bg-white hover:bg-slate-50 text-slate-900 border border-slate-300 shadow-xs transition-all duration-300 hover:border-slate-400 flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full sm:w-auto px-8 py-4 rounded-full text-sm font-bold text-slate-900 dark:text-white flex items-center justify-center gap-2 cursor-pointer border-none bg-transparent"
                 >
                   <Sparkles className="w-4 h-4 text-[#cf2e46]" />
                   <span>Free Cable Cost Audit (Save 15%+)</span>
@@ -179,50 +195,50 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
 
             {/* Live Metrics Grid (Gent 4-Column Stat Cards with crisp definition) */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 pt-8 max-w-4xl mx-auto text-left font-sans">
-              <div className="p-4 rounded-2xl bg-white border border-slate-300/80 shadow-xs hover:border-slate-400 hover:shadow-md transition-all duration-300 group">
+              <div className="p-4 rounded-2xl bg-white dark:bg-slate-900/90 border border-slate-300/80 dark:border-slate-800 shadow-xs hover:border-slate-400 dark:hover:border-slate-700 hover:shadow-md transition-all duration-300 group">
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-[11px] uppercase tracking-wider font-bold text-slate-500 font-mono">Avg Savings</span>
+                  <span className="text-[11px] uppercase tracking-wider font-bold text-slate-500 dark:text-slate-400 font-mono">Avg Savings</span>
                   <span className="w-2 h-2 rounded-full bg-[#cf2e46] group-hover:animate-ping" />
                 </div>
                 <div className="text-2xl sm:text-3xl font-black text-[#cf2e46] tracking-tight flex items-baseline">
                   <StatCounter target={18.4} decimals={1} suffix="%" />
                 </div>
-                <span className="text-[11px] text-slate-500 block mt-1">vs standard offline quotes</span>
+                <span className="text-[11px] text-slate-500 dark:text-slate-400 block mt-1">vs standard offline quotes</span>
               </div>
 
-              <div className="p-4 rounded-2xl bg-white border border-slate-300/80 shadow-xs hover:border-slate-400 hover:shadow-md transition-all duration-300 group">
+              <div className="p-4 rounded-2xl bg-white dark:bg-slate-900/90 border border-slate-300/80 dark:border-slate-800 shadow-xs hover:border-slate-400 dark:hover:border-slate-700 hover:shadow-md transition-all duration-300 group">
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-[11px] uppercase tracking-wider font-bold text-slate-500 font-mono">Response SLA</span>
+                  <span className="text-[11px] uppercase tracking-wider font-bold text-slate-500 dark:text-slate-400 font-mono">Response SLA</span>
                   <span className="w-2 h-2 rounded-full bg-[#cf2e46] group-hover:animate-ping" />
                 </div>
-                <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight flex items-baseline gap-1 whitespace-nowrap">
+                <div className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight flex items-baseline gap-1 whitespace-nowrap">
                   <StatCounter target={24} />
-                  <span className="text-sm font-bold text-slate-600">Hours</span>
+                  <span className="text-sm font-bold text-slate-600 dark:text-slate-400">Hours</span>
                 </div>
-                <span className="text-[11px] text-slate-500 block mt-1">Guaranteed turnaround</span>
+                <span className="text-[11px] text-slate-500 dark:text-slate-400 block mt-1">Guaranteed turnaround</span>
               </div>
 
-              <div className="p-4 rounded-2xl bg-white border border-slate-300/80 shadow-xs hover:border-slate-400 hover:shadow-md transition-all duration-300 group">
+              <div className="p-4 rounded-2xl bg-white dark:bg-slate-900/90 border border-slate-300/80 dark:border-slate-800 shadow-xs hover:border-slate-400 dark:hover:border-slate-700 hover:shadow-md transition-all duration-300 group">
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-[11px] uppercase tracking-wider font-bold text-slate-500 font-mono">Fastest Bids Cap</span>
+                  <span className="text-[11px] uppercase tracking-wider font-bold text-slate-500 dark:text-slate-400 font-mono">Fastest Bids Cap</span>
                   <span className="w-2 h-2 rounded-full bg-[#cf2e46] group-hover:animate-ping" />
                 </div>
-                <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight flex items-baseline gap-1 whitespace-nowrap">
+                <div className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight flex items-baseline gap-1 whitespace-nowrap">
                   <StatCounter target={5} />
-                  <span className="text-sm font-bold text-slate-600">Stockists</span>
+                  <span className="text-sm font-bold text-slate-600 dark:text-slate-400">Stockists</span>
                 </div>
-                <span className="text-[11px] text-slate-500 block mt-1">First-to-quote priority</span>
+                <span className="text-[11px] text-slate-500 dark:text-slate-400 block mt-1">First-to-quote priority</span>
               </div>
 
-              <div className="p-4 rounded-2xl bg-white border border-slate-300/80 shadow-xs hover:border-slate-400 hover:shadow-md transition-all duration-300 group">
+              <div className="p-4 rounded-2xl bg-white dark:bg-slate-900/90 border border-slate-300/80 dark:border-slate-800 shadow-xs hover:border-slate-400 dark:hover:border-slate-700 hover:shadow-md transition-all duration-300 group">
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-[11px] uppercase tracking-wider font-bold text-slate-500 font-mono">Trade License</span>
+                  <span className="text-[11px] uppercase tracking-wider font-bold text-slate-500 dark:text-slate-400 font-mono">Trade License</span>
                   <span className="w-2 h-2 rounded-full bg-[#cf2e46] group-hover:animate-ping" />
                 </div>
                 <div className="text-2xl sm:text-3xl font-black text-[#cf2e46] tracking-tight flex items-baseline">
                   <StatCounter target={100} suffix="%" />
                 </div>
-                <span className="text-[11px] text-slate-500 block mt-1">UAE DET / DED verified</span>
+                <span className="text-[11px] text-slate-500 dark:text-slate-400 block mt-1">UAE DET / DED verified</span>
               </div>
             </div>
 
@@ -234,9 +250,9 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
       <CinematicScrollSection setCurrentView={setCurrentView} />
 
       {/* 2. PARTNER / STOCKIST BRAND MARQUEE - RICH CONCRETE GRAY BAND */}
-      <section className="py-12 border-b border-slate-300/80 bg-[#eceef1] relative overflow-hidden">
+      <section className="py-12 border-b border-slate-300/80 dark:border-slate-800/80 bg-[#eceef1] dark:bg-slate-900/60 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-6">
-          <p className="text-xs uppercase tracking-widest text-slate-600 font-bold font-mono">
+          <p className="text-xs uppercase tracking-widest text-slate-600 dark:text-slate-400 font-bold font-mono">
             Trusted by 250+ UAE Contractors &amp; Certified Stockists across Dubai, Sharjah &amp; Abu Dhabi
           </p>
         </div>
@@ -246,10 +262,10 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             {[...brands, ...brands].map((brand, idx) => (
               <div
                 key={idx}
-                className="inline-flex items-center gap-3 px-5 py-2.5 rounded-2xl bg-white border border-slate-300/80 text-slate-800 hover:border-slate-400 shadow-2xs transition-colors"
+                className="inline-flex items-center gap-3 px-5 py-2.5 rounded-2xl bg-white dark:bg-slate-800/90 border border-slate-300/80 dark:border-slate-700/80 text-slate-800 dark:text-slate-200 hover:border-slate-400 dark:hover:border-slate-600 shadow-2xs transition-colors"
               >
                 <div className="w-2 h-2 rounded-full bg-[#cf2e46]" />
-                <span className="font-extrabold text-sm tracking-wider text-slate-900">{brand.name}</span>
+                <span className="font-extrabold text-sm tracking-wider text-slate-900 dark:text-white">{brand.name}</span>
                 <span className="text-[11px] text-[#cf2e46] font-mono">• {brand.tag}</span>
               </div>
             ))}
@@ -263,26 +279,26 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
 
 
       {/* 4. THE SOLUTION BENTO GRID - RICH CONCRETE GRAY BAND */}
-      <section className="py-20 sm:py-28 border-b border-slate-300/80 bg-[#eceef1] relative overflow-hidden">
+      <section className="py-20 sm:py-28 border-b border-slate-300/80 dark:border-slate-800/80 bg-[#eceef1] dark:bg-slate-900/60 relative overflow-hidden">
         {/* Subtle Architectural grid texture */}
-        <div className="absolute inset-0 architectural-grid-subtle opacity-40 pointer-events-none" />
+        <div className="absolute inset-0 architectural-grid-subtle opacity-40 dark:opacity-20 pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center space-y-3 mb-16 max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white text-[#cf2e46] border border-slate-300 shadow-2xs">
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white dark:bg-slate-800 text-[#cf2e46] border border-slate-300 dark:border-slate-700 shadow-2xs">
               <ShieldCheck className="w-3.5 h-3.5" />
               <span>[SS®—ARCHITECTURE] The Next-Gen B2B Solution</span>
             </div>
             <div className="flex justify-center">
               <AnimatedH3
                 text="Every feature shows its work."
-                className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight text-center"
+                className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight text-center"
                 blurAmount={12}
                 slideDistance={20}
                 staggerDelay={0.025}
               />
             </div>
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
+            <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed font-normal">
               Not just claims — purpose-built procurement technology engineered to guarantee quotes in 24 hours with complete price transparency.
             </p>
           </div>
@@ -291,33 +307,33 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
             {/* Bento Card 1: Multi-Vendor Bidding & 24H SLA */}
-            <div className="p-7 sm:p-9 rounded-3xl bg-white border border-slate-300/80 hover:border-slate-400 shadow-sm hover:shadow-md transition-all duration-300 space-y-6 flex flex-col justify-between group">
+            <div className="p-7 sm:p-9 rounded-3xl bg-white dark:bg-slate-900 border border-slate-300/80 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-700 shadow-sm hover:shadow-md transition-all duration-300 space-y-6 flex flex-col justify-between group">
               <div className="space-y-3">
-                <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 rounded-2xl bg-rose-50 dark:bg-rose-950/40 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
                   <Zap className="w-6 h-6" />
                 </div>
                 <AnimatedH3
                   text="Multi-Vendor Bidding with Guaranteed 24H SLA"
-                  className="text-xl sm:text-2xl font-black text-slate-900"
+                  className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white"
                   blurAmount={10}
                   slideDistance={16}
                   staggerDelay={0.02}
                 />
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                   Post your material requirement once. Verified UAE stockists receive immediate WhatsApp &amp; dashboard alerts to submit wholesale pricing before the 24-hour countdown expires.
                 </p>
               </div>
 
               {/* Interactive Visual Element */}
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-850/80 border border-slate-200 dark:border-slate-800 space-y-3">
                 <div className="flex items-center justify-between text-xs font-mono">
-                  <span className="text-slate-500 uppercase">SLA Clock: RFQ #SS-2026-089</span>
+                  <span className="text-slate-500 dark:text-slate-400 uppercase">SLA Clock: RFQ #SS-2026-089</span>
                   <span className="text-[#cf2e46] font-bold">14h 22m Remaining</span>
                 </div>
-                <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+                <div className="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
                   <div className="bg-[#cf2e46] h-full rounded-full w-[65%]" />
                 </div>
-                <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1 font-mono">
+                <div className="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 pt-1 font-mono">
                   <span>Posted: 09:30 AM (Sharjah)</span>
                   <span className="text-[#cf2e46] font-bold">3 Quotes Submitted</span>
                 </div>
@@ -325,19 +341,19 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             </div>
 
             {/* Bento Card 2: Fastest 5 Bids Rule */}
-            <div className="p-7 sm:p-9 rounded-3xl bg-white border border-slate-300/80 hover:border-slate-400 shadow-sm hover:shadow-md transition-all duration-300 space-y-6 flex flex-col justify-between group">
+            <div className="p-7 sm:p-9 rounded-3xl bg-white dark:bg-slate-900 border border-slate-300/80 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-700 shadow-sm hover:shadow-md transition-all duration-300 space-y-6 flex flex-col justify-between group">
               <div className="space-y-3">
-                <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 rounded-2xl bg-rose-50 dark:bg-rose-950/40 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
                   <Activity className="w-6 h-6" />
                 </div>
                 <AnimatedH3
                   text="Guaranteed Fastest 5 Bids Rule"
-                  className="text-xl sm:text-2xl font-black text-slate-900"
+                  className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white"
                   blurAmount={10}
                   slideDistance={16}
                   staggerDelay={0.02}
                 />
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                   Only the first 5 verified stockists can submit quotes. This motivates suppliers to bid their lowest price immediately, while saving contractors from drowning in 50 spam emails.
                 </p>
               </div>
@@ -355,12 +371,12 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                     key={idx}
                     className={`p-2.5 rounded-xl border ${
                       s.status === 'Open'
-                        ? 'bg-rose-50 border-rose-300 text-[#cf2e46] animate-pulse'
-                        : 'bg-slate-50 border-slate-200 text-slate-800'
+                        ? 'bg-rose-50 dark:bg-rose-950/30 border-rose-300 dark:border-rose-900/60 text-[#cf2e46] animate-pulse'
+                        : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200'
                     }`}
                   >
-                    <div className="text-[10px] font-mono uppercase text-slate-500">Slot {s.slot}</div>
-                    <div className="text-xs font-black mt-0.5 truncate">{s.name}</div>
+                    <div className="text-[10px] font-mono uppercase text-slate-500 dark:text-slate-400">Slot {s.slot}</div>
+                    <div className="text-xs font-black mt-0.5 truncate text-slate-900 dark:text-white">{s.name}</div>
                     <div className="text-[10px] font-mono mt-1 text-[#cf2e46] font-bold">{s.price}</div>
                   </div>
                 ))}
@@ -368,32 +384,32 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             </div>
 
             {/* Bento Card 3: Automated BOQ & Schedule Standardizer */}
-            <div className="p-7 sm:p-9 rounded-3xl bg-white border border-slate-300/80 hover:border-slate-400 shadow-sm hover:shadow-md transition-all duration-300 space-y-6 flex flex-col justify-between group">
+            <div className="p-7 sm:p-9 rounded-3xl bg-white dark:bg-slate-900 border border-slate-300/80 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-700 shadow-sm hover:shadow-md transition-all duration-300 space-y-6 flex flex-col justify-between group">
               <div className="space-y-3">
-                <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 rounded-2xl bg-rose-50 dark:bg-rose-950/40 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
                   <FileSpreadsheet className="w-6 h-6" />
                 </div>
                 <AnimatedH3
                   text="Automated BOQ & Cable Schedule Cleansing"
-                  className="text-xl sm:text-2xl font-black text-slate-900"
+                  className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white"
                   blurAmount={10}
                   slideDistance={16}
                   staggerDelay={0.02}
                 />
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                   Upload any format — Excel schedules, PDF requisition sheets, or smartphone photos of site notes. Our engine parses specs, standardizes cable codes, and matches stockists instantly.
                 </p>
               </div>
 
               {/* Visual Element */}
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
+              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-850/80 border border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-rose-100 text-[#cf2e46] flex items-center justify-center font-bold">
+                  <div className="w-9 h-9 rounded-xl bg-rose-100 dark:bg-rose-950/50 text-[#cf2e46] flex items-center justify-center font-bold">
                     XLS
                   </div>
                   <div>
-                    <div className="font-bold text-slate-900">Cable_Schedule_Tower_B.xlsx</div>
-                    <div className="text-[11px] text-slate-500 font-mono">18 Line Items • Standardized to BS 5467</div>
+                    <div className="font-bold text-slate-900 dark:text-white">Cable_Schedule_Tower_B.xlsx</div>
+                    <div className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">18 Line Items • Standardized to BS 5467</div>
                   </div>
                 </div>
                 <span className="text-[#cf2e46] font-bold text-xs font-mono">✓ Ready to Quote</span>
@@ -401,30 +417,30 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             </div>
 
             {/* Bento Card 4: UAE DET KYB & FTA VAT Compliance */}
-            <div className="p-7 sm:p-9 rounded-3xl bg-white border border-slate-300/80 hover:border-slate-400 shadow-sm hover:shadow-md transition-all duration-300 space-y-6 flex flex-col justify-between group">
+            <div className="p-7 sm:p-9 rounded-3xl bg-white dark:bg-slate-900 border border-slate-300/80 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-700 shadow-sm hover:shadow-md transition-all duration-300 space-y-6 flex flex-col justify-between group">
               <div className="space-y-3">
-                <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 rounded-2xl bg-rose-50 dark:bg-rose-950/40 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
                   <BadgeCheck className="w-6 h-6" />
                 </div>
                 <AnimatedH3
                   text="100% UAE DET KYB & FTA Tax Compliance"
-                  className="text-xl sm:text-2xl font-black text-slate-900"
+                  className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white"
                   blurAmount={10}
                   slideDistance={16}
                   staggerDelay={0.02}
                 />
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                   Every supplier is verified with genuine UAE Commercial Registration, 15-digit TRN, and physical stock in Dubai or Sharjah. Complete with 5% UAE VAT invoices and digital POs.
                 </p>
               </div>
 
               {/* Visual Element */}
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs font-mono">
-                <div className="flex items-center gap-2 text-slate-800">
+              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-850/80 border border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs font-mono">
+                <div className="flex items-center gap-2 text-slate-800 dark:text-slate-200">
                   <ShieldCheck className="w-5 h-5 text-[#cf2e46]" />
                   <span>TRN: 100482938400003</span>
                 </div>
-                <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase bg-white text-[#cf2e46] border border-rose-200 shadow-2xs">
+                <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase bg-white dark:bg-slate-800 text-[#cf2e46] border border-rose-200 dark:border-rose-900/60 shadow-2xs">
                   FTA Verified
                 </span>
               </div>
@@ -435,30 +451,30 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
       </section>
 
       {/* 5. HOW IT WORKS 3-STEP MODERN WORKFLOW */}
-      <section className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative bg-[#f4f4f6]">
+      <section className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative bg-[#f4f4f6] dark:bg-slate-950">
         {/* Subtle column guide lines */}
         <div className="absolute inset-0 pointer-events-none max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between z-0">
-          <div className="w-px h-full bg-slate-300/30" />
-          <div className="w-px h-full bg-slate-300/20 hidden md:block" />
-          <div className="w-px h-full bg-slate-300/20 hidden lg:block" />
-          <div className="w-px h-full bg-slate-300/30" />
+          <div className="w-px h-full bg-slate-300/30 dark:bg-slate-800/40" />
+          <div className="w-px h-full bg-slate-300/20 dark:bg-slate-800/30 hidden md:block" />
+          <div className="w-px h-full bg-slate-300/20 dark:bg-slate-800/30 hidden lg:block" />
+          <div className="w-px h-full bg-slate-300/30 dark:bg-slate-800/40" />
         </div>
 
         <div className="text-center space-y-3 mb-16 max-w-3xl mx-auto relative z-10">
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white text-[#cf2e46] border border-slate-300 shadow-2xs">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white dark:bg-slate-800 text-[#cf2e46] border border-slate-300 dark:border-slate-700 shadow-2xs">
             <Sparkles className="w-3.5 h-3.5" />
             <span>[SS®—WORKFLOW] Fast &amp; Transparent Execution</span>
           </div>
           <div className="flex justify-center">
             <AnimatedH3
               text="How SupplySouq Works in 3 Steps"
-              className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight text-center"
+              className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight text-center"
               blurAmount={12}
               slideDistance={20}
               staggerDelay={0.025}
             />
           </div>
-          <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
+          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed font-normal">
             No endless sales calls. No manual spreadsheets. From BOQ to job site delivery in 24 hours.
           </p>
         </div>
@@ -488,24 +504,24 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             return (
               <div
                 key={idx}
-                className="p-8 rounded-3xl bg-white border border-slate-300/80 hover:border-slate-400 shadow-xs hover:shadow-md transition-all duration-300 space-y-5 group"
+                className="p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-300/80 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-700 shadow-xs hover:shadow-md transition-all duration-300 space-y-5 group"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-3xl font-black font-mono text-[#cf2e46] opacity-90 group-hover:opacity-100 transition-opacity">
                     {item.step}
                   </span>
-                  <div className="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-200 text-[#cf2e46] flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <div className="w-12 h-12 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/40 text-[#cf2e46] flex items-center justify-center group-hover:scale-110 transition-transform">
                     <Icon className="w-6 h-6" />
                   </div>
                 </div>
                 <AnimatedH3
                   text={item.title}
-                  className="text-xl font-bold text-slate-900"
+                  className="text-xl font-bold text-slate-900 dark:text-white"
                   blurAmount={8}
                   slideDistance={14}
                   staggerDelay={0.02}
                 />
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{item.desc}</p>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">{item.desc}</p>
               </div>
             );
           })}
@@ -563,36 +579,36 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
       </section>
 
       {/* 7. CONTRACTOR & STOCKIST REVIEWS */}
-      <section className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative bg-[#f4f4f6]">
+      <section className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative bg-[#f4f4f6] dark:bg-slate-950">
         {/* Subtle column guide lines */}
         <div className="absolute inset-0 pointer-events-none max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between z-0">
-          <div className="w-px h-full bg-slate-300/30" />
-          <div className="w-px h-full bg-slate-300/20 hidden md:block" />
-          <div className="w-px h-full bg-slate-300/20 hidden lg:block" />
-          <div className="w-px h-full bg-slate-300/30" />
+          <div className="w-px h-full bg-slate-300/30 dark:bg-slate-800/40" />
+          <div className="w-px h-full bg-slate-300/20 dark:bg-slate-800/30 hidden md:block" />
+          <div className="w-px h-full bg-slate-300/20 dark:bg-slate-800/30 hidden lg:block" />
+          <div className="w-px h-full bg-slate-300/30 dark:bg-slate-800/40" />
         </div>
 
         <div className="text-center space-y-3 mb-16 max-w-3xl mx-auto relative z-10">
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white text-[#cf2e46] border border-slate-300 shadow-2xs">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white dark:bg-slate-800 text-[#cf2e46] border border-slate-300 dark:border-slate-700 shadow-2xs">
             <Star className="w-3.5 h-3.5 fill-[#cf2e46]" />
             <span>[SS®—REVIEWS] Verified UAE Industry Feedback</span>
           </div>
           <div className="flex justify-center">
             <AnimatedH3
               text="Procurement teams love SupplySouq."
-              className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight text-center"
+              className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight text-center"
               blurAmount={12}
               slideDistance={20}
               staggerDelay={0.025}
             />
           </div>
-          <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
+          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed font-normal">
             Hear from commercial managers, MEP project directors, and authorized distributors across the Emirates.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
-          <div className="p-8 rounded-3xl bg-white border border-slate-300/80 hover:border-slate-400 shadow-xs hover:shadow-md transition-all space-y-5 flex flex-col justify-between">
+          <div className="p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-300/80 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-700 shadow-xs hover:shadow-md transition-all space-y-5 flex flex-col justify-between">
             <div className="space-y-3">
               <div className="flex items-center gap-1 text-[#cf2e46]">
                 {[...Array(5)].map((_, i) => (
@@ -601,26 +617,26 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
               </div>
               <AnimatedH3
                 text='"Cut cable sourcing from 4 days to 4 hours."'
-                className="text-lg font-bold text-slate-900"
+                className="text-lg font-bold text-slate-900 dark:text-white"
                 blurAmount={8}
                 slideDistance={12}
               />
-              <p className="text-xs text-slate-600 leading-relaxed">
+              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                 "We replaced endless supplier phone calls with SupplySouq. Posting an RFQ takes minutes, and receiving itemized bids directly from verified stockists saved us AED 34,000 on our substation order alone."
               </p>
             </div>
-            <div className="pt-4 border-t border-slate-200 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-rose-100 text-[#cf2e46] font-bold flex items-center justify-center text-xs">
+            <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-rose-100 dark:bg-rose-950/50 text-[#cf2e46] font-bold flex items-center justify-center text-xs">
                 MK
               </div>
               <div>
-                <div className="text-xs font-bold text-slate-900">Maya K.</div>
-                <div className="text-[11px] text-slate-500">Head of Procurement, Apex MEP Contracting</div>
+                <div className="text-xs font-bold text-slate-900 dark:text-white">Maya K.</div>
+                <div className="text-[11px] text-slate-500 dark:text-slate-400">Head of Procurement, Apex MEP Contracting</div>
               </div>
             </div>
           </div>
 
-          <div className="p-8 rounded-3xl bg-white border-2 border-[#cf2e46] shadow-xl transition-all space-y-5 flex flex-col justify-between">
+          <div className="p-8 rounded-3xl bg-white dark:bg-slate-900 border-2 border-[#cf2e46] shadow-xl transition-all space-y-5 flex flex-col justify-between">
             <div className="space-y-3">
               <div className="flex items-center gap-1 text-[#cf2e46]">
                 {[...Array(5)].map((_, i) => (
@@ -629,26 +645,26 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
               </div>
               <AnimatedH3
                 text='"Setup took 5 minutes. 5 bids in 3 hours."'
-                className="text-lg font-bold text-slate-900"
+                className="text-lg font-bold text-slate-900 dark:text-white"
                 blurAmount={8}
                 slideDistance={12}
               />
-              <p className="text-xs text-slate-700 leading-relaxed">
+              <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
                 "I uploaded a photo of my site foreman's handwritten requisition sheet. Within 3 hours I had 5 itemized quotes with mill test certificates ready to download. Genuinely revolutionary for UAE construction."
               </p>
             </div>
-            <div className="pt-4 border-t border-slate-200 flex items-center gap-3">
+            <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-[#cf2e46] text-white font-bold flex items-center justify-center text-xs">
                 AR
               </div>
               <div>
-                <div className="text-xs font-bold text-slate-900">Alex Rivera</div>
-                <div className="text-[11px] text-slate-500">Project Director, Gulf Infrastructure LLC</div>
+                <div className="text-xs font-bold text-slate-900 dark:text-white">Alex Rivera</div>
+                <div className="text-[11px] text-slate-500 dark:text-slate-400">Project Director, Gulf Infrastructure LLC</div>
               </div>
             </div>
           </div>
 
-          <div className="p-8 rounded-3xl bg-white border border-slate-300/80 hover:border-slate-400 shadow-xs hover:shadow-md transition-all space-y-5 flex flex-col justify-between">
+          <div className="p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-300/80 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-700 shadow-xs hover:shadow-md transition-all space-y-5 flex flex-col justify-between">
             <div className="space-y-3">
               <div className="flex items-center gap-1 text-[#cf2e46]">
                 {[...Array(5)].map((_, i) => (
@@ -657,21 +673,21 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
               </div>
               <AnimatedH3
                 text='"Sharjah warehouse stock moves 3x faster."'
-                className="text-lg font-bold text-slate-900"
+                className="text-lg font-bold text-slate-900 dark:text-white"
                 blurAmount={8}
                 slideDistance={12}
               />
-              <p className="text-xs text-slate-600 leading-relaxed">
+              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                 "As an authorized cable stockist in Sharjah Industrial Area 13, SupplySouq sends pre-qualified RFQs straight to our sales desk. We quote directly to contractors with guaranteed 24h turnaround."
               </p>
             </div>
-            <div className="pt-4 border-t border-slate-200 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-rose-100 text-[#cf2e46] font-bold flex items-center justify-center text-xs">
+            <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-rose-100 dark:bg-rose-950/50 text-[#cf2e46] font-bold flex items-center justify-center text-xs">
                 TW
               </div>
               <div>
-                <div className="text-xs font-bold text-slate-900">Tom Wilson</div>
-                <div className="text-[11px] text-slate-500">Managing Director, Emirates Cable Supplies</div>
+                <div className="text-xs font-bold text-slate-900 dark:text-white">Tom Wilson</div>
+                <div className="text-[11px] text-slate-500 dark:text-slate-400">Managing Director, Emirates Cable Supplies</div>
               </div>
             </div>
           </div>
@@ -679,23 +695,23 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
       </section>
 
       {/* 8. TRANSPARENT LAUNCH PRICING SECTION - RICH CONCRETE GRAY BAND */}
-      <section id="pricing-section" className="py-20 sm:py-28 border-t border-b border-slate-300/80 bg-[#eceef1] relative">
+      <section id="pricing-section" className="py-20 sm:py-28 border-t border-b border-slate-300/80 dark:border-slate-800/80 bg-[#eceef1] dark:bg-slate-900/60 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-3 mb-16 max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white text-[#cf2e46] border border-slate-300 shadow-2xs">
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white dark:bg-slate-800 text-[#cf2e46] border border-slate-300 dark:border-slate-700 shadow-2xs">
               <DollarSign className="w-3.5 h-3.5" />
               <span>[SS®—RATES] Transparent Launch Pricing</span>
             </div>
             <div className="flex justify-center">
               <AnimatedH3
                 text="Simple pricing. Zero hidden fees."
-                className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight text-center"
+                className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight text-center"
                 blurAmount={12}
                 slideDistance={20}
                 staggerDelay={0.025}
               />
             </div>
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
+            <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed font-normal">
               100% free forever for contractors. First 3 months free trial for suppliers, then AED 1 per day. 0% platform commission during launch.
             </p>
           </div>
@@ -703,28 +719,28 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
             
             {/* Tier 1: Contractors & Engineers */}
-            <div className="p-8 rounded-3xl bg-white border border-slate-300/80 hover:border-slate-400 shadow-sm transition-all flex flex-col justify-between space-y-8">
+            <div className="p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-300/80 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-700 shadow-sm transition-all flex flex-col justify-between space-y-8">
               <div className="space-y-4">
                 <div>
-                  <span className="text-xs font-mono uppercase tracking-wider text-slate-500 font-bold">For Buyers</span>
+                  <span className="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold">For Buyers</span>
                   <AnimatedH3
                     text="Contractor Free"
-                    className="text-2xl font-black text-slate-900 mt-1"
+                    className="text-2xl font-black text-slate-900 dark:text-white mt-1"
                     blurAmount={8}
                     slideDistance={14}
                     staggerDelay={0.02}
                   />
-                  <p className="text-xs text-slate-600 mt-2 leading-relaxed">
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
                     For UAE electrical contractors, engineers, estimators, and facility managers.
                   </p>
                 </div>
 
                 <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-black text-slate-900">AED 0</span>
-                  <span className="text-xs text-slate-500 font-semibold">/ Free Forever</span>
+                  <span className="text-4xl font-black text-slate-900 dark:text-white">AED 0</span>
+                  <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold">/ Free Forever</span>
                 </div>
 
-                <ul className="space-y-3 text-xs text-slate-700 pt-4 border-t border-slate-200">
+                <ul className="space-y-3 text-xs text-slate-700 dark:text-slate-300 pt-4 border-t border-slate-200 dark:border-slate-800">
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 text-[#cf2e46] shrink-0" />
                     <span>Unlimited RFQ &amp; BOQ Postings</span>
@@ -754,14 +770,14 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
 
               <button
                 onClick={() => handleStartBuyer()}
-                className="w-full py-3.5 rounded-full text-xs font-bold text-slate-900 bg-slate-50 hover:bg-slate-100 border border-slate-300 hover:border-slate-400 transition-all cursor-pointer"
+                className="w-full py-3.5 rounded-full text-xs font-bold text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-750 border border-slate-300 dark:border-slate-700 transition-all cursor-pointer"
               >
                 Post Live RFQ (Free)
               </button>
             </div>
 
             {/* Tier 2: Verified Stockists */}
-            <div className="p-8 rounded-3xl bg-white border-2 border-[#cf2e46] shadow-xl flex flex-col justify-between space-y-8 relative group">
+            <div className="p-8 rounded-3xl bg-white dark:bg-slate-900 border-2 border-[#cf2e46] shadow-xl flex flex-col justify-between space-y-8 relative group">
               <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#cf2e46] text-white text-[10px] font-black uppercase tracking-wider py-1 px-4 rounded-full shadow-md font-mono">
                 Launch Phase • 3 Months Free Trial
               </div>
@@ -771,13 +787,13 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                   <span className="text-xs font-mono uppercase tracking-wider text-[#cf2e46] font-bold">For Stockists &amp; Traders</span>
                   <AnimatedH3
                     text="Verified Supplier"
-                    className="text-2xl font-black text-slate-900 mt-1"
+                    className="text-2xl font-black text-slate-900 dark:text-white mt-1"
                     colorVariant="crimson"
                     blurAmount={8}
                     slideDistance={14}
                     staggerDelay={0.02}
                   />
-                  <p className="text-xs text-slate-600 mt-2 leading-relaxed">
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
                     Direct access to live contractor RFQs in Dubai, Sharjah, and Abu Dhabi.
                   </p>
                 </div>
@@ -785,14 +801,14 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                 <div>
                   <div className="flex items-baseline gap-1">
                     <span className="text-4xl font-black text-[#cf2e46]">AED 0</span>
-                    <span className="text-xs text-slate-600 font-semibold">/ First 3 Months</span>
+                    <span className="text-xs text-slate-600 dark:text-slate-400 font-semibold">/ First 3 Months</span>
                   </div>
-                  <div className="text-[11px] text-slate-600 font-mono mt-1">
+                  <div className="text-[11px] text-slate-600 dark:text-slate-400 font-mono mt-1">
                     Then AED 1 / day (AED 30/mo) after trial • 0% Commission
                   </div>
                 </div>
 
-                <ul className="space-y-3 text-xs text-slate-700 pt-4 border-t border-rose-100">
+                <ul className="space-y-3 text-xs text-slate-700 dark:text-slate-300 pt-4 border-t border-rose-100 dark:border-rose-950/50">
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 text-[#cf2e46] shrink-0" />
                     <span>Unlimited Quotation Submissions</span>
@@ -829,28 +845,28 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             </div>
 
             {/* Tier 3: Enterprise Procurement */}
-            <div className="p-8 rounded-3xl bg-white border border-slate-300/80 hover:border-slate-400 shadow-sm transition-all flex flex-col justify-between space-y-8">
+            <div className="p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-300/80 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-700 shadow-sm transition-all flex flex-col justify-between space-y-8">
               <div className="space-y-4">
                 <div>
-                  <span className="text-xs font-mono uppercase tracking-wider text-slate-500 font-bold">For EPCs &amp; Developers</span>
+                  <span className="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold">For EPCs &amp; Developers</span>
                   <AnimatedH3
                     text="Enterprise Desk"
-                    className="text-2xl font-black text-slate-900 mt-1"
+                    className="text-2xl font-black text-slate-900 dark:text-white mt-1"
                     blurAmount={8}
                     slideDistance={14}
                     staggerDelay={0.02}
                   />
-                  <p className="text-xs text-slate-600 mt-2 leading-relaxed">
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
                     Custom procurement infrastructure for Tier-1 contractors and large project portfolios.
                   </p>
                 </div>
 
                 <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-black text-slate-900">Custom</span>
-                  <span className="text-xs text-slate-500 font-semibold">/ Tailored SLA</span>
+                  <span className="text-4xl font-black text-slate-900 dark:text-white">Custom</span>
+                  <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold">/ Tailored SLA</span>
                 </div>
 
-                <ul className="space-y-3 text-xs text-slate-700 pt-4 border-t border-slate-200">
+                <ul className="space-y-3 text-xs text-slate-700 dark:text-slate-300 pt-4 border-t border-slate-200 dark:border-slate-800">
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 text-[#cf2e46] shrink-0" />
                     <span>Dedicated Procurement Operations Desk</span>
@@ -876,7 +892,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
 
               <button
                 onClick={() => setCurrentView('onboarding-guide')}
-                className="w-full py-3.5 rounded-full text-xs font-bold text-slate-900 bg-slate-50 hover:bg-slate-100 border border-slate-300 hover:border-slate-400 transition-all cursor-pointer"
+                className="w-full py-3.5 rounded-full text-xs font-bold text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-750 border border-slate-300 dark:border-slate-700 transition-all cursor-pointer"
               >
                 Contact Enterprise Desk
               </button>
@@ -887,21 +903,21 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
       </section>
 
       {/* 9. FAQ ACCORDION */}
-      <section className="py-20 sm:py-28 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative bg-[#f4f4f6]">
+      <section className="py-20 sm:py-28 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative bg-[#f4f4f6] dark:bg-slate-950">
         <div className="text-center space-y-3 mb-14">
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white text-[#cf2e46] border border-slate-300 shadow-2xs">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white dark:bg-slate-800 text-[#cf2e46] border border-slate-300 dark:border-slate-700 shadow-2xs">
             <span>[SS®—FAQ] Frequently Asked Questions</span>
           </div>
           <div className="flex justify-center">
             <AnimatedH3
               text="Questions? Answered."
-              className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight text-center"
+              className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight text-center"
               blurAmount={12}
               slideDistance={20}
               staggerDelay={0.025}
             />
           </div>
-          <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
+          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed font-normal">
             Everything you need to know about buying or selling materials on SupplySouq.
           </p>
         </div>
@@ -910,14 +926,14 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
           {faqs.map((faq, idx) => (
             <div
               key={idx}
-              className="rounded-2xl bg-white border border-slate-300/80 overflow-hidden shadow-2xs transition-all duration-200"
+              className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-300/80 dark:border-slate-800 overflow-hidden shadow-2xs transition-all duration-200"
             >
               <button
                 onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 focus:outline-none hover:text-[#cf2e46] transition-colors cursor-pointer"
+                className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 focus:outline-none hover:text-[#cf2e46] dark:hover:text-[#cf2e46] transition-colors cursor-pointer"
               >
-                <span className="font-bold text-sm sm:text-base text-slate-900">{faq.q}</span>
-                <div className="w-8 h-8 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center shrink-0 text-slate-600 shadow-2xs">
+                <span className="font-bold text-sm sm:text-base text-slate-900 dark:text-white">{faq.q}</span>
+                <div className="w-8 h-8 rounded-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shrink-0 text-slate-600 dark:text-slate-300 shadow-2xs">
                   {openFaq === idx ? (
                     <ChevronDown className="w-4 h-4 text-[#cf2e46] rotate-180 transition-transform" />
                   ) : (
@@ -926,7 +942,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                 </div>
               </button>
               {openFaq === idx && (
-                <div className="px-5 sm:px-6 pb-6 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3 bg-slate-50/50">
+                <div className="px-5 sm:px-6 pb-6 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-800 pt-3 bg-slate-50/50 dark:bg-slate-850/50">
                   {faq.a}
                 </div>
               )}
@@ -971,10 +987,17 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-            <MetalFx preset="chromatic" strength={0.9} theme="dark" borderRadius={9999}>
+            <MetalFx
+              preset="chromatic"
+              strength={0.9}
+              theme="dark"
+              borderRadius={9999}
+              style={{ background: '#cf2e46' }}
+              className="rounded-full shadow-lg shadow-[#cf2e46]/30 hover:shadow-[#cf2e46]/50 hover:scale-105 transition-all duration-300 cursor-pointer"
+            >
               <button
                 onClick={() => handleStartBuyer()}
-                className="w-full sm:w-auto px-8 py-4 rounded-full text-sm font-black bg-[#cf2e46] text-white hover:bg-[#b91c33] transition-all shadow-md hover:scale-105 flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full sm:w-auto px-8 py-4 rounded-full text-sm font-black text-white flex items-center justify-center gap-2 cursor-pointer border-none bg-transparent"
               >
                 <Zap className="w-4 h-4 fill-white" />
                 <span>Post Live RFQ (100% Free)</span>

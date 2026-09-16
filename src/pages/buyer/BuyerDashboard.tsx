@@ -21,6 +21,7 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import { MetalFx } from 'metal-fx';
+import { useTheme } from '../../context/ThemeContext';
 
 interface BuyerDashboardProps {
   onNavigate: (view: string, params?: any) => void;
@@ -28,6 +29,7 @@ interface BuyerDashboardProps {
 
 export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) => {
   const { currentCompany } = useAuth();
+  const { isDark } = useTheme();
   const { rfqs, quotations, purchaseOrders, isRFQExtendedUnlocked } = useAppData();
 
   const myRFQs = rfqs
@@ -66,12 +68,19 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
           </p>
         </div>
 
-        <MetalFx preset="chromatic" strength={0.85} theme="light">
+        <MetalFx
+          preset="chromatic"
+          strength={0.85}
+          theme={isDark ? 'dark' : 'light'}
+          borderRadius={8}
+          style={{ background: '#0284c7' }}
+          className="rounded-lg shadow-sm"
+        >
           <Button
             variant="primary"
             onClick={() => onNavigate('create-rfq')}
             leftIcon={<PlusCircle className="w-4 h-4" />}
-            className="shadow-sm font-bold"
+            className="shadow-none border-none bg-transparent font-bold text-white"
           >
             Create New RFQ
           </Button>
@@ -94,13 +103,20 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
               </p>
             </div>
           </div>
-          <MetalFx preset="gold" strength={0.85} theme="dark">
+          <MetalFx
+            preset="gold"
+            strength={0.85}
+            theme={isDark ? 'dark' : 'light'}
+            borderRadius={8}
+            style={{ background: '#d97706' }}
+            className="rounded-lg shadow-sm"
+          >
             <Button
               variant="amber"
               size="sm"
               onClick={() => onNavigate('buyer-compare', { rfqId: evaluatingRFQs[0].id })}
               rightIcon={<ArrowRight className="w-4 h-4" />}
-              className="font-bold"
+              className="font-bold border-none bg-transparent text-white"
             >
               Open Comparison Matrix
             </Button>

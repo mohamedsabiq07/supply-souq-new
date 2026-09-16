@@ -33,11 +33,11 @@ export const AnimatedH3: React.FC<AnimatedH3Props> = ({
   // Pre-configured styling presets featuring responsive sizing, tight letter tracking, and smooth color transitions
   const variantStyles = {
     default:
-      'text-slate-950 hover:text-[#cf2e46] transition-colors duration-300',
+      'text-slate-950 dark:text-white hover:text-[#cf2e46] transition-colors duration-300',
     crimson:
       'text-[#cf2e46] hover:text-rose-700 transition-colors duration-300',
     gradient:
-      'bg-clip-text text-transparent bg-gradient-to-r from-slate-950 via-slate-800 to-[#cf2e46] hover:from-[#cf2e46] hover:to-rose-600 transition-all duration-500',
+      'bg-clip-text text-transparent bg-gradient-to-r from-slate-950 via-slate-800 to-[#cf2e46] dark:from-white dark:via-slate-200 dark:to-[#cf2e46] hover:from-[#cf2e46] hover:to-rose-600 transition-all duration-500',
     dark:
       'text-slate-900 dark:text-white hover:text-[#cf2e46] transition-colors duration-300',
     white:

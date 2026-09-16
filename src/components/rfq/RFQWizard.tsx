@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { BorderBeam } from 'border-beam';
 import { MetalFx } from 'metal-fx';
+import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
 import { useAppData } from '../../context/AppDataContext';
 import { RFQItem, RFQDocument, Emirate, QuickBundle } from '../../types';
@@ -133,6 +134,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
   onCancel 
 }) => {
   const { companies } = useAppData();
+  const { isDark } = useTheme();
   const verifiedSuppliers = companies.filter(c => c.companyType === 'supplier');
 
   const [wizardMode, setWizardMode] = useState<'photo_upload' | 'detailed_boq'>('detailed_boq');
@@ -872,13 +874,20 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
           </CardContent>
           <CardFooter className="justify-between">
             <Button variant="outline" onClick={onCancel}>Cancel</Button>
-            <MetalFx preset="chromatic" strength={0.85} theme="light">
+            <MetalFx
+              preset="chromatic"
+              strength={0.85}
+              theme={isDark ? 'dark' : 'light'}
+              borderRadius={8}
+              style={{ background: '#0284c7' }}
+              className="rounded-lg shadow-sm"
+            >
               <Button 
                 variant="primary" 
                 size="lg" 
                 onClick={() => setStep(2)} 
                 rightIcon={<ArrowRight className="w-4 h-4" />}
-                className="font-bold"
+                className="font-bold border-none bg-transparent text-white"
               >
                 Continue to Supplier Matching
               </Button>
@@ -1016,13 +1025,20 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
             <Button variant="outline" onClick={() => setStep(1)} leftIcon={<ArrowLeft className="w-4 h-4" />}>
               Back to Edit
             </Button>
-            <MetalFx preset="chromatic" strength={0.9} theme="light">
+            <MetalFx
+              preset="chromatic"
+              strength={0.9}
+              theme={isDark ? 'dark' : 'light'}
+              borderRadius={8}
+              style={{ background: '#0284c7' }}
+              className="rounded-lg shadow-md"
+            >
               <Button
                 variant="primary"
                 size="lg"
                 onClick={handleFinalPublish}
                 leftIcon={<Zap className="w-5 h-5 text-amber-300 fill-amber-300" />}
-                className="bg-brand-600 hover:bg-brand-700 shadow-md font-bold px-6"
+                className="font-bold px-6 border-none bg-transparent text-white"
               >
                 Broadcast RFQ to Suppliers
               </Button>

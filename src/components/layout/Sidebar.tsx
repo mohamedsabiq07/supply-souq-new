@@ -73,13 +73,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView })
   }
 
   return (
-    <aside className="w-64 bg-white border-r border-slate-200 shrink-0 hidden md:flex flex-col justify-between p-4 min-h-[calc(100vh-6.5rem)]">
+    <aside className="w-64 bg-white dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 shrink-0 hidden md:flex flex-col justify-between p-4 min-h-[calc(100vh-6.5rem)] transition-colors duration-200">
       <div>
         {/* User Card */}
         <button
           type="button"
           onClick={() => setCurrentView(role === 'buyer' ? 'buyer-profile' : role === 'supplier' ? 'supplier-profile' : 'admin-profile')}
-          className="w-full text-left p-3 bg-slate-50 hover:bg-slate-100/90 rounded-xl border border-slate-200/80 mb-5 transition-all group cursor-pointer shadow-2xs hover:shadow-xs"
+          className="w-full text-left p-3 bg-slate-50 dark:bg-slate-900 hover:bg-slate-100/90 dark:hover:bg-slate-850 rounded-xl border border-slate-200/80 dark:border-slate-800 mb-5 transition-all group cursor-pointer shadow-2xs hover:shadow-xs"
           title="Click to view and edit profile"
         >
           <div className="flex items-center gap-3">
@@ -87,21 +87,21 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView })
               <img
                 src={currentUser.avatarUrl}
                 alt={currentUser.fullName}
-                className="w-10 h-10 rounded-full object-cover border border-slate-200 group-hover:ring-2 group-hover:ring-brand-500/30 transition-all"
+                className="w-10 h-10 rounded-full object-cover border border-slate-200 dark:border-slate-700 group-hover:ring-2 group-hover:ring-brand-500/30 transition-all"
               />
             ) : (
-              <div className="w-10 h-10 rounded-full bg-slate-900 text-white font-bold flex items-center justify-center text-xs border border-slate-700 shrink-0">
+              <div className="w-10 h-10 rounded-full bg-slate-900 dark:bg-slate-800 text-white font-bold flex items-center justify-center text-xs border border-slate-700 shrink-0">
                 {(currentUser.fullName || 'User').trim().split(/\s+/).map((w: string) => w[0]).join('').slice(0, 2).toUpperCase()}
               </div>
             )}
             <div className="overflow-hidden flex-1">
               <div className="flex items-center justify-between gap-1">
-                <p className="text-xs font-bold text-slate-900 truncate group-hover:text-brand-600 transition-colors">{currentUser.fullName}</p>
+                <p className="text-xs font-bold text-slate-900 dark:text-white truncate group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">{currentUser.fullName}</p>
                 <span className="text-[10px] text-slate-400 group-hover:text-brand-500 font-medium">Edit ✎</span>
               </div>
-              <p className="text-[11px] text-slate-500 truncate">{currentCompany.name}</p>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate">{currentCompany.name}</p>
               <span className={`inline-block text-[10px] font-bold px-1.5 py-0.2 rounded mt-0.5 ${
-                role === 'buyer' ? 'bg-brand-100 text-brand-800' : role === 'supplier' ? 'bg-amber-100 text-amber-900' : 'bg-rose-100 text-rose-800'
+                role === 'buyer' ? 'bg-brand-100 dark:bg-brand-950/60 text-brand-800 dark:text-brand-300' : role === 'supplier' ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300' : 'bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300'
               }`}>
                 {role === 'buyer' ? 'Contractor Buyer' : role === 'supplier' ? 'Verified Trader' : 'Marketplace Admin'}
               </span>
@@ -113,7 +113,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView })
         {role === 'buyer' && (
           <button
             onClick={() => setCurrentView('create-rfq')}
-            className="w-full mb-5 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm shadow-sm transition-all hover:shadow"
+            className="w-full mb-5 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm shadow-sm transition-all hover:shadow cursor-pointer"
           >
             <PlusCircle className="w-4 h-4" />
             <span>Create New RFQ</span>
@@ -129,24 +129,24 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView })
               <button
                 key={link.id}
                 onClick={() => setCurrentView(link.id)}
-                className={`w-full flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl text-xs transition-all group ${
+                className={`w-full flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl text-xs transition-all group cursor-pointer ${
                   isActive
-                    ? 'bg-slate-900 text-white font-bold shadow-sm'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 font-medium'
+                    ? 'bg-slate-900 dark:bg-brand-600 text-white font-bold shadow-sm'
+                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-900 font-medium'
                 }`}
               >
                 <div className="flex items-center gap-2.5 min-w-0 flex-1 text-left">
-                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-brand-400' : 'text-slate-400 group-hover:text-slate-600'}`} />
+                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-brand-400 dark:text-white' : 'text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300'}`} />
                   <span className="truncate whitespace-nowrap">{link.label}</span>
                 </div>
                 {link.count !== undefined && link.count > 0 && (
                   <span
                     className={`shrink-0 min-w-[20px] h-5 px-1.5 flex items-center justify-center text-[10px] font-extrabold rounded-full ${
                       isActive
-                        ? 'bg-brand-500 text-white'
+                        ? 'bg-brand-500 dark:bg-white dark:text-brand-700 text-white'
                         : link.highlight
                         ? 'bg-amber-400 text-slate-950 shadow-xs'
-                        : 'bg-slate-100 text-slate-700 border border-slate-200/60'
+                        : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/60 dark:border-slate-700'
                     }`}
                   >
                     {link.count}
@@ -159,28 +159,28 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView })
       </div>
 
       {/* Bottom Sign Out & Session Area */}
-      <div className="space-y-3 pt-4 border-t border-slate-200 mt-6">
+      <div className="space-y-3 pt-4 border-t border-slate-200 dark:border-slate-800 mt-6">
         <button
           onClick={() => {
             logout();
             setCurrentView('home');
           }}
-          className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold text-red-600 bg-red-50/60 hover:bg-red-100/80 hover:text-red-700 transition-colors border border-red-200/60 shadow-sm"
+          className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold text-red-600 dark:text-rose-400 bg-red-50/60 dark:bg-rose-950/30 hover:bg-red-100/80 dark:hover:bg-rose-950/50 hover:text-red-700 dark:hover:text-rose-300 transition-colors border border-red-200/60 dark:border-rose-900/60 shadow-sm cursor-pointer"
         >
           <div className="flex items-center gap-2.5">
-            <LogOut className="w-4 h-4 text-red-500" />
+            <LogOut className="w-4 h-4 text-red-500 dark:text-rose-400" />
             <span>Sign Out</span>
           </div>
-          <span className="text-[10px] text-red-400 font-medium">End Session</span>
+          <span className="text-[10px] text-red-400 dark:text-rose-500 font-medium">End Session</span>
         </button>
 
         {/* UAE Compliance Note */}
-        <div className="p-2.5 bg-slate-50 border border-slate-100 rounded-xl text-[11px] text-slate-500 space-y-1">
-          <div className="flex items-center gap-1.5 text-slate-700 font-bold text-xs">
+        <div className="p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl text-[11px] text-slate-500 dark:text-slate-400 space-y-1">
+          <div className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300 font-bold text-xs">
             <Award className="w-3.5 h-3.5 text-amber-500" />
             <span>UAE Verified Session</span>
           </div>
-          <p className="leading-tight text-slate-500">
+          <p className="leading-tight text-slate-500 dark:text-slate-400">
             {currentCompany.name} ({currentCompany.emirate})
           </p>
         </div>

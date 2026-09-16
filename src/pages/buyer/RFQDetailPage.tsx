@@ -21,6 +21,7 @@ import {
   Trash2
 } from 'lucide-react';
 import { MetalFx, MetalBadge } from 'metal-fx';
+import { useTheme } from '../../context/ThemeContext';
 
 interface RFQDetailPageProps {
   rfqId: string;
@@ -29,6 +30,7 @@ interface RFQDetailPageProps {
 
 export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate }) => {
   const { rfqs, quotations, isRFQExtendedUnlocked, cancelRFQByBuyer } = useAppData();
+  const { isDark } = useTheme();
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
 
   const rfq = rfqs.find(r => r.id === rfqId || r.rfqNumber === rfqId);
@@ -97,12 +99,19 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
           )}
 
           {rfqQuotes.length > 0 && rfq.status !== 'cancelled' && (
-            <MetalFx preset="chromatic" strength={0.85} theme="light">
+            <MetalFx
+              preset="chromatic"
+              strength={0.85}
+              theme={isDark ? 'dark' : 'light'}
+              borderRadius={8}
+              style={{ background: '#0284c7' }}
+              className="rounded-lg shadow-sm"
+            >
               <Button
                 variant="primary"
                 onClick={() => onNavigate('buyer-compare', { rfqId: rfq.id })}
                 leftIcon={<GitCompare className="w-4 h-4" />}
-                className="font-bold shadow-sm"
+                className="font-bold shadow-none border-none bg-transparent"
               >
                 Compare {visibleQuotes.length} Quotations in Matrix
               </Button>

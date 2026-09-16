@@ -23,11 +23,11 @@ export const CinematicScrollSection: React.FC<CinematicScrollSectionProps> = ({ 
   return (
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="text-center mb-16">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-100 text-[#cf2e46] text-xs font-bold uppercase tracking-widest mb-6">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-100 dark:bg-rose-950/50 text-[#cf2e46] text-xs font-bold uppercase tracking-widest mb-6">
           <Sparkles className="w-3.5 h-3.5" />
           Procurement Intelligence
         </div>
-        <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight mb-4 cursor-default select-none">
+        <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight mb-4 cursor-default select-none">
           <VariableFontCursorProximity
             fromFontVariationSettings="'wght' 700, 'slnt' 0"
             toFontVariationSettings="'wght' 950, 'slnt' -8"
@@ -38,7 +38,7 @@ export const CinematicScrollSection: React.FC<CinematicScrollSectionProps> = ({ 
         </h2>
         <VariableFontCursorProximity
           as="p"
-          className="text-slate-500 text-lg max-w-2xl mx-auto cursor-default"
+          className="text-slate-500 dark:text-slate-400 text-lg max-w-2xl mx-auto cursor-default"
           fromFontVariationSettings="'wght' 400, 'slnt' 0"
           toFontVariationSettings="'wght' 700, 'slnt' -4"
           radius={120}
@@ -54,14 +54,14 @@ export const CinematicScrollSection: React.FC<CinematicScrollSectionProps> = ({ 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="md:col-span-2 row-span-1 rounded-3xl bg-white border border-slate-200 shadow-sm p-8 flex flex-col justify-between relative overflow-hidden group hover:shadow-md transition-shadow"
+          className="md:col-span-2 row-span-1 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm p-8 flex flex-col justify-between relative overflow-hidden group hover:shadow-md transition-shadow"
         >
-          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-rose-50 to-transparent rounded-bl-full -z-0 opacity-50" />
+          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-rose-50 to-transparent dark:from-rose-950/20 rounded-bl-full -z-0 opacity-50" />
           <div className="relative z-10">
-            <div className="w-12 h-12 bg-rose-100 text-[#cf2e46] rounded-2xl flex items-center justify-center mb-6">
+            <div className="w-12 h-12 bg-rose-100 dark:bg-rose-950/50 text-[#cf2e46] rounded-2xl flex items-center justify-center mb-6">
               <Layers className="w-6 h-6" />
             </div>
-            <h3 className="text-2xl font-bold text-slate-900 mb-2 cursor-default select-none">
+            <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2 cursor-default select-none">
               <VariableFontCursorProximity
                 fromFontVariationSettings="'wght' 600, 'slnt' 0"
                 toFontVariationSettings="'wght' 950, 'slnt' -8"
@@ -70,15 +70,15 @@ export const CinematicScrollSection: React.FC<CinematicScrollSectionProps> = ({ 
                 Upload BOQ. Receive Competitive Quotes.
               </VariableFontCursorProximity>
             </h3>
-            <p className="text-slate-500 max-w-md">
+            <p className="text-slate-500 dark:text-slate-400 max-w-md">
               Standardized line items mapped intelligently. Compare multiple suppliers side-by-side with mill test sheets included.
             </p>
           </div>
           <div className="relative z-10 flex items-center gap-3">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-100 text-slate-700 text-xs font-bold rounded-full">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-bold rounded-full">
               <span className="w-1.5 h-1.5 rounded-full bg-[#cf2e46] animate-pulse" /> 5 CAPPED BIDS
             </span>
-            <span className="text-xs text-slate-400 font-mono">BS 5467 // IEC 60502-1</span>
+            <span className="text-xs text-slate-400 dark:text-slate-500 font-mono">BS 5467 // IEC 60502-1</span>
           </div>
         </motion.div>
 
@@ -124,13 +124,13 @@ export const CinematicScrollSection: React.FC<CinematicScrollSectionProps> = ({ 
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2 }}
-          className="rounded-3xl bg-white border border-slate-200 shadow-sm p-8 flex flex-col justify-between relative overflow-hidden group hover:shadow-md transition-shadow"
+          className="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm p-8 flex flex-col justify-between relative overflow-hidden group hover:shadow-md transition-shadow"
         >
           <div className="relative z-10">
-            <div className="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center mb-6">
+            <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 rounded-xl flex items-center justify-center mb-6">
               <ShieldCheck className="w-5 h-5" />
             </div>
-            <h3 className="text-xl font-bold text-slate-900 mb-2 cursor-default select-none">
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 cursor-default select-none">
               <VariableFontCursorProximity
                 fromFontVariationSettings="'wght' 600, 'slnt' 0"
                 toFontVariationSettings="'wght' 950, 'slnt' -8"
@@ -139,16 +139,16 @@ export const CinematicScrollSection: React.FC<CinematicScrollSectionProps> = ({ 
                 Discover Verified Vendors
               </VariableFontCursorProximity>
             </h3>
-            <p className="text-slate-500 text-sm">
+            <p className="text-slate-500 dark:text-slate-400 text-sm">
               Direct physical stock in Al Quoz, Sharjah Industrial & Mussafah.
             </p>
           </div>
           <div className="relative z-10">
-            <div className="text-[10px] text-slate-400 font-mono uppercase tracking-widest mb-2">DET & DED Commercial KYB</div>
+            <div className="text-[10px] text-slate-400 dark:text-slate-500 font-mono uppercase tracking-widest mb-2">DET & DED Commercial KYB</div>
             <div className="flex flex-wrap gap-2">
-              <span className="text-[10px] px-2 py-1 bg-slate-100 text-slate-600 rounded-md">Copper</span>
-              <span className="text-[10px] px-2 py-1 bg-slate-100 text-slate-600 rounded-md">Cables</span>
-              <span className="text-[10px] px-2 py-1 bg-slate-100 text-slate-600 rounded-md">Conduits</span>
+              <span className="text-[10px] px-2 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-md">Copper</span>
+              <span className="text-[10px] px-2 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-md">Cables</span>
+              <span className="text-[10px] px-2 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-md">Conduits</span>
             </div>
           </div>
         </motion.div>
@@ -159,15 +159,15 @@ export const CinematicScrollSection: React.FC<CinematicScrollSectionProps> = ({ 
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}
-          className="md:col-span-2 row-span-1 rounded-3xl bg-white border border-slate-200 shadow-sm p-8 flex flex-col justify-between relative overflow-hidden group hover:shadow-md transition-shadow"
+          className="md:col-span-2 row-span-1 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm p-8 flex flex-col justify-between relative overflow-hidden group hover:shadow-md transition-shadow"
         >
-          <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-50 via-white to-white -z-0" />
+          <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-50 via-white to-white dark:from-slate-800/40 dark:via-slate-900 dark:to-slate-900 -z-0" />
           <div className="relative z-10 flex flex-col md:flex-row gap-8 justify-between h-full">
             <div className="flex-1">
-              <div className="w-12 h-12 bg-sky-100 text-sky-600 rounded-2xl flex items-center justify-center mb-6">
+              <div className="w-12 h-12 bg-sky-100 dark:bg-sky-950/50 text-sky-600 dark:text-sky-400 rounded-2xl flex items-center justify-center mb-6">
                 <Building2 className="w-6 h-6" />
               </div>
-              <h3 className="text-2xl font-bold text-slate-900 mb-2 cursor-default select-none">
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2 cursor-default select-none">
                 <VariableFontCursorProximity
                   fromFontVariationSettings="'wght' 600, 'slnt' 0"
                   toFontVariationSettings="'wght' 950, 'slnt' -8"
@@ -176,7 +176,7 @@ export const CinematicScrollSection: React.FC<CinematicScrollSectionProps> = ({ 
                   Built for Contractors & Procurement Teams
                 </VariableFontCursorProximity>
               </h3>
-              <p className="text-slate-500 max-w-sm mb-6">
+              <p className="text-slate-500 dark:text-slate-400 max-w-sm mb-6">
                 Engineered for EPCs. Transparent side-by-side matrices, digital POs, and 5% VAT invoicing.
               </p>
               <button 
@@ -187,24 +187,24 @@ export const CinematicScrollSection: React.FC<CinematicScrollSectionProps> = ({ 
               </button>
             </div>
             
-            <div className="flex-1 flex flex-col justify-end bg-slate-50 rounded-2xl p-5 border border-slate-100">
+            <div className="flex-1 flex flex-col justify-end bg-slate-50 dark:bg-slate-800/80 rounded-2xl p-5 border border-slate-100 dark:border-slate-700/60">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-8 h-8 rounded-full bg-[#cf2e46] text-white flex items-center justify-center">
                   <TrendingDown className="w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs text-slate-500 font-bold uppercase">Average Wholesale Savings</div>
-                  <div className="text-2xl font-black text-slate-900">-18.4%</div>
+                  <div className="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase">Average Wholesale Savings</div>
+                  <div className="text-2xl font-black text-slate-900 dark:text-white">-18.4%</div>
                 </div>
               </div>
               <div className="space-y-2">
-                <div className="flex items-center gap-2 text-xs text-slate-600 font-medium">
+                <div className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300 font-medium">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> BOQ Processed
                 </div>
-                <div className="flex items-center gap-2 text-xs text-slate-600 font-medium">
+                <div className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300 font-medium">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> 5 Verified Bids
                 </div>
-                <div className="flex items-center gap-2 text-xs text-slate-600 font-medium">
+                <div className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300 font-medium">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> Site Delivery
                 </div>
               </div>
