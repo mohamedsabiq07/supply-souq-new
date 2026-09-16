@@ -54,10 +54,10 @@ export const SuppliersPage: React.FC<{ onRequestQuote: (supplier?: any, category
       {/* Header Banner */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200 w-fit mb-2">
-            <ShieldCheck className="w-4 h-4 text-emerald-600" /> 100% UAE DET Commercial Trade License Verified
+          <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-800 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-1 rounded-md border border-emerald-200 dark:border-emerald-800/60 w-fit mb-2">
+            <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> 100% UAE DET Commercial Trade License Verified
           </div>
-          <h1 className="text-3xl font-extrabold text-slate-900 cursor-default select-none">
+          <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white cursor-default select-none">
             <VariableFontCursorProximity
               fromFontVariationSettings="'wght' 700, 'slnt' 0"
               toFontVariationSettings="'wght' 950, 'slnt' -8"
@@ -69,7 +69,7 @@ export const SuppliersPage: React.FC<{ onRequestQuote: (supplier?: any, category
           </h1>
           <VariableFontCursorProximity
             as="p"
-            className="text-sm text-slate-500 mt-1 cursor-default"
+            className="text-sm text-slate-500 dark:text-zinc-400 mt-1 cursor-default"
             fromFontVariationSettings="'wght' 400, 'slnt' 0"
             toFontVariationSettings="'wght' 700, 'slnt' -4"
             radius={100}
@@ -92,10 +92,10 @@ export const SuppliersPage: React.FC<{ onRequestQuote: (supplier?: any, category
       {/* Category Tabs Section */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-zinc-400">
             Filter by Material Category:
           </span>
-          <span className="text-xs text-slate-400 font-medium">
+          <span className="text-xs text-slate-400 dark:text-zinc-500 font-medium">
             Showing {filteredSuppliers.length} Verified Stockists
           </span>
         </div>
@@ -109,14 +109,14 @@ export const SuppliersPage: React.FC<{ onRequestQuote: (supplier?: any, category
                 onClick={() => setSelectedCategory(cat.id)}
                 className={`p-3 rounded-2xl border text-left transition-all duration-150 flex flex-col justify-between ${
                   isSelected
-                    ? 'bg-slate-900 text-white border-slate-900 shadow-md ring-2 ring-brand-500/20'
-                    : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300 hover:bg-slate-50'
+                    ? 'bg-slate-900 dark:bg-zinc-100 text-white dark:text-black border-slate-900 dark:border-white shadow-md ring-2 ring-brand-500/20'
+                    : 'bg-white dark:bg-[#0c0c0e] text-slate-700 dark:text-zinc-300 border-slate-200 dark:border-zinc-800 hover:border-slate-300 dark:hover:border-zinc-700 hover:bg-slate-50 dark:hover:bg-zinc-900'
                 }`}
               >
-                <span className={`text-xs font-extrabold truncate ${isSelected ? 'text-white' : 'text-slate-900'}`}>
+                <span className={`text-xs font-extrabold truncate ${isSelected ? 'text-white dark:text-black' : 'text-slate-900 dark:text-white'}`}>
                   {cat.label}
                 </span>
-                <span className={`text-[11px] font-bold mt-1 ${isSelected ? 'text-amber-400' : 'text-brand-600'}`}>
+                <span className={`text-[11px] font-bold mt-1 ${isSelected ? 'text-amber-400 dark:text-amber-600' : 'text-brand-600 dark:text-brand-400'}`}>
                   {cat.count} Verified
                 </span>
               </button>
@@ -125,7 +125,7 @@ export const SuppliersPage: React.FC<{ onRequestQuote: (supplier?: any, category
         </div>
 
         {activeCategoryObj?.desc && (
-          <div className="p-3 bg-brand-50/70 border border-brand-200 rounded-xl text-xs text-brand-900 flex items-center gap-2">
+          <div className="p-3 bg-brand-50/70 dark:bg-brand-950/30 border border-brand-200 dark:border-brand-900/50 rounded-xl text-xs text-brand-900 dark:text-brand-200 flex items-center gap-2">
             <span className="font-bold shrink-0">Included Materials:</span>
             <span>{activeCategoryObj.desc}</span>
           </div>
@@ -133,7 +133,7 @@ export const SuppliersPage: React.FC<{ onRequestQuote: (supplier?: any, category
       </div>
 
       {/* Search & Location Filters */}
-      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-subtle">
+      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 bg-white dark:bg-[#0c0c0e] p-4 rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-subtle">
         <BorderBeam size="line" theme="light" className="flex-1">
           <div className="relative w-full">
             <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
@@ -142,13 +142,13 @@ export const SuppliersPage: React.FC<{ onRequestQuote: (supplier?: any, category
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search by company name, material (cables, pipes, duct, chemicals), or industrial zone (Al Quoz, Sharjah, Mussafah)..."
-              className="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-brand-500 focus:outline-none placeholder:text-slate-400"
+              className="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 dark:border-zinc-800 bg-white dark:bg-[#121215] text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-brand-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-zinc-500"
             />
           </div>
         </BorderBeam>
 
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 text-xs">
-          <span className="text-slate-500 font-semibold whitespace-nowrap">Emirate:</span>
+          <span className="text-slate-500 dark:text-zinc-400 font-semibold whitespace-nowrap">Emirate:</span>
           {emirates.map(em => (
             <button
               key={em}
@@ -156,7 +156,7 @@ export const SuppliersPage: React.FC<{ onRequestQuote: (supplier?: any, category
               className={`px-3 py-1.5 rounded-xl font-bold transition-all whitespace-nowrap ${
                 emirateFilter === em
                   ? 'bg-brand-600 text-white shadow-sm'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  : 'bg-slate-100 dark:bg-zinc-900 text-slate-600 dark:text-zinc-300 hover:bg-slate-200 dark:hover:bg-zinc-800'
               }`}
             >
               {em}
@@ -177,13 +177,13 @@ export const SuppliersPage: React.FC<{ onRequestQuote: (supplier?: any, category
           ))}
         </div>
       ) : (
-        <div className="text-center py-16 bg-white rounded-2xl border border-dashed border-slate-300 p-8 space-y-4">
-          <div className="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 mx-auto flex items-center justify-center font-bold">
+        <div className="text-center py-16 bg-white dark:bg-[#0c0c0e] rounded-2xl border border-dashed border-slate-300 dark:border-zinc-800 p-8 space-y-4">
+          <div className="w-14 h-14 rounded-2xl bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 mx-auto flex items-center justify-center font-bold">
             <Zap className="w-7 h-7" />
           </div>
           <div className="space-y-1.5 max-w-lg mx-auto">
-            <h3 className="text-lg font-bold text-slate-900">Verified UAE Vendor Network</h3>
-            <p className="text-xs text-slate-500">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white">Verified UAE Vendor Network</h3>
+            <p className="text-xs text-slate-500 dark:text-zinc-400">
               Are you a UAE material importer, stockist, or distributor? Register your company to be listed in our verified directory and receive contractor RFQs directly on your sales desk.
             </p>
           </div>

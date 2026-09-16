@@ -185,6 +185,11 @@ const AppContent: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // Expose global navigation for easy testing and automation
+  React.useEffect(() => {
+    (window as any).__navigateTo = handleNavigate;
+  }, []);
+
   // Determine if this is a full-width public page or a dashboard view with sidebar
   const isPublicPage = [
     'home', 
@@ -194,7 +199,7 @@ const AppContent: React.FC = () => {
     'onboarding-guide', 
     'invoice-audit', 
     'login', 
-    'admin-login',
+    'admin-login', 
     'register',
     'halftone'
   ].includes(currentView);
@@ -207,7 +212,7 @@ const AppContent: React.FC = () => {
   // If user is logged out and tries to access private workspace, redirect to public login
   if (!isAuthenticated && !isPublicPage) {
     return (
-      <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-brand-500 selection:text-white">
+      <div className="min-h-screen flex flex-col bg-[#f4f4f6] dark:bg-black text-slate-900 dark:text-zinc-100 selection:bg-[#cf2e46] selection:text-white transition-colors duration-200">
         <Navbar currentView={currentView} setCurrentView={handleNavigate} />
         <MarketTicker />
         <main className="flex-1">
@@ -226,7 +231,7 @@ const AppContent: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f4f4f6] dark:bg-slate-950 text-slate-900 dark:text-slate-100 selection:bg-[#cf2e46] selection:text-white transition-colors duration-200">
+    <div className="min-h-screen flex flex-col bg-[#f4f4f6] dark:bg-black text-slate-900 dark:text-zinc-100 selection:bg-[#cf2e46] selection:text-white transition-colors duration-200">
       {/* Ghost Impersonation Mode Banner */}
       {isImpersonating && impersonatedUser && (
         <div className="bg-amber-500 text-slate-950 px-4 py-2 flex flex-wrap items-center justify-between text-xs sticky top-0 z-[100] shadow-md border-b border-amber-600">
@@ -263,13 +268,7 @@ const AppContent: React.FC = () => {
             <HomePage setCurrentView={handleNavigate} />
           )}
           {currentView === 'categories' && (
-            <SuppliersPage onRequestQuote={(targetSupplier, category) => {
-              if (!isAuthenticated) {
-                handleNavigate('login', { targetSupplier, category });
-              } else {
-                handleNavigate('create-rfq', { targetSupplier, category });
-              }
-            }} />
+            <CategoriesPage onPostRFQ={() => handleNavigate(isAuthenticated ? 'create-rfq' : 'login')} />
           )}
           {currentView === 'suppliers' && (
             <SuppliersPage onRequestQuote={(targetSupplier, category) => {

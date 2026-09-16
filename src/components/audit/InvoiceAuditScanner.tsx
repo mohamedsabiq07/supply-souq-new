@@ -223,7 +223,7 @@ export const InvoiceAuditScanner: React.FC<InvoiceAuditScannerProps> = ({ onSwit
   return (
     <div className="space-y-6">
       {/* Top Banner / Upload Widget */}
-      <div className="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-xl space-y-6">
+      <div className="bg-[#0c0c0e] text-white rounded-3xl p-6 sm:p-8 border border-zinc-800 shadow-xl space-y-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1 max-w-xl">
             <div className="inline-flex items-center gap-1.5 bg-rose-500/20 text-rose-300 border border-rose-400/30 px-3 py-1 rounded-full text-xs font-bold">
@@ -233,7 +233,7 @@ export const InvoiceAuditScanner: React.FC<InvoiceAuditScannerProps> = ({ onSwit
             <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
               Benchmark Your Electrical & Cable Invoices
             </h2>
-            <p className="text-xs sm:text-sm text-slate-300">
+            <p className="text-xs sm:text-sm text-zinc-300">
               Upload your last bill for Ducab cables, Schneider switchgear, or LED lighting to see exact wholesale price differences against 50+ verified stockists in Al Quoz, Sharjah, and Mussafah.
             </p>
           </div>
@@ -251,8 +251,8 @@ export const InvoiceAuditScanner: React.FC<InvoiceAuditScannerProps> = ({ onSwit
         </div>
 
         {/* Sample Invoices Tab Selector */}
-        <div className="space-y-2 pt-2 border-t border-slate-800">
-          <span className="text-xs text-slate-400 font-semibold block">
+        <div className="space-y-2 pt-2 border-t border-zinc-800">
+          <span className="text-xs text-zinc-400 font-semibold block">
             Or select a typical UAE electrical bill to test the price audit:
           </span>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
@@ -267,7 +267,7 @@ export const InvoiceAuditScanner: React.FC<InvoiceAuditScannerProps> = ({ onSwit
                 className={`p-3 rounded-xl border text-left transition-all ${
                   selectedInvoiceId === inv.id
                     ? 'bg-brand-600/90 text-white border-brand-400 shadow-md font-bold'
-                    : 'bg-slate-800/80 text-slate-300 border-slate-700 hover:bg-slate-700/60'
+                    : 'bg-zinc-900/80 text-zinc-300 border-zinc-700 hover:bg-zinc-800'
                 }`}
               >
                 <div className="flex items-center justify-between">
@@ -302,46 +302,46 @@ export const InvoiceAuditScanner: React.FC<InvoiceAuditScannerProps> = ({ onSwit
       {!isScanning && (
         <div className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Card className="border-slate-200">
+            <Card className="border-slate-200 dark:border-zinc-800 dark:bg-[#0c0c0e]">
               <CardContent className="p-5 space-y-1">
-                <span className="text-xs font-semibold text-slate-400">Current Supplier Total</span>
-                <div className="text-2xl font-extrabold text-slate-900">
+                <span className="text-xs font-semibold text-slate-400 dark:text-zinc-400">Current Supplier Total</span>
+                <div className="text-2xl font-extrabold text-slate-900 dark:text-white">
                   {formatAED(activeInvoice.currentTotalAED)}
                 </div>
-                <span className="text-[11px] text-slate-500 block">Based on your past invoice</span>
+                <span className="text-[11px] text-slate-500 dark:text-zinc-500 block">Based on your past invoice</span>
               </CardContent>
             </Card>
 
-            <Card className="border-rose-200 bg-rose-50/40">
+            <Card className="border-rose-200 dark:border-rose-900/50 bg-rose-50/40 dark:bg-rose-950/20">
               <CardContent className="p-5 space-y-1">
-                <span className="text-xs font-semibold text-rose-800">SupplySouq Verified Price</span>
-                <div className="text-2xl font-extrabold text-rose-950">
+                <span className="text-xs font-semibold text-rose-800 dark:text-rose-400">SupplySouq Verified Price</span>
+                <div className="text-2xl font-extrabold text-rose-950 dark:text-rose-200">
                   {formatAED(activeInvoice.supplySouqTotalAED)}
                 </div>
-                <span className="text-[11px] text-rose-700 block">Direct stockist wholesale rate</span>
+                <span className="text-[11px] text-rose-700 dark:text-rose-400/80 block">Direct stockist wholesale rate</span>
               </CardContent>
             </Card>
 
-            <Card className="border-amber-200 bg-amber-50/40">
+            <Card className="border-amber-200 dark:border-amber-900/50 bg-amber-50/40 dark:bg-amber-950/20">
               <CardContent className="p-5 space-y-1">
-                <span className="text-xs font-semibold text-amber-900">Your Project Savings</span>
-                <div className="text-2xl font-extrabold text-amber-950 flex items-center gap-1.5">
+                <span className="text-xs font-semibold text-amber-900 dark:text-amber-400">Your Project Savings</span>
+                <div className="text-2xl font-extrabold text-amber-950 dark:text-amber-200 flex items-center gap-1.5">
                   <TrendingDown className="w-6 h-6 text-[#cf2e46]" />
                   <span>{formatAED(activeInvoice.totalSavingsAED)}</span>
                 </div>
-                <span className="text-[11px] text-amber-800 font-bold block">
+                <span className="text-[11px] text-amber-800 dark:text-amber-400 font-bold block">
                   {activeInvoice.savingsPercent}% Direct Cost Reduction
                 </span>
               </CardContent>
             </Card>
 
-            <Card className="border-brand-200 bg-brand-50/40">
+            <Card className="border-brand-200 dark:border-brand-900/50 bg-brand-50/40 dark:bg-brand-950/20">
               <CardContent className="p-5 space-y-1">
-                <span className="text-xs font-semibold text-brand-800">Annual Procurement Savings</span>
-                <div className="text-2xl font-extrabold text-brand-950">
+                <span className="text-xs font-semibold text-brand-800 dark:text-brand-400">Annual Procurement Savings</span>
+                <div className="text-2xl font-extrabold text-brand-950 dark:text-brand-200">
                   {formatAED(annualSavingsAED)}
                 </div>
-                <span className="text-[11px] text-brand-700 block">Calculated on recurring projects</span>
+                <span className="text-[11px] text-brand-700 dark:text-brand-400/80 block">Calculated on recurring projects</span>
               </CardContent>
             </Card>
           </div>
@@ -350,10 +350,10 @@ export const InvoiceAuditScanner: React.FC<InvoiceAuditScannerProps> = ({ onSwit
           <Card>
             <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
-                <h3 className="text-base font-bold text-slate-900">
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">
                   Line-by-Line Electrical Cost Audit Breakdown
                 </h3>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-500 dark:text-zinc-400">
                   Comparison between your invoice rate and verified UAE electrical stockist rates.
                 </p>
               </div>
@@ -373,7 +373,7 @@ export const InvoiceAuditScanner: React.FC<InvoiceAuditScannerProps> = ({ onSwit
 
             <CardContent className="p-0 overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
+                <thead className="bg-slate-50 dark:bg-zinc-900/80 text-slate-600 dark:text-zinc-300 font-semibold border-b border-slate-200 dark:border-zinc-800">
                   <tr>
                     <th className="p-3">Electrical Spec & Standards</th>
                     <th className="p-3">Qty</th>
@@ -383,40 +383,40 @@ export const InvoiceAuditScanner: React.FC<InvoiceAuditScannerProps> = ({ onSwit
                     <th className="p-3">Verified Stockist Match</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-slate-100 dark:divide-zinc-800/80">
                   {activeInvoice.items.map((item) => (
-                    <tr key={item.id} className="hover:bg-slate-50/60">
+                    <tr key={item.id} className="hover:bg-slate-50/60 dark:hover:bg-zinc-900/50">
                       <td className="p-3">
-                        <strong className="block text-slate-900 font-bold">{item.itemDescription}</strong>
-                        <span className="text-[11px] text-slate-500 font-medium">{item.specMatch}</span>
+                        <strong className="block text-slate-900 dark:text-white font-bold">{item.itemDescription}</strong>
+                        <span className="text-[11px] text-slate-500 dark:text-zinc-400 font-medium">{item.specMatch}</span>
                       </td>
 
-                      <td className="p-3 font-semibold text-slate-800 whitespace-nowrap">
+                      <td className="p-3 font-semibold text-slate-800 dark:text-zinc-200 whitespace-nowrap">
                         {item.quantity} {item.unit}
                       </td>
 
                       <td className="p-3 text-right">
-                        <span className="font-semibold text-slate-900 block">{formatAED(item.currentTotalPriceAED)}</span>
-                        <span className="text-[10px] text-slate-400">{formatAED(item.currentUnitPriceAED, true)} / {item.unit}</span>
+                        <span className="font-semibold text-slate-900 dark:text-white block">{formatAED(item.currentTotalPriceAED)}</span>
+                        <span className="text-[10px] text-slate-400 dark:text-zinc-500">{formatAED(item.currentUnitPriceAED, true)} / {item.unit}</span>
                       </td>
 
-                      <td className="p-3 text-right text-rose-700 bg-rose-50/30">
-                        <span className="font-extrabold text-rose-950 block">{formatAED(item.supplySouqTotalPriceAED)}</span>
-                        <span className="text-[10px] text-rose-700 font-medium">{formatAED(item.supplySouqUnitPriceAED, true)} / {item.unit}</span>
+                      <td className="p-3 text-right text-rose-700 dark:text-rose-400 bg-rose-50/30 dark:bg-rose-950/20">
+                        <span className="font-extrabold text-rose-950 dark:text-rose-200 block">{formatAED(item.supplySouqTotalPriceAED)}</span>
+                        <span className="text-[10px] text-rose-700 dark:text-rose-400 font-medium">{formatAED(item.supplySouqUnitPriceAED, true)} / {item.unit}</span>
                       </td>
 
                       <td className="p-3 text-right">
-                        <span className="font-bold text-rose-700 bg-rose-100 px-2 py-0.5 rounded border border-rose-200 inline-block">
+                        <span className="font-bold text-rose-700 dark:text-rose-300 bg-rose-100 dark:bg-rose-950/60 px-2 py-0.5 rounded border border-rose-200 dark:border-rose-800/60 inline-block">
                           - {formatAED(item.savingsAED)} ({item.savingsPercent}%)
                         </span>
                       </td>
 
                       <td className="p-3 text-[11px]">
-                        <div className="flex items-center gap-1 text-slate-900 font-bold">
+                        <div className="flex items-center gap-1 text-slate-900 dark:text-white font-bold">
                           <ShieldCheck className="w-3.5 h-3.5 text-[#cf2e46]" />
                           <span>{item.matchedSupplierName}</span>
                         </div>
-                        <span className="text-slate-500 text-[10px] block">{item.matchedSupplierZone}</span>
+                        <span className="text-slate-500 dark:text-zinc-400 text-[10px] block">{item.matchedSupplierZone}</span>
                       </td>
                     </tr>
                   ))}
@@ -426,12 +426,12 @@ export const InvoiceAuditScanner: React.FC<InvoiceAuditScannerProps> = ({ onSwit
           </Card>
 
           {/* Bottom Action Card */}
-          <div className="bg-gradient-to-r from-brand-900 to-navy-950 text-white rounded-2xl p-6 border border-brand-700 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="bg-gradient-to-r from-zinc-950 via-[#0c0c0e] to-black text-white rounded-2xl p-6 border border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="space-y-1">
               <h4 className="text-lg font-bold text-white">
                 Ready to save {formatAED(activeInvoice.totalSavingsAED)} on your electrical procurement?
               </h4>
-              <p className="text-xs text-slate-300">
+              <p className="text-xs text-zinc-300">
                 SupplySouq broadcasts this bill of quantities to authorized UAE electrical stockists with guaranteed DEWA test certificates and 24h quotation turnaround.
               </p>
             </div>

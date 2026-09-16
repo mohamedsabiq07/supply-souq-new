@@ -294,7 +294,7 @@ export const ProfilePage: React.FC = () => {
   return (
     <div className="max-w-5xl mx-auto space-y-6 pb-12">
       {/* Top Banner & Header */}
-      <div className="relative rounded-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-brand-950 p-6 sm:p-8 text-white shadow-xl overflow-hidden border border-slate-700/60">
+      <div className="relative rounded-2xl bg-gradient-to-r from-black via-[#0c0c0e] to-zinc-950 p-6 sm:p-8 text-white shadow-xl overflow-hidden border border-zinc-800">
         <div className="absolute -right-10 -bottom-10 w-72 h-72 bg-brand-500/10 rounded-full blur-3xl pointer-events-none" />
         
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 relative z-10">
@@ -304,17 +304,17 @@ export const ProfilePage: React.FC = () => {
                 <img
                   src={formData.avatarUrl}
                   alt={formData.fullName}
-                  className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover ring-4 ring-white/10 shadow-lg border border-slate-600"
+                  className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover ring-4 ring-white/10 shadow-lg border border-zinc-700"
                 />
               ) : (
-                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-gradient-to-br from-brand-600 via-brand-700 to-slate-900 text-white font-extrabold text-2xl sm:text-3xl flex items-center justify-center ring-4 ring-white/10 shadow-lg border border-slate-600 tracking-wider select-none">
+                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-gradient-to-br from-brand-600 to-brand-800 text-white font-extrabold text-2xl sm:text-3xl flex items-center justify-center ring-4 ring-white/10 shadow-lg border border-zinc-700 tracking-wider select-none">
                   {userInitials}
                 </div>
               )}
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="absolute -bottom-1.5 -right-1.5 p-2 rounded-xl bg-slate-900 hover:bg-brand-600 text-white shadow-lg border border-slate-700 transition-all hover:scale-105 cursor-pointer"
+                className="absolute -bottom-1.5 -right-1.5 p-2 rounded-xl bg-black hover:bg-brand-600 text-white shadow-lg border border-zinc-700 transition-all hover:scale-105 cursor-pointer"
                 title="Choose photo from gallery or folders"
               >
                 <Camera className="w-3.5 h-3.5" />
@@ -476,7 +476,7 @@ export const ProfilePage: React.FC = () => {
                         className="w-16 h-16 rounded-xl object-cover ring-2 ring-brand-500/40 shadow-sm border border-slate-300"
                       />
                     ) : (
-                      <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-brand-600 to-slate-900 text-white font-extrabold text-xl flex items-center justify-center border border-slate-700 select-none">
+                      <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-brand-600 to-brand-800 text-white font-extrabold text-xl flex items-center justify-center border border-zinc-700 select-none">
                         {userInitials}
                       </div>
                     )}

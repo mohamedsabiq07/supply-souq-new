@@ -77,7 +77,7 @@ export const AdminSecurityDesk: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-slate-950 via-rose-950 to-slate-950 text-white p-6 rounded-2xl border border-rose-900/40 shadow-xl space-y-4">
+      <div className="bg-gradient-to-r from-black via-rose-950/40 to-black text-white p-6 rounded-2xl border border-rose-900/40 shadow-xl space-y-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2.5">

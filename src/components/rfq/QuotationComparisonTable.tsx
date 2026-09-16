@@ -124,7 +124,7 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
   return (
     <div className="space-y-6">
       {/* Platform Rebate Banner */}
-      <div className="p-4 bg-gradient-to-r from-brand-900 via-navy-900 to-slate-900 text-white rounded-2xl border border-brand-700 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+      <div className="p-4 bg-gradient-to-r from-zinc-950 via-[#0c0c0e] to-black text-white rounded-2xl border border-zinc-800 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center font-bold text-base shrink-0 shadow-sm">
             <Percent className="w-5 h-5" />
@@ -420,7 +420,7 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
 
         {/* LOCKED 5 MORE QUOTES CARD IF NOT UNLOCKED - ONLY VISIBLE ONCE 5 QUOTATIONS ARE OBTAINED */}
         {!isUnlocked && quotations.length >= 5 && (
-          <div className="bg-gradient-to-br from-slate-900 via-slate-900 to-navy-950 text-white rounded-2xl border-2 border-dashed border-amber-400/60 p-6 flex flex-col justify-between shadow-lg">
+          <div className="bg-gradient-to-br from-black via-[#0c0c0e] to-black text-white rounded-2xl border-2 border-dashed border-amber-400/60 p-6 flex flex-col justify-between shadow-lg">
             <div className="space-y-4">
               <div className="w-12 h-12 rounded-2xl bg-amber-400/20 border border-amber-400/40 text-amber-300 flex items-center justify-center font-bold">
                 <Lock className="w-6 h-6" />

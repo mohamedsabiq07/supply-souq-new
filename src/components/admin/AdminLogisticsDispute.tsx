@@ -103,7 +103,7 @@ export const AdminLogisticsDispute: React.FC<AdminLogisticsDisputeProps> = ({
   return (
     <div className="space-y-6">
       {/* Header Banner */}
-      <div className="p-5 bg-gradient-to-r from-slate-900 via-sky-950 to-slate-900 text-white rounded-2xl border border-slate-800 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="p-5 bg-gradient-to-r from-black via-[#0c0c0e] to-black text-white rounded-2xl border border-zinc-800 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <Truck className="w-5 h-5 text-sky-400" />

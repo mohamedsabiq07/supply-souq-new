@@ -47,11 +47,11 @@ export const InvoiceAuditPage: React.FC<InvoiceAuditPageProps> = ({ onStartRFQWi
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
       {/* Header Banner */}
       <div className="text-center max-w-3xl mx-auto space-y-3">
-        <div className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200 px-3 py-1 rounded-full text-xs font-bold">
-          <Sparkles className="w-4 h-4 text-emerald-600" />
+        <div className="inline-flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/60 px-3 py-1 rounded-full text-xs font-bold">
+          <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
           <span>Zero-Risk Electrical Price Benchmark</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight cursor-default select-none">
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight cursor-default select-none">
           <VariableFontCursorProximity
             fromFontVariationSettings="'wght' 700, 'slnt' 0"
             toFontVariationSettings="'wght' 950, 'slnt' -8"
@@ -63,7 +63,7 @@ export const InvoiceAuditPage: React.FC<InvoiceAuditPageProps> = ({ onStartRFQWi
         </h1>
         <VariableFontCursorProximity
           as="p"
-          className="text-sm text-slate-600 leading-relaxed cursor-default"
+          className="text-sm text-slate-600 dark:text-zinc-400 leading-relaxed cursor-default"
           fromFontVariationSettings="'wght' 400, 'slnt' 0"
           toFontVariationSettings="'wght' 700, 'slnt' -4"
           radius={100}
@@ -78,37 +78,37 @@ export const InvoiceAuditPage: React.FC<InvoiceAuditPageProps> = ({ onStartRFQWi
 
       {/* How the Audit Works in 3 Steps */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <Card className="border-slate-200">
+        <Card className="border-slate-200 dark:border-zinc-800">
           <CardContent className="p-6 space-y-3">
-            <div className="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center font-bold">
+            <div className="w-10 h-10 rounded-xl bg-brand-50 dark:bg-brand-950/40 text-brand-600 dark:text-brand-400 flex items-center justify-center font-bold">
               1
             </div>
-            <h3 className="text-base font-bold text-slate-900">Upload or Select Invoice</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white">Upload or Select Invoice</h3>
+            <p className="text-xs text-slate-500 dark:text-zinc-400 leading-relaxed">
               Upload any PDF bill, photo, or handwritten list from your current building materials or electrical supplier.
             </p>
           </CardContent>
         </Card>
 
-        <Card className="border-slate-200">
+        <Card className="border-slate-200 dark:border-zinc-800">
           <CardContent className="p-6 space-y-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
+            <div className="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold">
               2
             </div>
-            <h3 className="text-base font-bold text-slate-900">UAE Wholesale Market Benchmark</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white">UAE Wholesale Market Benchmark</h3>
+            <p className="text-xs text-slate-500 dark:text-zinc-400 leading-relaxed">
               Our automated engine cross-checks each SKU against live inventory lists from 50+ verified UAE stockists.
             </p>
           </CardContent>
         </Card>
 
-        <Card className="border-slate-200">
+        <Card className="border-slate-200 dark:border-zinc-800">
           <CardContent className="p-6 space-y-3">
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold">
               3
             </div>
-            <h3 className="text-base font-bold text-slate-900">Switch & Lock In Savings</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white">Switch & Lock In Savings</h3>
+            <p className="text-xs text-slate-500 dark:text-zinc-400 leading-relaxed">
               Convert the audited item list into a live SupplySouq RFQ with 1-click to receive binding competitive offers within 24 hours.
             </p>
           </CardContent>

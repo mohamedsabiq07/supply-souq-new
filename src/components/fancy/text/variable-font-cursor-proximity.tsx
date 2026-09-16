@@ -266,15 +266,14 @@ const VariableFontCursorProximity = forwardRef<HTMLElement, TextProps>(
                   ref={(el: HTMLSpanElement | null) => {
                     letterRefs.current[currentLetterIndex] = el
                   }}
-                  initial={{ opacity: 0, y: 14, filter: "blur(6px)" }}
-                  whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                  viewport={{ once: true }}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
                   transition={{
-                    duration: 0.45,
-                    delay: Math.min(currentLetterIndex * 0.015, 0.6),
+                    duration: 0.3,
+                    delay: Math.min(currentLetterIndex * 0.005, 0.25),
                     ease: [0.22, 1, 0.36, 1],
                   }}
-                  className="inline-block will-change-[transform,opacity,filter]"
+                  className="inline-block will-change-[transform,opacity]"
                   aria-hidden="true"
                   style={{
                     fontVariationSettings:

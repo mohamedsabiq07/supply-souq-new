@@ -163,22 +163,22 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
 
   return (
     <div className="max-w-2xl mx-auto py-10 px-4">
-      <Card className="p-6 sm:p-8 space-y-6 shadow-xl border-slate-200">
+      <Card className="p-6 sm:p-8 space-y-6 shadow-xl border-slate-200 dark:border-zinc-800">
         {/* Header */}
         <div className="text-center space-y-2">
-          <span className="inline-flex items-center gap-1 bg-brand-50 text-brand-700 text-xs font-bold px-3 py-1 rounded-full border border-brand-200">
-            <ShieldCheck className="w-4 h-4 text-brand-600" /> UAE Verified B2B Network (Dubai • Sharjah • Ajman)
+          <span className="inline-flex items-center gap-1 bg-brand-50 dark:bg-brand-950/40 text-brand-700 dark:text-brand-300 text-xs font-bold px-3 py-1 rounded-full border border-brand-200 dark:border-brand-800/60">
+            <ShieldCheck className="w-4 h-4 text-brand-600 dark:text-brand-400" /> UAE Verified B2B Network (Dubai • Sharjah • Ajman)
           </span>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             Create Your Corporate Account
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-zinc-400">
             Connect directly with verified UAE electrical, plumbing, HVAC & MEP stockists and contractors.
           </p>
         </div>
 
         {/* Role Toggle */}
-        <div className="grid grid-cols-2 gap-3 bg-slate-100 p-1.5 rounded-2xl text-xs font-bold">
+        <div className="grid grid-cols-2 gap-3 bg-slate-100 dark:bg-zinc-900 p-1.5 rounded-2xl text-xs font-bold border border-slate-200/50 dark:border-zinc-800">
           <button
             type="button"
             onClick={() => {
@@ -187,11 +187,11 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
             }}
             className={`py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all ${
               accountType === 'buyer'
-                ? 'bg-white shadow-md text-brand-700 font-extrabold border border-slate-200'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-white dark:bg-[#18181b] shadow-md text-brand-700 dark:text-brand-300 font-extrabold border border-slate-200 dark:border-zinc-700'
+                : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
-            <Building2 className="w-4 h-4 text-brand-600" />
+            <Building2 className="w-4 h-4 text-brand-600 dark:text-brand-400" />
             <span>Buyer / Contractor / MEP</span>
           </button>
           <button
@@ -202,18 +202,18 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
             }}
             className={`py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all ${
               accountType === 'supplier'
-                ? 'bg-white shadow-md text-amber-900 font-extrabold border border-amber-300'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-white dark:bg-[#18181b] shadow-md text-amber-900 dark:text-amber-300 font-extrabold border border-amber-300 dark:border-amber-700'
+                : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
-            <Store className="w-4 h-4 text-amber-600" />
+            <Store className="w-4 h-4 text-amber-600 dark:text-amber-400" />
             <span>Verified Stockist / Supplier</span>
           </button>
         </div>
 
         {errorMsg && (
-          <div className="p-3 bg-red-50 border border-red-200 rounded-xl flex items-center gap-2 text-xs text-red-700">
-            <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
+          <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50 rounded-xl flex items-center gap-2 text-xs text-red-700 dark:text-red-300">
+            <AlertCircle className="w-4 h-4 shrink-0 text-red-600 dark:text-red-400" />
             <span>{errorMsg}</span>
           </div>
         )}
@@ -221,41 +221,41 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
         {/* ---------------- BUYER SIGNUP FORM ---------------- */}
         {accountType === 'buyer' ? (
           <form onSubmit={handleSubmitBuyer} className="space-y-4 text-xs">
-            <div className="bg-brand-50/50 p-3 rounded-xl border border-brand-100 flex items-center gap-2 text-brand-800">
-              <CheckCircle2 className="w-4 h-4 text-brand-600 shrink-0" />
+            <div className="bg-brand-50/50 dark:bg-brand-950/30 p-3 rounded-xl border border-brand-100 dark:border-brand-900/50 flex items-center gap-2 text-brand-800 dark:text-brand-300">
+              <CheckCircle2 className="w-4 h-4 text-brand-600 dark:text-brand-400 shrink-0" />
               <span>Free Buyer Plan: Compare up to <strong>5 Live Quotations</strong> per RFQ with instant price benchmark.</span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="font-bold text-slate-700 block mb-1">Company Name *</label>
+                <label className="font-bold text-slate-700 dark:text-zinc-300 block mb-1">Company Name *</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Apex MEP & Contracting LLC"
                   value={buyerCompany}
                   onChange={(e) => setBuyerCompany(e.target.value)}
-                  className="w-full p-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 font-medium"
+                  className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 bg-white dark:bg-[#121215] text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 font-medium placeholder:text-slate-400 dark:placeholder:text-zinc-500"
                 />
               </div>
 
               <div>
-                <label className="font-bold text-slate-700 block mb-1">Procurement Engineer / Contact Person *</label>
+                <label className="font-bold text-slate-700 dark:text-zinc-300 block mb-1">Procurement Engineer / Contact Person *</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Eng. Tariq Mansour"
                   value={procurementEngineer}
                   onChange={(e) => setProcurementEngineer(e.target.value)}
-                  className="w-full p-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 font-medium"
+                  className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 bg-white dark:bg-[#121215] text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 font-medium placeholder:text-slate-400 dark:placeholder:text-zinc-500"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="font-bold text-slate-700 block mb-1 flex items-center gap-1">
-                  <Phone className="w-3.5 h-3.5 text-slate-400" /> UAE Mobile / Phone Number *
+                <label className="font-bold text-slate-700 dark:text-zinc-300 block mb-1 flex items-center gap-1">
+                  <Phone className="w-3.5 h-3.5 text-slate-400 dark:text-zinc-500" /> UAE Mobile / Phone Number *
                 </label>
                 <input
                   type="tel"
@@ -263,13 +263,13 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
                   placeholder="+971 5X XXX XXXX"
                   value={buyerPhone}
                   onChange={(e) => setBuyerPhone(e.target.value)}
-                  className="w-full p-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 font-medium"
+                  className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 bg-white dark:bg-[#121215] text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 font-medium placeholder:text-slate-400 dark:placeholder:text-zinc-500"
                 />
               </div>
 
               <div>
-                <label className="font-bold text-slate-700 block mb-1 flex items-center gap-1">
-                  <Mail className="w-3.5 h-3.5 text-slate-400" /> Work / Corporate Email *
+                <label className="font-bold text-slate-700 dark:text-zinc-300 block mb-1 flex items-center gap-1">
+                  <Mail className="w-3.5 h-3.5 text-slate-400 dark:text-zinc-500" /> Work / Corporate Email *
                 </label>
                 <input
                   type="email"
@@ -277,18 +277,18 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
                   placeholder="procurement@company.ae"
                   value={buyerEmail}
                   onChange={(e) => setBuyerEmail(e.target.value)}
-                  className="w-full p-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 font-medium"
+                  className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 bg-white dark:bg-[#121215] text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 font-medium placeholder:text-slate-400 dark:placeholder:text-zinc-500"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="font-bold text-slate-700 block mb-1">Primary Operating Emirate *</label>
+                <label className="font-bold text-slate-700 dark:text-zinc-300 block mb-1">Primary Operating Emirate *</label>
                 <select
                   value={buyerEmirate}
                   onChange={(e) => setBuyerEmirate(e.target.value as Emirate)}
-                  className="w-full p-2.5 rounded-lg border border-slate-300 bg-white font-semibold text-slate-800 focus:ring-2 focus:ring-brand-500"
+                  className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 bg-white dark:bg-[#121215] font-semibold text-slate-800 dark:text-white focus:ring-2 focus:ring-brand-500"
                 >
                   <option value="Dubai">Dubai</option>
                   <option value="Sharjah">Sharjah</option>
@@ -297,8 +297,8 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
               </div>
 
               <div>
-                <label className="font-bold text-slate-700 block mb-1 flex items-center gap-1">
-                  <MapPin className="w-3.5 h-3.5 text-slate-400" /> Office / Site Address *
+                <label className="font-bold text-slate-700 dark:text-zinc-300 block mb-1 flex items-center gap-1">
+                  <MapPin className="w-3.5 h-3.5 text-slate-400 dark:text-zinc-500" /> Office / Site Address *
                 </label>
                 <input
                   type="text"
@@ -306,15 +306,15 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
                   placeholder="e.g. Office 402, Business Bay, Dubai"
                   value={buyerAddress}
                   onChange={(e) => setBuyerAddress(e.target.value)}
-                  className="w-full p-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 font-medium"
+                  className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 bg-white dark:bg-[#121215] text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 font-medium placeholder:text-slate-400 dark:placeholder:text-zinc-500"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="font-bold text-slate-700 block mb-1 flex items-center gap-1">
-                  <User className="w-3.5 h-3.5 text-brand-600" /> Username for Login *
+                <label className="font-bold text-slate-700 dark:text-zinc-300 block mb-1 flex items-center gap-1">
+                  <User className="w-3.5 h-3.5 text-brand-600 dark:text-brand-400" /> Username for Login *
                 </label>
                 <input
                   type="text"
@@ -322,14 +322,14 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
                   placeholder="e.g. sabiq or sabiq07"
                   value={buyerUsername}
                   onChange={(e) => setBuyerUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_.-]/g, ''))}
-                  className="w-full p-2.5 rounded-lg border-2 border-brand-300 focus:ring-2 focus:ring-brand-500 font-bold text-slate-900 bg-brand-50/20"
+                  className="w-full p-2.5 rounded-lg border-2 border-brand-300 dark:border-brand-700 focus:ring-2 focus:ring-brand-500 font-bold text-slate-900 dark:text-white bg-brand-50/20 dark:bg-brand-950/20 placeholder:text-slate-400 dark:placeholder:text-zinc-500"
                 />
-                <p className="text-[10px] text-slate-500 mt-0.5">Choose a unique username to easily login.</p>
+                <p className="text-[10px] text-slate-500 dark:text-zinc-400 mt-0.5">Choose a unique username to easily login.</p>
               </div>
 
               <div>
-                <label className="font-bold text-slate-700 block mb-1 flex items-center gap-1">
-                  <Lock className="w-3.5 h-3.5 text-slate-400" /> Account Password *
+                <label className="font-bold text-slate-700 dark:text-zinc-300 block mb-1 flex items-center gap-1">
+                  <Lock className="w-3.5 h-3.5 text-slate-400 dark:text-zinc-500" /> Account Password *
                 </label>
                 <input
                   type="password"
@@ -337,9 +337,9 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
                   placeholder="••••••••••••"
                   value={buyerPassword}
                   onChange={(e) => setBuyerPassword(e.target.value)}
-                  className="w-full p-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 font-medium"
+                  className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 bg-white dark:bg-[#121215] text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 font-medium placeholder:text-slate-400 dark:placeholder:text-zinc-500"
                 />
-                <p className="text-[10px] text-slate-500 mt-0.5">Use this same password for your portal login.</p>
+                <p className="text-[10px] text-slate-500 dark:text-zinc-400 mt-0.5">Use this same password for your portal login.</p>
               </div>
             </div>
 
@@ -355,40 +355,40 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
         ) : (
           /* ---------------- SUPPLIER SIGNUP FORM ---------------- */
           <form onSubmit={handleSubmitSupplier} className="space-y-4 text-xs">
-            <div className="bg-amber-50 p-3 rounded-xl border border-amber-200 flex items-center gap-2 text-amber-900">
-              <ShieldCheck className="w-5 h-5 text-amber-600 shrink-0" />
+            <div className="bg-amber-50 dark:bg-amber-950/30 p-3 rounded-xl border border-amber-200 dark:border-amber-900/50 flex items-center gap-2 text-amber-900 dark:text-amber-300">
+              <ShieldCheck className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0" />
               <span><strong>Supplier Safety & Authenticity:</strong> Valid UAE Trade License verification ensures high trust and direct contractor PO awards.</span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="font-bold text-slate-700 block mb-1">Company Trading Name *</label>
+                <label className="font-bold text-slate-700 dark:text-zinc-300 block mb-1">Company Trading Name *</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Al Noor Electrical Trading LLC"
                   value={supplierCompany}
                   onChange={(e) => setSupplierCompany(e.target.value)}
-                  className="w-full p-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-amber-500 font-medium"
+                  className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 bg-white dark:bg-[#121215] text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500 font-medium placeholder:text-slate-400 dark:placeholder:text-zinc-500"
                 />
               </div>
 
               <div>
-                <label className="font-bold text-slate-700 block mb-1">Company Legal Name (on Trade License)</label>
+                <label className="font-bold text-slate-700 dark:text-zinc-300 block mb-1">Company Legal Name (on Trade License)</label>
                 <input
                   type="text"
                   placeholder="e.g. Al Noor Electrical & Lighting LLC"
                   value={supplierLegalName}
                   onChange={(e) => setSupplierLegalName(e.target.value)}
-                  className="w-full p-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-amber-500 font-medium"
+                  className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 bg-white dark:bg-[#121215] text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500 font-medium placeholder:text-slate-400 dark:placeholder:text-zinc-500"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="font-bold text-slate-700 block mb-1 text-amber-900 flex items-center gap-1">
-                  <FileText className="w-3.5 h-3.5 text-amber-600" /> UAE Trade License Number * (Mandatory)
+                <label className="font-bold text-slate-700 dark:text-zinc-300 block mb-1 text-amber-900 dark:text-amber-400 flex items-center gap-1">
+                  <FileText className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" /> UAE Trade License Number * (Mandatory)
                 </label>
                 <input
                   type="text"
@@ -396,12 +396,12 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
                   placeholder="e.g. TL-551029 or CN-1094821"
                   value={tradeLicenseNumber}
                   onChange={(e) => setTradeLicenseNumber(e.target.value)}
-                  className="w-full p-2.5 rounded-lg border-2 border-amber-300 focus:ring-2 focus:ring-amber-500 font-bold text-slate-900"
+                  className="w-full p-2.5 rounded-lg border-2 border-amber-300 dark:border-amber-700 bg-white dark:bg-[#121215] text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500 font-bold placeholder:text-slate-400 dark:placeholder:text-zinc-500"
                 />
               </div>
 
               <div>
-                <label className="font-bold text-slate-700 block mb-1">Trade License Copy / Certificate</label>
+                <label className="font-bold text-slate-700 dark:text-zinc-300 block mb-1">Trade License Copy / Certificate</label>
                 <div className="relative">
                   <input
                     type="file"
@@ -409,9 +409,9 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
                     onChange={handleFileUpload}
                     className="opacity-0 absolute inset-0 w-full h-full cursor-pointer z-10"
                   />
-                  <div className="w-full p-2.5 rounded-lg border border-dashed border-slate-300 bg-slate-50 flex items-center justify-between text-slate-600">
+                  <div className="w-full p-2.5 rounded-lg border border-dashed border-slate-300 dark:border-zinc-700 bg-slate-50 dark:bg-[#121215] flex items-center justify-between text-slate-600 dark:text-zinc-400">
                     <span className="truncate">{tradeLicenseFileName || 'Upload PDF or Image'}</span>
-                    <UploadCloud className="w-4 h-4 text-amber-600" />
+                    <UploadCloud className="w-4 h-4 text-amber-600 dark:text-amber-400" />
                   </div>
                 </div>
               </div>
@@ -419,20 +419,20 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="font-bold text-slate-700 block mb-1">Authorized Person Name *</label>
+                <label className="font-bold text-slate-700 dark:text-zinc-300 block mb-1">Authorized Person Name *</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Rajesh Kumar (Sales Manager)"
                   value={contactPerson}
                   onChange={(e) => setContactPerson(e.target.value)}
-                  className="w-full p-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-amber-500 font-medium"
+                  className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 bg-white dark:bg-[#121215] text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500 font-medium placeholder:text-slate-400 dark:placeholder:text-zinc-500"
                 />
               </div>
 
               <div>
-                <label className="font-bold text-slate-700 block mb-1 flex items-center gap-1">
-                  <Phone className="w-3.5 h-3.5 text-slate-400" /> UAE Phone Number *
+                <label className="font-bold text-slate-700 dark:text-zinc-300 block mb-1 flex items-center gap-1">
+                  <Phone className="w-3.5 h-3.5 text-slate-400 dark:text-zinc-500" /> UAE Phone Number *
                 </label>
                 <input
                   type="tel"
@@ -440,18 +440,18 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
                   placeholder="+971 5X XXX XXXX"
                   value={supplierPhone}
                   onChange={(e) => setSupplierPhone(e.target.value)}
-                  className="w-full p-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-amber-500 font-medium"
+                  className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 bg-white dark:bg-[#121215] text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500 font-medium placeholder:text-slate-400 dark:placeholder:text-zinc-500"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label className="font-bold text-slate-700 block mb-1">Emirate *</label>
+                <label className="font-bold text-slate-700 dark:text-zinc-300 block mb-1">Emirate *</label>
                 <select
                   value={supplierEmirate}
                   onChange={(e) => setSupplierEmirate(e.target.value as Emirate)}
-                  className="w-full p-2.5 rounded-lg border border-slate-300 bg-white font-semibold text-slate-800"
+                  className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 bg-white dark:bg-[#121215] font-semibold text-slate-800 dark:text-white"
                 >
                   <option value="Dubai">Dubai</option>
                   <option value="Sharjah">Sharjah</option>
@@ -460,20 +460,20 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
               </div>
 
               <div>
-                <label className="font-bold text-slate-700 block mb-1">Industrial Zone / Area *</label>
+                <label className="font-bold text-slate-700 dark:text-zinc-300 block mb-1">Industrial Zone / Area *</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Al Quoz 3 / Industrial Area 12"
                   value={industrialZone}
                   onChange={(e) => setIndustrialZone(e.target.value)}
-                  className="w-full p-2.5 rounded-lg border border-slate-300 font-medium"
+                  className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 bg-white dark:bg-[#121215] text-slate-900 dark:text-white font-medium placeholder:text-slate-400 dark:placeholder:text-zinc-500"
                 />
               </div>
 
               <div>
-                <label className="font-bold text-slate-700 block mb-1 flex items-center gap-1">
-                  <Mail className="w-3.5 h-3.5 text-slate-400" /> Sales Email *
+                <label className="font-bold text-slate-700 dark:text-zinc-300 block mb-1 flex items-center gap-1">
+                  <Mail className="w-3.5 h-3.5 text-slate-400 dark:text-zinc-500" /> Sales Email *
                 </label>
                 <input
                   type="email"
@@ -481,27 +481,27 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
                   placeholder="sales@supplier.ae"
                   value={supplierEmail}
                   onChange={(e) => setSupplierEmail(e.target.value)}
-                  className="w-full p-2.5 rounded-lg border border-slate-300 font-medium"
+                  className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 bg-white dark:bg-[#121215] text-slate-900 dark:text-white font-medium placeholder:text-slate-400 dark:placeholder:text-zinc-500"
                 />
               </div>
             </div>
 
             <div>
-              <label className="font-bold text-slate-700 block mb-1">Warehouse Address / Street *</label>
+              <label className="font-bold text-slate-700 dark:text-zinc-300 block mb-1">Warehouse Address / Street *</label>
               <input
                 type="text"
                 required
                 placeholder="e.g. Street 8, Warehouse 12, Al Quoz Industrial 3, Dubai"
                 value={supplierAddress}
                 onChange={(e) => setSupplierAddress(e.target.value)}
-                className="w-full p-2.5 rounded-lg border border-slate-300 font-medium"
+                className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 bg-white dark:bg-[#121215] text-slate-900 dark:text-white font-medium placeholder:text-slate-400 dark:placeholder:text-zinc-500"
               />
             </div>
 
             {/* Material Categories Checklist */}
             <div>
-              <label className="font-bold text-slate-700 block mb-2">Material Categories Handled *</label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 bg-slate-50 p-3 rounded-xl border border-slate-200">
+              <label className="font-bold text-slate-700 dark:text-zinc-300 block mb-2">Material Categories Handled *</label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 bg-slate-50 dark:bg-zinc-900/60 p-3 rounded-xl border border-slate-200 dark:border-zinc-800">
                 {CATEGORY_OPTIONS.map((cat) => {
                   const isChecked = selectedCategories.includes(cat);
                   return (
@@ -511,8 +511,8 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
                       onClick={() => toggleCategory(cat)}
                       className={`text-left p-2 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all ${
                         isChecked
-                          ? 'bg-amber-100 text-amber-950 font-bold border border-amber-300'
-                          : 'bg-white text-slate-600 border border-slate-200 hover:border-slate-300'
+                          ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-950 dark:text-amber-200 font-bold border border-amber-300 dark:border-amber-800'
+                          : 'bg-white dark:bg-[#141418] text-slate-600 dark:text-zinc-400 border border-slate-200 dark:border-zinc-800 hover:border-slate-300 dark:hover:border-zinc-700'
                       }`}
                     >
                       <input
@@ -530,8 +530,8 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="font-bold text-slate-700 block mb-1 flex items-center gap-1">
-                  <User className="w-3.5 h-3.5 text-amber-600" /> Username for Sales Desk Login *
+                <label className="font-bold text-slate-700 dark:text-zinc-300 block mb-1 flex items-center gap-1">
+                  <User className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" /> Username for Sales Desk Login *
                 </label>
                 <input
                   type="text"
@@ -539,14 +539,14 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
                   placeholder="e.g. alnoor_sales or sabiq"
                   value={supplierUsername}
                   onChange={(e) => setSupplierUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_.-]/g, ''))}
-                  className="w-full p-2.5 rounded-lg border-2 border-amber-300 focus:ring-2 focus:ring-amber-500 font-bold text-slate-900 bg-amber-50/30"
+                  className="w-full p-2.5 rounded-lg border-2 border-amber-300 dark:border-amber-700 bg-amber-50/30 dark:bg-amber-950/30 text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500 font-bold placeholder:text-slate-400 dark:placeholder:text-zinc-500"
                 />
-                <p className="text-[10px] text-slate-500 mt-0.5">Choose a unique username for easy login.</p>
+                <p className="text-[10px] text-slate-500 dark:text-zinc-400 mt-0.5">Choose a unique username for easy login.</p>
               </div>
 
               <div>
-                <label className="font-bold text-slate-700 block mb-1 flex items-center gap-1">
-                  <Lock className="w-3.5 h-3.5 text-slate-400" /> Account Password *
+                <label className="font-bold text-slate-700 dark:text-zinc-300 block mb-1 flex items-center gap-1">
+                  <Lock className="w-3.5 h-3.5 text-slate-400 dark:text-zinc-500" /> Account Password *
                 </label>
                 <input
                   type="password"
@@ -554,9 +554,9 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
                   placeholder="••••••••••••"
                   value={supplierPassword}
                   onChange={(e) => setSupplierPassword(e.target.value)}
-                  className="w-full p-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-amber-500 font-medium"
+                  className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 bg-white dark:bg-[#121215] text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500 font-medium placeholder:text-slate-400 dark:placeholder:text-zinc-500"
                 />
-                <p className="text-[10px] text-slate-500 mt-0.5">Use this same password for your portal login.</p>
+                <p className="text-[10px] text-slate-500 dark:text-zinc-400 mt-0.5">Use this same password for your portal login.</p>
               </div>
             </div>
 
@@ -572,7 +572,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
         )}
 
         {/* Footer info */}
-        <div className="text-center pt-2 border-t border-slate-100 text-xs text-slate-500">
+        <div className="text-center pt-2 border-t border-slate-100 dark:border-zinc-800 text-xs text-slate-500 dark:text-zinc-400">
           Already have an account?{' '}
           <button
             type="button"
@@ -580,7 +580,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
               if (onNavigateToLogin) onNavigateToLogin();
               else onSuccess();
             }}
-            className="text-brand-600 font-bold hover:underline"
+            className="text-brand-600 dark:text-brand-400 font-bold hover:underline"
           >
             Login to your portal
           </button>

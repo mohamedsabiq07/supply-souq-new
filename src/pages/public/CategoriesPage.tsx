@@ -28,7 +28,7 @@ export const CategoriesPage: React.FC<{ onPostRFQ: () => void }> = ({ onPostRFQ 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="text-xs font-bold text-brand-600 uppercase tracking-wider">UAE Electrical Materials Directory</span>
-          <h1 className="text-3xl font-extrabold text-slate-900 mt-1 cursor-default select-none">
+          <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white mt-1 cursor-default select-none">
             <VariableFontCursorProximity
               fromFontVariationSettings="'wght' 700, 'slnt' 0"
               toFontVariationSettings="'wght' 950, 'slnt' -8"
@@ -40,7 +40,7 @@ export const CategoriesPage: React.FC<{ onPostRFQ: () => void }> = ({ onPostRFQ 
           </h1>
           <VariableFontCursorProximity
             as="p"
-            className="text-sm text-slate-500 mt-1 cursor-default"
+            className="text-sm text-slate-500 dark:text-zinc-400 mt-1 cursor-default"
             fromFontVariationSettings="'wght' 400, 'slnt' 0"
             toFontVariationSettings="'wght' 700, 'slnt' -4"
             radius={100}
@@ -61,8 +61,8 @@ export const CategoriesPage: React.FC<{ onPostRFQ: () => void }> = ({ onPostRFQ 
             onClick={() => setSelectedVertical(v)}
             className={`px-4 py-2 rounded-xl text-xs font-bold transition-all shrink-0 ${
               selectedVertical === v
-                ? 'bg-slate-900 text-white shadow-sm'
-                : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                ? 'bg-slate-900 dark:bg-zinc-800 text-white shadow-sm border border-slate-900 dark:border-zinc-700'
+                : 'bg-white dark:bg-[#0c0c0e] text-slate-600 dark:text-zinc-300 border border-slate-200 dark:border-zinc-800 hover:bg-slate-50 dark:hover:bg-zinc-900'
             }`}
           >
             {v}
@@ -72,30 +72,30 @@ export const CategoriesPage: React.FC<{ onPostRFQ: () => void }> = ({ onPostRFQ 
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {filteredCategories.map((category) => (
-          <Card key={category.id} className="hover:border-brand-400 transition-all">
+          <Card key={category.id} className="hover:border-brand-400 dark:hover:border-brand-500 transition-all">
             <CardContent className="p-6 space-y-4">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center font-bold">
+                  <div className="w-12 h-12 rounded-xl bg-brand-50 dark:bg-rose-950/40 text-brand-600 dark:text-rose-400 border border-brand-200/50 dark:border-rose-900/50 flex items-center justify-center font-bold">
                     <Layers className="w-6 h-6" />
                   </div>
                   <div>
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{category.vertical}</span>
-                    <h3 className="text-lg font-bold text-slate-900">{category.name}</h3>
+                    <span className="text-[10px] font-bold text-slate-400 dark:text-zinc-500 uppercase tracking-wider">{category.vertical}</span>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white">{category.name}</h3>
                   </div>
                 </div>
-                <span className="text-xs font-bold text-slate-500 bg-slate-100 px-2.5 py-1 rounded-md">
+                <span className="text-xs font-bold text-slate-500 dark:text-zinc-400 bg-slate-100 dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 px-2.5 py-1 rounded-md">
                   {category.itemCount} SKUs
                 </span>
               </div>
 
-              <p className="text-xs text-slate-500 leading-relaxed">{category.description}</p>
+              <p className="text-xs text-slate-500 dark:text-zinc-400 leading-relaxed">{category.description}</p>
 
-              <div className="pt-2 border-t border-slate-100">
-                <h4 className="text-xs font-bold text-slate-800 mb-2">Available Subcategories & Items:</h4>
+              <div className="pt-2 border-t border-slate-100 dark:border-zinc-800">
+                <h4 className="text-xs font-bold text-slate-800 dark:text-zinc-200 mb-2">Available Subcategories & Items:</h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {category.subcategories.map((sub, idx) => (
-                    <div key={idx} className="flex items-center gap-1.5 text-xs text-slate-600">
+                    <div key={idx} className="flex items-center gap-1.5 text-xs text-slate-600 dark:text-zinc-300">
                       <CheckCircle2 className="w-3.5 h-3.5 text-[#cf2e46] shrink-0" />
                       <span className="truncate">{sub}</span>
                     </div>

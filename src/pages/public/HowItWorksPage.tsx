@@ -42,7 +42,7 @@ export const HowItWorksPage: React.FC<{ onStartRFQ: () => void }> = ({ onStartRF
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
       <div className="text-center max-w-2xl mx-auto space-y-3">
         <span className="text-xs font-bold text-brand-600 uppercase tracking-widest">Simple 5-Step Process</span>
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 cursor-default select-none">
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white cursor-default select-none">
           <VariableFontCursorProximity
             fromFontVariationSettings="'wght' 700, 'slnt' 0"
             toFontVariationSettings="'wght' 950, 'slnt' -8"
@@ -54,7 +54,7 @@ export const HowItWorksPage: React.FC<{ onStartRFQ: () => void }> = ({ onStartRF
         </h1>
         <VariableFontCursorProximity
           as="p"
-          className="text-sm text-slate-500 cursor-default"
+          className="text-sm text-slate-500 dark:text-zinc-400 cursor-default"
           fromFontVariationSettings="'wght' 400, 'slnt' 0"
           toFontVariationSettings="'wght' 700, 'slnt' -4"
           radius={100}
@@ -68,19 +68,19 @@ export const HowItWorksPage: React.FC<{ onStartRFQ: () => void }> = ({ onStartRF
         {steps.map((item, idx) => {
           const Icon = item.icon;
           return (
-            <Card key={idx} className="p-6 hover:border-brand-400 transition-all">
+            <Card key={idx} className="p-6 hover:border-brand-400 dark:hover:border-brand-500 transition-all">
               <div className="flex flex-col sm:flex-row sm:items-center gap-6">
-                <div className="w-14 h-14 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center font-extrabold text-xl shrink-0">
+                <div className="w-14 h-14 rounded-2xl bg-brand-50 dark:bg-rose-950/40 text-brand-600 dark:text-rose-400 border border-brand-200/50 dark:border-rose-900/50 flex items-center justify-center font-extrabold text-xl shrink-0">
                   <Icon className="w-7 h-7" />
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="text-xs font-mono font-bold text-brand-600 bg-brand-50 px-2 py-0.5 rounded">
+                    <span className="text-xs font-mono font-bold text-brand-600 dark:text-rose-400 bg-brand-50 dark:bg-rose-950/40 px-2 py-0.5 rounded border border-brand-200/50 dark:border-rose-900/50">
                       Step {item.step}
                     </span>
-                    <h3 className="text-lg font-bold text-slate-900">{item.title}</h3>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white">{item.title}</h3>
                   </div>
-                  <p className="text-xs text-slate-600 leading-relaxed">{item.desc}</p>
+                  <p className="text-xs text-slate-600 dark:text-zinc-400 leading-relaxed">{item.desc}</p>
                 </div>
               </div>
             </Card>
@@ -89,7 +89,7 @@ export const HowItWorksPage: React.FC<{ onStartRFQ: () => void }> = ({ onStartRF
       </div>
 
       {/* Transparent Pricing Model */}
-      <div className="bg-gradient-to-br from-slate-900 to-slate-950 text-white rounded-3xl p-8 border border-slate-800 shadow-xl space-y-6">
+      <div className="bg-[#0c0c0e] text-white rounded-3xl p-8 border border-zinc-800 shadow-xl space-y-6">
         <div className="text-center max-w-xl mx-auto space-y-2">
           <span className="text-xs font-bold text-[#cf2e46] uppercase tracking-widest">Transparent UAE Pricing</span>
           <h2 className="text-2xl font-black">Zero Commissions During Launch</h2>
@@ -100,7 +100,7 @@ export const HowItWorksPage: React.FC<{ onStartRFQ: () => void }> = ({ onStartRF
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
           {/* Contractors */}
-          <div className="bg-slate-800/80 p-6 rounded-2xl border border-slate-700/80 space-y-3">
+          <div className="bg-[#141417] p-6 rounded-2xl border border-zinc-800 space-y-3">
             <span className="text-xs font-extrabold uppercase tracking-wider text-[#cf2e46]">For MEP & Civil Contractors</span>
             <div className="text-2xl font-black text-white">100% Free Forever</div>
             <ul className="space-y-2 text-xs text-slate-300">
@@ -112,7 +112,7 @@ export const HowItWorksPage: React.FC<{ onStartRFQ: () => void }> = ({ onStartRF
           </div>
 
           {/* Suppliers */}
-          <div className="bg-slate-800/80 p-6 rounded-2xl border border-[#cf2e46]/40 space-y-3 relative overflow-hidden">
+          <div className="bg-[#141417] p-6 rounded-2xl border border-[#cf2e46]/40 space-y-3 relative overflow-hidden">
             <div className="absolute top-3 right-3 bg-[#cf2e46] text-white text-[10px] font-black uppercase px-2 py-0.5 rounded">
               Launch Special
             </div>
@@ -131,7 +131,7 @@ export const HowItWorksPage: React.FC<{ onStartRFQ: () => void }> = ({ onStartRF
         </div>
       </div>
 
-      <div className="text-center bg-slate-900 text-white rounded-3xl p-8 space-y-4">
+      <div className="text-center bg-[#0c0c0e] text-white rounded-3xl p-8 border border-zinc-800 space-y-4">
         <h3 className="text-xl font-bold">Ready to Experience Faster Procurement?</h3>
         <p className="text-xs text-slate-300 max-w-md mx-auto">
           Post your first material RFQ and receive 3-5 verified quotations within 24 hours.

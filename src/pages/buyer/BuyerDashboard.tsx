@@ -89,7 +89,7 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
 
       {/* Action Alert for Evaluating Quotes */}
       {evaluatingRFQs.length > 0 && (
-        <div className="p-4 bg-gradient-to-r from-brand-900 to-slate-900 text-white rounded-2xl border border-brand-700 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="p-4 bg-gradient-to-r from-brand-900 via-[#0c0c0e] to-black text-white rounded-2xl border border-brand-700 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-brand-500/30 border border-brand-400/40 flex items-center justify-center text-amber-400 shrink-0">
               <GitCompare className="w-5 h-5" />

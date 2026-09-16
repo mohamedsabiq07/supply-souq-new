@@ -114,7 +114,7 @@ export const AdminAnalyticsExport: React.FC<AdminAnalyticsExportProps> = ({
   return (
     <div className="space-y-6">
       {/* Analytics Banner */}
-      <div className="p-5 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-2xl border border-slate-800 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="p-5 bg-gradient-to-r from-black via-[#0c0c0e] to-black text-white rounded-2xl border border-zinc-800 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <BarChart3 className="w-5 h-5 text-indigo-400" />
