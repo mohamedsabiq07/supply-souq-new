@@ -52,10 +52,6 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   const handleStartBuyer = (bundle?: QuickBundle) => {
-    if (!isAuthenticated) {
-      setCurrentView('login', { redirect: 'create-rfq', bundle });
-      return;
-    }
     setCurrentView('create-rfq', { bundle });
   };
 
@@ -154,8 +150,8 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
               Upload your material list or BOQ in 60 seconds. Top verified UAE stockists compete to give you the best wholesale prices within 24 hours.
             </VariableFontCursorProximity>
 
-            {/* Dual CTAs */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+            {/* Primary Hero CTA */}
+            <div className="flex items-center justify-center pt-4">
               <MetalFx
                 preset="chromatic"
                 strength={0.85}
@@ -171,23 +167,6 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                   <Zap className="w-4 h-4 fill-white" />
                   <span>Post Live RFQ (100% Free)</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </button>
-              </MetalFx>
-
-              <MetalFx
-                preset="silver"
-                strength={0.65}
-                theme={isDark ? 'dark' : 'light'}
-                borderRadius={9999}
-                style={{ background: isDark ? '#121214' : '#ffffff' }}
-                className="rounded-full shadow-xs hover:shadow-md transition-all duration-300 cursor-pointer border border-slate-300 dark:border-zinc-700"
-              >
-                <button
-                  onClick={() => setCurrentView('invoice-audit')}
-                  className="w-full sm:w-auto px-8 py-4 rounded-full text-sm font-bold text-slate-900 dark:text-white flex items-center justify-center gap-2 cursor-pointer border-none bg-transparent"
-                >
-                  <Sparkles className="w-4 h-4 text-[#cf2e46]" />
-                  <span>Free Cable Cost Audit (Save 15%+)</span>
                 </button>
               </MetalFx>
             </div>

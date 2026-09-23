@@ -33,8 +33,8 @@ export const BuyerRFQsPage: React.FC<BuyerRFQsPageProps> = ({ onNavigate }) => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">My Requests for Quotation (RFQs)</h1>
-          <p className="text-xs text-slate-500 mt-0.5">Manage material requirements, active vendor bids, and quote evaluations.</p>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">My Requests for Quotation (RFQs)</h1>
+          <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">Manage material requirements, active vendor bids, and quote evaluations.</p>
         </div>
         <Button
           variant="primary"
@@ -45,7 +45,7 @@ export const BuyerRFQsPage: React.FC<BuyerRFQsPageProps> = ({ onNavigate }) => {
         </Button>
       </div>
 
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white p-3.5 rounded-xl border border-slate-200 shadow-subtle">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white dark:bg-[#0c0c0e] p-3.5 rounded-xl border border-slate-200 dark:border-zinc-800 shadow-subtle">
         <BorderBeam size="line" theme="light" className="flex-1">
           <div className="relative w-full">
             <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
@@ -54,7 +54,7 @@ export const BuyerRFQsPage: React.FC<BuyerRFQsPageProps> = ({ onNavigate }) => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search by RFQ #, material title, project name..."
-              className="w-full pl-9 pr-3 py-1.5 rounded-lg border border-slate-200 text-xs focus:ring-2 focus:ring-brand-500 focus:outline-none"
+              className="w-full pl-9 pr-3 py-1.5 rounded-lg border border-slate-200 dark:border-zinc-700 dark:bg-[#111114] dark:text-white text-xs focus:ring-2 focus:ring-brand-500 focus:outline-none"
             />
           </div>
         </BorderBeam>
@@ -66,8 +66,8 @@ export const BuyerRFQsPage: React.FC<BuyerRFQsPageProps> = ({ onNavigate }) => {
               onClick={() => setStatusFilter(status)}
               className={`px-3 py-1.5 rounded-lg font-semibold transition-all whitespace-nowrap capitalize ${
                 statusFilter === status
-                  ? 'bg-slate-900 text-white font-bold'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  ? 'bg-slate-900 dark:bg-zinc-800 text-white font-bold'
+                  : 'bg-slate-100 dark:bg-zinc-900 text-slate-600 dark:text-zinc-400 hover:bg-slate-200 dark:hover:bg-zinc-800'
               }`}
             >
               {status.replace('_', ' ')}
@@ -89,9 +89,9 @@ export const BuyerRFQsPage: React.FC<BuyerRFQsPageProps> = ({ onNavigate }) => {
           ))}
         </div>
       ) : (
-        <div className="text-center py-12 bg-white rounded-2xl border border-dashed border-slate-300 p-8">
-          <p className="text-sm font-bold text-slate-700">No RFQs Found</p>
-          <p className="text-xs text-slate-500 mt-1">Try adjusting your search or create your first material requirement.</p>
+        <div className="text-center py-12 bg-white dark:bg-[#0c0c0e] rounded-2xl border border-dashed border-slate-300 dark:border-zinc-800 p-8">
+          <p className="text-sm font-bold text-slate-700 dark:text-zinc-200">No RFQs Found</p>
+          <p className="text-xs text-slate-500 dark:text-zinc-400 mt-1">Try adjusting your search or create your first material requirement.</p>
         </div>
       )}
 

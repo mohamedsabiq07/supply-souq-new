@@ -49,97 +49,97 @@ export const RFQCard: React.FC<RFQCardProps> = ({
   const isCapacityFull = currentQuotesCount >= maxQuotes;
 
   return (
-    <Card className="hover:border-brand-300 hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
+    <Card className="hover:border-brand-300 dark:hover:border-zinc-700 hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
       <CardContent className="p-5">
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-3">
           <div>
             <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-              <span className="text-xs font-mono font-bold text-brand-600 bg-brand-50 px-2 py-0.5 rounded border border-brand-100">
+              <span className="text-xs font-mono font-bold text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950/60 px-2 py-0.5 rounded border border-brand-100 dark:border-brand-900/60">
                 {rfq.rfqNumber}
               </span>
               <StatusBadge status={rfq.status} />
-              <span className="text-[11px] font-bold text-rose-800 bg-rose-50 px-2 py-0.5 rounded border border-rose-200 inline-flex items-center gap-1">
+              <span className="text-[11px] font-bold text-rose-800 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/50 px-2 py-0.5 rounded border border-rose-200 dark:border-rose-900/60 inline-flex items-center gap-1">
                 <Clock className="w-3.5 h-3.5 text-[#cf2e46]" /> 24-Hour SLA
               </span>
               {rfq.authorityApproval && (
-                <span className="text-[11px] font-bold text-rose-800 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">
+                <span className="text-[11px] font-bold text-rose-800 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/50 px-2 py-0.5 rounded border border-rose-200 dark:border-rose-900/60">
                   {rfq.authorityApproval.split('(')[0].trim()}
                 </span>
               )}
               {rfq.priority === 'urgent' && (
-                <span className="inline-flex items-center gap-1 text-[11px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">
+                <span className="inline-flex items-center gap-1 text-[11px] font-bold text-rose-700 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/50 px-2 py-0.5 rounded border border-rose-200 dark:border-rose-900/60">
                   <AlertTriangle className="w-3 h-3" /> URGENT
                 </span>
               )}
             </div>
-            <h3 className="text-base font-bold text-slate-900 group-hover:text-brand-600 transition-colors">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-brand-600 transition-colors">
               {rfq.title}
             </h3>
-            <p className="text-xs text-slate-500 mt-0.5 font-medium">
-              Project: <span className="text-slate-700 font-semibold">{rfq.projectName}</span>
+            <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5 font-medium">
+              Project: <span className="text-slate-700 dark:text-zinc-200 font-semibold">{rfq.projectName}</span>
               {rfq.consultantName && (
-                <span className="ml-1 text-slate-400">({rfq.consultantName})</span>
+                <span className="ml-1 text-slate-400 dark:text-zinc-500">({rfq.consultantName})</span>
               )}
               {rfq.category && (
-                <span className="ml-2 text-slate-400">• Category: <strong className="text-slate-600">{rfq.category}</strong></span>
+                <span className="ml-2 text-slate-400 dark:text-zinc-500">• Category: <strong className="text-slate-600 dark:text-zinc-300">{rfq.category}</strong></span>
               )}
             </p>
           </div>
 
           <div className="sm:text-right shrink-0">
-            <div className="inline-flex sm:flex-col items-center sm:items-end gap-1.5 bg-slate-50 sm:bg-transparent p-2 sm:p-0 rounded-lg">
-              <span className="text-[11px] text-slate-500 font-semibold">
+            <div className="inline-flex sm:flex-col items-center sm:items-end gap-1.5 bg-slate-50 dark:bg-zinc-900 sm:bg-transparent sm:dark:bg-transparent p-2 sm:p-0 rounded-lg">
+              <span className="text-[11px] text-slate-500 dark:text-zinc-400 font-semibold">
                 {isCapacityFull ? 'Capacity Reached' : 'Fastest 5 Bids Rule'}
               </span>
               {isCapacityFull ? (
-                <span className="text-xs font-extrabold text-slate-600 bg-slate-200/80 px-2.5 py-1 rounded-md border border-slate-300 inline-flex items-center gap-1">
-                  <Lock className="w-3 h-3 text-slate-500" /> {maxQuotes} / {maxQuotes} Full
+                <span className="text-xs font-extrabold text-slate-600 dark:text-zinc-300 bg-slate-200/80 dark:bg-zinc-800 px-2.5 py-1 rounded-md border border-slate-300 dark:border-zinc-700 inline-flex items-center gap-1">
+                  <Lock className="w-3 h-3 text-slate-500 dark:text-zinc-400" /> {maxQuotes} / {maxQuotes} Full
                 </span>
               ) : currentQuotesCount === 0 ? (
-                <span className="text-xs font-extrabold text-[#cf2e46] bg-rose-50 px-2.5 py-1 rounded-md border border-rose-200 inline-flex items-center gap-1">
+                <span className="text-xs font-extrabold text-[#cf2e46] dark:text-rose-400 bg-rose-50 dark:bg-rose-950/40 px-2.5 py-1 rounded-md border border-rose-200 dark:border-rose-900/60 inline-flex items-center gap-1">
                   <Zap className="w-3 h-3 text-[#cf2e46]" /> 0 / {maxQuotes} Quotes (5 Open)
                 </span>
               ) : (
-                <span className="text-xs font-extrabold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-md border border-amber-300 inline-flex items-center gap-1">
-                  <Zap className="w-3 h-3 text-amber-600 animate-pulse" /> {currentQuotesCount} / {maxQuotes} ({spotsLeft} Spot{spotsLeft > 1 ? 's' : ''} Left!)
+                <span className="text-xs font-extrabold text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 px-2.5 py-1 rounded-md border border-amber-300 dark:border-amber-800 inline-flex items-center gap-1">
+                  <Zap className="w-3 h-3 text-amber-600 dark:text-amber-400 animate-pulse" /> {currentQuotesCount} / {maxQuotes} ({spotsLeft} Spot{spotsLeft > 1 ? 's' : ''} Left!)
                 </span>
               )}
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 py-3 my-3 border-y border-slate-100 text-xs">
-          <div className="flex items-center gap-2 text-slate-600">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 py-3 my-3 border-y border-slate-100 dark:border-zinc-800 text-xs">
+          <div className="flex items-center gap-2 text-slate-600 dark:text-zinc-400">
             <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
             <span className="truncate">{rfq.deliveryEmirate}</span>
           </div>
-          <div className="flex items-center gap-2 text-slate-600">
+          <div className="flex items-center gap-2 text-slate-600 dark:text-zinc-400">
             <Layers className="w-3.5 h-3.5 text-slate-400 shrink-0" />
             <span className="truncate">{rfq.items.length} Material Items</span>
           </div>
-          <div className="flex items-center gap-2 text-slate-600">
+          <div className="flex items-center gap-2 text-slate-600 dark:text-zinc-400">
             <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
             <span className="truncate">Need by: {formatDate(rfq.requiredDeliveryDate)}</span>
           </div>
-          <div className="flex items-center gap-2 text-slate-600">
+          <div className="flex items-center gap-2 text-slate-600 dark:text-zinc-400">
             <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
             <span className="truncate">Closes: {formatDate(rfq.closingDate)}</span>
           </div>
         </div>
 
-        <div className="bg-slate-50 p-2.5 rounded-lg mb-4 text-xs space-y-1">
+        <div className="bg-slate-50 dark:bg-zinc-900/60 dark:border dark:border-zinc-800 p-2.5 rounded-lg mb-4 text-xs space-y-1">
           {rfq.items.slice(0, 2).map((item, idx) => {
             const brandDisplay = (item.preferredBrands && item.preferredBrands.length > 0)
               ? item.preferredBrands.join(' / ')
               : item.preferredBrand;
 
             return (
-              <div key={item.id || idx} className="flex items-center justify-between text-slate-600">
-                <span className="truncate font-medium text-slate-800">
+              <div key={item.id || idx} className="flex items-center justify-between text-slate-600 dark:text-zinc-400">
+                <span className="truncate font-medium text-slate-800 dark:text-zinc-200">
                   • {item.quantity} {item.unit} — {item.description}
                 </span>
                 {brandDisplay && (
-                  <span className="text-[10px] font-bold text-brand-700 bg-white px-1.5 py-0.5 rounded border border-brand-200 shrink-0 ml-2">
+                  <span className="text-[10px] font-bold text-brand-700 dark:text-brand-300 bg-white dark:bg-zinc-800 px-1.5 py-0.5 rounded border border-brand-200 dark:border-zinc-700 shrink-0 ml-2">
                     {brandDisplay}
                   </span>
                 )}
@@ -147,7 +147,7 @@ export const RFQCard: React.FC<RFQCardProps> = ({
             );
           })}
           {rfq.items.length > 2 && (
-            <p className="text-[11px] text-brand-600 font-semibold pt-0.5">
+            <p className="text-[11px] text-brand-600 dark:text-brand-400 font-semibold pt-0.5">
               + {rfq.items.length - 2} more items in BOQ
             </p>
           )}

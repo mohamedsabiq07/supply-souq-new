@@ -55,66 +55,66 @@ export const BuyerOrdersPage: React.FC = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">Purchase Orders & Site Deliveries</h1>
-        <p className="text-xs text-slate-500 mt-0.5">Track procurement fulfillment, digital POs, and rate verified suppliers upon delivery.</p>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Purchase Orders & Site Deliveries</h1>
+        <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">Track procurement fulfillment, digital POs, and rate verified suppliers upon delivery.</p>
       </div>
 
       {myOrders.length > 0 ? (
         <div className="space-y-4">
           {myOrders.map((po) => (
-            <Card key={po.id} className="hover:border-slate-300 transition-all">
+            <Card key={po.id} className="hover:border-slate-300 dark:hover:border-zinc-700 transition-all">
             <CardContent className="p-6">
-              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-4 border-b border-slate-100">
+              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-4 border-b border-slate-100 dark:border-zinc-800">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="font-mono font-bold text-xs bg-slate-900 text-white px-2 py-0.5 rounded">
+                    <span className="font-mono font-bold text-xs bg-slate-900 dark:bg-black text-white px-2 py-0.5 rounded border border-transparent dark:border-zinc-800">
                       {po.poNumber}
                     </span>
                     <StatusBadge status={po.status} />
-                    <span className="text-xs text-slate-400">Ref: {po.quotationNumber}</span>
+                    <span className="text-xs text-slate-400 dark:text-zinc-500">Ref: {po.quotationNumber}</span>
                   </div>
-                  <h3 className="text-base font-bold text-slate-900">{po.rfqTitle}</h3>
-                  <p className="text-xs text-slate-500 mt-0.5 flex items-center gap-2">
-                    <span>Supplier: <strong className="text-slate-800 font-semibold">{po.supplierCompanyName}</strong></span>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white">{po.rfqTitle}</h3>
+                  <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5 flex items-center gap-2">
+                    <span>Supplier: <strong className="text-slate-800 dark:text-zinc-200 font-semibold">{po.supplierCompanyName}</strong></span>
                     <span>•</span>
                     <span className="flex items-center gap-1"><Phone className="w-3 h-3" /> {po.supplierPhone}</span>
                   </p>
                 </div>
 
                 <div className="sm:text-right">
-                  <span className="text-xs text-slate-400 block font-medium">Total Value (Incl. 5% VAT)</span>
-                  <span className="text-xl font-extrabold text-slate-900">{formatAED(po.totalAmountAED)}</span>
+                  <span className="text-xs text-slate-400 dark:text-zinc-500 block font-medium">Total Value (Incl. 5% VAT)</span>
+                  <span className="text-xl font-extrabold text-slate-900 dark:text-white">{formatAED(po.totalAmountAED)}</span>
                 </div>
               </div>
 
-              <div className="py-4 my-2 border-b border-slate-100">
-                <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500">
-                  <span className={po.status !== 'cancelled' ? 'text-brand-600 font-bold' : ''}>1. PO Issued</span>
-                  <span className={['accepted', 'processing', 'dispatched', 'delivered', 'completed'].includes(po.status) ? 'text-brand-600 font-bold' : ''}>2. Accepted</span>
-                  <span className={['processing', 'dispatched', 'delivered', 'completed'].includes(po.status) ? 'text-brand-600 font-bold' : ''}>3. Processing</span>
-                  <span className={['dispatched', 'delivered', 'completed'].includes(po.status) ? 'text-brand-600 font-bold' : ''}>4. Out for Delivery</span>
-                  <span className={['delivered', 'completed'].includes(po.status) ? 'text-emerald-600 font-bold' : ''}>5. Delivered on Site</span>
+              <div className="py-4 my-2 border-b border-slate-100 dark:border-zinc-800">
+                <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500 dark:text-zinc-400">
+                  <span className={po.status !== 'cancelled' ? 'text-brand-600 dark:text-brand-400 font-bold' : ''}>1. PO Issued</span>
+                  <span className={['accepted', 'processing', 'dispatched', 'delivered', 'completed'].includes(po.status) ? 'text-brand-600 dark:text-brand-400 font-bold' : ''}>2. Accepted</span>
+                  <span className={['processing', 'dispatched', 'delivered', 'completed'].includes(po.status) ? 'text-brand-600 dark:text-brand-400 font-bold' : ''}>3. Processing</span>
+                  <span className={['dispatched', 'delivered', 'completed'].includes(po.status) ? 'text-brand-600 dark:text-brand-400 font-bold' : ''}>4. Out for Delivery</span>
+                  <span className={['delivered', 'completed'].includes(po.status) ? 'text-emerald-600 dark:text-emerald-400 font-bold' : ''}>5. Delivered on Site</span>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-slate-600 my-2">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-slate-600 dark:text-zinc-300 my-2">
                 <div>
-                  <span className="text-slate-400 block">Delivery Site:</span>
-                  <strong className="text-slate-800">{po.deliveryAddress}</strong>
+                  <span className="text-slate-400 dark:text-zinc-500 block">Delivery Site:</span>
+                  <strong className="text-slate-800 dark:text-zinc-200">{po.deliveryAddress}</strong>
                 </div>
                 <div>
-                  <span className="text-slate-400 block">Payment Terms:</span>
-                  <strong className="text-slate-800">{po.paymentTerms}</strong>
+                  <span className="text-slate-400 dark:text-zinc-500 block">Payment Terms:</span>
+                  <strong className="text-slate-800 dark:text-zinc-200">{po.paymentTerms}</strong>
                 </div>
                 <div>
-                  <span className="text-slate-400 block">Expected On Site:</span>
-                  <strong className="text-slate-800">{formatDate(po.expectedDeliveryDate)}</strong>
+                  <span className="text-slate-400 dark:text-zinc-500 block">Expected On Site:</span>
+                  <strong className="text-slate-800 dark:text-zinc-200">{formatDate(po.expectedDeliveryDate)}</strong>
                 </div>
               </div>
 
               {po.trackingNotes && (
-                <div className="p-3 bg-slate-50 rounded-lg text-xs text-slate-700 mt-3 border border-slate-200">
-                  <strong className="text-slate-900 block mb-0.5">Delivery Notes / Dispatch Log:</strong>
+                <div className="p-3 bg-slate-50 dark:bg-zinc-900/60 rounded-lg text-xs text-slate-700 dark:text-zinc-300 mt-3 border border-slate-200 dark:border-zinc-800">
+                  <strong className="text-slate-900 dark:text-white block mb-0.5">Delivery Notes / Dispatch Log:</strong>
                   {po.trackingNotes}
                 </div>
               )}
@@ -141,7 +141,7 @@ export const BuyerOrdersPage: React.FC = () => {
                 )}
 
                 {po.reviewedByBuyer && (
-                  <span className="text-xs text-emerald-700 font-bold flex items-center gap-1">
+                  <span className="text-xs text-emerald-700 dark:text-emerald-400 font-bold flex items-center gap-1">
                     <CheckCircle2 className="w-4 h-4" /> Rating Submitted
                   </span>
                 )}
@@ -151,13 +151,13 @@ export const BuyerOrdersPage: React.FC = () => {
         ))}
       </div>
     ) : (
-      <Card className="p-12 text-center space-y-4 border-dashed border-2 border-slate-200 bg-slate-50/50">
-        <div className="w-12 h-12 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center mx-auto font-bold">
+      <Card className="p-12 text-center space-y-4 border-dashed border-2 border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-[#0c0c0e]">
+        <div className="w-12 h-12 rounded-2xl bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 flex items-center justify-center mx-auto font-bold border border-brand-200 dark:border-brand-800">
           <Package className="w-6 h-6" />
         </div>
         <div className="space-y-1 max-w-sm mx-auto">
-          <h3 className="text-base font-bold text-slate-900">No Purchase Orders Issued Yet</h3>
-          <p className="text-xs text-slate-500">
+          <h3 className="text-base font-bold text-slate-900 dark:text-white">No Purchase Orders Issued Yet</h3>
+          <p className="text-xs text-slate-500 dark:text-zinc-400">
             When you evaluate quotations and award an order, your official digital PO with delivery tracking and supplier contact info will appear here.
           </p>
         </div>
@@ -173,10 +173,10 @@ export const BuyerOrdersPage: React.FC = () => {
       >
         {selectedPO && (
           <div className="space-y-4 text-xs">
-            <div className="p-4 bg-slate-900 text-white rounded-xl flex justify-between items-center">
+            <div className="p-4 bg-slate-900 dark:bg-black text-white rounded-xl flex justify-between items-center border border-transparent dark:border-zinc-800">
               <div>
                 <h4 className="text-lg font-bold">SupplySouq B2B Purchase Order</h4>
-                <p className="text-slate-400">{selectedPO.poNumber}</p>
+                <p className="text-slate-400 dark:text-zinc-500">{selectedPO.poNumber}</p>
               </div>
               <div className="text-right">
                 <span className="text-xs text-emerald-400 font-bold bg-emerald-950 px-2.5 py-1 rounded border border-emerald-800">
@@ -185,21 +185,21 @@ export const BuyerOrdersPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 p-3 bg-slate-50 rounded-lg">
+            <div className="grid grid-cols-2 gap-4 p-3 bg-slate-50 dark:bg-zinc-900/60 rounded-lg border border-slate-100 dark:border-zinc-800">
               <div>
-                <strong className="block text-slate-500">Buyer Entity:</strong>
-                <p className="font-bold text-slate-900">{selectedPO.buyerCompanyName}</p>
-                <p className="text-slate-600">{selectedPO.buyerContactName} • {selectedPO.buyerPhone}</p>
+                <strong className="block text-slate-500 dark:text-zinc-400">Buyer Entity:</strong>
+                <p className="font-bold text-slate-900 dark:text-white">{selectedPO.buyerCompanyName}</p>
+                <p className="text-slate-600 dark:text-zinc-300">{selectedPO.buyerContactName} • {selectedPO.buyerPhone}</p>
               </div>
               <div>
-                <strong className="block text-slate-500">Awarded Supplier:</strong>
-                <p className="font-bold text-slate-900">{selectedPO.supplierCompanyName}</p>
-                <p className="text-slate-600">Tel: {selectedPO.supplierPhone}</p>
+                <strong className="block text-slate-500 dark:text-zinc-400">Awarded Supplier:</strong>
+                <p className="font-bold text-slate-900 dark:text-white">{selectedPO.supplierCompanyName}</p>
+                <p className="text-slate-600 dark:text-zinc-300">Tel: {selectedPO.supplierPhone}</p>
               </div>
             </div>
 
-            <table className="w-full text-left text-xs border border-slate-200">
-              <thead className="bg-slate-100 font-bold">
+            <table className="w-full text-left text-xs border border-slate-200 dark:border-zinc-800">
+              <thead className="bg-slate-100 dark:bg-zinc-900 text-slate-900 dark:text-white font-bold border-b border-slate-200 dark:border-zinc-800">
                 <tr>
                   <th className="p-2">Item</th>
                   <th className="p-2">Brand</th>
@@ -208,23 +208,23 @@ export const BuyerOrdersPage: React.FC = () => {
                   <th className="p-2 text-right">Total AED</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-slate-100 dark:divide-zinc-800">
                 {selectedPO.items?.map((item, idx) => (
-                  <tr key={idx}>
-                    <td className="p-2 font-medium">{item.itemDescription}</td>
-                    <td className="p-2 text-slate-600">{item.offeredBrand}</td>
-                    <td className="p-2 font-bold">{item.quantity} {item.unit}</td>
-                    <td className="p-2 text-right">{formatAED(item.unitPriceAED, true)}</td>
-                    <td className="p-2 text-right font-bold">{formatAED(item.totalPriceAED)}</td>
+                  <tr key={idx} className="hover:bg-slate-50/50 dark:hover:bg-zinc-800/40">
+                    <td className="p-2 font-medium text-slate-900 dark:text-white">{item.itemDescription}</td>
+                    <td className="p-2 text-slate-600 dark:text-zinc-400">{item.offeredBrand}</td>
+                    <td className="p-2 font-bold text-slate-900 dark:text-white">{item.quantity} {item.unit}</td>
+                    <td className="p-2 text-right text-slate-700 dark:text-zinc-300">{formatAED(item.unitPriceAED, true)}</td>
+                    <td className="p-2 text-right font-bold text-slate-900 dark:text-white">{formatAED(item.totalPriceAED)}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
 
-            <div className="p-3 bg-slate-50 rounded-lg space-y-1 text-right">
-              <p>Subtotal: <strong>{formatAED(selectedPO.subtotalAED)}</strong></p>
-              <p>5% UAE VAT: <strong>{formatAED(selectedPO.vatAED)}</strong></p>
-              <p className="text-sm font-extrabold text-slate-900 pt-1 border-t border-slate-200">
+            <div className="p-3 bg-slate-50 dark:bg-zinc-900/60 rounded-lg space-y-1 text-right border border-slate-100 dark:border-zinc-800 text-slate-700 dark:text-zinc-300">
+              <p>Subtotal: <strong className="text-slate-900 dark:text-white">{formatAED(selectedPO.subtotalAED)}</strong></p>
+              <p>5% UAE VAT: <strong className="text-slate-900 dark:text-white">{formatAED(selectedPO.vatAED)}</strong></p>
+              <p className="text-sm font-extrabold text-slate-900 dark:text-white pt-1 border-t border-slate-200 dark:border-zinc-800">
                 Total Purchase Order Value: {formatAED(selectedPO.totalAmountAED)}
               </p>
             </div>
@@ -240,7 +240,7 @@ export const BuyerOrdersPage: React.FC = () => {
       >
         <form onSubmit={handleReviewSubmit} className="space-y-4 text-xs">
           <div>
-            <label className="font-semibold text-slate-700 block mb-1">Overall Supplier Rating (1 to 5 Stars)</label>
+            <label className="font-semibold text-slate-700 dark:text-zinc-300 block mb-1">Overall Supplier Rating (1 to 5 Stars)</label>
             <div className="flex gap-2">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
@@ -248,7 +248,7 @@ export const BuyerOrdersPage: React.FC = () => {
                   type="button"
                   onClick={() => setRating(star)}
                   className={`p-2 text-base rounded-lg border ${
-                    rating >= star ? 'bg-amber-50 text-amber-600 border-amber-300 font-bold' : 'bg-slate-50 text-slate-400'
+                    rating >= star ? 'bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 border-amber-300 dark:border-amber-700 font-bold' : 'bg-slate-50 dark:bg-zinc-800 text-slate-400 dark:text-zinc-500 border-slate-200 dark:border-zinc-700'
                   }`}
                 >
                   ★ {star}
@@ -259,11 +259,11 @@ export const BuyerOrdersPage: React.FC = () => {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="font-semibold text-slate-700 block mb-1">Delivery Speed (1-5)</label>
+              <label className="font-semibold text-slate-700 dark:text-zinc-300 block mb-1">Delivery Speed (1-5)</label>
               <select
                 value={deliverySpeedRating}
                 onChange={(e) => setDeliverySpeedRating(Number(e.target.value))}
-                className="w-full p-2 rounded-lg border border-slate-200 font-medium"
+                className="w-full p-2 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-[#111114] text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-brand-500"
               >
                 <option value={5}>5 - On Time / Early</option>
                 <option value={4}>4 - Minor Delay</option>
@@ -273,11 +273,11 @@ export const BuyerOrdersPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="font-semibold text-slate-700 block mb-1">Material Quality / Specs (1-5)</label>
+              <label className="font-semibold text-slate-700 dark:text-zinc-300 block mb-1">Material Quality / Specs (1-5)</label>
               <select
                 value={materialQualityRating}
                 onChange={(e) => setMaterialQualityRating(Number(e.target.value))}
-                className="w-full p-2 rounded-lg border border-slate-200 font-medium"
+                className="w-full p-2 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-[#111114] text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-brand-500"
               >
                 <option value={5}>5 - Exact Spec & Certified</option>
                 <option value={4}>4 - Approved Equivalent</option>
@@ -287,12 +287,12 @@ export const BuyerOrdersPage: React.FC = () => {
           </div>
 
           <div>
-            <label className="font-semibold text-slate-700 block mb-1">Review Comments</label>
+            <label className="font-semibold text-slate-700 dark:text-zinc-300 block mb-1">Review Comments</label>
             <textarea
               rows={3}
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              className="w-full p-2 rounded-lg border border-slate-200"
+              className="w-full p-2 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-[#111114] text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500"
             />
           </div>
 

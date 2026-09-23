@@ -80,12 +80,12 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
 
   if (quotations.length === 0) {
     return (
-      <div className="text-center py-12 bg-white rounded-2xl border border-dashed border-slate-300 p-8">
-        <div className="w-12 h-12 rounded-full bg-amber-50 text-amber-600 mx-auto flex items-center justify-center mb-3">
+      <div className="text-center py-12 bg-white dark:bg-[#0c0c0e] rounded-2xl border border-dashed border-slate-300 dark:border-zinc-800 p-8">
+        <div className="w-12 h-12 rounded-full bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 mx-auto flex items-center justify-center mb-3">
           <Zap className="w-6 h-6" />
         </div>
-        <h4 className="text-base font-bold text-slate-900">Waiting for Quotations</h4>
-        <p className="text-xs text-slate-500 max-w-md mx-auto mt-1">
+        <h4 className="text-base font-bold text-slate-900 dark:text-white">Waiting for Quotations</h4>
+        <p className="text-xs text-slate-500 dark:text-zinc-400 max-w-md mx-auto mt-1">
           Your RFQ #{rfq.rfqNumber} has been distributed to 5 verified suppliers in {rfq.deliveryEmirate}. As quotations arrive, they will appear here side-by-side.
         </p>
       </div>
@@ -156,18 +156,18 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
       </div>
 
       {/* Top Filter & Sort Bar */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-subtle">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-[#0c0c0e] p-4 rounded-xl border border-slate-200 dark:border-zinc-800 shadow-subtle">
         <div>
           <div className="flex items-center gap-2">
-            <h3 className="text-base font-bold text-slate-900">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white">
               Quotation Comparison Matrix
             </h3>
-            <span className="text-xs font-extrabold bg-rose-50 text-rose-800 border border-rose-200 px-2.5 py-0.5 rounded-full flex items-center gap-1">
+            <span className="text-xs font-extrabold bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-900/60 px-2.5 py-0.5 rounded-full flex items-center gap-1">
               <CheckCircle2 className="w-3.5 h-3.5 text-[#cf2e46]" />
               <span>{visibleQuotes.length} {visibleQuotes.length === 1 ? 'Quote' : 'Quotes'} Displayed{isUnlocked ? ' (Extended Pack Active)' : quotations.length >= 5 ? ' (Free Limit: 5)' : ''}</span>
             </span>
           </div>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">
             Comparing verified UAE stockists under RFQ #{rfq.rfqNumber} ({rfq.title})
           </p>
         </div>
@@ -175,14 +175,14 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
         <div className="flex flex-wrap items-center gap-3">
           {/* Sort Menu */}
           <div className="flex items-center gap-1.5">
-            <span className="text-xs text-slate-500 font-medium flex items-center gap-1">
+            <span className="text-xs text-slate-500 dark:text-zinc-400 font-medium flex items-center gap-1">
               <ArrowUpDown className="w-3.5 h-3.5" /> Sort:
             </span>
-            <div className="inline-flex bg-slate-100 p-1 rounded-lg border border-slate-200 text-xs">
+            <div className="inline-flex bg-slate-100 dark:bg-zinc-900 p-1 rounded-lg border border-slate-200 dark:border-zinc-800 text-xs">
               <button
                 onClick={() => setSortBy('recommended')}
                 className={`px-2 py-1 rounded font-medium transition-all ${
-                  sortBy === 'recommended' ? 'bg-white shadow-sm font-bold text-brand-700' : 'text-slate-600'
+                  sortBy === 'recommended' ? 'bg-white dark:bg-zinc-800 shadow-sm font-bold text-brand-700 dark:text-brand-300' : 'text-slate-600 dark:text-zinc-400'
                 }`}
               >
                 Best Match
@@ -190,7 +190,7 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
               <button
                 onClick={() => setSortBy('price_asc')}
                 className={`px-2 py-1 rounded font-medium transition-all ${
-                  sortBy === 'price_asc' ? 'bg-white shadow-sm font-bold text-[#cf2e46]' : 'text-slate-600'
+                  sortBy === 'price_asc' ? 'bg-white dark:bg-zinc-800 shadow-sm font-bold text-[#cf2e46]' : 'text-slate-600 dark:text-zinc-400'
                 }`}
               >
                 Lowest Price
@@ -198,7 +198,7 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
               <button
                 onClick={() => setSortBy('delivery_asc')}
                 className={`px-2 py-1 rounded font-medium transition-all ${
-                  sortBy === 'delivery_asc' ? 'bg-white shadow-sm font-bold text-sky-700' : 'text-slate-600'
+                  sortBy === 'delivery_asc' ? 'bg-white dark:bg-zinc-800 shadow-sm font-bold text-sky-700 dark:text-sky-400' : 'text-slate-600 dark:text-zinc-400'
                 }`}
               >
                 Fastest Lead Time
@@ -206,7 +206,7 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
               <button
                 onClick={() => setSortBy('rating_desc')}
                 className={`px-2 py-1 rounded font-medium transition-all ${
-                  sortBy === 'rating_desc' ? 'bg-white shadow-sm font-bold text-amber-700' : 'text-slate-600'
+                  sortBy === 'rating_desc' ? 'bg-white dark:bg-zinc-800 shadow-sm font-bold text-amber-700 dark:text-amber-400' : 'text-slate-600 dark:text-zinc-400'
                 }`}
               >
                 Top Rated
@@ -228,34 +228,34 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
           return (
             <div
               key={quote.id}
-              className={`bg-white rounded-2xl border transition-all duration-200 flex flex-col justify-between overflow-hidden shadow-subtle ${
+              className={`bg-white dark:bg-[#0c0c0e] rounded-2xl border transition-all duration-200 flex flex-col justify-between overflow-hidden shadow-subtle ${
                 isAwarded
                   ? 'border-[#cf2e46] ring-2 ring-[#cf2e46]/20'
                   : isBestPrice
-                  ? 'border-rose-400 shadow-md'
-                  : 'border-slate-200 hover:border-slate-300 hover:shadow-card'
+                  ? 'border-rose-400 dark:border-rose-700 shadow-md'
+                  : 'border-slate-200 dark:border-zinc-800 hover:border-slate-300 dark:hover:border-zinc-700 hover:shadow-card'
               }`}
             >
               <div>
                 {/* Supplier Header Banner */}
                 <div className={`p-4 border-b ${
                   isAwarded
-                    ? 'bg-rose-50/80 border-rose-200'
-                    : 'bg-slate-50/60 border-slate-100'
+                    ? 'bg-rose-50/80 dark:bg-rose-950/40 border-rose-200 dark:border-rose-900/60'
+                    : 'bg-slate-50/60 dark:bg-zinc-900/60 border-slate-100 dark:border-zinc-800'
                 }`}>
                   <div className="flex items-center justify-between gap-2 mb-2">
                     <div className="flex items-center gap-1.5">
-                      <span className="text-[11px] font-mono font-bold text-slate-600 bg-white px-2 py-0.5 rounded border border-slate-200">
+                      <span className="text-[11px] font-mono font-bold text-slate-600 dark:text-zinc-300 bg-white dark:bg-zinc-800 px-2 py-0.5 rounded border border-slate-200 dark:border-zinc-700">
                         {quote.quotationNumber}
                       </span>
-                      <span className="text-[10px] font-bold bg-rose-50 text-rose-800 px-1.5 py-0.5 rounded border border-rose-200">
+                      <span className="text-[10px] font-bold bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-300 px-1.5 py-0.5 rounded border border-rose-200 dark:border-rose-900/60">
                         Quote {index + 1} of {visibleQuotes.length}
                       </span>
                     </div>
 
                     <div className="flex items-center gap-1">
                       {isAwarded && (
-                        <span className="inline-flex items-center gap-1 text-xs font-bold text-rose-800 bg-rose-100 px-2 py-0.5 rounded border border-rose-300">
+                        <span className="inline-flex items-center gap-1 text-xs font-bold text-rose-800 dark:text-rose-300 bg-rose-100 dark:bg-rose-950/60 px-2 py-0.5 rounded border border-rose-300 dark:border-rose-800">
                           <CheckCircle2 className="w-3.5 h-3.5" /> AWARDED
                         </span>
                       )}
@@ -265,14 +265,14 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
                     </div>
                   </div>
 
-                  <h4 className="text-base font-bold text-slate-900">
+                  <h4 className="text-base font-bold text-slate-900 dark:text-white">
                     {quote.supplierCompanyName}
                   </h4>
-                  <p className="text-xs text-slate-500 flex items-center gap-1.5 mt-0.5">
-                    <Building2 className="w-3.5 h-3.5 text-slate-400" />
+                  <p className="text-xs text-slate-500 dark:text-zinc-400 flex items-center gap-1.5 mt-0.5">
+                    <Building2 className="w-3.5 h-3.5 text-slate-400 dark:text-zinc-500" />
                     <span>{quote.supplierZone || quote.supplierEmirate || 'Verified Stockist'}</span>
-                    <span className="text-slate-300">•</span>
-                    <span className="text-amber-600 font-semibold flex items-center gap-0.5">
+                    <span className="text-slate-300 dark:text-zinc-600">•</span>
+                    <span className="text-amber-600 dark:text-amber-400 font-semibold flex items-center gap-0.5">
                       ★ {quote.supplierRating?.toFixed(1) || '4.9'}
                     </span>
                   </p>
@@ -280,7 +280,7 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
 
                 {/* Price & Commercial Highlights */}
                 <div className="p-4 space-y-3">
-                  <div className="bg-slate-900 text-white p-3.5 rounded-xl flex items-center justify-between">
+                  <div className="bg-slate-900 dark:bg-black text-white p-3.5 rounded-xl flex items-center justify-between border border-transparent dark:border-zinc-800">
                     <div>
                       <span className="text-[10px] text-slate-400 block font-medium uppercase tracking-wider">
                         Total Amount (5% VAT Incl.)
@@ -290,27 +290,27 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
                       </span>
                     </div>
                     {/* Assuming quote object has vatAmountAED, otherwise 0 */}
-                    <span className="text-[10px] text-slate-400 bg-slate-800 px-2 py-1 rounded border border-slate-700">
+                    <span className="text-[10px] text-slate-400 bg-slate-800 dark:bg-zinc-900 px-2 py-1 rounded border border-slate-700 dark:border-zinc-800">
                       VAT {formatAED(quote.vatAED || 0)}
                     </span>
                   </div>
 
                   {/* Operational Metrics Grid */}
                   <div className="grid grid-cols-2 gap-2 text-xs">
-                    <div className="bg-slate-50 p-2.5 rounded-lg border border-slate-100">
-                      <span className="text-slate-400 text-[10px] block font-medium flex items-center gap-1">
-                        <Truck className="w-3 h-3 text-slate-400" /> Lead Time
+                    <div className="bg-slate-50 dark:bg-zinc-900/60 p-2.5 rounded-lg border border-slate-100 dark:border-zinc-800">
+                      <span className="text-slate-400 dark:text-zinc-500 text-[10px] block font-medium flex items-center gap-1">
+                        <Truck className="w-3 h-3 text-slate-400 dark:text-zinc-500" /> Lead Time
                       </span>
-                      <strong className="text-slate-900 font-bold block mt-0.5">
+                      <strong className="text-slate-900 dark:text-white font-bold block mt-0.5">
                         {quote.leadTimeDisplay || `${quote.leadTimeDays} Days`}
                       </strong>
                     </div>
 
-                    <div className="bg-slate-50 p-2.5 rounded-lg border border-slate-100">
-                      <span className="text-slate-400 text-[10px] block font-medium flex items-center gap-1">
-                        <CreditCard className="w-3 h-3 text-slate-400" /> Payment Terms
+                    <div className="bg-slate-50 dark:bg-zinc-900/60 p-2.5 rounded-lg border border-slate-100 dark:border-zinc-800">
+                      <span className="text-slate-400 dark:text-zinc-500 text-[10px] block font-medium flex items-center gap-1">
+                        <CreditCard className="w-3 h-3 text-slate-400 dark:text-zinc-500" /> Payment Terms
                       </span>
-                      <strong className="text-slate-900 font-bold block mt-0.5 truncate">
+                      <strong className="text-slate-900 dark:text-white font-bold block mt-0.5 truncate">
                         {quote.paymentTerms || '30 Days PDC'}
                       </strong>
                     </div>
@@ -319,11 +319,11 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
                   {/* Delivery & Fleet Badge */}
                   <div className={`p-2 rounded-lg text-xs border flex items-center justify-between gap-2 ${
                     quote.deliveryMethod === 'supplysouq_managed'
-                      ? 'bg-brand-50/70 border-brand-200 text-brand-900'
-                      : 'bg-slate-50 border-slate-200 text-slate-700'
+                      ? 'bg-brand-50/70 dark:bg-brand-950/40 border-brand-200 dark:border-brand-900/60 text-brand-900 dark:text-brand-300'
+                      : 'bg-slate-50 dark:bg-zinc-900/60 border-slate-200 dark:border-zinc-800 text-slate-700 dark:text-zinc-300'
                   }`}>
                     <div className="flex items-center gap-1.5 truncate">
-                      <Truck className={`w-3.5 h-3.5 shrink-0 ${quote.deliveryMethod === 'supplysouq_managed' ? 'text-brand-600' : 'text-slate-500'}`} />
+                      <Truck className={`w-3.5 h-3.5 shrink-0 ${quote.deliveryMethod === 'supplysouq_managed' ? 'text-brand-600 dark:text-brand-400' : 'text-slate-500 dark:text-zinc-400'}`} />
                       <span className="font-semibold truncate">
                         {quote.deliveryMethod === 'supplysouq_managed' ? 'SupplySouq Logistics' : 'Supplier In-House Fleet'}
                       </span>
@@ -339,7 +339,7 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
                     <button
                       type="button"
                       onClick={() => setExpandedQuoteId(isExpanded ? null : quote.id)}
-                      className="w-full flex items-center justify-between text-xs font-bold text-slate-700 hover:text-brand-600 py-1.5 px-2 bg-slate-50 rounded-lg border border-slate-100 transition-colors"
+                      className="w-full flex items-center justify-between text-xs font-bold text-slate-700 dark:text-zinc-300 hover:text-brand-600 dark:hover:text-brand-400 py-1.5 px-2 bg-slate-50 dark:bg-zinc-900/60 rounded-lg border border-slate-100 dark:border-zinc-800 transition-colors"
                     >
                       <span>Item Breakdown ({quote.items?.length || 0} items)</span>
                       {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
@@ -350,15 +350,15 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
                         {quote.items?.map((item, i) => (
                           <div
                             key={item.id || i}
-                            className="bg-white p-2 rounded-lg border border-slate-100 flex items-center justify-between text-[11px]"
+                            className="bg-white dark:bg-zinc-900 p-2 rounded-lg border border-slate-100 dark:border-zinc-800 flex items-center justify-between text-[11px]"
                           >
                             <div className="truncate pr-2">
-                              <span className="font-semibold text-slate-800 block truncate">{item.itemDescription}</span>
-                              <span className="text-slate-400 text-[10px]">
+                              <span className="font-semibold text-slate-800 dark:text-zinc-200 block truncate">{item.itemDescription}</span>
+                              <span className="text-slate-400 dark:text-zinc-500 text-[10px]">
                                 {item.quantity} {item.unit} @ {formatAED(item.unitPriceAED)}/ea
                               </span>
                             </div>
-                            <span className="font-mono font-bold text-slate-900 shrink-0">
+                            <span className="font-mono font-bold text-slate-900 dark:text-white shrink-0">
                               {formatAED(item.totalPriceAED)}
                             </span>
                           </div>
@@ -370,18 +370,18 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
               </div>
 
               {/* Card Footer CTA */}
-              <div className="p-4 bg-slate-50 border-t border-slate-100 space-y-2.5">
+              <div className="p-4 bg-slate-50 dark:bg-zinc-900/50 border-t border-slate-100 dark:border-zinc-800 space-y-2.5">
                 {/* Quotation Rating Bar */}
-                <div className="flex items-center justify-between text-xs pb-1.5 border-b border-slate-200/60">
+                <div className="flex items-center justify-between text-xs pb-1.5 border-b border-slate-200/60 dark:border-zinc-800">
                   <div className="flex items-center gap-1.5">
-                    <span className="text-slate-500 font-medium text-[11px]">Quote Rating:</span>
+                    <span className="text-slate-500 dark:text-zinc-400 font-medium text-[11px]">Quote Rating:</span>
                     {quote.buyerRating ? (
-                      <span className="inline-flex items-center gap-1 bg-amber-50 text-amber-900 border border-amber-200 px-2 py-0.5 rounded font-bold text-[11px]">
+                      <span className="inline-flex items-center gap-1 bg-amber-50 dark:bg-amber-950/40 text-amber-900 dark:text-amber-300 border border-amber-200 dark:border-amber-800 px-2 py-0.5 rounded font-bold text-[11px]">
                         <Star className="w-3 h-3 fill-amber-400 text-amber-500" />
                         <span>{quote.buyerRating} / 5</span>
                       </span>
                     ) : (
-                      <span className="text-[10px] text-slate-400 italic">Unrated</span>
+                      <span className="text-[10px] text-slate-400 dark:text-zinc-500 italic">Unrated</span>
                     )}
                   </div>
 
@@ -390,8 +390,8 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
                     onClick={() => handleOpenRatingModal(quote)}
                     className={`text-[11px] font-bold px-2 py-1 rounded-md transition-all flex items-center gap-1 cursor-pointer ${
                       quote.buyerRating
-                        ? 'text-amber-800 bg-amber-100/60 hover:bg-amber-100 border border-amber-300'
-                        : 'text-brand-700 bg-brand-50 hover:bg-brand-100 border border-brand-200'
+                        ? 'text-amber-800 dark:text-amber-300 bg-amber-100/60 dark:bg-amber-950/60 hover:bg-amber-100 border border-amber-300 dark:border-amber-800'
+                        : 'text-brand-700 dark:text-brand-300 bg-brand-50 dark:bg-brand-950/60 hover:bg-brand-100 border border-brand-200 dark:border-brand-800'
                     }`}
                   >
                     <Star className="w-3 h-3 fill-current" />
@@ -400,7 +400,7 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
                 </div>
 
                 {isAwarded ? (
-                  <div className="w-full text-center py-2.5 bg-rose-100 text-rose-800 font-bold text-xs rounded-lg border border-rose-200">
+                  <div className="w-full text-center py-2.5 bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 font-bold text-xs rounded-lg border border-rose-200 dark:border-rose-800">
                     ✓ Awarded & Purchase Order Issued
                   </div>
                 ) : (
@@ -483,40 +483,40 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
         maxWidth="md"
       >
         <div className="space-y-4 text-xs">
-          <div className="p-4 bg-amber-50 rounded-xl border border-amber-200 space-y-2 text-amber-950">
-            <div className="flex items-center gap-2 font-bold text-sm text-amber-900">
-              <Sparkles className="w-4 h-4 text-amber-700" />
+          <div className="p-4 bg-amber-50 dark:bg-amber-950/40 rounded-xl border border-amber-200 dark:border-amber-800 space-y-2 text-amber-950 dark:text-amber-200">
+            <div className="flex items-center gap-2 font-bold text-sm text-amber-900 dark:text-amber-300">
+              <Sparkles className="w-4 h-4 text-amber-700 dark:text-amber-400" />
               <span>5 Additional Verified Stockist Bids Waiting</span>
             </div>
-            <p className="text-[11px] leading-relaxed text-amber-800">
+            <p className="text-[11px] leading-relaxed text-amber-800 dark:text-amber-300">
               Expanding this RFQ reveals 5 tier-2 factory importers and regional stockists across JAFZA, Dubai Industrial City, and Sharjah with special wholesale pricing.
             </p>
           </div>
 
-          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2.5">
-            <h5 className="font-bold text-slate-900">Included in this Extended Pack:</h5>
-            <ul className="space-y-2 text-slate-600">
+          <div className="p-4 bg-slate-50 dark:bg-zinc-900/60 rounded-xl border border-slate-200 dark:border-zinc-800 space-y-2.5">
+            <h5 className="font-bold text-slate-900 dark:text-white">Included in this Extended Pack:</h5>
+            <ul className="space-y-2 text-slate-600 dark:text-zinc-300">
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-[#cf2e46] shrink-0" />
-                <span><strong>5 Additional Commercial Quotations:</strong> Full itemized price breakdown.</span>
+                <span><strong className="text-slate-900 dark:text-white">5 Additional Commercial Quotations:</strong> Full itemized price breakdown.</span>
               </li>
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-[#cf2e46] shrink-0" />
-                <span><strong>Flexible Credit Terms:</strong> Extended 30 to 45-day PDC payment options.</span>
+                <span><strong className="text-slate-900 dark:text-white">Flexible Credit Terms:</strong> Extended 30 to 45-day PDC payment options.</span>
               </li>
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-[#cf2e46] shrink-0" />
-                <span><strong>Complete 10-Way Comparison Matrix:</strong> Compare all offers side-by-side.</span>
+                <span><strong className="text-slate-900 dark:text-white">Complete 10-Way Comparison Matrix:</strong> Compare all offers side-by-side.</span>
               </li>
             </ul>
           </div>
 
-          <div className="p-3 bg-slate-900 text-white rounded-xl flex items-center justify-between">
+          <div className="p-3 bg-slate-900 dark:bg-black text-white rounded-xl flex items-center justify-between border border-transparent dark:border-zinc-800">
             <div>
               <span className="text-[10px] text-slate-400 block font-semibold">One-Time RFQ Unlock Fee</span>
               <span className="text-lg font-extrabold text-amber-300 font-mono">AED 49.00</span>
             </div>
-            <span className="text-[10px] text-rose-300 bg-slate-800 px-2.5 py-1 rounded border border-slate-700 font-bold">
+            <span className="text-[10px] text-rose-300 bg-slate-800 dark:bg-zinc-900 px-2.5 py-1 rounded border border-slate-700 dark:border-zinc-800 font-bold">
               Instant Activation
             </span>
           </div>
@@ -550,43 +550,43 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
       >
         {selectedAwardQuote && (
           <div className="space-y-4 text-xs">
-            <div className="p-4 bg-rose-50 rounded-xl border border-rose-200 space-y-1">
-              <div className="flex items-center gap-2 text-rose-950 font-bold text-sm">
+            <div className="p-4 bg-rose-50 dark:bg-rose-950/40 rounded-xl border border-rose-200 dark:border-rose-900/60 space-y-1">
+              <div className="flex items-center gap-2 text-rose-950 dark:text-rose-100 font-bold text-sm">
                 <Gift className="w-4 h-4 text-[#cf2e46]" />
                 <span>SupplySouq 10% Platform Protection Active</span>
               </div>
-              <p className="text-[11px] text-rose-800">
+              <p className="text-[11px] text-rose-800 dark:text-rose-300">
                 You are covered by SupplySouq's 100% Quality & DEWA Certified Replacement Guarantee with full FTA digital VAT compliance.
               </p>
             </div>
 
-            <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div className="p-4 bg-slate-50 dark:bg-zinc-900/60 rounded-xl border border-slate-200 dark:border-zinc-800 space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-slate-500 font-medium">Selected Supplier:</span>
-                <strong className="text-slate-900">{selectedAwardQuote.supplierCompanyName}</strong>
+                <span className="text-slate-500 dark:text-zinc-400 font-medium">Selected Supplier:</span>
+                <strong className="text-slate-900 dark:text-white">{selectedAwardQuote.supplierCompanyName}</strong>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-slate-500 font-medium">Quotation Reference:</span>
-                <span className="font-mono font-bold text-brand-700">{selectedAwardQuote.quotationNumber}</span>
+                <span className="text-slate-500 dark:text-zinc-400 font-medium">Quotation Reference:</span>
+                <span className="font-mono font-bold text-brand-700 dark:text-brand-400">{selectedAwardQuote.quotationNumber}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-slate-500 font-medium">Total PO Value (Incl. 5% VAT):</span>
-                <strong className="text-base font-extrabold text-slate-900">{formatAED(selectedAwardQuote.grandTotalAED)}</strong>
+                <span className="text-slate-500 dark:text-zinc-400 font-medium">Total PO Value (Incl. 5% VAT):</span>
+                <strong className="text-base font-extrabold text-slate-900 dark:text-white">{formatAED(selectedAwardQuote.grandTotalAED)}</strong>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-slate-500 font-medium">Delivery Lead Time:</span>
-                <span className="font-semibold text-slate-800">{selectedAwardQuote.leadTimeDisplay}</span>
+                <span className="text-slate-500 dark:text-zinc-400 font-medium">Delivery Lead Time:</span>
+                <span className="font-semibold text-slate-800 dark:text-zinc-200">{selectedAwardQuote.leadTimeDisplay}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-slate-500 font-medium">Payment Terms:</span>
-                <span className="font-semibold text-slate-800">{selectedAwardQuote.paymentTerms}</span>
+                <span className="text-slate-500 dark:text-zinc-400 font-medium">Payment Terms:</span>
+                <span className="font-semibold text-slate-800 dark:text-zinc-200">{selectedAwardQuote.paymentTerms}</span>
               </div>
             </div>
 
-            <div className="p-3 bg-amber-50 rounded-lg border border-amber-200 text-amber-900 flex items-start gap-2">
-              <AlertCircle className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
+            <div className="p-3 bg-amber-50 dark:bg-amber-950/40 rounded-lg border border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-200 flex items-start gap-2">
+              <AlertCircle className="w-4 h-4 text-amber-700 dark:text-amber-400 shrink-0 mt-0.5" />
               <p>
-                Issuing this Purchase Order will generate an official UAE standard digital PO document, notify <strong>{selectedAwardQuote.supplierCompanyName}</strong>, and notify other quoting suppliers that the bid has concluded.
+                Issuing this Purchase Order will generate an official UAE standard digital PO document, notify <strong className="text-slate-900 dark:text-white">{selectedAwardQuote.supplierCompanyName}</strong>, and notify other quoting suppliers that the bid has concluded.
               </p>
             </div>
 
@@ -617,21 +617,21 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
       >
         {ratingModalQuote && (
           <div className="space-y-4 text-xs">
-            <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-xl space-y-1">
+            <div className="p-3.5 bg-slate-50 dark:bg-zinc-900/60 border border-slate-200 dark:border-zinc-800 rounded-xl space-y-1">
               <div className="flex items-center justify-between">
-                <span className="font-bold text-slate-900 text-sm">{ratingModalQuote.supplierCompanyName}</span>
-                <span className="font-mono font-bold text-slate-800 text-sm">
+                <span className="font-bold text-slate-900 dark:text-white text-sm">{ratingModalQuote.supplierCompanyName}</span>
+                <span className="font-mono font-bold text-slate-800 dark:text-zinc-200 text-sm">
                   {formatAED(ratingModalQuote.grandTotalAED)}
                 </span>
               </div>
-              <p className="text-slate-500 text-[11px]">
+              <p className="text-slate-500 dark:text-zinc-400 text-[11px]">
                 Quote #{ratingModalQuote.quotationNumber} • Lead Time: {ratingModalQuote.leadTimeDisplay || `${ratingModalQuote.leadTimeDays} Days`} • Terms: {ratingModalQuote.paymentTerms || '30 Days PDC'}
               </p>
             </div>
 
             {/* Star Rating Interactive Selector */}
-            <div className="p-4 bg-gradient-to-b from-amber-50/70 to-white rounded-2xl border border-amber-200 text-center space-y-2">
-              <span className="text-xs font-bold text-slate-700 block">
+            <div className="p-4 bg-gradient-to-b from-amber-50/70 to-white dark:from-amber-950/20 dark:to-[#121215] rounded-2xl border border-amber-200 dark:border-amber-900/60 text-center space-y-2">
+              <span className="text-xs font-bold text-slate-700 dark:text-zinc-300 block">
                 How would you rate this supplier's rates & commercial quote?
               </span>
               <div className="flex items-center justify-center gap-2 py-1">
@@ -650,7 +650,7 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
                         className={`w-8 h-8 transition-colors ${
                           isFilled
                             ? 'fill-amber-400 text-amber-500 drop-shadow-sm'
-                            : 'text-slate-200 hover:text-amber-200'
+                            : 'text-slate-200 dark:text-zinc-700 hover:text-amber-200'
                         }`}
                       />
                     </button>
@@ -658,14 +658,14 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
                 })}
               </div>
 
-              <div className="text-xs font-bold text-amber-900">
+              <div className="text-xs font-bold text-amber-900 dark:text-amber-300">
                 {starLabels[hoveredStars !== null ? hoveredStars : selectedStars]}
               </div>
             </div>
 
             {/* Quick Feedback Chips */}
             <div className="space-y-1.5">
-              <span className="text-[11px] font-bold text-slate-600 block">Quick Feedback Tags:</span>
+              <span className="text-[11px] font-bold text-slate-600 dark:text-zinc-400 block">Quick Feedback Tags:</span>
               <div className="flex flex-wrap gap-1.5">
                 {[
                   '🔥 Highly Competitive Price',
@@ -683,7 +683,7 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
                         setRatingFeedback(prev => prev ? `${prev}, ${tag}` : tag);
                       }
                     }}
-                    className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[11px] font-medium transition-colors cursor-pointer"
+                    className="px-2.5 py-1 bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 text-slate-700 dark:text-zinc-200 rounded-lg text-[11px] font-medium transition-colors cursor-pointer"
                   >
                     {tag}
                   </button>
@@ -693,7 +693,7 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
 
             {/* Optional Comment */}
             <div>
-              <label className="text-[11px] font-bold text-slate-700 block mb-1">
+              <label className="text-[11px] font-bold text-slate-700 dark:text-zinc-300 block mb-1">
                 Feedback / Notes for Supplier (Optional):
               </label>
               <textarea
@@ -701,19 +701,19 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
                 value={ratingFeedback}
                 onChange={(e) => setRatingFeedback(e.target.value)}
                 placeholder="e.g. Excellent rates on Ducab cable drum. Fast turnaround."
-                className="w-full p-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-brand-500"
+                className="w-full p-2.5 rounded-xl border border-slate-300 dark:border-zinc-700 bg-white dark:bg-[#111114] text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-brand-500"
               />
             </div>
 
             {/* Trust Notice explaining how rating impacts supplier rank */}
-            <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl text-[11px] text-rose-950 flex items-start gap-2">
+            <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 rounded-xl text-[11px] text-rose-950 dark:text-rose-200 flex items-start gap-2">
               <Sparkles className="w-4 h-4 text-[#cf2e46] shrink-0 mt-0.5" />
               <div>
                 <strong>Merit-Based Supplier Rankings:</strong> Your rating updates this supplier's overall profile rating in real-time. Suppliers with higher ratings are prioritized at the top of the supplier directory and receive first access to contractor RFQ broadcasts.
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100 dark:border-zinc-800">
               <Button variant="outline" onClick={() => setRatingModalQuote(null)}>
                 Cancel
               </Button>

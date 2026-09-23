@@ -218,7 +218,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
                   </VariableFontCursorProximity>
                 </button>
                 <button
-                  onClick={() => setCurrentView('login', { redirect: 'create-rfq' })}
+                  onClick={() => setCurrentView('create-rfq')}
                   className="px-4 py-2 rounded-full text-xs font-black bg-[#cf2e46] text-white hover:bg-[#b91c33] transition-all shadow-sm flex items-center gap-1.5 hover:scale-105 cursor-pointer"
                 >
                   <Zap className="w-3.5 h-3.5 fill-white" />
@@ -365,7 +365,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
               <>
                 <button
                   onClick={() => {
-                    setCurrentView('login', { redirect: 'create-rfq' });
+                    setCurrentView('create-rfq');
                     setMobileMenuOpen(false);
                   }}
                   className="w-full py-3 rounded-xl font-black bg-[#cf2e46] text-white shadow-sm flex items-center justify-center gap-2 cursor-pointer"

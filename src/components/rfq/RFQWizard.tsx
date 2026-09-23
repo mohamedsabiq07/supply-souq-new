@@ -8,6 +8,7 @@ import { RFQItem, RFQDocument, Emirate, QuickBundle } from '../../types';
 import { initialQuickBundles } from '../../data/seedData';
 import { Card, CardHeader, CardContent, CardFooter } from '../ui/Card';
 import { Button } from '../ui/Button';
+import { Modal } from '../ui/Modal';
 import { 
   CheckCircle2, 
   Plus, 
@@ -149,10 +150,10 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
       ? initialBundle.title 
       : targetSupplier 
         ? `Material Requirement for ${targetSupplier.name}`
-        : 'LV Copper Power Cables & Switchgear Requirement'
+        : ''
   );
   const [deliveryEmirate, setDeliveryEmirate] = useState<Emirate>('Dubai');
-  const [deliveryAddress, setDeliveryAddress] = useState('Al Quoz Industrial Loading Bay 3, Dubai');
+  const [deliveryAddress, setDeliveryAddress] = useState('');
   const [category, setCategory] = useState(
     initialBundle 
       ? initialBundle.category 
@@ -162,8 +163,14 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
           ? targetSupplier.categories[0] 
           : 'LV Power Cables & Building Wires'
   );
-  const [requiredDeliveryDate, setRequiredDeliveryDate] = useState('2026-08-30');
-  const [closingDate, setClosingDate] = useState('2026-08-26');
+  const [requiredDeliveryDate, setRequiredDeliveryDate] = useState(() => {
+    const d = new Date(Date.now() + 7 * 86400000);
+    return d.toISOString().split('T')[0];
+  });
+  const [closingDate, setClosingDate] = useState(() => {
+    const d = new Date(Date.now() + 3 * 86400000);
+    return d.toISOString().split('T')[0];
+  });
   const [priority, setPriority] = useState<'low' | 'normal' | 'urgent'>('normal');
 
   // Authority Compliance & Payment Terms
@@ -177,7 +184,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
   const [brandSearchQueries, setBrandSearchQueries] = useState<Record<number, string>>({});
   const [activeDropdownIndex, setActiveDropdownIndex] = useState<number | null>(null);
 
-  // Line Items
+  // Line Items - clean blank single item for new users
   const [items, setItems] = useState<RFQItem[]>(() => {
     if (initialBundle) {
       return initialBundle.items.map((it, idx) => ({
@@ -192,12 +199,25 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
         unit: it.unit as any,
       }));
     }
-    return DEFAULT_ELECTRICAL_ITEMS;
+    return [
+      {
+        id: 'item-1',
+        itemNumber: 1,
+        description: '',
+        specification: '',
+        preferredBrands: [],
+        preferredBrand: '',
+        allowAlternatives: true,
+        quantity: '' as any,
+        unit: 'm',
+        notes: ''
+      }
+    ];
   });
 
   const [documents, setDocuments] = useState<RFQDocument[]>([]);
   const [targetScope, setTargetScope] = useState<'all_verified' | 'local_emirate_only' | 'preferred_only'>('all_verified');
-  const [notes, setNotes] = useState('All materials must be genuine factory-sealed with valid mill test certificates and UAE authority compliance.');
+  const [notes, setNotes] = useState('');
 
   // Add brand to item
   const handleAddBrand = (itemIndex: number, brandName: string) => {
@@ -233,24 +253,18 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
     setItems(next);
   };
 
-  // Quick Bundle Preset loader
-  const handleSelectBundlePreset = (bundle: QuickBundle) => {
-    setTitle(bundle.title);
-    setCategory(bundle.category);
-    setItems(
-      bundle.items.map((it, idx) => ({
-        id: 'item-bundle-' + idx,
-        itemNumber: idx + 1,
-        description: it.description,
-        specification: it.specification,
-        preferredBrand: it.preferredBrand || '',
-        preferredBrands: it.preferredBrand ? it.preferredBrand.split('/').map(b => b.trim()) : [],
-        allowAlternatives: true,
-        quantity: it.quantity,
-        unit: it.unit as any,
-      }))
-    );
-  };
+  const { isAuthenticated, signIn, signUpBuyer, currentUser, currentCompany } = useAuth();
+  const [showAuthGateModal, setShowAuthGateModal] = useState(false);
+  const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
+  const [authError, setAuthError] = useState('');
+  
+  // Auth Form State
+  const [authUsername, setAuthUsername] = useState('');
+  const [authPassword, setAuthPassword] = useState('');
+  const [authCompanyName, setAuthCompanyName] = useState('');
+  const [authFullName, setAuthFullName] = useState('');
+  const [authPhone, setAuthPhone] = useState('');
+  const [authEmirate, setAuthEmirate] = useState<Emirate>('Dubai');
 
   const handleSimulatePhotoUpload = () => {
     setPhotoPreview('https://images.unsplash.com/photo-1584824486509-112e4181ff6b?w=600&auto=format&fit=crop&q=80');
@@ -298,40 +312,112 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
     setItems(next);
   };
 
-  const handleFinalPublish = () => {
+  const executePublish = (companyData?: any) => {
+    const activeCompany = companyData || currentCompany || buyerCompany;
+    const validItems = items.filter(it => it.description.trim().length > 0 || (it.quantity && Number(it.quantity) > 0));
+    const finalItems = validItems.length > 0
+      ? validItems.map((it, idx) => ({ ...it, itemNumber: idx + 1, quantity: Number(it.quantity) || 1 }))
+      : [
+          {
+            id: 'item-1',
+            itemNumber: 1,
+            description: title.trim() || 'Electrical Material Requirement',
+            specification: 'Standard DEWA / UAE authority compliant',
+            preferredBrands: [],
+            preferredBrand: '',
+            allowAlternatives: true,
+            quantity: 1,
+            unit: 'lot' as any,
+            notes: ''
+          }
+        ];
+
     const payload = {
-      buyerCompanyId: buyerCompany.id,
-      buyerCompanyName: buyerCompany.name,
-      buyerContactName: buyerCompany.contactName,
-      buyerPhone: buyerCompany.phone,
-      buyerEmail: buyerCompany.email,
-      title,
-      projectName: title,
-      projectLocation: deliveryAddress + ', ' + deliveryEmirate,
+      buyerCompanyId: activeCompany?.id || 'comp-buyer-1',
+      buyerCompanyName: activeCompany?.name || 'Contractor Buyer',
+      buyerContactName: activeCompany?.contactName || currentUser?.fullName || 'Procurement Engineer',
+      buyerPhone: activeCompany?.phone || '+971 4 340 8899',
+      buyerEmail: activeCompany?.email || 'procurement@company.ae',
+      title: title.trim() || 'Electrical Material Requirement',
+      projectName: title.trim() || 'Electrical Material Requirement',
+      projectLocation: (deliveryAddress ? deliveryAddress + ', ' : '') + deliveryEmirate,
       deliveryEmirate,
-      deliveryAddress,
+      deliveryAddress: deliveryAddress || 'Project Site, ' + deliveryEmirate,
       category,
-      requiredDeliveryDate,
-      closingDate,
+      requiredDeliveryDate: requiredDeliveryDate || new Date(Date.now() + 7 * 86400000).toISOString().split('T')[0],
+      closingDate: closingDate || new Date(Date.now() + 3 * 86400000).toISOString().split('T')[0],
       priority,
       authorityApproval,
       paymentTermsPreference,
       targetSupplierScope: targetScope,
       targetSupplierId: selectedTargetSupplier?.id,
       targetSupplierName: selectedTargetSupplier?.name,
-      notes: notes + (photoPreview ? ' [Includes photo attachment]' : ''),
+      notes: (notes || 'Standard genuine factory-sealed materials with mill test certificates.') + (photoPreview ? ' [Includes photo attachment]' : ''),
       photoUploadUrl: photoPreview || undefined,
       isQuickTemplate: false,
-      items,
+      items: finalItems,
       documents,
     };
     onPublish(payload);
   };
 
+  const handleFinalPublish = () => {
+    if (!isAuthenticated) {
+      setShowAuthGateModal(true);
+      return;
+    }
+    executePublish(buyerCompany);
+  };
+
+  const handleAuthSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAuthError('');
+    if (authMode === 'login') {
+      const res = await signIn(authUsername, authPassword);
+      if (res.success) {
+        setShowAuthGateModal(false);
+        executePublish(currentCompany);
+      } else {
+        setAuthError(res.error || 'Invalid credentials. Check your username or password, or use a test account below.');
+      }
+    } else {
+      if (!authCompanyName || !authFullName || !authUsername || !authPassword) {
+        setAuthError('Please fill in all required registration fields.');
+        return;
+      }
+      const res = await signUpBuyer({
+        companyName: authCompanyName,
+        procurementEngineerName: authFullName,
+        username: authUsername,
+        password: authPassword,
+        phone: authPhone || '+971 50 123 4567',
+        email: authUsername.includes('@') ? authUsername : `${authUsername}@company.ae`,
+        address: 'Dubai, UAE',
+        emirate: authEmirate,
+      });
+      if (res.success) {
+        setShowAuthGateModal(false);
+        executePublish(currentCompany);
+      } else {
+        setAuthError(res.error || 'Registration failed. Try a different username.');
+      }
+    }
+  };
+
+  const handleQuickLogin = async (username: string) => {
+    const res = await signIn(username, 'password123');
+    if (res.success) {
+      setShowAuthGateModal(false);
+      executePublish(currentCompany);
+    } else {
+      setAuthError(res.error || 'Login failed.');
+    }
+  };
+
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="w-full max-w-5xl mx-auto space-y-6">
       {/* Top Method Selector */}
-      <div className="bg-slate-900 text-white p-4 rounded-2xl shadow-md space-y-3">
+      <div className="bg-slate-900 dark:bg-[#0c0c0e] text-white p-4 rounded-2xl shadow-md border border-slate-800 dark:border-zinc-800 space-y-3">
         <div>
           <span className="text-[11px] font-bold text-amber-400 uppercase tracking-wider block">
             Choose How You Want to Create Your RFQ
@@ -349,13 +435,13 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
             className={`p-3.5 rounded-xl border text-left flex items-start gap-3 transition-all ${
               wizardMode === 'detailed_boq'
                 ? 'bg-brand-600 text-white border-brand-400 shadow-md font-bold'
-                : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700/60'
+                : 'bg-slate-800 dark:bg-zinc-900 text-slate-300 border-slate-700 dark:border-zinc-800 hover:bg-slate-700/60 dark:hover:bg-zinc-800'
             }`}
           >
             <FileText className="w-5 h-5 text-sky-300 shrink-0 mt-0.5" />
             <div>
               <span className="block font-bold">Custom Electrical Line-Item BOQ</span>
-              <span className="text-[10px] text-slate-300 font-normal">Search and select approved brands, specs, and quantities</span>
+              <span className="text-[10px] text-slate-300 dark:text-zinc-400 font-normal">Search and select approved brands, specs, and quantities</span>
             </div>
           </button>
 
@@ -368,29 +454,29 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
             className={`p-3.5 rounded-xl border text-left flex items-start gap-3 transition-all ${
               wizardMode === 'photo_upload'
                 ? 'bg-brand-600 text-white border-brand-400 shadow-md font-bold'
-                : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700/60'
+                : 'bg-slate-800 dark:bg-zinc-900 text-slate-300 border-slate-700 dark:border-zinc-800 hover:bg-slate-700/60 dark:hover:bg-zinc-800'
             }`}
           >
             <Camera className="w-5 h-5 text-rose-300 shrink-0 mt-0.5" />
             <div>
               <span className="block font-bold">Snap Photo of BOQ / Previous Invoice</span>
-              <span className="text-[10px] text-slate-300 font-normal">Handwritten cable schedule, single-line diagram, or paper bill</span>
+              <span className="text-[10px] text-slate-300 dark:text-zinc-400 font-normal">Handwritten cable schedule, single-line diagram, or paper bill</span>
             </div>
           </button>
         </div>
       </div>
 
       {/* Progress Stepper */}
-      <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-subtle flex items-center justify-between text-xs">
+      <div className="bg-white dark:bg-[#0c0c0e] p-3.5 rounded-xl border border-slate-200 dark:border-zinc-800 shadow-subtle flex items-center justify-between text-xs">
         <div className="flex items-center gap-2">
           <span className="w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold text-xs">
             {step}
           </span>
-          <span className="font-bold text-slate-900">
+          <span className="font-bold text-slate-900 dark:text-white">
             {step === 1 ? '1. Material Requirement & Delivery Details' : '2. Review & Broadcast to Verified Stockists'}
           </span>
         </div>
-        <span className="text-slate-400 font-medium">Step {step} of 2</span>
+        <span className="text-slate-400 dark:text-zinc-500 font-medium">Step {step} of 2</span>
       </div>
 
       {/* STEP 1 */}
@@ -399,32 +485,15 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
           <CardHeader>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
-                <h3 className="text-base font-bold text-slate-900">
-                  {wizardMode === 'photo_upload' ? 'Upload Photo & Delivery Site' : 'Select Package & Delivery Site'}
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                  {wizardMode === 'photo_upload' ? 'Upload Photo & Delivery Site' : 'Material Requirement & Delivery Site'}
                 </h3>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-500 dark:text-zinc-400">
                   {wizardMode === 'photo_upload'
                     ? 'Take a photo of your paper material list or existing supplier invoice to get competing wholesale bids.'
                     : 'Enter your project details and material items.'}
                 </p>
               </div>
-
-              {/* 1-Click Fast Bundle Presets */}
-              {wizardMode !== 'photo_upload' && (
-                <div className="flex items-center gap-1.5 flex-wrap">
-                  <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Fast Presets:</span>
-                  {initialQuickBundles.slice(0, 3).map((b) => (
-                    <button
-                      key={b.id}
-                      type="button"
-                      onClick={() => handleSelectBundlePreset(b)}
-                      className="text-[10px] font-bold text-brand-700 bg-brand-50 hover:bg-brand-100 px-2 py-1 rounded-md border border-brand-200 transition-colors"
-                    >
-                      + {b.title.split(' ')[0]} {b.title.split(' ')[1]}
-                    </button>
-                  ))}
-                </div>
-              )}
             </div>
           </CardHeader>
           <CardContent className="space-y-6 text-xs">
@@ -479,29 +548,30 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
             )}
 
             {/* Section A: Title, Category & Authority Approval */}
-            <div className="bg-slate-50/80 p-4 rounded-2xl border border-slate-200 space-y-4">
-              <span className="text-[11px] font-extrabold uppercase tracking-wider text-brand-700 flex items-center gap-1.5">
+            <div className="bg-slate-50/80 dark:bg-zinc-900/40 p-4 rounded-2xl border border-slate-200 dark:border-zinc-800 space-y-4">
+              <span className="text-[11px] font-extrabold uppercase tracking-wider text-brand-700 dark:text-brand-400 flex items-center gap-1.5">
                 <Building2 className="w-3.5 h-3.5" /> Requirement & Specification Standards
               </span>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="sm:col-span-1">
-                  <label className="font-semibold text-slate-700 block mb-1">RFQ Title / Requirement Name *</label>
+                  <label className="font-semibold text-slate-700 dark:text-zinc-300 block mb-1">RFQ Title / Requirement Name *</label>
                   <input
                     type="text"
                     required
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    className="w-full p-2.5 rounded-lg border border-slate-200 text-xs font-semibold focus:ring-2 focus:ring-brand-500 bg-white"
+                    placeholder="e.g. LV Copper Power Cables & Switchgear"
+                    className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-zinc-700 text-xs font-semibold focus:ring-2 focus:ring-brand-500 bg-white dark:bg-[#111114] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-zinc-500"
                   />
                 </div>
 
                 <div className="sm:col-span-1">
-                  <label className="font-semibold text-slate-700 block mb-1">Procurement Category *</label>
+                  <label className="font-semibold text-slate-700 dark:text-zinc-300 block mb-1">Procurement Category *</label>
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    className="w-full p-2.5 rounded-lg border border-slate-200 text-xs font-semibold focus:ring-2 focus:ring-brand-500 bg-white"
+                    className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-zinc-700 text-xs font-semibold focus:ring-2 focus:ring-brand-500 bg-white dark:bg-[#111114] text-slate-900 dark:text-white"
                   >
                     <option value="LV Power Cables & Building Wires">⚡ LV Power Cables & Building Wires</option>
                     <option value="MV & HV Power Cables (11kV - 132kV)">⚡ MV & HV Power Cables (11kV - 132kV)</option>
@@ -517,13 +587,13 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                 </div>
 
                 <div className="sm:col-span-1">
-                  <label className="font-semibold text-slate-700 block mb-1">
+                  <label className="font-semibold text-slate-700 dark:text-zinc-300 block mb-1">
                     Authority Compliance *
                   </label>
                   <select
                     value={authorityApproval}
                     onChange={(e) => setAuthorityApproval(e.target.value)}
-                    className="w-full p-2.5 rounded-lg border border-slate-200 text-xs font-bold text-brand-700 focus:ring-2 focus:ring-brand-500 bg-white"
+                    className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-zinc-700 text-xs font-bold text-brand-700 dark:text-brand-400 focus:ring-2 focus:ring-brand-500 bg-white dark:bg-[#111114]"
                   >
                     <option value="DEWA Approved (Dubai Standard)">🏛️ DEWA Approved (Dubai)</option>
                     <option value="SEWA Approved (Sharjah Standard)">🏛️ SEWA Approved (Sharjah)</option>
@@ -537,18 +607,18 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
             </div>
 
             {/* Section B: Delivery Location & Terms */}
-            <div className="bg-slate-50/80 p-4 rounded-2xl border border-slate-200 space-y-4">
-              <span className="text-[11px] font-extrabold uppercase tracking-wider text-brand-700 flex items-center gap-1.5">
+            <div className="bg-slate-50/80 dark:bg-zinc-900/40 p-4 rounded-2xl border border-slate-200 dark:border-zinc-800 space-y-4">
+              <span className="text-[11px] font-extrabold uppercase tracking-wider text-brand-700 dark:text-brand-400 flex items-center gap-1.5">
                 <MapPin className="w-3.5 h-3.5" /> Delivery Location & Commercial Terms
               </span>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                 <div>
-                  <label className="font-semibold text-slate-700 block mb-1">Delivery Emirate *</label>
+                  <label className="font-semibold text-slate-700 dark:text-zinc-300 block mb-1">Delivery Emirate *</label>
                   <select
                     value={deliveryEmirate}
                     onChange={(e) => setDeliveryEmirate(e.target.value as Emirate)}
-                    className="w-full p-2.5 rounded-lg border border-slate-200 text-xs font-bold text-brand-700 focus:ring-2 focus:ring-brand-500 bg-white"
+                    className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-zinc-700 text-xs font-bold text-brand-700 dark:text-brand-400 focus:ring-2 focus:ring-brand-500 bg-white dark:bg-[#111114]"
                   >
                     <option value="Dubai">Dubai</option>
                     <option value="Sharjah">Sharjah</option>
@@ -557,34 +627,34 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                 </div>
 
                 <div className="lg:col-span-2">
-                  <label className="font-semibold text-slate-700 block mb-1">Delivery Site / Gate Address *</label>
+                  <label className="font-semibold text-slate-700 dark:text-zinc-300 block mb-1">Delivery Site / Gate Address *</label>
                   <input
                     type="text"
                     required
                     value={deliveryAddress}
                     onChange={(e) => setDeliveryAddress(e.target.value)}
                     placeholder="e.g. Al Quoz Industrial Loading Bay 3, Dubai"
-                    className="w-full p-2.5 rounded-lg border border-slate-200 text-xs focus:ring-2 focus:ring-brand-500 bg-white"
+                    className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-zinc-700 text-xs focus:ring-2 focus:ring-brand-500 bg-white dark:bg-[#111114] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-zinc-500"
                   />
                 </div>
 
                 <div>
-                  <label className="font-semibold text-slate-700 block mb-1">Required Delivery Date *</label>
+                  <label className="font-semibold text-slate-700 dark:text-zinc-300 block mb-1">Required Delivery Date *</label>
                   <input
                     type="date"
                     required
                     value={requiredDeliveryDate}
                     onChange={(e) => setRequiredDeliveryDate(e.target.value)}
-                    className="w-full p-2.5 rounded-lg border border-slate-200 text-xs font-semibold focus:ring-2 focus:ring-brand-500 bg-white"
+                    className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-zinc-700 text-xs font-semibold focus:ring-2 focus:ring-brand-500 bg-white dark:bg-[#111114] text-slate-900 dark:text-white"
                   />
                 </div>
 
                 <div>
-                  <label className="font-semibold text-slate-700 block mb-1">Turnaround Priority</label>
+                  <label className="font-semibold text-slate-700 dark:text-zinc-300 block mb-1">Turnaround Priority</label>
                   <select
                     value={priority}
                     onChange={(e) => setPriority(e.target.value as any)}
-                    className="w-full p-2.5 rounded-lg border border-slate-200 text-xs font-semibold focus:ring-2 focus:ring-brand-500 bg-white"
+                    className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-zinc-700 text-xs font-semibold focus:ring-2 focus:ring-brand-500 bg-white dark:bg-[#111114] text-slate-900 dark:text-white"
                   >
                     <option value="normal">Normal (Standard 48h quotation)</option>
                     <option value="urgent">⚡ Urgent (Express 24h quotation)</option>
@@ -594,11 +664,11 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
 
               {/* Payment Terms Preference */}
               <div>
-                <label className="font-semibold text-slate-700 block mb-1">Payment Terms Preference</label>
+                <label className="font-semibold text-slate-700 dark:text-zinc-300 block mb-1">Payment Terms Preference</label>
                 <select
                   value={paymentTermsPreference}
                   onChange={(e) => setPaymentTermsPreference(e.target.value)}
-                  className="w-full sm:w-80 p-2.5 rounded-lg border border-slate-200 text-xs font-semibold focus:ring-2 focus:ring-brand-500 bg-white"
+                  className="w-full sm:w-80 p-2.5 rounded-lg border border-slate-200 dark:border-zinc-700 text-xs font-semibold focus:ring-2 focus:ring-brand-500 bg-white dark:bg-[#111114] text-slate-900 dark:text-white"
                 >
                   <option value="PDC 30 Days Credit">PDC 30 Days Credit</option>
                   <option value="PDC 60 Days Credit">PDC 60 Days Credit</option>
@@ -614,10 +684,10 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
               <div className="space-y-4 pt-2">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h4 className="font-bold text-slate-900 text-sm">
+                    <h4 className="font-bold text-slate-900 dark:text-white text-sm">
                       Material Items Included ({items.length}):
                     </h4>
-                    <p className="text-[11px] text-slate-500">
+                    <p className="text-[11px] text-slate-500 dark:text-zinc-400">
                       Search and select one or multiple approved brands for each material item.
                     </p>
                   </div>
@@ -647,22 +717,22 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                     return (
                       <div 
                         key={item.id || idx} 
-                        className="p-4 bg-white rounded-2xl border border-slate-200 shadow-subtle hover:border-slate-300 transition-all space-y-3"
+                        className="p-4 bg-white dark:bg-[#0c0c0e] rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-subtle hover:border-slate-300 dark:hover:border-zinc-700 transition-all space-y-3"
                       >
                         {/* Item Card Header */}
-                        <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                        <div className="flex items-center justify-between border-b border-slate-100 dark:border-zinc-800 pb-2">
                           <div className="flex items-center gap-2">
-                            <span className="w-5 h-5 rounded-full bg-brand-50 text-brand-700 font-extrabold text-[11px] flex items-center justify-center border border-brand-200">
+                            <span className="w-5 h-5 rounded-full bg-brand-50 dark:bg-brand-950/60 text-brand-700 dark:text-brand-400 font-extrabold text-[11px] flex items-center justify-center border border-brand-200 dark:border-brand-800">
                               {idx + 1}
                             </span>
-                            <span className="font-bold text-slate-800 text-xs">Line Item #{idx + 1}</span>
+                            <span className="font-bold text-slate-800 dark:text-zinc-200 text-xs">Line Item #{idx + 1}</span>
                           </div>
 
                           {items.length > 1 && (
                             <button
                               type="button"
                               onClick={() => handleRemoveItem(idx)}
-                              className="text-slate-400 hover:text-rose-600 p-1 flex items-center gap-1 text-[11px] font-semibold transition-colors"
+                              className="text-slate-400 hover:text-rose-600 dark:text-zinc-400 dark:hover:text-rose-400 p-1 flex items-center gap-1 text-[11px] font-semibold transition-colors"
                             >
                               <Trash2 className="w-3.5 h-3.5" /> Remove
                             </button>
@@ -672,7 +742,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                         {/* Row 1: Description, Quantity & Electrical Unit */}
                         <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
                           <div className="sm:col-span-6">
-                            <label className="block text-[11px] font-semibold text-slate-700 mb-1">
+                            <label className="block text-[11px] font-semibold text-slate-700 dark:text-zinc-300 mb-1">
                               Material Description / Name *
                             </label>
                             <input
@@ -681,12 +751,12 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                               value={item.description}
                               onChange={(e) => handleItemChange(idx, 'description', e.target.value)}
                               placeholder="e.g. 4C x 16mm² XLPE/SWA/PVC Copper Armoured Cable..."
-                              className="w-full p-2 rounded-lg border border-slate-200 text-xs font-bold text-slate-900 focus:ring-2 focus:ring-brand-500"
+                              className="w-full p-2 rounded-lg border border-slate-200 dark:border-zinc-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-[#111114] focus:ring-2 focus:ring-brand-500"
                             />
                           </div>
 
                           <div className="sm:col-span-3">
-                            <label className="block text-[11px] font-semibold text-slate-700 mb-1">
+                            <label className="block text-[11px] font-semibold text-slate-700 dark:text-zinc-300 mb-1">
                               Quantity *
                             </label>
                             <input
@@ -695,18 +765,18 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                               required
                               value={item.quantity}
                               onChange={(e) => handleItemChange(idx, 'quantity', parseFloat(e.target.value) || 1)}
-                              className="w-full p-2 rounded-lg border border-slate-200 text-xs font-black text-center focus:ring-2 focus:ring-brand-500"
+                              className="w-full p-2 rounded-lg border border-slate-200 dark:border-zinc-700 text-xs font-black text-center focus:ring-2 focus:ring-brand-500 bg-white dark:bg-[#111114] text-slate-900 dark:text-white"
                             />
                           </div>
 
                           <div className="sm:col-span-3">
-                            <label className="block text-[11px] font-semibold text-slate-700 mb-1">
+                            <label className="block text-[11px] font-semibold text-slate-700 dark:text-zinc-300 mb-1">
                               Electrical Unit *
                             </label>
                             <select
                               value={item.unit}
                               onChange={(e) => handleItemChange(idx, 'unit', e.target.value)}
-                              className="w-full p-2 rounded-lg border border-slate-200 text-xs font-semibold focus:ring-2 focus:ring-brand-500 bg-white"
+                              className="w-full p-2 rounded-lg border border-slate-200 dark:border-zinc-700 text-xs font-semibold focus:ring-2 focus:ring-brand-500 bg-white dark:bg-[#111114] text-slate-900 dark:text-white"
                             >
                               <option value="m">Meters (m)</option>
                               <option value="pcs">Pieces (pcs)</option>
@@ -722,7 +792,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
 
                         {/* Row 2: Technical Specifications & Sizing */}
                         <div>
-                          <label className="block text-[11px] font-semibold text-slate-700 mb-1">
+                          <label className="block text-[11px] font-semibold text-slate-700 dark:text-zinc-300 mb-1">
                             Technical Specification & Sizing
                           </label>
                           <input
@@ -730,15 +800,15 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                             value={item.specification}
                             onChange={(e) => handleItemChange(idx, 'specification', e.target.value)}
                             placeholder="e.g. BS 5467, 600/1000V, stranded annealed copper, galvanized steel wire armoured..."
-                            className="w-full p-2 rounded-lg border border-slate-200 text-xs text-slate-700 focus:ring-1 focus:ring-brand-500"
+                            className="w-full p-2 rounded-lg border border-slate-200 dark:border-zinc-700 text-xs text-slate-700 dark:text-zinc-200 bg-white dark:bg-[#111114] focus:ring-1 focus:ring-brand-500"
                           />
                         </div>
 
                         {/* Row 3: Searchable Multi-Brand Selection (No pre-built suggested buttons) */}
-                        <div className="bg-slate-50/90 p-3 rounded-xl border border-slate-200 space-y-2.5">
+                        <div className="bg-slate-50/90 dark:bg-zinc-900/60 p-3 rounded-xl border border-slate-200 dark:border-zinc-800 space-y-2.5">
                           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
-                            <label className="text-[11px] font-bold text-slate-800 flex items-center gap-1.5">
-                              <Tag className="w-3.5 h-3.5 text-brand-600" />
+                            <label className="text-[11px] font-bold text-slate-800 dark:text-zinc-200 flex items-center gap-1.5">
+                              <Tag className="w-3.5 h-3.5 text-brand-600 dark:text-brand-400" />
                               <span>Search & Select Brand(s):</span>
                             </label>
 
@@ -748,9 +818,9 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                                 type="checkbox"
                                 checked={item.allowAlternatives ?? true}
                                 onChange={(e) => handleItemChange(idx, 'allowAlternatives', e.target.checked)}
-                                className="w-3.5 h-3.5 text-brand-600 rounded border-slate-300 focus:ring-brand-500"
+                                className="w-3.5 h-3.5 text-brand-600 rounded border-slate-300 dark:border-zinc-700 dark:bg-zinc-800 focus:ring-brand-500"
                               />
-                              <span className="text-[11px] font-semibold text-slate-700">
+                              <span className="text-[11px] font-semibold text-slate-700 dark:text-zinc-300">
                                 Equal & Approved Equivalents Welcome
                               </span>
                             </label>
@@ -778,7 +848,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                               ))}
                             </div>
                           ) : (
-                            <p className="text-[11px] text-slate-400 italic">
+                            <p className="text-[11px] text-slate-400 dark:text-zinc-500 italic">
                               No specific brand selected yet. Type below to search and add one or multiple brands.
                             </p>
                           )}
@@ -804,7 +874,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                                       }
                                     }}
                                     placeholder="Search brand name... (e.g. Ducab, Schneider, Decoduct)"
-                                    className="w-full pl-8 pr-3 py-1.5 text-xs rounded-lg border border-slate-200 bg-white focus:ring-2 focus:ring-brand-500"
+                                    className="w-full pl-8 pr-3 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-[#111114] text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500"
                                   />
                                 </div>
                               </BorderBeam>
@@ -821,8 +891,8 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
 
                             {/* Autocomplete Dropdown List - ONLY appears when user is searching */}
                             {isDropdownOpen && filteredBrands.length > 0 && (
-                              <div className="absolute z-20 mt-1 w-full max-w-md bg-white rounded-xl border border-slate-200 shadow-xl overflow-hidden py-1 max-h-48 overflow-y-auto">
-                                <div className="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider bg-slate-50 border-b border-slate-100">
+                              <div className="absolute z-20 mt-1 w-full max-w-md bg-white dark:bg-[#18181b] rounded-xl border border-slate-200 dark:border-zinc-700 shadow-xl overflow-hidden py-1 max-h-48 overflow-y-auto">
+                                <div className="px-3 py-1 text-[10px] font-bold text-slate-400 dark:text-zinc-400 uppercase tracking-wider bg-slate-50 dark:bg-zinc-800 border-b border-slate-100 dark:border-zinc-700">
                                   Matching Brands:
                                 </div>
                                 {filteredBrands.map((b) => (
@@ -830,10 +900,10 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                                     key={b}
                                     type="button"
                                     onClick={() => handleAddBrand(idx, b)}
-                                    className="w-full text-left px-3 py-1.5 text-xs font-medium text-slate-800 hover:bg-brand-50 hover:text-brand-700 transition-colors flex items-center justify-between"
+                                    className="w-full text-left px-3 py-1.5 text-xs font-medium text-slate-800 dark:text-zinc-200 hover:bg-brand-50 dark:hover:bg-brand-950/40 hover:text-brand-700 dark:hover:text-brand-300 transition-colors flex items-center justify-between"
                                   >
                                     <span>{b}</span>
-                                    <span className="text-[10px] font-bold text-brand-600">+ Select</span>
+                                    <span className="text-[10px] font-bold text-brand-600 dark:text-brand-400">+ Select</span>
                                   </button>
                                 ))}
                               </div>
@@ -848,7 +918,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                             value={item.notes || ''}
                             onChange={(e) => handleItemChange(idx, 'notes', e.target.value)}
                             placeholder="Special instructions: e.g. Drum length 500m preferred, test certificate required..."
-                            className="w-full p-1.5 rounded-lg border border-slate-200 text-[11px] text-slate-500 italic bg-white"
+                            className="w-full p-1.5 rounded-lg border border-slate-200 dark:border-zinc-700 text-[11px] text-slate-500 dark:text-zinc-400 italic bg-white dark:bg-[#111114]"
                           />
                         </div>
                       </div>
@@ -860,14 +930,14 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
 
             {/* General Commercial Instructions */}
             <div className="pt-2">
-              <label className="font-semibold text-slate-700 block mb-1">
+              <label className="font-semibold text-slate-700 dark:text-zinc-300 block mb-1">
                 General Commercial Instructions to Stockists
               </label>
               <textarea
                 rows={2}
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                className="w-full p-2.5 rounded-lg border border-slate-200 text-xs text-slate-700 focus:ring-2 focus:ring-brand-500"
+                className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-zinc-700 text-xs text-slate-700 dark:text-zinc-200 bg-white dark:bg-[#111114] focus:ring-2 focus:ring-brand-500"
               />
             </div>
 
@@ -901,72 +971,72 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
         <Card className="animate-in fade-in duration-150">
           <CardHeader>
             <div>
-              <h3 className="text-base font-bold text-slate-900">Step 2: Confirm & Broadcast to Verified UAE Stockists</h3>
-              <p className="text-xs text-slate-500">Your RFQ will be distributed to verified traders matching {category} in {deliveryEmirate}.</p>
+              <h3 className="text-base font-bold text-slate-900 dark:text-white">Step 2: Confirm & Broadcast to Verified UAE Stockists</h3>
+              <p className="text-xs text-slate-500 dark:text-zinc-400">Your RFQ will be distributed to verified traders matching {category} in {deliveryEmirate}.</p>
             </div>
           </CardHeader>
           <CardContent className="space-y-5 text-xs">
             
-            <div className="p-4 bg-rose-50 rounded-2xl border border-rose-200 flex items-center justify-between">
+            <div className="p-4 bg-rose-50 dark:bg-rose-950/30 rounded-2xl border border-rose-200 dark:border-rose-900/60 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-[#cf2e46] text-white flex items-center justify-center font-extrabold text-base shrink-0">
                   5
                 </div>
                 <div>
-                  <h4 className="font-bold text-rose-950 text-sm">
+                  <h4 className="font-bold text-rose-950 dark:text-rose-100 text-sm">
                     {selectedTargetSupplier 
                       ? `Delivering Directly to ${selectedTargetSupplier.name} + 4 Matched Stockists`
                       : `5 Verified UAE Stockists Ready to Compete`}
                   </h4>
-                  <p className="text-rose-700 text-xs">
+                  <p className="text-rose-700 dark:text-rose-300 text-xs">
                     Stockists in {deliveryEmirate} & Sharjah Industrial will receive your RFQ immediately on their sales desk under the <strong className="font-bold">Fastest 5 Bids Rule</strong>.
                   </p>
                 </div>
               </div>
-              <span className="text-xs font-bold text-rose-800 bg-rose-100 px-3 py-1 rounded-full border border-rose-300 shrink-0">
+              <span className="text-xs font-bold text-rose-800 dark:text-rose-200 bg-rose-100 dark:bg-rose-900/50 px-3 py-1 rounded-full border border-rose-300 dark:border-rose-800 shrink-0">
                 ⚡ 24h Quoting SLA
               </span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-slate-50 dark:bg-zinc-900/60 rounded-xl border border-slate-200 dark:border-zinc-800">
               <div>
-                <span className="text-slate-400 block font-medium">RFQ Title:</span>
-                <strong className="text-slate-900 text-sm">{title}</strong>
+                <span className="text-slate-400 dark:text-zinc-500 block font-medium">RFQ Title:</span>
+                <strong className="text-slate-900 dark:text-white text-sm">{title}</strong>
               </div>
               <div>
-                <span className="text-slate-400 block font-medium">Delivery Destination:</span>
-                <strong className="text-slate-900">{deliveryAddress} ({deliveryEmirate})</strong>
+                <span className="text-slate-400 dark:text-zinc-500 block font-medium">Delivery Destination:</span>
+                <strong className="text-slate-900 dark:text-white">{deliveryAddress} ({deliveryEmirate})</strong>
               </div>
               <div>
-                <span className="text-slate-400 block font-medium">Authority Compliance:</span>
-                <span className="font-bold text-brand-700 bg-brand-50 px-2 py-0.5 rounded border border-brand-200 inline-block">
+                <span className="text-slate-400 dark:text-zinc-500 block font-medium">Authority Compliance:</span>
+                <span className="font-bold text-brand-700 dark:text-brand-300 bg-brand-50 dark:bg-brand-950/60 px-2 py-0.5 rounded border border-brand-200 dark:border-brand-800 inline-block">
                   {authorityApproval}
                 </span>
               </div>
               <div>
-                <span className="text-slate-400 block font-medium">Payment Terms:</span>
-                <strong className="text-slate-800">{paymentTermsPreference}</strong>
+                <span className="text-slate-400 dark:text-zinc-500 block font-medium">Payment Terms:</span>
+                <strong className="text-slate-800 dark:text-zinc-200">{paymentTermsPreference}</strong>
               </div>
               <div>
-                <span className="text-slate-400 block font-medium">Target Category:</span>
-                <span className="font-semibold text-brand-700">{category}</span>
+                <span className="text-slate-400 dark:text-zinc-500 block font-medium">Target Category:</span>
+                <span className="font-semibold text-brand-700 dark:text-brand-300">{category}</span>
               </div>
             </div>
 
             {photoPreview ? (
-              <div className="p-3 bg-white rounded-xl border border-slate-200 flex items-center gap-3">
-                <img src={photoPreview} alt="Attached list" className="w-16 h-14 object-cover rounded-lg border" />
+              <div className="p-3 bg-white dark:bg-zinc-900 rounded-xl border border-slate-200 dark:border-zinc-800 flex items-center gap-3">
+                <img src={photoPreview} alt="Attached list" className="w-16 h-14 object-cover rounded-lg border border-slate-200 dark:border-zinc-700" />
                 <div>
-                  <span className="font-bold text-slate-800">Handwritten List Photo Attached</span>
-                  <p className="text-[11px] text-slate-500">Suppliers will price directly against this photo.</p>
+                  <span className="font-bold text-slate-800 dark:text-zinc-200">Handwritten List Photo Attached</span>
+                  <p className="text-[11px] text-slate-500 dark:text-zinc-400">Suppliers will price directly against this photo.</p>
                 </div>
               </div>
             ) : (
               <div>
-                <h4 className="font-bold text-slate-900 mb-2">Material Items & Approved Brands Summary ({items.length}):</h4>
-                <div className="border border-slate-200 rounded-xl overflow-hidden">
+                <h4 className="font-bold text-slate-900 dark:text-white mb-2">Material Items & Approved Brands Summary ({items.length}):</h4>
+                <div className="border border-slate-200 dark:border-zinc-800 rounded-xl overflow-hidden">
                   <table className="w-full text-left text-xs">
-                    <thead className="bg-slate-100 text-slate-600 font-semibold border-b border-slate-200">
+                    <thead className="bg-slate-100 dark:bg-zinc-900 text-slate-600 dark:text-zinc-400 font-semibold border-b border-slate-200 dark:border-zinc-800">
                       <tr>
                         <th className="p-2.5">#</th>
                         <th className="p-2.5">Description</th>
@@ -974,26 +1044,26 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                         <th className="p-2.5">Quantity & Unit</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-slate-100 dark:divide-zinc-800">
                       {items.map((item, idx) => (
-                        <tr key={idx} className="hover:bg-slate-50">
-                          <td className="p-2.5 font-mono text-slate-400">{idx + 1}</td>
-                          <td className="p-2.5 font-semibold text-slate-900">
+                        <tr key={idx} className="hover:bg-slate-50 dark:hover:bg-zinc-800/40">
+                          <td className="p-2.5 font-mono text-slate-400 dark:text-zinc-500">{idx + 1}</td>
+                          <td className="p-2.5 font-semibold text-slate-900 dark:text-white">
                             {item.description}
                             {item.specification && (
-                              <p className="text-[11px] text-slate-500 font-normal">{item.specification}</p>
+                              <p className="text-[11px] text-slate-500 dark:text-zinc-400 font-normal">{item.specification}</p>
                             )}
                           </td>
                           <td className="p-2.5">
                             <div className="flex flex-wrap gap-1">
                               {(item.preferredBrands && item.preferredBrands.length > 0) ? (
                                 item.preferredBrands.map(b => (
-                                  <span key={b} className="bg-brand-50 text-brand-700 border border-brand-200 font-bold px-2 py-0.5 rounded text-[10px]">
+                                  <span key={b} className="bg-brand-50 dark:bg-brand-950/60 text-brand-700 dark:text-brand-300 border border-brand-200 dark:border-brand-800 font-bold px-2 py-0.5 rounded text-[10px]">
                                     {b}
                                   </span>
                                 ))
                               ) : (
-                                <span className="bg-slate-100 text-slate-600 font-medium px-2 py-0.5 rounded text-[10px]">
+                                <span className="bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-zinc-300 font-medium px-2 py-0.5 rounded text-[10px]">
                                   {item.preferredBrand || 'Open Spec (Any Brand)'}
                                 </span>
                               )}
@@ -1004,7 +1074,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                               )}
                             </div>
                           </td>
-                          <td className="p-2.5 font-bold text-slate-800">{item.quantity} {item.unit}</td>
+                          <td className="p-2.5 font-bold text-slate-800 dark:text-zinc-200">{item.quantity} {item.unit}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -1013,8 +1083,8 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
               </div>
             )}
 
-            <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 text-amber-900 flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-amber-700 shrink-0" />
+            <div className="p-3 bg-amber-50 dark:bg-amber-950/30 rounded-xl border border-amber-200 dark:border-amber-900/50 text-amber-900 dark:text-amber-200 flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-amber-700 dark:text-amber-400 shrink-0" />
               <span>
                 100% Free for Buyers. The first 5 stockists to submit itemized prices will deliver directly to your dashboard within 24 hours.
               </span>
@@ -1046,6 +1116,210 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
           </CardFooter>
         </Card>
       )}
+
+      {/* Auth Gate Modal for Guest Submissions */}
+      <Modal
+        isOpen={showAuthGateModal}
+        onClose={() => setShowAuthGateModal(false)}
+        title={authMode === 'login' ? 'Sign In to Broadcast Your RFQ' : 'Create Account to Broadcast Your RFQ'}
+        subtitle="Your RFQ line items and specs are ready! Sign in to distribute directly to 5 verified UAE stockists."
+        maxWidth="md"
+      >
+        <div className="space-y-4 text-xs">
+          {/* Tabs */}
+          <div className="flex bg-slate-100 dark:bg-zinc-900 p-1 rounded-xl">
+            <button
+              type="button"
+              onClick={() => { setAuthMode('login'); setAuthError(''); }}
+              className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${
+                authMode === 'login'
+                  ? 'bg-white dark:bg-zinc-800 text-slate-900 dark:text-white shadow-xs'
+                  : 'text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white'
+              }`}
+            >
+              Sign In Existing Account
+            </button>
+            <button
+              type="button"
+              onClick={() => { setAuthMode('register'); setAuthError(''); }}
+              className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${
+                authMode === 'register'
+                  ? 'bg-white dark:bg-zinc-800 text-slate-900 dark:text-white shadow-xs'
+                  : 'text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white'
+              }`}
+            >
+              Register New Buyer
+            </button>
+          </div>
+
+          {authError && (
+            <div className="p-3 bg-red-50 dark:bg-rose-950/40 border border-red-200 dark:border-rose-900/60 rounded-xl text-red-700 dark:text-rose-300 text-xs">
+              {authError}
+            </div>
+          )}
+
+          {authMode === 'login' ? (
+            <form onSubmit={handleAuthSubmit} className="space-y-3">
+              <div>
+                <label className="block font-semibold text-slate-700 dark:text-zinc-300 mb-1">
+                  Username or Corporate Email *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={authUsername}
+                  onChange={(e) => setAuthUsername(e.target.value)}
+                  placeholder="e.g. facade, apex, or your email"
+                  className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-[#111114] text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-brand-500"
+                />
+              </div>
+
+              <div>
+                <label className="block font-semibold text-slate-700 dark:text-zinc-300 mb-1">
+                  Password *
+                </label>
+                <input
+                  type="password"
+                  required
+                  value={authPassword}
+                  onChange={(e) => setAuthPassword(e.target.value)}
+                  placeholder="••••••••••••"
+                  className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-[#111114] text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-brand-500"
+                />
+              </div>
+
+              <Button
+                type="submit"
+                variant="primary"
+                className="w-full font-bold py-2.5 text-xs shadow-md"
+              >
+                Sign In & Broadcast RFQ
+              </Button>
+
+              {/* 1-Click Fast Test Accounts */}
+              <div className="pt-2 border-t border-slate-100 dark:border-zinc-800">
+                <span className="text-[10px] text-slate-400 dark:text-zinc-500 uppercase font-bold block mb-1.5">
+                  Or 1-Click Fast Test Buyer:
+                </span>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => handleQuickLogin('facade')}
+                    className="p-2 rounded-lg bg-slate-50 dark:bg-zinc-900 hover:bg-slate-100 dark:hover:bg-zinc-800 border border-slate-200 dark:border-zinc-700 text-left transition-colors"
+                  >
+                    <span className="block font-bold text-slate-800 dark:text-zinc-200 text-[11px]">Facade Lighting</span>
+                    <span className="text-[10px] text-slate-400">Contractor Buyer</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleQuickLogin('apex')}
+                    className="p-2 rounded-lg bg-slate-50 dark:bg-zinc-900 hover:bg-slate-100 dark:hover:bg-zinc-800 border border-slate-200 dark:border-zinc-700 text-left transition-colors"
+                  >
+                    <span className="block font-bold text-slate-800 dark:text-zinc-200 text-[11px]">Apex MEP</span>
+                    <span className="text-[10px] text-slate-400">Contractor Buyer</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          ) : (
+            <form onSubmit={handleAuthSubmit} className="space-y-3">
+              <div>
+                <label className="block font-semibold text-slate-700 dark:text-zinc-300 mb-1">
+                  Contractor / Company Name *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={authCompanyName}
+                  onChange={(e) => setAuthCompanyName(e.target.value)}
+                  placeholder="e.g. Al Futtaim Engineering / Apex MEP"
+                  className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-[#111114] text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-brand-500"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="block font-semibold text-slate-700 dark:text-zinc-300 mb-1">
+                    Contact Person *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={authFullName}
+                    onChange={(e) => setAuthFullName(e.target.value)}
+                    placeholder="e.g. Eng. Tariq"
+                    className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-[#111114] text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-brand-500"
+                  />
+                </div>
+                <div>
+                  <label className="block font-semibold text-slate-700 dark:text-zinc-300 mb-1">
+                    UAE Mobile Number
+                  </label>
+                  <input
+                    type="text"
+                    value={authPhone}
+                    onChange={(e) => setAuthPhone(e.target.value)}
+                    placeholder="+971 50 123 4567"
+                    className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-[#111114] text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-brand-500"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="block font-semibold text-slate-700 dark:text-zinc-300 mb-1">
+                    Username / Email *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={authUsername}
+                    onChange={(e) => setAuthUsername(e.target.value)}
+                    placeholder="e.g. tariq@apex.ae"
+                    className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-[#111114] text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-brand-500"
+                  />
+                </div>
+                <div>
+                  <label className="block font-semibold text-slate-700 dark:text-zinc-300 mb-1">
+                    Password *
+                  </label>
+                  <input
+                    type="password"
+                    required
+                    value={authPassword}
+                    onChange={(e) => setAuthPassword(e.target.value)}
+                    placeholder="••••••••••••"
+                    className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-[#111114] text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-brand-500"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-semibold text-slate-700 dark:text-zinc-300 mb-1">
+                  Primary Emirate
+                </label>
+                <select
+                  value={authEmirate}
+                  onChange={(e) => setAuthEmirate(e.target.value as Emirate)}
+                  className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-[#111114] text-slate-900 dark:text-white text-xs font-semibold focus:ring-2 focus:ring-brand-500"
+                >
+                  <option value="Dubai">Dubai</option>
+                  <option value="Sharjah">Sharjah</option>
+                  <option value="Ajman">Ajman</option>
+                </select>
+              </div>
+
+              <Button
+                type="submit"
+                variant="primary"
+                className="w-full font-bold py-2.5 text-xs shadow-md"
+              >
+                Create Account & Broadcast RFQ
+              </Button>
+            </form>
+          )}
+        </div>
+      </Modal>
     </div>
   );
 };

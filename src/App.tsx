@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { AppDataProvider } from './context/AppDataContext';
-import { MarketTicker } from './components/ui/MarketTicker';
 import { Navbar } from './components/layout/Navbar';
 import { Sidebar } from './components/layout/Sidebar';
 import { Footer } from './components/layout/Footer';
@@ -167,6 +166,7 @@ const AppContent: React.FC = () => {
       'how-it-works', 
       'onboarding-guide', 
       'invoice-audit', 
+      'create-rfq',
       'login', 
       'admin-login',
       'register',
@@ -198,6 +198,7 @@ const AppContent: React.FC = () => {
     'how-it-works', 
     'onboarding-guide', 
     'invoice-audit', 
+    'create-rfq',
     'login', 
     'admin-login', 
     'register',
@@ -214,7 +215,6 @@ const AppContent: React.FC = () => {
     return (
       <div className="min-h-screen flex flex-col bg-[#f4f4f6] dark:bg-black text-slate-900 dark:text-zinc-100 selection:bg-[#cf2e46] selection:text-white transition-colors duration-200">
         <Navbar currentView={currentView} setCurrentView={handleNavigate} />
-        <MarketTicker />
         <main className="flex-1">
           <LoginPage 
             isAdminMode={currentView.startsWith('admin')}
@@ -258,9 +258,6 @@ const AppContent: React.FC = () => {
       {/* Main Brand Navbar at the Top */}
       <Navbar currentView={currentView} setCurrentView={handleNavigate} />
 
-      {/* Live Market Telemetry Ticker - Sleek Sub-Navbar Ribbon */}
-      <MarketTicker />
-
       {/* Main Content Body */}
       {isPublicPage ? (
         <main className="flex-1">
@@ -268,26 +265,19 @@ const AppContent: React.FC = () => {
             <HomePage setCurrentView={handleNavigate} />
           )}
           {currentView === 'categories' && (
-            <CategoriesPage onPostRFQ={() => handleNavigate(isAuthenticated ? 'create-rfq' : 'login')} />
+            <CategoriesPage onPostRFQ={() => handleNavigate('create-rfq')} />
           )}
           {currentView === 'suppliers' && (
             <SuppliersPage onRequestQuote={(targetSupplier, category) => {
-              if (!isAuthenticated) {
-                handleNavigate('login', { targetSupplier, category });
-              } else {
-                handleNavigate('create-rfq', { targetSupplier, category });
-              }
+              handleNavigate('create-rfq', { targetSupplier, category });
             }} />
           )}
           {currentView === 'how-it-works' && (
-            <HowItWorksPage onStartRFQ={() => handleNavigate(isAuthenticated ? 'create-rfq' : 'login')} />
+            <HowItWorksPage onStartRFQ={() => handleNavigate('create-rfq')} />
           )}
           {currentView === 'onboarding-guide' && (
             <OnboardingGuidePage
-              onStartBuyer={() => {
-                if (!isAuthenticated) handleNavigate('register');
-                else handleNavigate('create-rfq');
-              }}
+              onStartBuyer={() => handleNavigate('create-rfq')}
               onStartSupplier={() => {
                 if (!isAuthenticated) handleNavigate('register');
                 else handleNavigate('supplier-inbox');
@@ -297,10 +287,19 @@ const AppContent: React.FC = () => {
           {currentView === 'invoice-audit' && (
             <InvoiceAuditPage
               onStartRFQWithAudit={(bundle) => {
-                if (!isAuthenticated) handleNavigate('login', { bundle });
-                else handleNavigate('create-rfq', { bundle });
+                handleNavigate('create-rfq', { bundle });
               }}
             />
+          )}
+          {currentView === 'create-rfq' && (
+            <div className="w-full bg-[#f4f4f6] dark:bg-black transition-colors duration-200">
+              <CreateRFQPage 
+                initialBundle={viewParams.bundle} 
+                targetSupplier={viewParams.targetSupplier}
+                initialCategory={viewParams.category}
+                onNavigate={handleNavigate} 
+              />
+            </div>
           )}
           {(currentView === 'login' || currentView === 'admin-login') && (
             <LoginPage 
@@ -336,14 +335,6 @@ const AppContent: React.FC = () => {
             )}
             {currentView === 'buyer-rfqs' && (
               <BuyerRFQsPage onNavigate={handleNavigate} />
-            )}
-            {currentView === 'create-rfq' && (
-              <CreateRFQPage 
-                initialBundle={viewParams.bundle} 
-                targetSupplier={viewParams.targetSupplier}
-                initialCategory={viewParams.category}
-                onNavigate={handleNavigate} 
-              />
             )}
             {currentView === 'rfq-detail' && (
               <RFQDetailPage rfqId={viewParams.rfqId} onNavigate={handleNavigate} />

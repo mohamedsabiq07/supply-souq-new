@@ -151,8 +151,8 @@ export const BuyerMessagesPage: React.FC = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">Procurement Messaging & Voice Desk</h1>
-        <p className="text-xs text-slate-500 mt-0.5">
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Procurement Messaging & Voice Desk</h1>
+        <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">
           Real-time text & voice notes directly connected to RFQs, chemical specs, and purchase order tracking.
         </p>
       </div>
@@ -160,13 +160,13 @@ export const BuyerMessagesPage: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 min-h-[540px]">
         {/* RFQ Threads Sidebar */}
         <Card className="md:col-span-1 p-0 flex flex-col">
-          <div className="p-4 border-b border-slate-100 bg-slate-50/60 flex items-center justify-between">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500">Active RFQ Channels</h3>
-            <span className="text-[10px] font-bold bg-brand-50 text-brand-700 px-2 py-0.5 rounded-full border border-brand-200">
+          <div className="p-4 border-b border-slate-100 dark:border-zinc-800 bg-slate-50/60 dark:bg-zinc-900/60 flex items-center justify-between">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-zinc-400">Active RFQ Channels</h3>
+            <span className="text-[10px] font-bold bg-brand-50 dark:bg-brand-950/60 text-brand-700 dark:text-brand-300 px-2 py-0.5 rounded-full border border-brand-200 dark:border-brand-800">
               {rfqList.length} Active
             </span>
           </div>
-          <div className="divide-y divide-slate-100 flex-1 overflow-y-auto">
+          <div className="divide-y divide-slate-100 dark:divide-zinc-800 flex-1 overflow-y-auto">
             {rfqList.map((rfq) => {
               const isActive = rfq.id === activeRFQId;
               return (
@@ -174,18 +174,18 @@ export const BuyerMessagesPage: React.FC = () => {
                   key={rfq.id}
                   onClick={() => setActiveRFQId(rfq.id)}
                   className={`w-full text-left p-3.5 transition-colors flex items-start gap-3 ${
-                    isActive ? 'bg-brand-50/80 border-l-4 border-brand-600' : 'hover:bg-slate-50'
+                    isActive ? 'bg-brand-50/80 dark:bg-brand-950/40 border-l-4 border-brand-600' : 'hover:bg-slate-50 dark:hover:bg-zinc-900/60'
                   }`}
                 >
-                  <div className="w-8 h-8 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-xs shrink-0">
-                    <MessageSquare className="w-4 h-4 text-brand-600" />
+                  <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 flex items-center justify-center font-bold text-xs shrink-0">
+                    <MessageSquare className="w-4 h-4 text-brand-600 dark:text-brand-400" />
                   </div>
                   <div className="overflow-hidden">
                     <div className="flex items-center gap-1.5">
-                      <span className="font-mono text-[10px] font-bold text-brand-700">{rfq.rfqNumber}</span>
+                      <span className="font-mono text-[10px] font-bold text-brand-700 dark:text-brand-400">{rfq.rfqNumber}</span>
                     </div>
-                    <p className="text-xs font-bold text-slate-900 truncate mt-0.5">{rfq.title}</p>
-                    <p className="text-[11px] text-slate-500 truncate">{rfq.projectName}</p>
+                    <p className="text-xs font-bold text-slate-900 dark:text-white truncate mt-0.5">{rfq.title}</p>
+                    <p className="text-[11px] text-slate-500 dark:text-zinc-400 truncate">{rfq.projectName}</p>
                   </div>
                 </button>
               );
@@ -196,27 +196,27 @@ export const BuyerMessagesPage: React.FC = () => {
         {/* Chat Area */}
         <Card className="md:col-span-2 p-0 flex flex-col justify-between">
           {/* Header */}
-          <div className="p-4 border-b border-slate-100 bg-slate-50/80 flex items-center justify-between">
+          <div className="p-4 border-b border-slate-100 dark:border-zinc-800 bg-slate-50/80 dark:bg-zinc-900/60 flex items-center justify-between">
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-mono text-xs font-bold text-brand-700 bg-white px-2 py-0.5 rounded border border-brand-200">
+                <span className="font-mono text-xs font-bold text-brand-700 dark:text-brand-300 bg-white dark:bg-zinc-800 px-2 py-0.5 rounded border border-brand-200 dark:border-zinc-700">
                   {activeRFQ?.rfqNumber}
                 </span>
-                <h3 className="text-sm font-bold text-slate-900">{activeRFQ?.title}</h3>
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white">{activeRFQ?.title}</h3>
               </div>
-              <p className="text-[11px] text-slate-500 mt-0.5">
+              <p className="text-[11px] text-slate-500 dark:text-zinc-400 mt-0.5">
                 Channel: <strong>{activeRFQ?.buyerCompanyName}</strong> ↔ <strong>Verified Quoting Suppliers</strong>
               </p>
             </div>
 
-            <div className="flex items-center gap-1.5 text-[11px] text-emerald-700 font-semibold bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+            <div className="flex items-center gap-1.5 text-[11px] text-emerald-700 dark:text-emerald-300 font-semibold bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-1 rounded-full border border-emerald-200 dark:border-emerald-800">
               <Volume2 className="w-3.5 h-3.5" />
               <span>Voice Enabled</span>
             </div>
           </div>
 
           {/* Message List */}
-          <div className="p-4 space-y-4 flex-1 overflow-y-auto max-h-[380px] bg-slate-50/40">
+          <div className="p-4 space-y-4 flex-1 overflow-y-auto max-h-[380px] bg-slate-50/40 dark:bg-[#0c0c0e]">
             {rfqMessages.length > 0 ? (
               rfqMessages.map((msg) => {
                 const isMe = msg.senderId === currentUser.id || msg.senderRole === role;
@@ -228,8 +228,8 @@ export const BuyerMessagesPage: React.FC = () => {
                     key={msg.id}
                     className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}
                   >
-                    <div className="flex items-center gap-1.5 text-[10px] text-slate-400 mb-1 px-1">
-                      <span className="font-bold text-slate-700">{msg.senderName}</span>
+                    <div className="flex items-center gap-1.5 text-[10px] text-slate-400 dark:text-zinc-500 mb-1 px-1">
+                      <span className="font-bold text-slate-700 dark:text-zinc-300">{msg.senderName}</span>
                       <span>({msg.senderCompanyName})</span>
                       <span>•</span>
                       <span>{formatRelativeTime(msg.createdAt)}</span>
@@ -241,7 +241,7 @@ export const BuyerMessagesPage: React.FC = () => {
                         className={`p-3.5 rounded-2xl max-w-sm w-full shadow-subtle border ${
                           isMe
                             ? 'bg-brand-600 text-white border-brand-700 rounded-br-none'
-                            : 'bg-white text-slate-800 border-slate-200 rounded-bl-none'
+                            : 'bg-white dark:bg-[#18181b] text-slate-800 dark:text-zinc-200 border-slate-200 dark:border-zinc-800 rounded-bl-none'
                         }`}
                       >
                         <div className="flex items-center gap-3">
@@ -267,7 +267,7 @@ export const BuyerMessagesPage: React.FC = () => {
                                   className={`w-1 rounded-full transition-all duration-150 ${
                                     isMe
                                       ? isPlaying ? 'bg-amber-300' : 'bg-white/70'
-                                      : isPlaying ? 'bg-brand-600' : 'bg-slate-300'
+                                      : isPlaying ? 'bg-brand-600' : 'bg-slate-300 dark:bg-zinc-700'
                                   }`}
                                 />
                               ))}
@@ -282,7 +282,7 @@ export const BuyerMessagesPage: React.FC = () => {
 
                         {/* Text summary below voice note */}
                         <p className={`text-[11px] mt-2 pt-2 border-t font-medium ${
-                          isMe ? 'border-brand-500/60 text-brand-100' : 'border-slate-100 text-slate-600'
+                          isMe ? 'border-brand-500/60 text-brand-100' : 'border-slate-100 dark:border-zinc-800 text-slate-600 dark:text-zinc-400'
                         }`}>
                           🎤 {msg.messageText}
                         </p>
@@ -293,7 +293,7 @@ export const BuyerMessagesPage: React.FC = () => {
                         className={`p-3 rounded-2xl max-w-md text-xs leading-relaxed shadow-subtle ${
                           isMe
                             ? 'bg-brand-600 text-white rounded-br-none'
-                            : 'bg-white text-slate-800 border border-slate-200 rounded-bl-none'
+                            : 'bg-white dark:bg-[#18181b] text-slate-800 dark:text-zinc-200 border border-slate-200 dark:border-zinc-800 rounded-bl-none'
                         }`}
                       >
                         {msg.messageText}
@@ -303,22 +303,22 @@ export const BuyerMessagesPage: React.FC = () => {
                 );
               })
             ) : (
-              <div className="text-center py-12 text-slate-400 text-xs">
+              <div className="text-center py-12 text-slate-400 dark:text-zinc-500 text-xs">
                 No messages yet for this RFQ. Start the conversation or send a voice note below.
               </div>
             )}
           </div>
 
           {/* Bottom Chat Bar with Voice Note Recorder */}
-          <div className="p-3 border-t border-slate-100 bg-white">
+          <div className="p-3 border-t border-slate-100 dark:border-zinc-800 bg-white dark:bg-[#0c0c0e]">
             {isRecording ? (
               /* LIVE RECORDING STATE */
-              <div className="p-3 bg-rose-50 border border-rose-200 rounded-2xl flex items-center justify-between gap-3 animate-in fade-in">
+              <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 rounded-2xl flex items-center justify-between gap-3 animate-in fade-in">
                 <div className="flex items-center gap-3">
                   <span className="w-3 h-3 rounded-full bg-rose-600 animate-ping" />
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-rose-900">Recording Voice Note:</span>
-                    <span className="font-mono text-xs font-extrabold text-rose-700 bg-white px-2 py-0.5 rounded border border-rose-300">
+                    <span className="text-xs font-bold text-rose-900 dark:text-rose-200">Recording Voice Note:</span>
+                    <span className="font-mono text-xs font-extrabold text-rose-700 dark:text-rose-300 bg-white dark:bg-zinc-900 px-2 py-0.5 rounded border border-rose-300 dark:border-rose-800">
                       {formatSeconds(recordingSeconds)} / 1:00
                     </span>
                   </div>
@@ -339,9 +339,9 @@ export const BuyerMessagesPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={handleCancelRecording}
-                    className="px-3 py-1.5 rounded-lg border border-slate-300 text-slate-600 hover:bg-slate-100 text-xs font-semibold flex items-center gap-1"
+                    className="px-3 py-1.5 rounded-lg border border-slate-300 dark:border-zinc-700 text-slate-600 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-800 text-xs font-semibold flex items-center gap-1 transition-colors"
                   >
-                    <Trash2 className="w-3.5 h-3.5 text-rose-600" />
+                    <Trash2 className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
                     <span>Cancel</span>
                   </button>
 
@@ -363,9 +363,9 @@ export const BuyerMessagesPage: React.FC = () => {
                   type="button"
                   onClick={handleStartRecording}
                   title="Record Voice Note"
-                  className="p-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 transition-all flex items-center gap-1.5 text-xs font-bold shrink-0 shadow-sm"
+                  className="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-100 dark:hover:bg-amber-900/60 text-amber-900 dark:text-amber-200 border border-amber-300 dark:border-amber-700/60 transition-all flex items-center gap-1.5 text-xs font-bold shrink-0 shadow-sm"
                 >
-                  <Mic className="w-4 h-4 text-amber-600" />
+                  <Mic className="w-4 h-4 text-amber-600 dark:text-amber-400" />
                   <span className="hidden sm:inline">Voice Note</span>
                 </button>
 
@@ -375,7 +375,7 @@ export const BuyerMessagesPage: React.FC = () => {
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
                     placeholder="Type message or click Voice Note to record..."
-                    className="w-full text-xs p-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-500 focus:outline-none"
+                    className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-zinc-700 bg-white dark:bg-[#121215] text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-500 focus:ring-2 focus:ring-brand-500 focus:outline-none"
                   />
                 </BorderBeam>
 

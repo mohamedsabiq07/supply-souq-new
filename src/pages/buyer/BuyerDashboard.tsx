@@ -56,14 +56,14 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
               Procurement Command Dashboard
             </h1>
-            <span className="bg-brand-50 text-brand-700 text-xs font-bold px-2 py-0.5 rounded border border-brand-200">
+            <span className="bg-brand-50 dark:bg-brand-950/60 text-brand-700 dark:text-brand-300 text-xs font-bold px-2 py-0.5 rounded border border-brand-200 dark:border-brand-800">
               {currentCompany.name || 'Contractor Portal'}
             </span>
           </div>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-zinc-400 mt-1">
             Manage your project material RFQs, compare multi-vendor quotations, and track UAE site deliveries.
           </p>
         </div>
@@ -89,7 +89,7 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
 
       {/* Action Alert for Evaluating Quotes */}
       {evaluatingRFQs.length > 0 && (
-        <div className="p-4 bg-gradient-to-r from-brand-900 via-[#0c0c0e] to-black text-white rounded-2xl border border-brand-700 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="p-4 bg-gradient-to-r from-brand-900 via-[#0c0c0e] to-black text-white rounded-2xl border border-brand-700 dark:border-zinc-800 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-brand-500/30 border border-brand-400/40 flex items-center justify-center text-amber-400 shrink-0">
               <GitCompare className="w-5 h-5" />
@@ -98,7 +98,7 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
               <h4 className="text-sm font-bold text-white">
                 {evaluatingRFQs[0].quotesCount} Quotation{evaluatingRFQs[0].quotesCount > 1 ? 's' : ''} Ready for Evaluation ({evaluatingRFQs[0].rfqNumber})
               </h4>
-              <p className="text-xs text-slate-300">
+              <p className="text-xs text-slate-300 dark:text-zinc-400">
                 Suppliers have submitted official offers for "{evaluatingRFQs[0].title}".
               </p>
             </div>
@@ -157,14 +157,14 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-rose-100 text-rose-800 flex items-center justify-center font-bold">
+              <div className="w-8 h-8 rounded-lg bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 flex items-center justify-center font-bold">
                 <GitCompare className="w-4 h-4" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-slate-900">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white">
                   Quotations Collected by RFQ ({myQuotes.length} Total Offers)
                 </h3>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-500 dark:text-zinc-400">
                   Supplier quotations are collected under each respective material RFQ for multi-vendor comparison and PO awarding.
                 </p>
               </div>
@@ -182,32 +182,32 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
                 : null;
 
               return (
-                <div key={rfq.id} className="bg-white rounded-2xl border border-slate-200 p-5 shadow-subtle space-y-4">
+                <div key={rfq.id} className="bg-white dark:bg-[#0c0c0e] rounded-2xl border border-slate-200 dark:border-zinc-800 p-5 shadow-subtle space-y-4">
                   {/* RFQ Group Header */}
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3.5">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-zinc-800 pb-3.5">
                     <div className="space-y-1">
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="font-mono font-bold text-xs bg-brand-50 text-brand-700 px-2.5 py-0.5 rounded border border-brand-200">
+                        <span className="font-mono font-bold text-xs bg-brand-50 dark:bg-brand-950/60 text-brand-700 dark:text-brand-400 px-2.5 py-0.5 rounded border border-brand-200 dark:border-brand-800">
                           RFQ #{rfq.rfqNumber}
                         </span>
-                        <span className="text-xs font-bold text-rose-800 bg-rose-50 px-2.5 py-0.5 rounded-full border border-rose-200 flex items-center gap-1">
+                        <span className="text-xs font-bold text-rose-800 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/40 px-2.5 py-0.5 rounded-full border border-rose-200 dark:border-rose-900/60 flex items-center gap-1">
                           <CheckCircle2 className="w-3.5 h-3.5 text-[#cf2e46]" />
                           <span>
                             {isUnlocked ? `${quotesForThisRFQ.length} Quotations (Unlocked)` : `${Math.min(quotesForThisRFQ.length, 5)} / 5 Free Quotations`}
                           </span>
                         </span>
                         {lockedCount > 0 && (
-                          <span className="text-xs font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                          <span className="text-xs font-bold text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 rounded border border-amber-200 dark:border-amber-800">
                             +{lockedCount} More Locked (AED 49)
                           </span>
                         )}
-                        <span className="text-xs text-slate-500 hidden sm:inline">
+                        <span className="text-xs text-slate-500 dark:text-zinc-400 hidden sm:inline">
                           • {rfq.category}
                         </span>
                       </div>
-                      <h4 className="text-base font-extrabold text-slate-900">{rfq.title}</h4>
-                      <p className="text-xs text-slate-500">
-                        Project: <strong className="text-slate-700">{rfq.projectName}</strong> • Delivery: <strong>{rfq.deliveryEmirate}</strong>
+                      <h4 className="text-base font-extrabold text-slate-900 dark:text-white">{rfq.title}</h4>
+                      <p className="text-xs text-slate-500 dark:text-zinc-400">
+                        Project: <strong className="text-slate-700 dark:text-zinc-200">{rfq.projectName}</strong> • Delivery: <strong>{rfq.deliveryEmirate}</strong>
                       </p>
                     </div>
 
@@ -230,16 +230,16 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
                           key={quote.id}
                           className={`p-4 rounded-xl border transition-all space-y-3 flex flex-col justify-between ${
                             isLowest 
-                              ? 'bg-gradient-to-b from-rose-50/50 to-white border-rose-300 shadow-xs' 
-                              : 'bg-slate-50/50 border-slate-200 hover:border-slate-300'
+                              ? 'bg-gradient-to-b from-rose-50/50 to-white dark:from-rose-950/20 dark:to-[#121215] border-rose-300 dark:border-rose-900/60 shadow-xs' 
+                              : 'bg-slate-50/50 dark:bg-[#121215] border-slate-200 dark:border-zinc-800 hover:border-slate-300 dark:hover:border-zinc-700'
                           }`}
                         >
                           <div className="space-y-2">
                             <div className="flex items-center justify-between gap-1">
-                              <span className="font-mono text-xs font-bold text-slate-600">{quote.quotationNumber}</span>
+                              <span className="font-mono text-xs font-bold text-slate-600 dark:text-zinc-400">{quote.quotationNumber}</span>
                               <div className="flex items-center gap-1.5">
                                 {quote.buyerRating ? (
-                                  <span className="font-bold text-amber-800 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 text-[10px]">
+                                  <span className="font-bold text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 px-1.5 py-0.5 rounded border border-amber-200 dark:border-amber-800 text-[10px]">
                                     ★ {quote.buyerRating}/5
                                   </span>
                                 ) : null}
@@ -251,23 +251,23 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
                               </div>
                             </div>
                             <div>
-                              <h5 className="font-bold text-slate-900 text-xs truncate">{quote.supplierCompanyName}</h5>
-                              <p className="text-[11px] text-slate-500">{quote.supplierZone || quote.supplierEmirate || 'Verified Stockist'}</p>
+                              <h5 className="font-bold text-slate-900 dark:text-white text-xs truncate">{quote.supplierCompanyName}</h5>
+                              <p className="text-[11px] text-slate-500 dark:text-zinc-400">{quote.supplierZone || quote.supplierEmirate || 'Verified Stockist'}</p>
                             </div>
-                            <div className="pt-2 border-t border-slate-200/60">
-                              <span className="text-[10px] text-slate-400 block font-medium">Quoted Total (5% VAT Incl.)</span>
-                              <div className="text-base font-extrabold text-slate-900 font-mono">
+                            <div className="pt-2 border-t border-slate-200/60 dark:border-zinc-800">
+                              <span className="text-[10px] text-slate-400 dark:text-zinc-500 block font-medium">Quoted Total (5% VAT Incl.)</span>
+                              <div className="text-base font-extrabold text-slate-900 dark:text-white font-mono">
                                 {formatAED(quote.grandTotalAED)}
                               </div>
                             </div>
-                            <div className="text-[11px] space-y-1 text-slate-600 pt-1">
+                            <div className="text-[11px] space-y-1 text-slate-600 dark:text-zinc-300 pt-1">
                               <div className="flex justify-between">
-                                <span className="text-slate-400">Lead Time:</span>
-                                <strong className="text-slate-800">{quote.leadTimeDisplay || `${quote.leadTimeDays} Days`}</strong>
+                                <span className="text-slate-400 dark:text-zinc-500">Lead Time:</span>
+                                <strong className="text-slate-800 dark:text-zinc-200">{quote.leadTimeDisplay || `${quote.leadTimeDays} Days`}</strong>
                               </div>
                               <div className="flex justify-between">
-                                <span className="text-slate-400">Payment:</span>
-                                <strong className="text-slate-800 truncate">{quote.paymentTerms || '30 Days'}</strong>
+                                <span className="text-slate-400 dark:text-zinc-500">Payment:</span>
+                                <strong className="text-slate-800 dark:text-zinc-200 truncate">{quote.paymentTerms || '30 Days'}</strong>
                               </div>
                             </div>
                           </div>
@@ -297,20 +297,20 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
                     {lockedCount > 0 && (
                       <div
                         onClick={() => onNavigate('buyer-compare', { rfqId: rfq.id })}
-                        className="p-4 rounded-xl border-2 border-dashed border-amber-300 bg-amber-50/40 hover:bg-amber-50 transition-all space-y-3 flex flex-col justify-between cursor-pointer"
+                        className="p-4 rounded-xl border-2 border-dashed border-amber-300 dark:border-amber-700/60 bg-amber-50/40 dark:bg-amber-950/20 hover:bg-amber-50 dark:hover:bg-amber-950/30 transition-all space-y-3 flex flex-col justify-between cursor-pointer"
                       >
                         <div className="space-y-2">
                           <div className="flex items-center justify-between">
-                            <span className="text-[10px] font-bold bg-amber-200 text-amber-900 px-2 py-0.5 rounded">
+                            <span className="text-[10px] font-bold bg-amber-200 dark:bg-amber-900/60 text-amber-900 dark:text-amber-300 px-2 py-0.5 rounded">
                               +5 Extended Pack
                             </span>
-                            <span className="text-xs font-bold text-amber-800 font-mono">AED 49.00</span>
+                            <span className="text-xs font-bold text-amber-800 dark:text-amber-300 font-mono">AED 49.00</span>
                           </div>
                           <div>
-                            <h5 className="font-bold text-slate-900 text-xs">+{lockedCount} More Supplier Quotations</h5>
-                            <p className="text-[11px] text-slate-500">Tier-2 factory importers & regional stockist bids</p>
+                            <h5 className="font-bold text-slate-900 dark:text-white text-xs">+{lockedCount} More Supplier Quotations</h5>
+                            <p className="text-[11px] text-slate-500 dark:text-zinc-400">Tier-2 factory importers & regional stockist bids</p>
                           </div>
-                          <p className="text-[11px] text-amber-800 bg-white/80 p-2 rounded border border-amber-200 leading-snug">
+                          <p className="text-[11px] text-amber-800 dark:text-amber-300 bg-white/80 dark:bg-zinc-900/80 p-2 rounded border border-amber-200 dark:border-amber-900/60 leading-snug">
                             Pay AED 49 to unlock 5 additional supplier quotations for this RFQ.
                           </p>
                         </div>
@@ -335,11 +335,11 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
       {/* Active RFQs Section */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-bold text-slate-900">Active Material RFQs</h3>
+          <h3 className="text-lg font-bold text-slate-900 dark:text-white">Active Material RFQs</h3>
           {myRFQs.length > 0 && (
             <button
               onClick={() => onNavigate('buyer-rfqs')}
-              className="text-xs font-bold text-brand-600 hover:text-brand-700 flex items-center gap-1"
+              className="text-xs font-bold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 flex items-center gap-1"
             >
               View All ({myRFQs.length}) <ArrowRight className="w-3.5 h-3.5" />
             </button>
@@ -358,13 +358,13 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
             ))}
           </div>
         ) : (
-          <Card className="p-8 text-center space-y-4 border-dashed border-2 border-slate-200 bg-white">
-            <div className="w-12 h-12 rounded-2xl bg-brand-50 border border-brand-200 flex items-center justify-center text-brand-600 mx-auto">
+          <Card className="p-8 text-center space-y-4 border-dashed border-2 border-slate-200 dark:border-zinc-800 bg-white dark:bg-[#0c0c0e]">
+            <div className="w-12 h-12 rounded-2xl bg-brand-50 dark:bg-brand-950/60 border border-brand-200 dark:border-brand-800 flex items-center justify-center text-brand-600 dark:text-brand-400 mx-auto">
               <PlusCircle className="w-6 h-6" />
             </div>
             <div className="space-y-1 max-w-md mx-auto">
-              <h4 className="text-base font-bold text-slate-900">No Material RFQs Posted Yet</h4>
-              <p className="text-xs text-slate-500">
+              <h4 className="text-base font-bold text-slate-900 dark:text-white">No Material RFQs Posted Yet</h4>
+              <p className="text-xs text-slate-500 dark:text-zinc-400">
                 Post your material requirements (e.g., Ducab cables, switchgear, LED fixtures) or upload your BOQ sheet to receive up to 5 verified stockist quotes.
               </p>
             </div>
@@ -384,8 +384,8 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
       <Card>
         <CardHeader>
           <div>
-            <h3 className="text-base font-bold text-slate-900">Recent Purchase Orders & Deliveries</h3>
-            <p className="text-xs text-slate-500">Track PO dispatch, site gate receipts, and supplier ratings.</p>
+            <h3 className="text-base font-bold text-slate-900 dark:text-white">Recent Purchase Orders & Deliveries</h3>
+            <p className="text-xs text-slate-500 dark:text-zinc-400">Track PO dispatch, site gate receipts, and supplier ratings.</p>
           </div>
           {activeOrders.length > 0 && (
             <Button
@@ -400,7 +400,7 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
         {activeOrders.length > 0 ? (
           <CardContent className="p-0 overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
+              <thead className="bg-slate-50 dark:bg-zinc-900 text-slate-600 dark:text-zinc-400 font-semibold border-b border-slate-200 dark:border-zinc-800">
                 <tr>
                   <th className="p-3">PO Number</th>
                   <th className="p-3">Project / RFQ</th>
@@ -411,24 +411,24 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
                   <th className="p-3 text-right">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-slate-100 dark:divide-zinc-800">
                 {activeOrders.map((po) => (
-                  <tr key={po.id} className="hover:bg-slate-50/60">
-                    <td className="p-3 font-mono font-bold text-brand-700">{po.poNumber}</td>
+                  <tr key={po.id} className="hover:bg-slate-50/60 dark:hover:bg-zinc-800/40">
+                    <td className="p-3 font-mono font-bold text-brand-700 dark:text-brand-400">{po.poNumber}</td>
                     <td className="p-3">
-                      <p className="font-semibold text-slate-900">{po.rfqTitle}</p>
-                      <span className="text-[10px] text-slate-400 font-mono">{po.rfqNumber}</span>
+                      <p className="font-semibold text-slate-900 dark:text-white">{po.rfqTitle}</p>
+                      <span className="text-[10px] text-slate-400 dark:text-zinc-500 font-mono">{po.rfqNumber}</span>
                     </td>
-                    <td className="p-3 font-semibold text-slate-800">{po.supplierCompanyName}</td>
-                    <td className="p-3 font-extrabold text-slate-900">{formatAED(po.totalAmountAED)}</td>
-                    <td className="p-3 text-slate-600">{formatDate(po.expectedDeliveryDate)}</td>
+                    <td className="p-3 font-semibold text-slate-800 dark:text-zinc-200">{po.supplierCompanyName}</td>
+                    <td className="p-3 font-extrabold text-slate-900 dark:text-white">{formatAED(po.totalAmountAED)}</td>
+                    <td className="p-3 text-slate-600 dark:text-zinc-400">{formatDate(po.expectedDeliveryDate)}</td>
                     <td className="p-3">
                       <StatusBadge status={po.status} />
                     </td>
                     <td className="p-3 text-right">
                       <button
                         onClick={() => onNavigate('buyer-orders')}
-                        className="text-brand-600 hover:text-brand-800 font-bold"
+                        className="text-brand-600 dark:text-brand-400 hover:text-brand-800 dark:hover:text-brand-300 font-bold"
                       >
                         Track PO
                       </button>
@@ -439,9 +439,9 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
             </table>
           </CardContent>
         ) : (
-          <CardContent className="p-8 text-center text-xs text-slate-500">
-            <p className="font-semibold text-slate-700">No purchase orders issued yet</p>
-            <p className="text-slate-400 mt-1">Once you compare quotes and award a supplier, your digital POs and site tracking receipts will appear here.</p>
+          <CardContent className="p-8 text-center text-xs text-slate-500 dark:text-zinc-400">
+            <p className="font-semibold text-slate-700 dark:text-zinc-300">No purchase orders issued yet</p>
+            <p className="text-slate-400 dark:text-zinc-500 mt-1">Once you compare quotes and award a supplier, your digital POs and site tracking receipts will appear here.</p>
           </CardContent>
         )}
       </Card>
