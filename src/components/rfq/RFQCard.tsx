@@ -49,7 +49,7 @@ export const RFQCard: React.FC<RFQCardProps> = ({
   const isCapacityFull = currentQuotesCount >= maxQuotes;
 
   return (
-    <Card className="hover:border-brand-300 dark:hover:border-zinc-700 hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
+    <Card className="hover:border-brand-300 dark:hover:border-white/[0.18] hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
       <CardContent className="p-5">
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-3">
           <div>
@@ -92,7 +92,7 @@ export const RFQCard: React.FC<RFQCardProps> = ({
                 {isCapacityFull ? 'Capacity Reached' : 'Fastest 5 Bids Rule'}
               </span>
               {isCapacityFull ? (
-                <span className="text-xs font-extrabold text-slate-600 dark:text-zinc-300 bg-slate-200/80 dark:bg-zinc-800 px-2.5 py-1 rounded-md border border-slate-300 dark:border-zinc-700 inline-flex items-center gap-1">
+                <span className="text-xs font-extrabold text-slate-600 dark:text-zinc-300 bg-slate-200/80 dark:bg-white/[0.04] px-2.5 py-1 rounded-md border border-slate-300 dark:border-white/[0.08] inline-flex items-center gap-1">
                   <Lock className="w-3 h-3 text-slate-500 dark:text-zinc-400" /> {maxQuotes} / {maxQuotes} Full
                 </span>
               ) : currentQuotesCount === 0 ? (
@@ -108,7 +108,7 @@ export const RFQCard: React.FC<RFQCardProps> = ({
           </div>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 py-3 my-3 border-y border-slate-100 dark:border-zinc-800 text-xs">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 py-3 my-3 border-y border-slate-100 dark:border-white/[0.06] text-xs">
           <div className="flex items-center gap-2 text-slate-600 dark:text-zinc-400">
             <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
             <span className="truncate">{rfq.deliveryEmirate}</span>
@@ -127,7 +127,7 @@ export const RFQCard: React.FC<RFQCardProps> = ({
           </div>
         </div>
 
-        <div className="bg-slate-50 dark:bg-zinc-900/60 dark:border dark:border-zinc-800 p-2.5 rounded-lg mb-4 text-xs space-y-1">
+        <div className="bg-slate-50/70 dark:bg-white/[0.02] border border-slate-200/60 dark:border-white/[0.06] p-2.5 rounded-xl mb-4 text-xs space-y-1">
           {rfq.items.slice(0, 2).map((item, idx) => {
             const brandDisplay = (item.preferredBrands && item.preferredBrands.length > 0)
               ? item.preferredBrands.join(' / ')
@@ -139,7 +139,7 @@ export const RFQCard: React.FC<RFQCardProps> = ({
                   • {item.quantity} {item.unit} — {item.description}
                 </span>
                 {brandDisplay && (
-                  <span className="text-[10px] font-bold text-brand-700 dark:text-brand-300 bg-white dark:bg-zinc-800 px-1.5 py-0.5 rounded border border-brand-200 dark:border-zinc-700 shrink-0 ml-2">
+                  <span className="text-[10px] font-bold text-brand-700 dark:text-brand-300 bg-white dark:bg-white/[0.04] px-1.5 py-0.5 rounded border border-brand-200 dark:border-white/[0.08] shrink-0 ml-2">
                     {brandDisplay}
                   </span>
                 )}

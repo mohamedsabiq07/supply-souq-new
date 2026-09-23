@@ -96,7 +96,7 @@ export const SupplierDashboard: React.FC<SupplierDashboardProps> = ({ onNavigate
       </div>
 
       {/* 3-Month Free Trial & Pricing Banner */}
-      <div className="bg-gradient-to-r from-black via-[#0c0c0e] to-black text-white p-4 sm:p-5 rounded-2xl border border-zinc-800 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs">
+      <div className="bg-gradient-to-r from-black via-[#0c0c0e] to-black text-white p-5 rounded-2xl border border-white/[0.08] shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs">
         <div className="flex items-center gap-3.5">
           <div className="w-11 h-11 rounded-2xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-400 font-bold shrink-0">
             <Gift className="w-6 h-6 text-amber-400" />
@@ -116,7 +116,7 @@ export const SupplierDashboard: React.FC<SupplierDashboardProps> = ({ onNavigate
             </p>
           </div>
         </div>
-        <div className="shrink-0 bg-black/80 px-4 py-2 rounded-xl border border-zinc-700 text-right self-start sm:self-auto">
+        <div className="shrink-0 bg-white/[0.04] px-4 py-2 rounded-xl border border-white/[0.08] text-right self-start sm:self-auto">
           <span className="text-[10px] text-zinc-400 block uppercase font-bold tracking-wider">After 3-Month Trial</span>
           <span className="text-amber-400 font-black text-sm font-mono">AED 1.00 <span className="text-[10px] text-zinc-400 font-normal">/ day</span></span>
         </div>

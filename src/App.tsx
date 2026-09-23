@@ -43,6 +43,7 @@ import { RegisterPage } from './pages/auth/RegisterPage';
 
 // Shader Pages
 import { HalftoneShader } from './components/shader/HalftoneShader';
+import { BackgroundsShowcasePage } from './pages/public/BackgroundsShowcasePage';
 
 const checkIsAdminSecretRoute = () => {
   try {
@@ -76,6 +77,18 @@ const checkIsHalftoneRoute = () => {
   }
 };
 
+const checkIsBackgroundsRoute = () => {
+  try {
+    const pathname = window.location.pathname.toLowerCase().replace(/^\/+|\/+$/g, '');
+    const hash = window.location.hash.replace('#', '').toLowerCase().replace(/^\/+|\/+$/g, '');
+    const search = new URLSearchParams(window.location.search);
+    const viewParam = (search.get('view') || search.get('page') || '').toLowerCase();
+    return pathname === 'backgrounds' || hash === 'backgrounds' || viewParam === 'backgrounds';
+  } catch (e) {
+    return false;
+  }
+};
+
 const AppContent: React.FC = () => {
   const { role, setRole, isAuthenticated, isImpersonating, impersonatedUser, stopImpersonating, panicLock } = useAuth();
   const [currentView, setCurrentView] = useState<string>(() => {
@@ -84,6 +97,9 @@ const AppContent: React.FC = () => {
     }
     if (checkIsHalftoneRoute()) {
       return 'halftone';
+    }
+    if (checkIsBackgroundsRoute()) {
+      return 'backgrounds';
     }
     return 'home';
   });
@@ -102,6 +118,10 @@ const AppContent: React.FC = () => {
       }
       if (checkIsHalftoneRoute()) {
         setCurrentView('halftone');
+        return;
+      }
+      if (checkIsBackgroundsRoute()) {
+        setCurrentView('backgrounds');
         return;
       }
     };
@@ -202,12 +222,18 @@ const AppContent: React.FC = () => {
     'login', 
     'admin-login', 
     'register',
-    'halftone'
+    'halftone',
+    'backgrounds'
   ].includes(currentView);
 
   // Full-bleed Halftone WebGL Shader View (Zero Chrome, Pure Canvas, No Typography)
   if (currentView === 'halftone') {
     return <HalftoneShader onBack={() => handleNavigate('home')} />;
+  }
+
+  // Interactive Backgrounds Mockup & Comparison Lab
+  if (currentView === 'backgrounds') {
+    return <BackgroundsShowcasePage onBackToHome={() => handleNavigate('home')} />;
   }
 
   // If user is logged out and tries to access private workspace, redirect to public login

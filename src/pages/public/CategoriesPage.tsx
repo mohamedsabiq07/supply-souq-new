@@ -61,8 +61,8 @@ export const CategoriesPage: React.FC<{ onPostRFQ: () => void }> = ({ onPostRFQ 
             onClick={() => setSelectedVertical(v)}
             className={`px-4 py-2 rounded-xl text-xs font-bold transition-all shrink-0 ${
               selectedVertical === v
-                ? 'bg-slate-900 dark:bg-zinc-800 text-white shadow-sm border border-slate-900 dark:border-zinc-700'
-                : 'bg-white dark:bg-[#0c0c0e] text-slate-600 dark:text-zinc-300 border border-slate-200 dark:border-zinc-800 hover:bg-slate-50 dark:hover:bg-zinc-900'
+                ? 'bg-slate-900 dark:bg-white text-white dark:text-black shadow-sm border border-slate-900 dark:border-white'
+                : 'bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] text-slate-600 dark:text-zinc-300 border border-slate-200/80 dark:border-white/[0.08] hover:bg-slate-50 dark:hover:bg-white/[0.04]'
             }`}
           >
             {v}
@@ -84,14 +84,14 @@ export const CategoriesPage: React.FC<{ onPostRFQ: () => void }> = ({ onPostRFQ 
                     <h3 className="text-lg font-bold text-slate-900 dark:text-white">{category.name}</h3>
                   </div>
                 </div>
-                <span className="text-xs font-bold text-slate-500 dark:text-zinc-400 bg-slate-100 dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800 px-2.5 py-1 rounded-md">
+                <span className="text-xs font-bold text-slate-500 dark:text-zinc-400 bg-slate-100 dark:bg-white/[0.04] border border-slate-200/60 dark:border-white/[0.08] px-2.5 py-1 rounded-md">
                   {category.itemCount} SKUs
                 </span>
               </div>
 
               <p className="text-xs text-slate-500 dark:text-zinc-400 leading-relaxed">{category.description}</p>
 
-              <div className="pt-2 border-t border-slate-100 dark:border-zinc-800">
+              <div className="pt-2 border-t border-slate-100 dark:border-white/[0.06]">
                 <h4 className="text-xs font-bold text-slate-800 dark:text-zinc-200 mb-2">Available Subcategories & Items:</h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {category.subcategories.map((sub, idx) => (

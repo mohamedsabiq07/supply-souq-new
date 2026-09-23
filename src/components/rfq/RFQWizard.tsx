@@ -417,12 +417,12 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
   return (
     <div className="w-full max-w-5xl mx-auto space-y-6">
       {/* Top Method Selector */}
-      <div className="bg-slate-900 dark:bg-[#0c0c0e] text-white p-4 rounded-2xl shadow-md border border-slate-800 dark:border-zinc-800 space-y-3">
+      <div className="bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] text-slate-900 dark:text-white p-5 rounded-2xl sm:rounded-3xl shadow-sm border border-slate-200/80 dark:border-white/[0.08] space-y-3.5">
         <div>
-          <span className="text-[11px] font-bold text-amber-400 uppercase tracking-wider block">
+          <span className="text-[11px] font-bold text-amber-500 dark:text-amber-400 uppercase tracking-wider block">
             Choose How You Want to Create Your RFQ
           </span>
-          <h3 className="text-base font-bold text-white">High-Speed UAE Electrical Procurement</h3>
+          <h3 className="text-base font-extrabold text-slate-900 dark:text-white">High-Speed UAE Electrical Procurement</h3>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-semibold">
@@ -432,16 +432,16 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
               setWizardMode('detailed_boq');
               setStep(1);
             }}
-            className={`p-3.5 rounded-xl border text-left flex items-start gap-3 transition-all ${
+            className={`p-4 rounded-xl sm:rounded-2xl border text-left flex items-start gap-3 transition-all ${
               wizardMode === 'detailed_boq'
-                ? 'bg-brand-600 text-white border-brand-400 shadow-md font-bold'
-                : 'bg-slate-800 dark:bg-zinc-900 text-slate-300 border-slate-700 dark:border-zinc-800 hover:bg-slate-700/60 dark:hover:bg-zinc-800'
+                ? 'bg-brand-600 text-white border-brand-500 shadow-md shadow-brand-500/15 font-bold'
+                : 'bg-slate-50 dark:bg-white/[0.03] text-slate-700 dark:text-zinc-300 border-slate-200 dark:border-white/[0.08] hover:bg-slate-100 dark:hover:bg-white/[0.06]'
             }`}
           >
-            <FileText className="w-5 h-5 text-sky-300 shrink-0 mt-0.5" />
+            <FileText className="w-5 h-5 text-sky-500 dark:text-sky-300 shrink-0 mt-0.5" />
             <div>
               <span className="block font-bold">Custom Electrical Line-Item BOQ</span>
-              <span className="text-[10px] text-slate-300 dark:text-zinc-400 font-normal">Search and select approved brands, specs, and quantities</span>
+              <span className={`text-[11px] font-normal ${wizardMode === 'detailed_boq' ? 'text-white/80' : 'text-slate-500 dark:text-zinc-400'}`}>Search and select approved brands, specs, and quantities</span>
             </div>
           </button>
 
@@ -451,32 +451,32 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
               setWizardMode('photo_upload');
               setStep(1);
             }}
-            className={`p-3.5 rounded-xl border text-left flex items-start gap-3 transition-all ${
+            className={`p-4 rounded-xl sm:rounded-2xl border text-left flex items-start gap-3 transition-all ${
               wizardMode === 'photo_upload'
-                ? 'bg-brand-600 text-white border-brand-400 shadow-md font-bold'
-                : 'bg-slate-800 dark:bg-zinc-900 text-slate-300 border-slate-700 dark:border-zinc-800 hover:bg-slate-700/60 dark:hover:bg-zinc-800'
+                ? 'bg-brand-600 text-white border-brand-500 shadow-md shadow-brand-500/15 font-bold'
+                : 'bg-slate-50 dark:bg-white/[0.03] text-slate-700 dark:text-zinc-300 border-slate-200 dark:border-white/[0.08] hover:bg-slate-100 dark:hover:bg-white/[0.06]'
             }`}
           >
-            <Camera className="w-5 h-5 text-rose-300 shrink-0 mt-0.5" />
+            <Camera className="w-5 h-5 text-rose-500 dark:text-rose-300 shrink-0 mt-0.5" />
             <div>
               <span className="block font-bold">Snap Photo of BOQ / Previous Invoice</span>
-              <span className="text-[10px] text-slate-300 dark:text-zinc-400 font-normal">Handwritten cable schedule, single-line diagram, or paper bill</span>
+              <span className={`text-[11px] font-normal ${wizardMode === 'photo_upload' ? 'text-white/80' : 'text-slate-500 dark:text-zinc-400'}`}>Handwritten cable schedule, single-line diagram, or paper bill</span>
             </div>
           </button>
         </div>
       </div>
 
       {/* Progress Stepper */}
-      <div className="bg-white dark:bg-[#0c0c0e] p-3.5 rounded-xl border border-slate-200 dark:border-zinc-800 shadow-subtle flex items-center justify-between text-xs">
-        <div className="flex items-center gap-2">
-          <span className="w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold text-xs">
+      <div className="bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] p-3.5 rounded-2xl border border-slate-200/80 dark:border-white/[0.08] shadow-xs flex items-center justify-between text-xs">
+        <div className="flex items-center gap-2.5">
+          <span className="w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold text-xs shadow-xs">
             {step}
           </span>
           <span className="font-bold text-slate-900 dark:text-white">
             {step === 1 ? '1. Material Requirement & Delivery Details' : '2. Review & Broadcast to Verified Stockists'}
           </span>
         </div>
-        <span className="text-slate-400 dark:text-zinc-500 font-medium">Step {step} of 2</span>
+        <span className="text-slate-400 dark:text-zinc-500 font-semibold">Step {step} of 2</span>
       </div>
 
       {/* STEP 1 */}
@@ -548,7 +548,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
             )}
 
             {/* Section A: Title, Category & Authority Approval */}
-            <div className="bg-slate-50/80 dark:bg-zinc-900/40 p-4 rounded-2xl border border-slate-200 dark:border-zinc-800 space-y-4">
+            <div className="bg-slate-50/70 dark:bg-white/[0.02] p-5 rounded-2xl sm:rounded-3xl border border-slate-200/80 dark:border-white/[0.06] space-y-4 shadow-2xs">
               <span className="text-[11px] font-extrabold uppercase tracking-wider text-brand-700 dark:text-brand-400 flex items-center gap-1.5">
                 <Building2 className="w-3.5 h-3.5" /> Requirement & Specification Standards
               </span>
@@ -562,7 +562,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="e.g. LV Copper Power Cables & Switchgear"
-                    className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-zinc-700 text-xs font-semibold focus:ring-2 focus:ring-brand-500 bg-white dark:bg-[#111114] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-zinc-500"
+                    className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-white/[0.08] text-xs font-semibold focus:ring-2 focus:ring-brand-500 bg-white dark:bg-black/40 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-zinc-500"
                   />
                 </div>
 
@@ -571,7 +571,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-zinc-700 text-xs font-semibold focus:ring-2 focus:ring-brand-500 bg-white dark:bg-[#111114] text-slate-900 dark:text-white"
+                    className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-white/[0.08] text-xs font-semibold focus:ring-2 focus:ring-brand-500 bg-white dark:bg-black/40 text-slate-900 dark:text-white"
                   >
                     <option value="LV Power Cables & Building Wires">⚡ LV Power Cables & Building Wires</option>
                     <option value="MV & HV Power Cables (11kV - 132kV)">⚡ MV & HV Power Cables (11kV - 132kV)</option>
@@ -593,7 +593,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                   <select
                     value={authorityApproval}
                     onChange={(e) => setAuthorityApproval(e.target.value)}
-                    className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-zinc-700 text-xs font-bold text-brand-700 dark:text-brand-400 focus:ring-2 focus:ring-brand-500 bg-white dark:bg-[#111114]"
+                    className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-white/[0.08] text-xs font-bold text-brand-700 dark:text-brand-400 focus:ring-2 focus:ring-brand-500 bg-white dark:bg-black/40"
                   >
                     <option value="DEWA Approved (Dubai Standard)">🏛️ DEWA Approved (Dubai)</option>
                     <option value="SEWA Approved (Sharjah Standard)">🏛️ SEWA Approved (Sharjah)</option>
@@ -607,7 +607,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
             </div>
 
             {/* Section B: Delivery Location & Terms */}
-            <div className="bg-slate-50/80 dark:bg-zinc-900/40 p-4 rounded-2xl border border-slate-200 dark:border-zinc-800 space-y-4">
+            <div className="bg-slate-50/70 dark:bg-white/[0.02] p-5 rounded-2xl sm:rounded-3xl border border-slate-200/80 dark:border-white/[0.06] space-y-4 shadow-2xs">
               <span className="text-[11px] font-extrabold uppercase tracking-wider text-brand-700 dark:text-brand-400 flex items-center gap-1.5">
                 <MapPin className="w-3.5 h-3.5" /> Delivery Location & Commercial Terms
               </span>
@@ -618,7 +618,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                   <select
                     value={deliveryEmirate}
                     onChange={(e) => setDeliveryEmirate(e.target.value as Emirate)}
-                    className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-zinc-700 text-xs font-bold text-brand-700 dark:text-brand-400 focus:ring-2 focus:ring-brand-500 bg-white dark:bg-[#111114]"
+                    className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-white/[0.08] text-xs font-bold text-brand-700 dark:text-brand-400 focus:ring-2 focus:ring-brand-500 bg-white dark:bg-black/40"
                   >
                     <option value="Dubai">Dubai</option>
                     <option value="Sharjah">Sharjah</option>
@@ -634,7 +634,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                     value={deliveryAddress}
                     onChange={(e) => setDeliveryAddress(e.target.value)}
                     placeholder="e.g. Al Quoz Industrial Loading Bay 3, Dubai"
-                    className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-zinc-700 text-xs focus:ring-2 focus:ring-brand-500 bg-white dark:bg-[#111114] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-zinc-500"
+                    className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-white/[0.08] text-xs focus:ring-2 focus:ring-brand-500 bg-white dark:bg-black/40 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-zinc-500"
                   />
                 </div>
 
@@ -645,7 +645,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                     required
                     value={requiredDeliveryDate}
                     onChange={(e) => setRequiredDeliveryDate(e.target.value)}
-                    className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-zinc-700 text-xs font-semibold focus:ring-2 focus:ring-brand-500 bg-white dark:bg-[#111114] text-slate-900 dark:text-white"
+                    className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-white/[0.08] text-xs font-semibold focus:ring-2 focus:ring-brand-500 bg-white dark:bg-black/40 text-slate-900 dark:text-white"
                   />
                 </div>
 
@@ -654,7 +654,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                   <select
                     value={priority}
                     onChange={(e) => setPriority(e.target.value as any)}
-                    className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-zinc-700 text-xs font-semibold focus:ring-2 focus:ring-brand-500 bg-white dark:bg-[#111114] text-slate-900 dark:text-white"
+                    className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-white/[0.08] text-xs font-semibold focus:ring-2 focus:ring-brand-500 bg-white dark:bg-black/40 text-slate-900 dark:text-white"
                   >
                     <option value="normal">Normal (Standard 48h quotation)</option>
                     <option value="urgent">⚡ Urgent (Express 24h quotation)</option>
@@ -668,7 +668,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                 <select
                   value={paymentTermsPreference}
                   onChange={(e) => setPaymentTermsPreference(e.target.value)}
-                  className="w-full sm:w-80 p-2.5 rounded-lg border border-slate-200 dark:border-zinc-700 text-xs font-semibold focus:ring-2 focus:ring-brand-500 bg-white dark:bg-[#111114] text-slate-900 dark:text-white"
+                  className="w-full sm:w-80 p-2.5 rounded-xl border border-slate-200 dark:border-white/[0.08] text-xs font-semibold focus:ring-2 focus:ring-brand-500 bg-white dark:bg-black/40 text-slate-900 dark:text-white"
                 >
                   <option value="PDC 30 Days Credit">PDC 30 Days Credit</option>
                   <option value="PDC 60 Days Credit">PDC 60 Days Credit</option>
@@ -717,10 +717,10 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                     return (
                       <div 
                         key={item.id || idx} 
-                        className="p-4 bg-white dark:bg-[#0c0c0e] rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-subtle hover:border-slate-300 dark:hover:border-zinc-700 transition-all space-y-3"
+                        className="p-5 bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] rounded-2xl sm:rounded-3xl border border-slate-200/80 dark:border-white/[0.08] shadow-xs hover:border-slate-300 dark:hover:border-white/[0.14] transition-all space-y-4"
                       >
                         {/* Item Card Header */}
-                        <div className="flex items-center justify-between border-b border-slate-100 dark:border-zinc-800 pb-2">
+                        <div className="flex items-center justify-between border-b border-slate-100 dark:border-white/[0.06] pb-3">
                           <div className="flex items-center gap-2">
                             <span className="w-5 h-5 rounded-full bg-brand-50 dark:bg-brand-950/60 text-brand-700 dark:text-brand-400 font-extrabold text-[11px] flex items-center justify-center border border-brand-200 dark:border-brand-800">
                               {idx + 1}
@@ -751,7 +751,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                               value={item.description}
                               onChange={(e) => handleItemChange(idx, 'description', e.target.value)}
                               placeholder="e.g. 4C x 16mm² XLPE/SWA/PVC Copper Armoured Cable..."
-                              className="w-full p-2 rounded-lg border border-slate-200 dark:border-zinc-700 text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-[#111114] focus:ring-2 focus:ring-brand-500"
+                              className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-white/[0.08] text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-black/40 focus:ring-2 focus:ring-brand-500"
                             />
                           </div>
 
@@ -765,7 +765,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                               required
                               value={item.quantity}
                               onChange={(e) => handleItemChange(idx, 'quantity', parseFloat(e.target.value) || 1)}
-                              className="w-full p-2 rounded-lg border border-slate-200 dark:border-zinc-700 text-xs font-black text-center focus:ring-2 focus:ring-brand-500 bg-white dark:bg-[#111114] text-slate-900 dark:text-white"
+                              className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-white/[0.08] text-xs font-black text-center focus:ring-2 focus:ring-brand-500 bg-white dark:bg-black/40 text-slate-900 dark:text-white"
                             />
                           </div>
 
@@ -776,7 +776,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                             <select
                               value={item.unit}
                               onChange={(e) => handleItemChange(idx, 'unit', e.target.value)}
-                              className="w-full p-2 rounded-lg border border-slate-200 dark:border-zinc-700 text-xs font-semibold focus:ring-2 focus:ring-brand-500 bg-white dark:bg-[#111114] text-slate-900 dark:text-white"
+                              className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-white/[0.08] text-xs font-semibold focus:ring-2 focus:ring-brand-500 bg-white dark:bg-black/40 text-slate-900 dark:text-white"
                             >
                               <option value="m">Meters (m)</option>
                               <option value="pcs">Pieces (pcs)</option>
@@ -800,12 +800,12 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                             value={item.specification}
                             onChange={(e) => handleItemChange(idx, 'specification', e.target.value)}
                             placeholder="e.g. BS 5467, 600/1000V, stranded annealed copper, galvanized steel wire armoured..."
-                            className="w-full p-2 rounded-lg border border-slate-200 dark:border-zinc-700 text-xs text-slate-700 dark:text-zinc-200 bg-white dark:bg-[#111114] focus:ring-1 focus:ring-brand-500"
+                            className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-white/[0.08] text-xs text-slate-700 dark:text-zinc-200 bg-white dark:bg-black/40 focus:ring-1 focus:ring-brand-500"
                           />
                         </div>
 
                         {/* Row 3: Searchable Multi-Brand Selection (No pre-built suggested buttons) */}
-                        <div className="bg-slate-50/90 dark:bg-zinc-900/60 p-3 rounded-xl border border-slate-200 dark:border-zinc-800 space-y-2.5">
+                        <div className="bg-slate-50/80 dark:bg-white/[0.02] p-3.5 rounded-2xl border border-slate-200/70 dark:border-white/[0.06] space-y-3">
                           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
                             <label className="text-[11px] font-bold text-slate-800 dark:text-zinc-200 flex items-center gap-1.5">
                               <Tag className="w-3.5 h-3.5 text-brand-600 dark:text-brand-400" />
@@ -818,7 +818,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                                 type="checkbox"
                                 checked={item.allowAlternatives ?? true}
                                 onChange={(e) => handleItemChange(idx, 'allowAlternatives', e.target.checked)}
-                                className="w-3.5 h-3.5 text-brand-600 rounded border-slate-300 dark:border-zinc-700 dark:bg-zinc-800 focus:ring-brand-500"
+                                className="w-3.5 h-3.5 text-brand-600 rounded border-slate-300 dark:border-white/[0.2] dark:bg-zinc-800 focus:ring-brand-500"
                               />
                               <span className="text-[11px] font-semibold text-slate-700 dark:text-zinc-300">
                                 Equal & Approved Equivalents Welcome
@@ -874,7 +874,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                                       }
                                     }}
                                     placeholder="Search brand name... (e.g. Ducab, Schneider, Decoduct)"
-                                    className="w-full pl-8 pr-3 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-[#111114] text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500"
+                                    className="w-full pl-8 pr-3 py-1.5 text-xs rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-black/40 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500"
                                   />
                                 </div>
                               </BorderBeam>
@@ -891,8 +891,8 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
 
                             {/* Autocomplete Dropdown List - ONLY appears when user is searching */}
                             {isDropdownOpen && filteredBrands.length > 0 && (
-                              <div className="absolute z-20 mt-1 w-full max-w-md bg-white dark:bg-[#18181b] rounded-xl border border-slate-200 dark:border-zinc-700 shadow-xl overflow-hidden py-1 max-h-48 overflow-y-auto">
-                                <div className="px-3 py-1 text-[10px] font-bold text-slate-400 dark:text-zinc-400 uppercase tracking-wider bg-slate-50 dark:bg-zinc-800 border-b border-slate-100 dark:border-zinc-700">
+                              <div className="absolute z-20 mt-1 w-full max-w-md bg-white dark:bg-[#18181b] rounded-xl border border-slate-200 dark:border-white/[0.1] shadow-xl overflow-hidden py-1 max-h-48 overflow-y-auto">
+                                <div className="px-3 py-1 text-[10px] font-bold text-slate-400 dark:text-zinc-400 uppercase tracking-wider bg-slate-50 dark:bg-zinc-800 border-b border-slate-100 dark:border-white/[0.06]">
                                   Matching Brands:
                                 </div>
                                 {filteredBrands.map((b) => (
@@ -918,7 +918,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                             value={item.notes || ''}
                             onChange={(e) => handleItemChange(idx, 'notes', e.target.value)}
                             placeholder="Special instructions: e.g. Drum length 500m preferred, test certificate required..."
-                            className="w-full p-1.5 rounded-lg border border-slate-200 dark:border-zinc-700 text-[11px] text-slate-500 dark:text-zinc-400 italic bg-white dark:bg-[#111114]"
+                            className="w-full p-2 rounded-xl border border-slate-200 dark:border-white/[0.08] text-[11px] text-slate-500 dark:text-zinc-400 italic bg-white dark:bg-black/40"
                           />
                         </div>
                       </div>
@@ -937,7 +937,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                 rows={2}
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-zinc-700 text-xs text-slate-700 dark:text-zinc-200 bg-white dark:bg-[#111114] focus:ring-2 focus:ring-brand-500"
+                className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-white/[0.1] text-xs text-slate-700 dark:text-zinc-200 bg-white dark:bg-[#111114] focus:ring-2 focus:ring-brand-500"
               />
             </div>
 
@@ -998,7 +998,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
               </span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-slate-50 dark:bg-zinc-900/60 rounded-xl border border-slate-200 dark:border-zinc-800">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-5 bg-slate-50/70 dark:bg-white/[0.02] rounded-2xl sm:rounded-3xl border border-slate-200/80 dark:border-white/[0.06]">
               <div>
                 <span className="text-slate-400 dark:text-zinc-500 block font-medium">RFQ Title:</span>
                 <strong className="text-slate-900 dark:text-white text-sm">{title}</strong>
@@ -1024,8 +1024,8 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
             </div>
 
             {photoPreview ? (
-              <div className="p-3 bg-white dark:bg-zinc-900 rounded-xl border border-slate-200 dark:border-zinc-800 flex items-center gap-3">
-                <img src={photoPreview} alt="Attached list" className="w-16 h-14 object-cover rounded-lg border border-slate-200 dark:border-zinc-700" />
+              <div className="p-3.5 bg-white dark:bg-[#111114] rounded-2xl border border-slate-200/80 dark:border-white/[0.08] flex items-center gap-3">
+                <img src={photoPreview} alt="Attached list" className="w-16 h-14 object-cover rounded-xl border border-slate-200 dark:border-white/[0.08]" />
                 <div>
                   <span className="font-bold text-slate-800 dark:text-zinc-200">Handwritten List Photo Attached</span>
                   <p className="text-[11px] text-slate-500 dark:text-zinc-400">Suppliers will price directly against this photo.</p>
@@ -1034,9 +1034,9 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
             ) : (
               <div>
                 <h4 className="font-bold text-slate-900 dark:text-white mb-2">Material Items & Approved Brands Summary ({items.length}):</h4>
-                <div className="border border-slate-200 dark:border-zinc-800 rounded-xl overflow-hidden">
+                <div className="border border-slate-200/80 dark:border-white/[0.08] rounded-2xl overflow-hidden shadow-2xs">
                   <table className="w-full text-left text-xs">
-                    <thead className="bg-slate-100 dark:bg-zinc-900 text-slate-600 dark:text-zinc-400 font-semibold border-b border-slate-200 dark:border-zinc-800">
+                    <thead className="bg-slate-50 dark:bg-white/[0.03] text-slate-600 dark:text-zinc-300 font-semibold border-b border-slate-200/80 dark:border-white/[0.06]">
                       <tr>
                         <th className="p-2.5">#</th>
                         <th className="p-2.5">Description</th>
@@ -1044,9 +1044,9 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                         <th className="p-2.5">Quantity & Unit</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100 dark:divide-zinc-800">
+                    <tbody className="divide-y divide-slate-100 dark:divide-white/[0.05]">
                       {items.map((item, idx) => (
-                        <tr key={idx} className="hover:bg-slate-50 dark:hover:bg-zinc-800/40">
+                        <tr key={idx} className="hover:bg-slate-50/60 dark:hover:bg-white/[0.02]">
                           <td className="p-2.5 font-mono text-slate-400 dark:text-zinc-500">{idx + 1}</td>
                           <td className="p-2.5 font-semibold text-slate-900 dark:text-white">
                             {item.description}
@@ -1170,7 +1170,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                   value={authUsername}
                   onChange={(e) => setAuthUsername(e.target.value)}
                   placeholder="e.g. facade, apex, or your email"
-                  className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-[#111114] text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-brand-500"
+                  className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-white/[0.1] bg-white dark:bg-[#111114] text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-brand-500"
                 />
               </div>
 
@@ -1184,7 +1184,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                   value={authPassword}
                   onChange={(e) => setAuthPassword(e.target.value)}
                   placeholder="••••••••••••"
-                  className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-[#111114] text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-brand-500"
+                  className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-white/[0.1] bg-white dark:bg-[#111114] text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-brand-500"
                 />
               </div>
 
@@ -1197,7 +1197,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
               </Button>
 
               {/* 1-Click Fast Test Accounts */}
-              <div className="pt-2 border-t border-slate-100 dark:border-zinc-800">
+              <div className="pt-2 border-t border-slate-100 dark:border-white/[0.06]">
                 <span className="text-[10px] text-slate-400 dark:text-zinc-500 uppercase font-bold block mb-1.5">
                   Or 1-Click Fast Test Buyer:
                 </span>
@@ -1205,18 +1205,18 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                   <button
                     type="button"
                     onClick={() => handleQuickLogin('facade')}
-                    className="p-2 rounded-lg bg-slate-50 dark:bg-zinc-900 hover:bg-slate-100 dark:hover:bg-zinc-800 border border-slate-200 dark:border-zinc-700 text-left transition-colors"
+                    className="p-2 rounded-xl bg-slate-50 dark:bg-white/[0.03] hover:bg-slate-100 dark:hover:bg-white/[0.06] border border-slate-200 dark:border-white/[0.08] text-left transition-colors"
                   >
                     <span className="block font-bold text-slate-800 dark:text-zinc-200 text-[11px]">Facade Lighting</span>
-                    <span className="text-[10px] text-slate-400">Contractor Buyer</span>
+                    <span className="text-[10px] text-slate-400 dark:text-zinc-500">Contractor Buyer</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => handleQuickLogin('apex')}
-                    className="p-2 rounded-lg bg-slate-50 dark:bg-zinc-900 hover:bg-slate-100 dark:hover:bg-zinc-800 border border-slate-200 dark:border-zinc-700 text-left transition-colors"
+                    className="p-2 rounded-xl bg-slate-50 dark:bg-white/[0.03] hover:bg-slate-100 dark:hover:bg-white/[0.06] border border-slate-200 dark:border-white/[0.08] text-left transition-colors"
                   >
                     <span className="block font-bold text-slate-800 dark:text-zinc-200 text-[11px]">Apex MEP</span>
-                    <span className="text-[10px] text-slate-400">Contractor Buyer</span>
+                    <span className="text-[10px] text-slate-400 dark:text-zinc-500">Contractor Buyer</span>
                   </button>
                 </div>
               </div>
@@ -1233,7 +1233,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                   value={authCompanyName}
                   onChange={(e) => setAuthCompanyName(e.target.value)}
                   placeholder="e.g. Al Futtaim Engineering / Apex MEP"
-                  className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-[#111114] text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-brand-500"
+                  className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-white/[0.1] bg-white dark:bg-[#111114] text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-brand-500"
                 />
               </div>
 
@@ -1248,7 +1248,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                     value={authFullName}
                     onChange={(e) => setAuthFullName(e.target.value)}
                     placeholder="e.g. Eng. Tariq"
-                    className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-[#111114] text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-brand-500"
+                    className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-white/[0.1] bg-white dark:bg-[#111114] text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-brand-500"
                   />
                 </div>
                 <div>
@@ -1260,7 +1260,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                     value={authPhone}
                     onChange={(e) => setAuthPhone(e.target.value)}
                     placeholder="+971 50 123 4567"
-                    className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-[#111114] text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-brand-500"
+                    className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-white/[0.1] bg-white dark:bg-[#111114] text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-brand-500"
                   />
                 </div>
               </div>
@@ -1276,7 +1276,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                     value={authUsername}
                     onChange={(e) => setAuthUsername(e.target.value)}
                     placeholder="e.g. tariq@apex.ae"
-                    className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-[#111114] text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-brand-500"
+                    className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-white/[0.1] bg-white dark:bg-[#111114] text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-brand-500"
                   />
                 </div>
                 <div>
@@ -1289,7 +1289,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                     value={authPassword}
                     onChange={(e) => setAuthPassword(e.target.value)}
                     placeholder="••••••••••••"
-                    className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-[#111114] text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-brand-500"
+                    className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-white/[0.1] bg-white dark:bg-[#111114] text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-brand-500"
                   />
                 </div>
               </div>
@@ -1301,7 +1301,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                 <select
                   value={authEmirate}
                   onChange={(e) => setAuthEmirate(e.target.value as Emirate)}
-                  className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-[#111114] text-slate-900 dark:text-white text-xs font-semibold focus:ring-2 focus:ring-brand-500"
+                  className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-white/[0.1] bg-white dark:bg-[#111114] text-slate-900 dark:text-white text-xs font-semibold focus:ring-2 focus:ring-brand-500"
                 >
                   <option value="Dubai">Dubai</option>
                   <option value="Sharjah">Sharjah</option>

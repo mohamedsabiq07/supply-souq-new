@@ -224,7 +224,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
 
   return (
     <div className="max-w-md mx-auto py-10 px-4">
-      <Card className="p-8 space-y-6 shadow-xl border-slate-200 dark:border-zinc-800">
+      <Card className="p-8 space-y-6 shadow-xl border-slate-200/80 dark:border-white/[0.08]">
         <div className="text-center space-y-2">
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-600 to-zinc-950 flex items-center justify-center text-white mx-auto shadow-md shadow-brand-500/20">
             <Layers className="w-6 h-6 text-amber-400" />
@@ -241,16 +241,16 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
 
         {/* Portal Type Switcher */}
         {!isActuallyAdmin ? (
-          <div className="grid grid-cols-2 gap-2 bg-slate-100 dark:bg-zinc-900 p-1 rounded-xl text-xs font-bold border border-slate-200/50 dark:border-zinc-800">
+          <div className="grid grid-cols-2 gap-2 bg-slate-100 dark:bg-white/[0.03] p-1.5 rounded-2xl text-xs font-bold border border-slate-200/60 dark:border-white/[0.08]">
             <button
               type="button"
               onClick={() => {
                 setRole('buyer');
                 setErrorMsg('');
               }}
-              className={`py-2.5 rounded-lg transition-all flex items-center justify-center gap-1.5 ${
+              className={`py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 ${
                 role === 'buyer'
-                  ? 'bg-white dark:bg-[#18181b] shadow-sm font-extrabold text-brand-700 dark:text-brand-300 border border-slate-200 dark:border-zinc-700'
+                  ? 'bg-white dark:bg-white/[0.08] shadow-sm font-extrabold text-brand-700 dark:text-brand-300 border border-slate-200/80 dark:border-white/[0.1]'
                   : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
@@ -263,9 +263,9 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
                 setRole('supplier');
                 setErrorMsg('');
               }}
-              className={`py-2.5 rounded-lg transition-all flex items-center justify-center gap-1.5 ${
+              className={`py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 ${
                 role === 'supplier'
-                  ? 'bg-white dark:bg-[#18181b] shadow-sm font-extrabold text-amber-900 dark:text-amber-300 border border-amber-300 dark:border-amber-700'
+                  ? 'bg-white dark:bg-white/[0.08] shadow-sm font-extrabold text-amber-900 dark:text-amber-300 border border-amber-300 dark:border-white/[0.1]'
                   : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
@@ -317,7 +317,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
                   value={identifier}
                   onChange={(e) => setIdentifier(e.target.value)}
                   placeholder="e.g. facade, ridout, or name@company.ae"
-                  className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 bg-white dark:bg-[#121215] text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 font-medium disabled:bg-slate-100 dark:disabled:bg-zinc-800 disabled:cursor-not-allowed placeholder:text-slate-400 dark:placeholder:text-zinc-500"
+                  className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-white/[0.1] bg-white dark:bg-[#121215] text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 font-medium disabled:bg-slate-100 dark:disabled:bg-zinc-800 disabled:cursor-not-allowed placeholder:text-slate-400 dark:placeholder:text-zinc-500"
                 />
               </div>
 
@@ -353,7 +353,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••••••"
-                    className="w-full p-2.5 pr-10 rounded-lg border border-slate-300 dark:border-zinc-700 bg-white dark:bg-[#121215] text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 font-medium disabled:bg-slate-100 dark:disabled:bg-zinc-800 disabled:cursor-not-allowed placeholder:text-slate-400 dark:placeholder:text-zinc-500"
+                    className="w-full p-2.5 pr-10 rounded-lg border border-slate-300 dark:border-white/[0.1] bg-white dark:bg-[#121215] text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 font-medium disabled:bg-slate-100 dark:disabled:bg-zinc-800 disabled:cursor-not-allowed placeholder:text-slate-400 dark:placeholder:text-zinc-500"
                   />
                   <button
                     type="button"
@@ -373,7 +373,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
                     type="checkbox"
                     checked={rememberMe}
                     onChange={(e) => setRememberMe(e.target.checked)}
-                    className="w-4 h-4 rounded border-slate-300 dark:border-zinc-700 text-brand-600 focus:ring-brand-500 cursor-pointer"
+                    className="w-4 h-4 rounded border-slate-300 dark:border-white/[0.1] text-brand-600 focus:ring-brand-500 cursor-pointer"
                   />
                   <span className="text-xs font-medium">Remember credentials on this device</span>
                 </label>
@@ -530,7 +530,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
 
         {/* Quick Test Accounts Pill Bar */}
         {!isActuallyAdmin && (
-          <div className="p-3 bg-slate-50 dark:bg-zinc-900/60 border border-slate-200 dark:border-zinc-800 rounded-xl space-y-1.5">
+          <div className="p-3 bg-slate-50/70 dark:bg-white/[0.02] border border-slate-200/80 dark:border-white/[0.08] rounded-2xl space-y-1.5">
             <div className="flex items-center gap-1 text-[11px] font-bold text-slate-600 dark:text-zinc-400">
               <Sparkles className="w-3 h-3 text-brand-600 dark:text-brand-400" />
               <span>Quick Test Accounts:</span>
@@ -539,21 +539,21 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
               <button
                 type="button"
                 onClick={() => quickFill('facade', '123456789', 'buyer')}
-                className="px-2 py-1 bg-white dark:bg-[#141418] border border-slate-200 dark:border-zinc-700 hover:border-brand-500 hover:text-brand-700 dark:hover:text-brand-300 rounded-md font-medium transition-all shadow-2xs text-slate-700 dark:text-zinc-300"
+                className="px-2.5 py-1 bg-white dark:bg-white/[0.06] border border-slate-200/80 dark:border-white/[0.08] hover:border-brand-500 hover:text-brand-700 dark:hover:text-brand-300 rounded-lg font-medium transition-all shadow-2xs text-slate-700 dark:text-zinc-300"
               >
                 🏢 Facade Lighting (Buyer)
               </button>
               <button
                 type="button"
                 onClick={() => quickFill('ridout', '123456789', 'supplier')}
-                className="px-2 py-1 bg-white dark:bg-[#141418] border border-slate-200 dark:border-zinc-700 hover:border-amber-500 hover:text-amber-800 dark:hover:text-amber-300 rounded-md font-medium transition-all shadow-2xs text-slate-700 dark:text-zinc-300"
+                className="px-2.5 py-1 bg-white dark:bg-white/[0.06] border border-slate-200/80 dark:border-white/[0.08] hover:border-amber-500 hover:text-amber-800 dark:hover:text-amber-300 rounded-lg font-medium transition-all shadow-2xs text-slate-700 dark:text-zinc-300"
               >
                 🏭 Ridout Pest (Supplier)
               </button>
               <button
                 type="button"
                 onClick={() => quickFill('tariq', 'password123', 'buyer')}
-                className="px-2 py-1 bg-white dark:bg-[#141418] border border-slate-200 dark:border-zinc-700 hover:border-brand-500 hover:text-brand-700 dark:hover:text-brand-300 rounded-md font-medium transition-all shadow-2xs text-slate-500 dark:text-zinc-400"
+                className="px-2.5 py-1 bg-white dark:bg-white/[0.06] border border-slate-200/80 dark:border-white/[0.08] hover:border-brand-500 hover:text-brand-700 dark:hover:text-brand-300 rounded-lg font-medium transition-all shadow-2xs text-slate-500 dark:text-zinc-400"
               >
                 ⚡ Apex MEP
               </button>
@@ -568,7 +568,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
         </div>
 
         {!isActuallyAdmin ? (
-          <div className="pt-3 border-t border-slate-100 dark:border-zinc-800 text-xs text-slate-500 dark:text-zinc-400 flex flex-col items-center gap-2">
+          <div className="pt-3 border-t border-slate-100 dark:border-white/[0.06] text-xs text-slate-500 dark:text-zinc-400 flex flex-col items-center gap-2">
             <div>
               Don't have an account yet?{' '}
               <button
@@ -584,7 +584,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
             </div>
           </div>
         ) : (
-          <div className="text-center pt-3 border-t border-slate-100 dark:border-zinc-800 text-xs text-slate-500 dark:text-zinc-400">
+          <div className="text-center pt-3 border-t border-slate-100 dark:border-white/[0.06] text-xs text-slate-500 dark:text-zinc-400">
             <button
               type="button"
               onClick={() => {

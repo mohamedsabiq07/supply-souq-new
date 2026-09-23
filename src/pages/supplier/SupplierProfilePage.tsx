@@ -17,7 +17,7 @@ export const SupplierProfilePage: React.FC = () => {
       <Card>
         <CardHeader>
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-slate-900 dark:bg-zinc-800 text-white font-extrabold flex items-center justify-center text-lg border border-slate-800 dark:border-zinc-700">
+            <div className="w-12 h-12 rounded-xl bg-slate-900 dark:bg-white/[0.06] text-white font-extrabold flex items-center justify-center text-lg border border-slate-800 dark:border-white/[0.1]">
               {currentCompany.name.slice(0, 2).toUpperCase()}
             </div>
             <div>
@@ -32,7 +32,7 @@ export const SupplierProfilePage: React.FC = () => {
           </div>
         </CardHeader>
         <CardContent className="space-y-6 text-xs">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-slate-50 dark:bg-[#121215] rounded-xl border border-slate-200 dark:border-zinc-800">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-5 bg-slate-50/70 dark:bg-white/[0.02] rounded-2xl border border-slate-200/80 dark:border-white/[0.06]">
             <div>
               <span className="text-slate-400 dark:text-zinc-500 block font-medium">UAE Trade License Number:</span>
               <strong className="text-sm font-mono text-slate-900 dark:text-white">{currentCompany.tradeLicenseNumber}</strong>

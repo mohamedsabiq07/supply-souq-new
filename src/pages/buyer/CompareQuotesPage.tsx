@@ -31,7 +31,7 @@ export const CompareQuotesPage: React.FC<CompareQuotesPageProps> = ({ rfqId, onN
 
   if (!targetRFQ) {
     return (
-      <div className="text-center py-16 bg-white dark:bg-[#0c0c0e] rounded-2xl border border-slate-200 dark:border-zinc-800 p-8 space-y-4">
+      <div className="text-center py-16 bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] rounded-3xl border border-slate-200/80 dark:border-white/[0.08] p-8 space-y-4">
         <div className="w-12 h-12 rounded-2xl bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto">
           <GitCompare className="w-6 h-6" />
         </div>
@@ -83,7 +83,7 @@ export const CompareQuotesPage: React.FC<CompareQuotesPageProps> = ({ rfqId, onN
       </div>
 
       {/* RFQ SELECTOR SECTION: "Which RFQ do you want to compare?" */}
-      <div className="bg-white dark:bg-[#0c0c0e] p-5 rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-subtle space-y-3">
+      <div className="bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] p-5 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-200/80 dark:border-white/[0.08] shadow-sm space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="w-6 h-6 rounded-full bg-brand-50 dark:bg-brand-950/60 text-brand-700 dark:text-brand-400 text-xs font-extrabold flex items-center justify-center border border-brand-200 dark:border-brand-800">
@@ -115,16 +115,16 @@ export const CompareQuotesPage: React.FC<CompareQuotesPageProps> = ({ rfqId, onN
                 key={rfq.id}
                 type="button"
                 onClick={() => setSelectedRFQId(rfq.id)}
-                className={`text-left p-4 rounded-xl border transition-all relative flex flex-col justify-between space-y-3 cursor-pointer ${
+                className={`text-left p-4 rounded-2xl border transition-all relative flex flex-col justify-between space-y-3 cursor-pointer ${
                   isSelected
                     ? 'bg-gradient-to-b from-brand-50/50 to-white dark:from-brand-950/30 dark:to-[#121215] border-brand-500 dark:border-brand-500 ring-2 ring-brand-500/20 shadow-md'
-                    : 'bg-slate-50/60 dark:bg-[#121215] border-slate-200 dark:border-zinc-800 hover:border-slate-300 dark:hover:border-zinc-700 hover:bg-white dark:hover:bg-zinc-900'
+                    : 'bg-slate-50/60 dark:bg-white/[0.02] border-slate-200 dark:border-white/[0.06] hover:border-slate-300 dark:hover:border-white/[0.12] hover:bg-white dark:hover:bg-white/[0.04]'
                 }`}
               >
                 <div className="space-y-1.5 w-full">
                   <div className="flex items-center justify-between gap-1">
-                    <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded border ${
-                      isSelected ? 'bg-brand-500 text-white border-brand-600' : 'bg-white dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 border-slate-200 dark:border-zinc-700'
+                    <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded-lg border ${
+                      isSelected ? 'bg-brand-500 text-white border-brand-600' : 'bg-white dark:bg-white/[0.06] text-slate-700 dark:text-zinc-300 border-slate-200 dark:border-white/[0.08]'
                     }`}>
                       {rfq.rfqNumber}
                     </span>
@@ -150,7 +150,7 @@ export const CompareQuotesPage: React.FC<CompareQuotesPageProps> = ({ rfqId, onN
                   </p>
                 </div>
 
-                <div className="pt-2 border-t border-slate-200/60 dark:border-zinc-800 flex items-center justify-between w-full text-xs">
+                <div className="pt-2 border-t border-slate-200/60 dark:border-white/[0.06] flex items-center justify-between w-full text-xs">
                   {quotesCount > 0 ? (
                     <span className="font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800 flex items-center gap-1">
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
@@ -161,7 +161,7 @@ export const CompareQuotesPage: React.FC<CompareQuotesPageProps> = ({ rfqId, onN
                       </span>
                     </span>
                   ) : (
-                    <span className="text-slate-500 dark:text-zinc-400 bg-slate-100 dark:bg-zinc-800 px-2 py-0.5 rounded border border-slate-200 dark:border-zinc-700 text-[11px] flex items-center gap-1">
+                    <span className="text-slate-500 dark:text-zinc-400 bg-slate-100 dark:bg-white/[0.05] px-2.5 py-0.5 rounded-lg border border-slate-200 dark:border-white/[0.08] text-[11px] flex items-center gap-1">
                       <Clock className="w-3 h-3 text-slate-400 dark:text-zinc-500" />
                       <span>0 Quotes • In Bidding</span>
                     </span>

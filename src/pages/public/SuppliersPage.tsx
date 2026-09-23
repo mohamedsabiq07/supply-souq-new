@@ -109,8 +109,8 @@ export const SuppliersPage: React.FC<{ onRequestQuote: (supplier?: any, category
                 onClick={() => setSelectedCategory(cat.id)}
                 className={`p-3 rounded-2xl border text-left transition-all duration-150 flex flex-col justify-between ${
                   isSelected
-                    ? 'bg-slate-900 dark:bg-zinc-100 text-white dark:text-black border-slate-900 dark:border-white shadow-md ring-2 ring-brand-500/20'
-                    : 'bg-white dark:bg-[#0c0c0e] text-slate-700 dark:text-zinc-300 border-slate-200 dark:border-zinc-800 hover:border-slate-300 dark:hover:border-zinc-700 hover:bg-slate-50 dark:hover:bg-zinc-900'
+                    ? 'bg-slate-900 dark:bg-white text-white dark:text-black border-slate-900 dark:border-white shadow-md ring-2 ring-brand-500/20'
+                    : 'bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] text-slate-700 dark:text-zinc-300 border-slate-200/80 dark:border-white/[0.08] hover:border-slate-300 dark:hover:border-white/[0.18] hover:bg-slate-50 dark:hover:bg-white/[0.04]'
                 }`}
               >
                 <span className={`text-xs font-extrabold truncate ${isSelected ? 'text-white dark:text-black' : 'text-slate-900 dark:text-white'}`}>
@@ -133,7 +133,7 @@ export const SuppliersPage: React.FC<{ onRequestQuote: (supplier?: any, category
       </div>
 
       {/* Search & Location Filters */}
-      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 bg-white dark:bg-[#0c0c0e] p-4 rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-subtle">
+      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] p-4 rounded-2xl border border-slate-200/80 dark:border-white/[0.08] shadow-subtle">
         <BorderBeam size="line" theme="light" className="flex-1">
           <div className="relative w-full">
             <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
@@ -142,7 +142,7 @@ export const SuppliersPage: React.FC<{ onRequestQuote: (supplier?: any, category
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search by company name, material (cables, pipes, duct, chemicals), or industrial zone (Al Quoz, Sharjah, Mussafah)..."
-              className="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 dark:border-zinc-800 bg-white dark:bg-[#121215] text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-brand-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-zinc-500"
+              className="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200/80 dark:border-white/[0.08] bg-slate-50/70 dark:bg-white/[0.03] text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-brand-500 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-zinc-500"
             />
           </div>
         </BorderBeam>
@@ -156,7 +156,7 @@ export const SuppliersPage: React.FC<{ onRequestQuote: (supplier?: any, category
               className={`px-3 py-1.5 rounded-xl font-bold transition-all whitespace-nowrap ${
                 emirateFilter === em
                   ? 'bg-brand-600 text-white shadow-sm'
-                  : 'bg-slate-100 dark:bg-zinc-900 text-slate-600 dark:text-zinc-300 hover:bg-slate-200 dark:hover:bg-zinc-800'
+                  : 'bg-slate-100 dark:bg-white/[0.04] text-slate-600 dark:text-zinc-300 hover:bg-slate-200 dark:hover:bg-white/[0.08] border border-transparent dark:border-white/[0.06]'
               }`}
             >
               {em}
@@ -177,7 +177,7 @@ export const SuppliersPage: React.FC<{ onRequestQuote: (supplier?: any, category
           ))}
         </div>
       ) : (
-        <div className="text-center py-16 bg-white dark:bg-[#0c0c0e] rounded-2xl border border-dashed border-slate-300 dark:border-zinc-800 p-8 space-y-4">
+        <div className="text-center py-16 bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] rounded-2xl border border-dashed border-slate-300 dark:border-white/[0.10] p-8 space-y-4">
           <div className="w-14 h-14 rounded-2xl bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 mx-auto flex items-center justify-center font-bold">
             <Zap className="w-7 h-7" />
           </div>

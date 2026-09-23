@@ -67,7 +67,7 @@ export const OnboardingGuidePage: React.FC<OnboardingGuidePageProps> = ({
 
         {/* Tab Switcher */}
         <div className="flex justify-center pt-4">
-          <div className="bg-slate-100 dark:bg-zinc-900 p-1.5 rounded-2xl flex gap-2 border border-slate-200 dark:border-zinc-800 text-xs font-bold">
+          <div className="bg-slate-100 dark:bg-white/[0.04] p-1.5 rounded-2xl flex gap-2 border border-slate-200/80 dark:border-white/[0.08] text-xs font-bold">
             <button
               onClick={() => setActiveTab('buyer')}
               className={`px-6 py-2.5 rounded-xl transition-all flex items-center gap-2 ${
@@ -128,7 +128,7 @@ export const OnboardingGuidePage: React.FC<OnboardingGuidePageProps> = ({
                   desc: 'Register in 30 seconds with your Company Name, Procurement Engineer Name, UAE Mobile Number (+971), and Work Email.',
                   icon: Building2,
                   badge: 'Instant Activation',
-                  color: 'text-brand-600 bg-brand-50 border-brand-200'
+                  color: 'text-brand-700 dark:text-brand-300 bg-brand-50 dark:bg-brand-950/40 border-brand-200 dark:border-brand-800/60'
                 },
                 {
                   step: '02',
@@ -136,7 +136,7 @@ export const OnboardingGuidePage: React.FC<OnboardingGuidePageProps> = ({
                   desc: 'Specify material line items, quantities, brand preferences (Ducab, Schneider, etc.) or drag-and-drop your Excel BOQ or smartphone bill photo.',
                   icon: FileSpreadsheet,
                   badge: 'Excel / Photo / BOQ',
-                  color: 'text-indigo-600 bg-indigo-50 border-indigo-200'
+                  color: 'text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/40 border-indigo-200 dark:border-indigo-800/60'
                 },
                 {
                   step: '03',
@@ -144,7 +144,7 @@ export const OnboardingGuidePage: React.FC<OnboardingGuidePageProps> = ({
                   desc: 'Verified stockists submit itemized unit prices, lead times, and 5% VAT calculations within 24 hours. Compare side-by-side on one screen.',
                   icon: GitCompare,
                   badge: '18% Cost Savings',
-                  color: 'text-amber-600 bg-amber-50 border-amber-200'
+                  color: 'text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-800/60'
                 },
                 {
                   step: '04',
@@ -152,12 +152,12 @@ export const OnboardingGuidePage: React.FC<OnboardingGuidePageProps> = ({
                   desc: 'Select the best offer and issue an official digital Purchase Order with 1-click. Track live fulfillment directly to your project site.',
                   icon: PackageCheck,
                   badge: 'Direct Site Delivery',
-                  color: 'text-emerald-600 bg-emerald-50 border-emerald-200'
+                  color: 'text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800/60'
                 }
               ].map((card, idx) => {
                 const Icon = card.icon;
                 return (
-                  <Card key={idx} className="border-slate-200 dark:border-zinc-800 dark:bg-[#0c0c0e] flex flex-col justify-between hover:border-brand-400 hover:shadow-md transition-all">
+                  <Card key={idx} className="flex flex-col justify-between hover:border-brand-400 dark:hover:border-white/[0.18] hover:shadow-md transition-all">
                     <CardContent className="p-5 space-y-3">
                       <div className="flex items-center justify-between">
                         <span className="font-mono text-xs font-extrabold text-brand-700 dark:text-brand-300 bg-brand-50 dark:bg-brand-950/40 px-2.5 py-1 rounded-lg border border-brand-200 dark:border-brand-800/60">
@@ -167,7 +167,7 @@ export const OnboardingGuidePage: React.FC<OnboardingGuidePageProps> = ({
                           {card.badge}
                         </span>
                       </div>
-                      <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-zinc-800 flex items-center justify-center text-slate-800 dark:text-zinc-200 font-bold">
+                      <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-white/[0.04] flex items-center justify-center text-slate-800 dark:text-zinc-200 font-bold">
                         <Icon className="w-5 h-5" />
                       </div>
                       <h3 className="text-base font-bold text-slate-900 dark:text-white">{card.title}</h3>
@@ -180,35 +180,35 @@ export const OnboardingGuidePage: React.FC<OnboardingGuidePageProps> = ({
           </div>
 
           {/* Deep-Dive Operational Workflow Details */}
-          <div className="bg-slate-50 dark:bg-[#0c0c0e] border border-slate-200 dark:border-zinc-800 rounded-3xl p-6 sm:p-8 space-y-6">
+          <div className="bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] border border-slate-200/80 dark:border-white/[0.08] rounded-3xl p-6 sm:p-8 space-y-6">
             <h3 className="text-lg font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
               <Zap className="w-5 h-5 text-amber-500" />
               Detailed Buyer Platform Workflow Explained
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-slate-700 dark:text-zinc-300">
-              <div className="bg-white dark:bg-[#121215] p-5 rounded-2xl border border-slate-200 dark:border-zinc-800 space-y-2">
+              <div className="bg-slate-50/70 dark:bg-white/[0.03] p-5 rounded-2xl border border-slate-200/80 dark:border-white/[0.06] space-y-2">
                 <span className="font-bold text-sm text-slate-900 dark:text-white block">1. Transparent Multi-Stockist Distribution</span>
                 <p className="leading-relaxed text-slate-600 dark:text-zinc-400">
                   When you submit an RFQ, SupplySouq automatically parses your line items and alerts verified authorized stockists in your material category. No middlemen or broker margins are added.
                 </p>
               </div>
 
-              <div className="bg-white dark:bg-[#121215] p-5 rounded-2xl border border-slate-200 dark:border-zinc-800 space-y-2">
+              <div className="bg-slate-50/70 dark:bg-white/[0.03] p-5 rounded-2xl border border-slate-200/80 dark:border-white/[0.06] space-y-2">
                 <span className="font-bold text-sm text-slate-900 dark:text-white block">2. Standardized 5% UAE VAT Quotations</span>
                 <p className="leading-relaxed text-slate-600 dark:text-zinc-400">
                   All quotations are structured identically: Unit Price, Subtotal, 5% UAE VAT, Grand Total, Brand Offered, Lead Time, and Payment Terms (e.g., 30 Days Credit, PDC, or COD).
                 </p>
               </div>
 
-              <div className="bg-white dark:bg-[#121215] p-5 rounded-2xl border border-slate-200 dark:border-zinc-800 space-y-2">
+              <div className="bg-slate-50/70 dark:bg-white/[0.03] p-5 rounded-2xl border border-slate-200/80 dark:border-white/[0.06] space-y-2">
                 <span className="font-bold text-sm text-slate-900 dark:text-white block">3. Automated Free Cable & Invoice Cost Audit</span>
                 <p className="leading-relaxed text-slate-600 dark:text-zinc-400">
                   You can upload your past supplier invoices or bills to benchmark every line item against live stockist prices and identify competitive wholesale rates in seconds.
                 </p>
               </div>
 
-              <div className="bg-white dark:bg-[#121215] p-5 rounded-2xl border border-slate-200 dark:border-zinc-800 space-y-2">
+              <div className="bg-slate-50/70 dark:bg-white/[0.03] p-5 rounded-2xl border border-slate-200/80 dark:border-white/[0.06] space-y-2">
                 <span className="font-bold text-sm text-slate-900 dark:text-white block">4. Direct Order Fulfillment & Site Tracking</span>
                 <p className="leading-relaxed text-slate-600 dark:text-zinc-400">
                   Once awarded, the stockist receives your official PO with your site delivery address, coordinates dispatch with driver contact, and delivers materials directly to your site.
@@ -218,28 +218,28 @@ export const OnboardingGuidePage: React.FC<OnboardingGuidePageProps> = ({
           </div>
 
           {/* Buyer FAQ Section */}
-          <Card className="bg-[#0c0c0e] text-white border-zinc-800">
-            <CardContent className="p-6 sm:p-8 space-y-4">
-              <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                <HelpCircle className="w-5 h-5 text-amber-400" />
+          <Card>
+            <CardContent className="p-6 sm:p-8 space-y-5">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <HelpCircle className="w-5 h-5 text-amber-500" />
                 Frequently Asked Questions for Contractors
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-zinc-300">
-                <div className="p-3.5 bg-[#141418] rounded-xl border border-zinc-800 space-y-1">
-                  <strong className="text-white block">Is SupplySouq free for contractors and MEP buyers?</strong>
-                  <p className="text-zinc-400">Yes! Buyers use SupplySouq 100% free of charge to post RFQs and receive up to 5 live quotations per requirement.</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-600 dark:text-zinc-300">
+                <div className="p-4 bg-slate-50/70 dark:bg-white/[0.02] rounded-2xl border border-slate-200/80 dark:border-white/[0.06] space-y-1.5 shadow-2xs">
+                  <strong className="text-slate-900 dark:text-white block font-bold">Is SupplySouq free for contractors and MEP buyers?</strong>
+                  <p className="text-slate-600 dark:text-zinc-400 leading-relaxed">Yes! Buyers use SupplySouq 100% free of charge to post RFQs and receive up to 5 live quotations per requirement.</p>
                 </div>
-                <div className="p-3.5 bg-[#141418] rounded-xl border border-zinc-800 space-y-1">
-                  <strong className="text-white block">How are suppliers vetted on the platform?</strong>
-                  <p className="text-zinc-400">Every supplier must possess an active UAE Trade License, verified warehouse location, and valid TRN tax registration before quoting.</p>
+                <div className="p-4 bg-slate-50/70 dark:bg-white/[0.02] rounded-2xl border border-slate-200/80 dark:border-white/[0.06] space-y-1.5 shadow-2xs">
+                  <strong className="text-slate-900 dark:text-white block font-bold">How are suppliers vetted on the platform?</strong>
+                  <p className="text-slate-600 dark:text-zinc-400 leading-relaxed">Every supplier must possess an active UAE Trade License, verified warehouse location, and valid TRN tax registration before quoting.</p>
                 </div>
-                <div className="p-3.5 bg-[#141418] rounded-xl border border-zinc-800 space-y-1">
-                  <strong className="text-white block">Can I upload my existing Excel BOQ or paper bill?</strong>
-                  <p className="text-zinc-400">Yes! You can upload Excel files, PDF schedules, or snap a mobile camera photo of your handwritten paper list.</p>
+                <div className="p-4 bg-slate-50/70 dark:bg-white/[0.02] rounded-2xl border border-slate-200/80 dark:border-white/[0.06] space-y-1.5 shadow-2xs">
+                  <strong className="text-slate-900 dark:text-white block font-bold">Can I upload my existing Excel BOQ or paper bill?</strong>
+                  <p className="text-slate-600 dark:text-zinc-400 leading-relaxed">Yes! You can upload Excel files, PDF schedules, or snap a mobile camera photo of your handwritten paper list.</p>
                 </div>
-                <div className="p-3.5 bg-[#141418] rounded-xl border border-zinc-800 space-y-1">
-                  <strong className="text-white block">What payment terms are offered?</strong>
-                  <p className="text-zinc-400">Suppliers specify payment terms on every quotation: 30–60 Days Credit, Post-Dated Cheques (PDC), or Cash on Delivery (COD).</p>
+                <div className="p-4 bg-slate-50/70 dark:bg-white/[0.02] rounded-2xl border border-slate-200/80 dark:border-white/[0.06] space-y-1.5 shadow-2xs">
+                  <strong className="text-slate-900 dark:text-white block font-bold">What payment terms are offered?</strong>
+                  <p className="text-slate-600 dark:text-zinc-400 leading-relaxed">Suppliers specify payment terms on every quotation: 30–60 Days Credit, Post-Dated Cheques (PDC), or Cash on Delivery (COD).</p>
                 </div>
               </div>
             </CardContent>
@@ -281,7 +281,7 @@ export const OnboardingGuidePage: React.FC<OnboardingGuidePageProps> = ({
                   desc: 'Provide your Company Trading Name, Legal Name, Contact Person Name, Sales Email, and UAE Phone Number.',
                   icon: Store,
                   badge: 'Stockist Profile',
-                  color: 'text-amber-600 bg-amber-50 border-amber-200'
+                  color: 'text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-800/60'
                 },
                 {
                   step: '02',
@@ -289,7 +289,7 @@ export const OnboardingGuidePage: React.FC<OnboardingGuidePageProps> = ({
                   desc: 'Enter your UAE Trade License Number and upload your certificate copy. Our compliance team verifies authenticity for contractor safety.',
                   icon: FileText,
                   badge: 'Mandatory Safety',
-                  color: 'text-emerald-600 bg-emerald-50 border-emerald-200'
+                  color: 'text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800/60'
                 },
                 {
                   step: '03',
@@ -297,7 +297,7 @@ export const OnboardingGuidePage: React.FC<OnboardingGuidePageProps> = ({
                   desc: 'Select categories you stock (Electrical cables, Switchgear, LED lighting, Piping, HVAC, Chemicals, PPE) to receive relevant RFQ leads.',
                   icon: Layers,
                   badge: 'Targeted Leads',
-                  color: 'text-indigo-600 bg-indigo-50 border-indigo-200'
+                  color: 'text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/40 border-indigo-200 dark:border-indigo-800/60'
                 },
                 {
                   step: '04',
@@ -305,12 +305,12 @@ export const OnboardingGuidePage: React.FC<OnboardingGuidePageProps> = ({
                   desc: 'View live buyer RFQs in your inbox, enter your competitive unit rates and lead times, win awarded POs, and fulfill orders directly.',
                   icon: DollarSign,
                   badge: 'Direct PO Awards',
-                  color: 'text-brand-600 bg-brand-50 border-brand-200'
+                  color: 'text-brand-700 dark:text-brand-300 bg-brand-50 dark:bg-brand-950/40 border-brand-200 dark:border-brand-800/60'
                 }
               ].map((card, idx) => {
                 const Icon = card.icon;
                 return (
-                  <Card key={idx} className="border-slate-200 dark:border-zinc-800 dark:bg-[#0c0c0e] flex flex-col justify-between hover:border-amber-400 hover:shadow-md transition-all">
+                  <Card key={idx} className="flex flex-col justify-between hover:border-amber-400 dark:hover:border-white/[0.18] hover:shadow-md transition-all">
                     <CardContent className="p-5 space-y-3">
                       <div className="flex items-center justify-between">
                         <span className="font-mono text-xs font-extrabold text-amber-900 dark:text-amber-300 bg-amber-100 dark:bg-amber-950/50 px-2.5 py-1 rounded-lg border border-amber-300 dark:border-amber-800/60">
@@ -380,28 +380,28 @@ export const OnboardingGuidePage: React.FC<OnboardingGuidePageProps> = ({
           </Card>
 
           {/* Supplier FAQ Section */}
-          <Card className="bg-[#0c0c0e] text-white border-zinc-800">
-            <CardContent className="p-6 sm:p-8 space-y-4">
-              <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                <HelpCircle className="w-5 h-5 text-amber-400" />
+          <Card>
+            <CardContent className="p-6 sm:p-8 space-y-5">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <HelpCircle className="w-5 h-5 text-amber-500" />
                 Frequently Asked Questions for Material Stockists
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-zinc-300">
-                <div className="p-3.5 bg-[#141418] rounded-xl border border-zinc-800 space-y-1">
-                  <strong className="text-white block">How do I receive RFQs from contractors?</strong>
-                  <p className="text-zinc-400">All matching buyer RFQs appear in real-time in your "Live RFQ Inbox" filtered by the supply categories you select.</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-600 dark:text-zinc-300">
+                <div className="p-4 bg-slate-50/70 dark:bg-white/[0.02] rounded-2xl border border-slate-200/80 dark:border-white/[0.06] space-y-1.5 shadow-2xs">
+                  <strong className="text-slate-900 dark:text-white block font-bold">How do I receive RFQs from contractors?</strong>
+                  <p className="text-slate-600 dark:text-zinc-400 leading-relaxed">All matching buyer RFQs appear in real-time in your "Live RFQ Inbox" filtered by the supply categories you select.</p>
                 </div>
-                <div className="p-3.5 bg-[#141418] rounded-xl border border-zinc-800 space-y-1">
-                  <strong className="text-white block">Will my submitted quotations be saved permanently?</strong>
-                  <p className="text-zinc-400">Yes! Every quote you submit is stored permanently in the Supabase database. You can track all active, evaluating, and won quotes anytime.</p>
+                <div className="p-4 bg-slate-50/70 dark:bg-white/[0.02] rounded-2xl border border-slate-200/80 dark:border-white/[0.06] space-y-1.5 shadow-2xs">
+                  <strong className="text-slate-900 dark:text-white block font-bold">Will my submitted quotations be saved permanently?</strong>
+                  <p className="text-slate-600 dark:text-zinc-400 leading-relaxed">Yes! Every quote you submit is stored permanently in the Supabase database. You can track all active, evaluating, and won quotes anytime.</p>
                 </div>
-                <div className="p-3.5 bg-[#141418] rounded-xl border border-zinc-800 space-y-1">
-                  <strong className="text-white block">How are purchase orders awarded?</strong>
-                  <p className="text-zinc-400">When a buyer selects your quote, an official PO is generated with the buyer's billing details and delivery address in your "Orders & POs" desk.</p>
+                <div className="p-4 bg-slate-50/70 dark:bg-white/[0.02] rounded-2xl border border-slate-200/80 dark:border-white/[0.06] space-y-1.5 shadow-2xs">
+                  <strong className="text-slate-900 dark:text-white block font-bold">How are purchase orders awarded?</strong>
+                  <p className="text-slate-600 dark:text-zinc-400 leading-relaxed">When a buyer selects your quote, an official PO is generated with the buyer's billing details and delivery address in your "Orders & POs" desk.</p>
                 </div>
-                <div className="p-3.5 bg-[#141418] rounded-xl border border-zinc-800 space-y-1">
-                  <strong className="text-white block">Can I update delivery dispatch status?</strong>
-                  <p className="text-zinc-400">Yes! You can update order status (Accepted, Processing, Dispatched, Delivered) and add logistics tracking notes.</p>
+                <div className="p-4 bg-slate-50/70 dark:bg-white/[0.02] rounded-2xl border border-slate-200/80 dark:border-white/[0.06] space-y-1.5 shadow-2xs">
+                  <strong className="text-slate-900 dark:text-white block font-bold">Can I update delivery dispatch status?</strong>
+                  <p className="text-slate-600 dark:text-zinc-400 leading-relaxed">Yes! You can update order status (Accepted, Processing, Dispatched, Delivered) and add logistics tracking notes.</p>
                 </div>
               </div>
             </CardContent>

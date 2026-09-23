@@ -41,10 +41,10 @@ export const KineticHeadline: React.FC = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.25, duration: 0.4 }}
-            className="inline-flex items-center gap-2 mt-2.5 bg-slate-800/90 border border-slate-700/80 text-slate-300 px-3 py-0.5 rounded-full text-[11px] sm:text-xs font-sans font-medium"
+            className="inline-flex items-center gap-2 mt-2.5 bg-slate-100 dark:bg-white/[0.06] border border-slate-200 dark:border-white/[0.08] text-slate-600 dark:text-zinc-300 px-3 py-0.5 rounded-full text-[11px] sm:text-xs font-sans font-medium"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-[#cf2e46] animate-pulse" />
-            <span>Standard: <strong className="text-white font-semibold">{currentItem.tag}</strong></span>
+            <span>Standard: <strong className="text-slate-900 dark:text-white font-semibold">{currentItem.tag}</strong></span>
           </motion.div>
         </motion.div>
       </AnimatePresence>

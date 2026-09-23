@@ -30,32 +30,33 @@ export const CreateRFQPage: React.FC<CreateRFQPageProps> = ({
   return (
     <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-fadeIn">
       {/* Top Action Bar & Title */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-zinc-800 pb-5">
-        <div className="flex items-center gap-3">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => onNavigate(isAuthenticated ? 'buyer-dashboard' : 'home')}
-            leftIcon={<ArrowLeft className="w-4 h-4" />}
-            className="dark:bg-zinc-900 dark:border-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-800"
-          >
-            {isAuthenticated ? 'Back to Workspace' : 'Back to Home'}
-          </Button>
-          <div>
+      <div>
+        <button
+          onClick={() => onNavigate(isAuthenticated ? 'buyer-dashboard' : 'home')}
+          className="inline-flex items-center gap-2 text-xs font-bold text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer group mb-3"
+        >
+          <span className="p-1.5 rounded-lg bg-slate-100 dark:bg-white/[0.06] group-hover:bg-slate-200 dark:group-hover:bg-white/[0.1] border border-slate-200/60 dark:border-white/[0.08] transition-colors">
+            <ArrowLeft className="w-3.5 h-3.5" />
+          </span>
+          <span>{isAuthenticated ? 'Back to Workspace Dashboard' : 'Back to Home'}</span>
+        </button>
+
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200/80 dark:border-white/[0.08] pb-5">
+          <div className="space-y-1">
             <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               Create Material Requirement / RFQ
             </h1>
-            <p className="text-xs sm:text-sm text-slate-500 dark:text-zinc-400 mt-0.5">
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-zinc-400 font-normal">
               Specify line items, upload BOQ sheets, and broadcast directly to verified UAE stockists.
             </p>
           </div>
-        </div>
 
-        <div className="flex items-center gap-2 self-start sm:self-center">
-          <span className="text-xs font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 px-3 py-1.5 rounded-xl border border-emerald-200 dark:border-emerald-800/60 flex items-center gap-1.5">
-            <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-            <span>Fastest 5 Bids Guaranteed</span>
-          </span>
+          <div className="flex items-center gap-2 self-start sm:self-center">
+            <span className="text-xs font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 px-3.5 py-1.5 rounded-full border border-emerald-200/80 dark:border-emerald-800/60 flex items-center gap-1.5 shadow-2xs">
+              <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+              <span>Fastest 5 Bids Guaranteed</span>
+            </span>
+          </div>
         </div>
       </div>
 

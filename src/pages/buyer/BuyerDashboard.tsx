@@ -89,7 +89,7 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
 
       {/* Action Alert for Evaluating Quotes */}
       {evaluatingRFQs.length > 0 && (
-        <div className="p-4 bg-gradient-to-r from-brand-900 via-[#0c0c0e] to-black text-white rounded-2xl border border-brand-700 dark:border-zinc-800 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="p-4 bg-gradient-to-r from-brand-900 via-[#0c0c0e] to-black text-white rounded-2xl border border-brand-700 dark:border-white/[0.08] shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-brand-500/30 border border-brand-400/40 flex items-center justify-center text-amber-400 shrink-0">
               <GitCompare className="w-5 h-5" />
@@ -182,9 +182,9 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
                 : null;
 
               return (
-                <div key={rfq.id} className="bg-white dark:bg-[#0c0c0e] rounded-2xl border border-slate-200 dark:border-zinc-800 p-5 shadow-subtle space-y-4">
+                <div key={rfq.id} className="bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] rounded-2xl sm:rounded-3xl border border-slate-200/80 dark:border-white/[0.08] p-5 sm:p-6 shadow-sm space-y-4">
                   {/* RFQ Group Header */}
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-zinc-800 pb-3.5">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-white/[0.06] pb-3.5">
                     <div className="space-y-1">
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="font-mono font-bold text-xs bg-brand-50 dark:bg-brand-950/60 text-brand-700 dark:text-brand-400 px-2.5 py-0.5 rounded border border-brand-200 dark:border-brand-800">
@@ -231,7 +231,7 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
                           className={`p-4 rounded-xl border transition-all space-y-3 flex flex-col justify-between ${
                             isLowest 
                               ? 'bg-gradient-to-b from-rose-50/50 to-white dark:from-rose-950/20 dark:to-[#121215] border-rose-300 dark:border-rose-900/60 shadow-xs' 
-                              : 'bg-slate-50/50 dark:bg-[#121215] border-slate-200 dark:border-zinc-800 hover:border-slate-300 dark:hover:border-zinc-700'
+                              : 'bg-slate-50/50 dark:bg-white/[0.02] border-slate-200 dark:border-white/[0.06] hover:border-slate-300 dark:hover:border-white/[0.12]'
                           }`}
                         >
                           <div className="space-y-2">
@@ -254,7 +254,7 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
                               <h5 className="font-bold text-slate-900 dark:text-white text-xs truncate">{quote.supplierCompanyName}</h5>
                               <p className="text-[11px] text-slate-500 dark:text-zinc-400">{quote.supplierZone || quote.supplierEmirate || 'Verified Stockist'}</p>
                             </div>
-                            <div className="pt-2 border-t border-slate-200/60 dark:border-zinc-800">
+                            <div className="pt-2 border-t border-slate-200/60 dark:border-white/[0.06]">
                               <span className="text-[10px] text-slate-400 dark:text-zinc-500 block font-medium">Quoted Total (5% VAT Incl.)</span>
                               <div className="text-base font-extrabold text-slate-900 dark:text-white font-mono">
                                 {formatAED(quote.grandTotalAED)}
@@ -358,7 +358,7 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
             ))}
           </div>
         ) : (
-          <Card className="p-8 text-center space-y-4 border-dashed border-2 border-slate-200 dark:border-zinc-800 bg-white dark:bg-[#0c0c0e]">
+          <Card className="p-8 text-center space-y-4 border-dashed border-2 border-slate-200/80 dark:border-white/[0.08] bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e]">
             <div className="w-12 h-12 rounded-2xl bg-brand-50 dark:bg-brand-950/60 border border-brand-200 dark:border-brand-800 flex items-center justify-center text-brand-600 dark:text-brand-400 mx-auto">
               <PlusCircle className="w-6 h-6" />
             </div>
@@ -400,7 +400,7 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
         {activeOrders.length > 0 ? (
           <CardContent className="p-0 overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 dark:bg-zinc-900 text-slate-600 dark:text-zinc-400 font-semibold border-b border-slate-200 dark:border-zinc-800">
+              <thead className="bg-slate-50 dark:bg-white/[0.02] text-slate-600 dark:text-zinc-400 font-semibold border-b border-slate-200/80 dark:border-white/[0.06]">
                 <tr>
                   <th className="p-3">PO Number</th>
                   <th className="p-3">Project / RFQ</th>
@@ -411,7 +411,7 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
                   <th className="p-3 text-right">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-zinc-800">
+              <tbody className="divide-y divide-slate-100 dark:divide-white/[0.04]">
                 {activeOrders.map((po) => (
                   <tr key={po.id} className="hover:bg-slate-50/60 dark:hover:bg-zinc-800/40">
                     <td className="p-3 font-mono font-bold text-brand-700 dark:text-brand-400">{po.poNumber}</td>

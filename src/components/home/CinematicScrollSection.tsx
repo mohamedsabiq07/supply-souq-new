@@ -54,7 +54,7 @@ export const CinematicScrollSection: React.FC<CinematicScrollSectionProps> = ({ 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="md:col-span-2 row-span-1 rounded-3xl bg-white dark:bg-[#0c0c0e] border border-slate-200 dark:border-zinc-800 shadow-sm p-8 flex flex-col justify-between relative overflow-hidden group hover:shadow-md transition-shadow"
+          className="md:col-span-2 row-span-1 rounded-3xl bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] border border-slate-200/80 dark:border-white/[0.08] shadow-sm p-8 flex flex-col justify-between relative overflow-hidden group hover:shadow-md transition-shadow"
         >
           <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-rose-50 to-transparent dark:from-rose-950/20 rounded-bl-full -z-0 opacity-50" />
           <div className="relative z-10">
@@ -75,7 +75,7 @@ export const CinematicScrollSection: React.FC<CinematicScrollSectionProps> = ({ 
             </p>
           </div>
           <div className="relative z-10 flex items-center gap-3">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-100 dark:bg-zinc-900 text-slate-700 dark:text-zinc-300 text-xs font-bold rounded-full">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-100 dark:bg-white/[0.05] border border-slate-200/60 dark:border-white/[0.06] text-slate-700 dark:text-zinc-300 text-xs font-bold rounded-full">
               <span className="w-1.5 h-1.5 rounded-full bg-[#cf2e46] animate-pulse" /> 5 CAPPED BIDS
             </span>
             <span className="text-xs text-slate-400 dark:text-zinc-500 font-mono">BS 5467 // IEC 60502-1</span>
@@ -88,7 +88,7 @@ export const CinematicScrollSection: React.FC<CinematicScrollSectionProps> = ({ 
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.1 }}
-          className="rounded-3xl bg-slate-900 text-white border border-slate-800 shadow-sm p-8 flex flex-col justify-between relative overflow-hidden group hover:shadow-md transition-shadow"
+          className="rounded-3xl bg-slate-900 text-white border border-slate-800 dark:border-white/[0.08] shadow-sm p-8 flex flex-col justify-between relative overflow-hidden group hover:shadow-md transition-shadow"
         >
           <div className="relative z-10">
             <div className="w-10 h-10 bg-white/10 text-sky-400 rounded-xl flex items-center justify-center mb-6">
@@ -124,7 +124,7 @@ export const CinematicScrollSection: React.FC<CinematicScrollSectionProps> = ({ 
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2 }}
-          className="rounded-3xl bg-white dark:bg-[#0c0c0e] border border-slate-200 dark:border-zinc-800 shadow-sm p-8 flex flex-col justify-between relative overflow-hidden group hover:shadow-md transition-shadow"
+          className="rounded-3xl bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] border border-slate-200/80 dark:border-white/[0.08] shadow-sm p-8 flex flex-col justify-between relative overflow-hidden group hover:shadow-md transition-shadow"
         >
           <div className="relative z-10">
             <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 rounded-xl flex items-center justify-center mb-6">
@@ -146,9 +146,9 @@ export const CinematicScrollSection: React.FC<CinematicScrollSectionProps> = ({ 
           <div className="relative z-10">
             <div className="text-[10px] text-slate-400 dark:text-zinc-500 font-mono uppercase tracking-widest mb-2">DET & DED Commercial KYB</div>
             <div className="flex flex-wrap gap-2">
-              <span className="text-[10px] px-2 py-1 bg-slate-100 dark:bg-zinc-900 text-slate-600 dark:text-zinc-300 rounded-md">Copper</span>
-              <span className="text-[10px] px-2 py-1 bg-slate-100 dark:bg-zinc-900 text-slate-600 dark:text-zinc-300 rounded-md">Cables</span>
-              <span className="text-[10px] px-2 py-1 bg-slate-100 dark:bg-zinc-900 text-slate-600 dark:text-zinc-300 rounded-md">Conduits</span>
+              <span className="text-[10px] px-2.5 py-1 bg-slate-100 dark:bg-white/[0.05] border border-slate-200/60 dark:border-white/[0.06] text-slate-600 dark:text-zinc-300 rounded-lg">Copper</span>
+              <span className="text-[10px] px-2.5 py-1 bg-slate-100 dark:bg-white/[0.05] border border-slate-200/60 dark:border-white/[0.06] text-slate-600 dark:text-zinc-300 rounded-lg">Cables</span>
+              <span className="text-[10px] px-2.5 py-1 bg-slate-100 dark:bg-white/[0.05] border border-slate-200/60 dark:border-white/[0.06] text-slate-600 dark:text-zinc-300 rounded-lg">Conduits</span>
             </div>
           </div>
         </motion.div>
@@ -159,7 +159,7 @@ export const CinematicScrollSection: React.FC<CinematicScrollSectionProps> = ({ 
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}
-          className="md:col-span-2 row-span-1 rounded-3xl bg-white dark:bg-[#0c0c0e] border border-slate-200 dark:border-zinc-800 shadow-sm p-8 flex flex-col justify-between relative overflow-hidden group hover:shadow-md transition-shadow"
+          className="md:col-span-2 row-span-1 rounded-3xl bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] border border-slate-200/80 dark:border-white/[0.08] shadow-sm p-8 flex flex-col justify-between relative overflow-hidden group hover:shadow-md transition-shadow"
         >
           <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-50 via-white to-white dark:from-zinc-900/40 dark:via-black dark:to-black -z-0" />
           <div className="relative z-10 flex flex-col md:flex-row gap-8 justify-between h-full">
@@ -187,7 +187,7 @@ export const CinematicScrollSection: React.FC<CinematicScrollSectionProps> = ({ 
               </button>
             </div>
             
-            <div className="flex-1 flex flex-col justify-end bg-slate-50 dark:bg-zinc-900/80 rounded-2xl p-5 border border-slate-100 dark:border-zinc-700/60">
+            <div className="flex-1 flex flex-col justify-end bg-slate-50 dark:bg-white/[0.04] rounded-2xl p-5 border border-slate-200/80 dark:border-white/[0.08]">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-8 h-8 rounded-full bg-[#cf2e46] text-white flex items-center justify-center">
                   <TrendingDown className="w-4 h-4" />

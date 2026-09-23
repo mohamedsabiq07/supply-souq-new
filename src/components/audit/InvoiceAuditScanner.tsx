@@ -223,17 +223,17 @@ export const InvoiceAuditScanner: React.FC<InvoiceAuditScannerProps> = ({ onSwit
   return (
     <div className="space-y-6">
       {/* Top Banner / Upload Widget */}
-      <div className="bg-[#0c0c0e] text-white rounded-3xl p-6 sm:p-8 border border-zinc-800 shadow-xl space-y-6">
+      <div className="bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] text-slate-900 dark:text-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 dark:border-white/[0.08] shadow-sm space-y-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="space-y-1 max-w-xl">
-            <div className="inline-flex items-center gap-1.5 bg-rose-500/20 text-rose-300 border border-rose-400/30 px-3 py-1 rounded-full text-xs font-bold">
+          <div className="space-y-1.5 max-w-xl">
+            <div className="inline-flex items-center gap-1.5 bg-rose-500/10 text-rose-600 dark:text-rose-300 border border-rose-500/20 px-3 py-1 rounded-full text-xs font-bold">
               <Sparkles className="w-3.5 h-3.5" />
               <span>Free 30-Second Electrical Cost Audit</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
               Benchmark Your Electrical & Cable Invoices
             </h2>
-            <p className="text-xs sm:text-sm text-zinc-300">
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-zinc-300">
               Upload your last bill for Ducab cables, Schneider switchgear, or LED lighting to see exact wholesale price differences against 50+ verified stockists in Al Quoz, Sharjah, and Mussafah.
             </p>
           </div>
@@ -243,7 +243,7 @@ export const InvoiceAuditScanner: React.FC<InvoiceAuditScannerProps> = ({ onSwit
               variant="primary"
               onClick={handleSimulateCustomUpload}
               leftIcon={<UploadCloud className="w-4 h-4" />}
-              className="bg-brand-500 hover:bg-brand-600 font-bold"
+              className="bg-brand-600 hover:bg-brand-700 font-bold shadow-md shadow-brand-500/15"
             >
               Upload Electrical Invoice (PDF / Photo)
             </Button>
@@ -251,8 +251,8 @@ export const InvoiceAuditScanner: React.FC<InvoiceAuditScannerProps> = ({ onSwit
         </div>
 
         {/* Sample Invoices Tab Selector */}
-        <div className="space-y-2 pt-2 border-t border-zinc-800">
-          <span className="text-xs text-zinc-400 font-semibold block">
+        <div className="space-y-2.5 pt-3 border-t border-slate-100 dark:border-white/[0.06]">
+          <span className="text-xs text-slate-500 dark:text-zinc-400 font-semibold block">
             Or select a typical UAE electrical bill to test the price audit:
           </span>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
@@ -264,21 +264,27 @@ export const InvoiceAuditScanner: React.FC<InvoiceAuditScannerProps> = ({ onSwit
                   setSelectedInvoiceId(inv.id);
                   setUploadedFileName(null);
                 }}
-                className={`p-3 rounded-xl border text-left transition-all ${
+                className={`p-3 rounded-2xl border text-left transition-all ${
                   selectedInvoiceId === inv.id
-                    ? 'bg-brand-600/90 text-white border-brand-400 shadow-md font-bold'
-                    : 'bg-zinc-900/80 text-zinc-300 border-zinc-700 hover:bg-zinc-800'
+                    ? 'bg-brand-600 text-white border-brand-500 shadow-md font-bold'
+                    : 'bg-slate-50 dark:bg-white/[0.03] text-slate-700 dark:text-zinc-300 border-slate-200 dark:border-white/[0.08] hover:bg-slate-100 dark:hover:bg-white/[0.06]'
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] uppercase tracking-wider text-amber-300 font-mono">
+                  <span className={`text-[10px] uppercase tracking-wider font-mono font-bold ${
+                    selectedInvoiceId === inv.id ? 'text-amber-200' : 'text-amber-600 dark:text-amber-300'
+                  }`}>
                     {inv.facilityType}
                   </span>
-                  <span className="text-[10px] text-rose-400 font-extrabold">
+                  <span className={`text-[10px] font-extrabold ${
+                    selectedInvoiceId === inv.id ? 'text-white' : 'text-[#cf2e46] dark:text-rose-400'
+                  }`}>
                     Save {inv.savingsPercent}%
                   </span>
                 </div>
-                <strong className="block text-xs mt-1 truncate">{inv.title}</strong>
+                <strong className={`block text-xs mt-1 truncate ${
+                  selectedInvoiceId === inv.id ? 'text-white' : 'text-slate-800 dark:text-zinc-200 font-bold'
+                }`}>{inv.title}</strong>
               </button>
             ))}
           </div>
@@ -302,7 +308,7 @@ export const InvoiceAuditScanner: React.FC<InvoiceAuditScannerProps> = ({ onSwit
       {!isScanning && (
         <div className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Card className="border-slate-200 dark:border-zinc-800 dark:bg-[#0c0c0e]">
+            <Card>
               <CardContent className="p-5 space-y-1">
                 <span className="text-xs font-semibold text-slate-400 dark:text-zinc-400">Current Supplier Total</span>
                 <div className="text-2xl font-extrabold text-slate-900 dark:text-white">
@@ -373,7 +379,7 @@ export const InvoiceAuditScanner: React.FC<InvoiceAuditScannerProps> = ({ onSwit
 
             <CardContent className="p-0 overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-slate-50 dark:bg-zinc-900/80 text-slate-600 dark:text-zinc-300 font-semibold border-b border-slate-200 dark:border-zinc-800">
+                <thead className="bg-slate-50 dark:bg-white/[0.03] text-slate-600 dark:text-zinc-300 font-semibold border-b border-slate-200/80 dark:border-white/[0.06]">
                   <tr>
                     <th className="p-3">Electrical Spec & Standards</th>
                     <th className="p-3">Qty</th>
@@ -383,9 +389,9 @@ export const InvoiceAuditScanner: React.FC<InvoiceAuditScannerProps> = ({ onSwit
                     <th className="p-3">Verified Stockist Match</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 dark:divide-zinc-800/80">
+                <tbody className="divide-y divide-slate-100 dark:divide-white/[0.05]">
                   {activeInvoice.items.map((item) => (
-                    <tr key={item.id} className="hover:bg-slate-50/60 dark:hover:bg-zinc-900/50">
+                    <tr key={item.id} className="hover:bg-slate-50/60 dark:hover:bg-white/[0.02]">
                       <td className="p-3">
                         <strong className="block text-slate-900 dark:text-white font-bold">{item.itemDescription}</strong>
                         <span className="text-[11px] text-slate-500 dark:text-zinc-400 font-medium">{item.specMatch}</span>
@@ -426,7 +432,7 @@ export const InvoiceAuditScanner: React.FC<InvoiceAuditScannerProps> = ({ onSwit
           </Card>
 
           {/* Bottom Action Card */}
-          <div className="bg-gradient-to-r from-zinc-950 via-[#0c0c0e] to-black text-white rounded-2xl p-6 border border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="bg-slate-900 dark:bg-gradient-to-r dark:from-zinc-950 dark:via-[#0c0c0e] dark:to-black text-white rounded-3xl p-6 sm:p-8 border border-slate-800 dark:border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
             <div className="space-y-1">
               <h4 className="text-lg font-bold text-white">
                 Ready to save {formatAED(activeInvoice.totalSavingsAED)} on your electrical procurement?

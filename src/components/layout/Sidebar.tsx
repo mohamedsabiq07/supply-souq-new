@@ -73,13 +73,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView })
   }
 
   return (
-    <aside className="w-64 bg-white dark:bg-[#080809] border-r border-slate-200 dark:border-zinc-800 shrink-0 hidden md:flex flex-col justify-between p-4 min-h-[calc(100vh-6.5rem)] transition-colors duration-200">
+    <aside className="w-64 bg-white dark:bg-[#080809] border-r border-slate-200/80 dark:border-white/[0.08] shrink-0 hidden md:flex flex-col justify-between p-4 min-h-[calc(100vh-6.5rem)] transition-colors duration-200">
       <div>
         {/* User Card */}
         <button
           type="button"
           onClick={() => setCurrentView(role === 'buyer' ? 'buyer-profile' : role === 'supplier' ? 'supplier-profile' : 'admin-profile')}
-          className="w-full text-left p-3 bg-slate-50 dark:bg-[#0f0f12] hover:bg-slate-100/90 dark:hover:bg-zinc-800 rounded-xl border border-slate-200/80 dark:border-zinc-800 mb-5 transition-all group cursor-pointer shadow-2xs hover:shadow-xs"
+          className="w-full text-left p-3 bg-slate-50 dark:bg-[#0f0f12] hover:bg-slate-100/90 dark:hover:bg-zinc-800 rounded-xl border border-slate-200/80 dark:border-white/[0.08] mb-5 transition-all group cursor-pointer shadow-2xs hover:shadow-xs"
           title="Click to view and edit profile"
         >
           <div className="flex items-center gap-3">
@@ -87,10 +87,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView })
               <img
                 src={currentUser.avatarUrl}
                 alt={currentUser.fullName}
-                className="w-10 h-10 rounded-full object-cover border border-slate-200 dark:border-zinc-700 group-hover:ring-2 group-hover:ring-brand-500/30 transition-all"
+                className="w-10 h-10 rounded-full object-cover border border-slate-200 dark:border-white/[0.1] group-hover:ring-2 group-hover:ring-brand-500/30 transition-all"
               />
             ) : (
-              <div className="w-10 h-10 rounded-full bg-slate-900 dark:bg-zinc-800 text-white font-bold flex items-center justify-center text-xs border border-slate-700 dark:border-zinc-700 shrink-0">
+              <div className="w-10 h-10 rounded-full bg-slate-900 dark:bg-white/[0.08] text-white font-bold flex items-center justify-center text-xs border border-slate-700 dark:border-white/[0.1] shrink-0">
                 {(currentUser.fullName || 'User').trim().split(/\s+/).map((w: string) => w[0]).join('').slice(0, 2).toUpperCase()}
               </div>
             )}
@@ -132,7 +132,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView })
                 className={`w-full flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl text-xs transition-all group cursor-pointer ${
                   isActive
                     ? 'bg-slate-900 dark:bg-brand-600 text-white font-bold shadow-sm'
-                    : 'text-slate-600 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-zinc-900 font-medium'
+                    : 'text-slate-600 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-white/[0.06] font-medium'
                 }`}
               >
                 <div className="flex items-center gap-2.5 min-w-0 flex-1 text-left">
@@ -146,7 +146,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView })
                         ? 'bg-brand-500 dark:bg-white dark:text-brand-700 text-white'
                         : link.highlight
                         ? 'bg-amber-400 text-slate-950 shadow-xs'
-                        : 'bg-slate-100 dark:bg-zinc-900 text-slate-700 dark:text-zinc-300 border border-slate-200/60 dark:border-zinc-800'
+                        : 'bg-slate-100 dark:bg-zinc-900 text-slate-700 dark:text-zinc-300 border border-slate-200/60 dark:border-white/[0.08]'
                     }`}
                   >
                     {link.count}
@@ -159,7 +159,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView })
       </div>
 
       {/* Bottom Sign Out & Session Area */}
-      <div className="space-y-3 pt-4 border-t border-slate-200 dark:border-zinc-800 mt-6">
+      <div className="space-y-3 pt-4 border-t border-slate-200/80 dark:border-white/[0.06] mt-6">
         <button
           onClick={() => {
             logout();
@@ -175,7 +175,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView })
         </button>
 
         {/* UAE Compliance Note */}
-        <div className="p-2.5 bg-slate-50 dark:bg-[#0f0f12] border border-slate-100 dark:border-zinc-800 rounded-xl text-[11px] text-slate-500 dark:text-zinc-400 space-y-1">
+        <div className="p-2.5 bg-slate-50 dark:bg-[#0f0f12] border border-slate-200/60 dark:border-white/[0.06] rounded-xl text-[11px] text-slate-500 dark:text-zinc-400 space-y-1">
           <div className="flex items-center gap-1.5 text-slate-700 dark:text-zinc-300 font-bold text-xs">
             <Award className="w-3.5 h-3.5 text-amber-500" />
             <span>UAE Verified Session</span>

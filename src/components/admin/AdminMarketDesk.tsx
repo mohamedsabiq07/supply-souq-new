@@ -158,7 +158,7 @@ export const AdminMarketDesk: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-black via-[#0c0c0e] to-black text-white p-6 rounded-2xl border border-zinc-800 shadow-xl space-y-4">
+      <div className="bg-gradient-to-r from-black via-[#0c0c0e] to-black text-white p-6 rounded-3xl border border-slate-800 dark:border-white/[0.08] shadow-xl space-y-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2.5">

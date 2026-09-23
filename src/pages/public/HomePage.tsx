@@ -8,6 +8,7 @@ import { CinematicScrollSection } from '../../components/home/CinematicScrollSec
 import { ProblemScrollSection } from '../../components/home/ProblemScrollSection';
 import { AnimatedH3, ProximityText } from '../../components/ui/AnimatedHeading';
 import VariableFontCursorProximity from '../../components/fancy/text/variable-font-cursor-proximity';
+import { DynamicBackgroundHost } from '../../components/backgrounds/DynamicBackgroundHost';
 import { MetalFx } from 'metal-fx';
 import {
   Zap,
@@ -105,17 +106,20 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
     <div className="bg-[#f4f4f6] dark:bg-black text-slate-900 dark:text-zinc-100 selection:bg-[#cf2e46] selection:text-white overflow-x-clip font-sans transition-colors duration-200">
       
       {/* 1. HERO SECTION - ARCHITECTURAL STUDIO GRAY & NEIDEN GRID */}
-      <section className="relative pt-16 sm:pt-24 pb-20 sm:pb-32 overflow-hidden border-b border-slate-200/90 dark:border-zinc-800 bg-[#f4f4f6] dark:bg-black">
+      <section className="relative pt-16 sm:pt-24 pb-20 sm:pb-32 overflow-hidden border-b border-slate-200/80 dark:border-white/[0.08] bg-[#f4f4f6] dark:bg-black">
         {/* Architectural Column Guide Lines (Neiden style) */}
         <div className="absolute inset-0 pointer-events-none max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between z-0">
-          <div className="w-px h-full bg-slate-300/40 dark:bg-zinc-800/60" />
-          <div className="w-px h-full bg-slate-300/30 dark:bg-zinc-800/40 hidden md:block" />
-          <div className="w-px h-full bg-slate-300/30 dark:bg-zinc-800/40 hidden lg:block" />
-          <div className="w-px h-full bg-slate-300/40 dark:bg-zinc-800/60" />
+          <div className="w-px h-full bg-slate-300/40 dark:bg-white/[0.05]" />
+          <div className="w-px h-full bg-slate-300/30 dark:bg-white/[0.03] hidden md:block" />
+          <div className="w-px h-full bg-slate-300/30 dark:bg-white/[0.03] hidden lg:block" />
+          <div className="w-px h-full bg-slate-300/40 dark:bg-white/[0.05]" />
         </div>
 
         {/* Subtle Architectural Grid with graceful radial mask */}
         <div className="absolute inset-0 architectural-grid opacity-70 dark:opacity-30 [mask-image:radial-gradient(ellipse_70%_70%_at_50%_20%,black_30%,transparent_90%)] pointer-events-none z-0" />
+
+        {/* Dynamic Interactive Background Layer & Switcher Dock */}
+        <DynamicBackgroundHost className="z-0" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-4xl mx-auto text-center space-y-6">
@@ -174,7 +178,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
 
             {/* Live Metrics Grid (Gent 4-Column Stat Cards with crisp definition) */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 pt-8 max-w-4xl mx-auto text-left font-sans">
-              <div className="p-4 rounded-2xl bg-white dark:bg-[#0c0c0e]/90 border border-slate-300/80 dark:border-zinc-800 shadow-xs hover:border-slate-400 dark:hover:border-zinc-700 hover:shadow-md transition-all duration-300 group">
+              <div className="p-4 rounded-2xl bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] border border-slate-200/80 dark:border-white/[0.08] shadow-xs hover:border-slate-400 dark:hover:border-white/[0.18] hover:shadow-md transition-all duration-300 group">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-[11px] uppercase tracking-wider font-bold text-slate-500 dark:text-zinc-400 font-mono">Avg Savings</span>
                   <span className="w-2 h-2 rounded-full bg-[#cf2e46] group-hover:animate-ping" />
@@ -185,7 +189,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                 <span className="text-[11px] text-slate-500 dark:text-zinc-400 block mt-1">vs standard offline quotes</span>
               </div>
 
-              <div className="p-4 rounded-2xl bg-white dark:bg-[#0c0c0e]/90 border border-slate-300/80 dark:border-zinc-800 shadow-xs hover:border-slate-400 dark:hover:border-zinc-700 hover:shadow-md transition-all duration-300 group">
+              <div className="p-4 rounded-2xl bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] border border-slate-200/80 dark:border-white/[0.08] shadow-xs hover:border-slate-400 dark:hover:border-white/[0.18] hover:shadow-md transition-all duration-300 group">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-[11px] uppercase tracking-wider font-bold text-slate-500 dark:text-zinc-400 font-mono">Response SLA</span>
                   <span className="w-2 h-2 rounded-full bg-[#cf2e46] group-hover:animate-ping" />
@@ -197,7 +201,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                 <span className="text-[11px] text-slate-500 dark:text-zinc-400 block mt-1">Guaranteed turnaround</span>
               </div>
 
-              <div className="p-4 rounded-2xl bg-white dark:bg-[#0c0c0e]/90 border border-slate-300/80 dark:border-zinc-800 shadow-xs hover:border-slate-400 dark:hover:border-zinc-700 hover:shadow-md transition-all duration-300 group">
+              <div className="p-4 rounded-2xl bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] border border-slate-200/80 dark:border-white/[0.08] shadow-xs hover:border-slate-400 dark:hover:border-white/[0.18] hover:shadow-md transition-all duration-300 group">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-[11px] uppercase tracking-wider font-bold text-slate-500 dark:text-zinc-400 font-mono">Fastest Bids Cap</span>
                   <span className="w-2 h-2 rounded-full bg-[#cf2e46] group-hover:animate-ping" />
@@ -209,7 +213,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                 <span className="text-[11px] text-slate-500 dark:text-zinc-400 block mt-1">First-to-quote priority</span>
               </div>
 
-              <div className="p-4 rounded-2xl bg-white dark:bg-[#0c0c0e]/90 border border-slate-300/80 dark:border-zinc-800 shadow-xs hover:border-slate-400 dark:hover:border-zinc-700 hover:shadow-md transition-all duration-300 group">
+              <div className="p-4 rounded-2xl bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] border border-slate-200/80 dark:border-white/[0.08] shadow-xs hover:border-slate-400 dark:hover:border-white/[0.18] hover:shadow-md transition-all duration-300 group">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-[11px] uppercase tracking-wider font-bold text-slate-500 dark:text-zinc-400 font-mono">Trade License</span>
                   <span className="w-2 h-2 rounded-full bg-[#cf2e46] group-hover:animate-ping" />
@@ -229,7 +233,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
       <CinematicScrollSection setCurrentView={setCurrentView} />
 
       {/* 2. PARTNER / STOCKIST BRAND MARQUEE - RICH CONCRETE GRAY BAND */}
-      <section className="py-12 border-b border-slate-300/80 dark:border-zinc-800 bg-[#eceef1] dark:bg-[#080809] relative overflow-hidden">
+      <section className="py-12 border-b border-slate-200/80 dark:border-white/[0.08] bg-[#eceef1] dark:bg-[#080809] relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-6">
           <p className="text-xs uppercase tracking-widest text-slate-600 dark:text-zinc-400 font-bold font-mono">
             Trusted by 250+ UAE Contractors &amp; Certified Stockists across Dubai, Sharjah &amp; Abu Dhabi
@@ -241,7 +245,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             {[...brands, ...brands].map((brand, idx) => (
               <div
                 key={idx}
-                className="inline-flex items-center gap-3 px-5 py-2.5 rounded-2xl bg-white dark:bg-zinc-900/90 border border-slate-300/80 dark:border-zinc-700/80 text-slate-800 dark:text-zinc-200 hover:border-slate-400 dark:hover:border-zinc-500 shadow-2xs transition-colors"
+                className="inline-flex items-center gap-3 px-5 py-2.5 rounded-2xl bg-white dark:bg-white/[0.04] border border-slate-200/80 dark:border-white/[0.08] text-slate-800 dark:text-zinc-200 hover:border-slate-400 dark:hover:border-white/[0.18] shadow-2xs transition-colors"
               >
                 <div className="w-2 h-2 rounded-full bg-[#cf2e46]" />
                 <span className="font-extrabold text-sm tracking-wider text-slate-900 dark:text-white">{brand.name}</span>
@@ -258,13 +262,13 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
 
 
       {/* 4. THE SOLUTION BENTO GRID - RICH CONCRETE GRAY BAND */}
-      <section className="py-20 sm:py-28 border-b border-slate-300/80 dark:border-zinc-800 bg-[#eceef1] dark:bg-[#080809] relative overflow-hidden">
+      <section className="py-20 sm:py-28 border-b border-slate-200/80 dark:border-white/[0.08] bg-[#eceef1] dark:bg-[#080809] relative overflow-hidden">
         {/* Subtle Architectural grid texture */}
         <div className="absolute inset-0 architectural-grid-subtle opacity-40 dark:opacity-20 pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center space-y-3 mb-16 max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white dark:bg-zinc-900 text-[#cf2e46] border border-slate-300 dark:border-zinc-700 shadow-2xs">
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white dark:bg-white/[0.06] text-[#cf2e46] border border-slate-300/80 dark:border-white/[0.1] shadow-2xs">
               <ShieldCheck className="w-3.5 h-3.5" />
               <span>[SS®—ARCHITECTURE] The Next-Gen B2B Solution</span>
             </div>
@@ -286,7 +290,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
             {/* Bento Card 1: Multi-Vendor Bidding & 24H SLA */}
-            <div className="p-7 sm:p-9 rounded-3xl bg-white dark:bg-[#0c0c0e] border border-slate-300/80 dark:border-zinc-800 hover:border-slate-400 dark:hover:border-zinc-700 shadow-sm hover:shadow-md transition-all duration-300 space-y-6 flex flex-col justify-between group">
+            <div className="p-7 sm:p-9 rounded-3xl bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] border border-slate-200/80 dark:border-white/[0.08] hover:border-slate-400 dark:hover:border-white/[0.18] shadow-sm hover:shadow-md transition-all duration-300 space-y-6 flex flex-col justify-between group">
               <div className="space-y-3">
                 <div className="w-12 h-12 rounded-2xl bg-rose-50 dark:bg-rose-950/40 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
                   <Zap className="w-6 h-6" />
@@ -304,12 +308,12 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
               </div>
 
               {/* Interactive Visual Element */}
-              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-[#121215] border border-slate-200 dark:border-zinc-800 space-y-3">
+              <div className="p-4 rounded-2xl bg-slate-50/70 dark:bg-white/[0.02] border border-slate-200/80 dark:border-white/[0.06] space-y-3">
                 <div className="flex items-center justify-between text-xs font-mono">
                   <span className="text-slate-500 dark:text-zinc-400 uppercase">SLA Clock: RFQ #SS-2026-089</span>
                   <span className="text-[#cf2e46] font-bold">14h 22m Remaining</span>
                 </div>
-                <div className="w-full bg-slate-200 dark:bg-zinc-700 h-2 rounded-full overflow-hidden">
+                <div className="w-full bg-slate-200 dark:bg-white/[0.1] h-2 rounded-full overflow-hidden">
                   <div className="bg-[#cf2e46] h-full rounded-full w-[65%]" />
                 </div>
                 <div className="flex items-center justify-between text-[11px] text-slate-500 dark:text-zinc-400 pt-1 font-mono">
@@ -320,7 +324,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             </div>
 
             {/* Bento Card 2: Fastest 5 Bids Rule */}
-            <div className="p-7 sm:p-9 rounded-3xl bg-white dark:bg-[#0c0c0e] border border-slate-300/80 dark:border-zinc-800 hover:border-slate-400 dark:hover:border-zinc-700 shadow-sm hover:shadow-md transition-all duration-300 space-y-6 flex flex-col justify-between group">
+            <div className="p-7 sm:p-9 rounded-3xl bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] border border-slate-200/80 dark:border-white/[0.08] hover:border-slate-400 dark:hover:border-white/[0.18] shadow-sm hover:shadow-md transition-all duration-300 space-y-6 flex flex-col justify-between group">
               <div className="space-y-3">
                 <div className="w-12 h-12 rounded-2xl bg-rose-50 dark:bg-rose-950/40 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
                   <Activity className="w-6 h-6" />
@@ -351,7 +355,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                     className={`p-2.5 rounded-xl border ${
                       s.status === 'Open'
                         ? 'bg-rose-50 dark:bg-rose-950/30 border-rose-300 dark:border-rose-900/60 text-[#cf2e46] animate-pulse'
-                        : 'bg-slate-50 dark:bg-zinc-900 border-slate-200 dark:border-zinc-700 text-slate-800 dark:text-zinc-200'
+                        : 'bg-slate-50 dark:bg-white/[0.04] border-slate-200/80 dark:border-white/[0.08] text-slate-800 dark:text-zinc-200'
                     }`}
                   >
                     <div className="text-[10px] font-mono uppercase text-slate-500 dark:text-zinc-400">Slot {s.slot}</div>
@@ -363,7 +367,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             </div>
 
             {/* Bento Card 3: Automated BOQ & Schedule Standardizer */}
-            <div className="p-7 sm:p-9 rounded-3xl bg-white dark:bg-[#0c0c0e] border border-slate-300/80 dark:border-zinc-800 hover:border-slate-400 dark:hover:border-zinc-700 shadow-sm hover:shadow-md transition-all duration-300 space-y-6 flex flex-col justify-between group">
+            <div className="p-7 sm:p-9 rounded-3xl bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] border border-slate-200/80 dark:border-white/[0.08] hover:border-slate-400 dark:hover:border-white/[0.18] shadow-sm hover:shadow-md transition-all duration-300 space-y-6 flex flex-col justify-between group">
               <div className="space-y-3">
                 <div className="w-12 h-12 rounded-2xl bg-rose-50 dark:bg-rose-950/40 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
                   <FileSpreadsheet className="w-6 h-6" />
@@ -381,7 +385,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
               </div>
 
               {/* Visual Element */}
-              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-[#121215] border border-slate-200 dark:border-zinc-800 flex items-center justify-between text-xs">
+              <div className="p-4 rounded-2xl bg-slate-50/70 dark:bg-white/[0.02] border border-slate-200/80 dark:border-white/[0.06] flex items-center justify-between text-xs">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-xl bg-rose-100 dark:bg-rose-950/50 text-[#cf2e46] flex items-center justify-center font-bold">
                     XLS
@@ -396,7 +400,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             </div>
 
             {/* Bento Card 4: UAE DET KYB & FTA VAT Compliance */}
-            <div className="p-7 sm:p-9 rounded-3xl bg-white dark:bg-[#0c0c0e] border border-slate-300/80 dark:border-zinc-800 hover:border-slate-400 dark:hover:border-zinc-700 shadow-sm hover:shadow-md transition-all duration-300 space-y-6 flex flex-col justify-between group">
+            <div className="p-7 sm:p-9 rounded-3xl bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] border border-slate-200/80 dark:border-white/[0.08] hover:border-slate-400 dark:hover:border-white/[0.18] shadow-sm hover:shadow-md transition-all duration-300 space-y-6 flex flex-col justify-between group">
               <div className="space-y-3">
                 <div className="w-12 h-12 rounded-2xl bg-rose-50 dark:bg-rose-950/40 text-[#cf2e46] flex items-center justify-center font-black group-hover:scale-110 transition-transform">
                   <BadgeCheck className="w-6 h-6" />
@@ -414,12 +418,12 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
               </div>
 
               {/* Visual Element */}
-              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-[#121215] border border-slate-200 dark:border-zinc-800 flex items-center justify-between text-xs font-mono">
+              <div className="p-4 rounded-2xl bg-slate-50/70 dark:bg-white/[0.02] border border-slate-200/80 dark:border-white/[0.06] flex items-center justify-between text-xs font-mono">
                 <div className="flex items-center gap-2 text-slate-800 dark:text-zinc-200">
                   <ShieldCheck className="w-5 h-5 text-[#cf2e46]" />
                   <span>TRN: 100482938400003</span>
                 </div>
-                <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase bg-white dark:bg-zinc-900 text-[#cf2e46] border border-rose-200 dark:border-rose-900/60 shadow-2xs">
+                <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase bg-white dark:bg-white/[0.08] text-[#cf2e46] border border-rose-200 dark:border-rose-900/60 shadow-2xs">
                   FTA Verified
                 </span>
               </div>
@@ -440,7 +444,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
         </div>
 
         <div className="text-center space-y-3 mb-16 max-w-3xl mx-auto relative z-10">
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white dark:bg-zinc-900 text-[#cf2e46] border border-slate-300 dark:border-zinc-700 shadow-2xs">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white dark:bg-white/[0.04] text-[#cf2e46] border border-slate-200/80 dark:border-white/[0.08] shadow-2xs">
             <Sparkles className="w-3.5 h-3.5" />
             <span>[SS®—WORKFLOW] Fast &amp; Transparent Execution</span>
           </div>
@@ -483,7 +487,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             return (
               <div
                 key={idx}
-                className="p-8 rounded-3xl bg-white dark:bg-[#0c0c0e] border border-slate-300/80 dark:border-zinc-800 hover:border-slate-400 dark:hover:border-zinc-700 shadow-xs hover:shadow-md transition-all duration-300 space-y-5 group"
+                className="p-8 rounded-3xl bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] border border-slate-200/80 dark:border-white/[0.08] hover:border-slate-300 dark:hover:border-white/[0.18] shadow-xs hover:shadow-md transition-all duration-300 space-y-5 group"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-3xl font-black font-mono text-[#cf2e46] opacity-90 group-hover:opacity-100 transition-opacity">
@@ -508,7 +512,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
       </section>
 
       {/* 6. BIG TELEMETRY & IMPACT STATS */}
-      <section className="py-16 border-t border-b border-slate-800 bg-[#0a0a0a] text-white">
+      <section className="py-16 border-t border-b border-slate-800/80 dark:border-white/[0.08] bg-[#0a0a0a] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
             <div className="space-y-1">
@@ -561,14 +565,14 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
       <section className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative bg-[#f4f4f6] dark:bg-black">
         {/* Subtle column guide lines */}
         <div className="absolute inset-0 pointer-events-none max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between z-0">
-          <div className="w-px h-full bg-slate-300/30 dark:bg-zinc-800/40" />
-          <div className="w-px h-full bg-slate-300/20 dark:bg-zinc-800/30 hidden md:block" />
-          <div className="w-px h-full bg-slate-300/20 dark:bg-zinc-800/30 hidden lg:block" />
-          <div className="w-px h-full bg-slate-300/30 dark:bg-zinc-800/40" />
+          <div className="w-px h-full bg-slate-300/30 dark:bg-white/[0.04]" />
+          <div className="w-px h-full bg-slate-300/20 dark:bg-white/[0.02] hidden md:block" />
+          <div className="w-px h-full bg-slate-300/20 dark:bg-white/[0.02] hidden lg:block" />
+          <div className="w-px h-full bg-slate-300/30 dark:bg-white/[0.04]" />
         </div>
 
         <div className="text-center space-y-3 mb-16 max-w-3xl mx-auto relative z-10">
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white dark:bg-zinc-900 text-[#cf2e46] border border-slate-300 dark:border-zinc-700 shadow-2xs">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white dark:bg-white/[0.04] text-[#cf2e46] border border-slate-200 dark:border-white/[0.08] shadow-2xs">
             <Star className="w-3.5 h-3.5 fill-[#cf2e46]" />
             <span>[SS®—REVIEWS] Verified UAE Industry Feedback</span>
           </div>
@@ -587,7 +591,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
-          <div className="p-8 rounded-3xl bg-white dark:bg-[#0c0c0e] border border-slate-300/80 dark:border-zinc-800 hover:border-slate-400 dark:hover:border-zinc-700 shadow-xs hover:shadow-md transition-all space-y-5 flex flex-col justify-between">
+          <div className="p-8 rounded-3xl bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] border border-slate-200/80 dark:border-white/[0.08] hover:border-slate-300 dark:hover:border-white/[0.18] shadow-xs hover:shadow-md transition-all space-y-5 flex flex-col justify-between">
             <div className="space-y-3">
               <div className="flex items-center gap-1 text-[#cf2e46]">
                 {[...Array(5)].map((_, i) => (
@@ -604,7 +608,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                 "We replaced endless supplier phone calls with SupplySouq. Posting an RFQ takes minutes, and receiving itemized bids directly from verified stockists saved us AED 34,000 on our substation order alone."
               </p>
             </div>
-            <div className="pt-4 border-t border-slate-200 dark:border-zinc-800 flex items-center gap-3">
+            <div className="pt-4 border-t border-slate-200/80 dark:border-white/[0.06] flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-rose-100 dark:bg-rose-950/50 text-[#cf2e46] font-bold flex items-center justify-center text-xs">
                 MK
               </div>
@@ -615,7 +619,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             </div>
           </div>
 
-          <div className="p-8 rounded-3xl bg-white dark:bg-[#0c0c0e] border-2 border-[#cf2e46] shadow-xl transition-all space-y-5 flex flex-col justify-between">
+          <div className="p-8 rounded-3xl bg-white dark:bg-gradient-to-b dark:from-[#161214] dark:to-[#0e0c0d] border-2 border-[#cf2e46]/60 shadow-xl transition-all space-y-5 flex flex-col justify-between">
             <div className="space-y-3">
               <div className="flex items-center gap-1 text-[#cf2e46]">
                 {[...Array(5)].map((_, i) => (
@@ -632,7 +636,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                 "I uploaded a photo of my site foreman's handwritten requisition sheet. Within 3 hours I had 5 itemized quotes with mill test certificates ready to download. Genuinely revolutionary for UAE construction."
               </p>
             </div>
-            <div className="pt-4 border-t border-slate-200 dark:border-zinc-800 flex items-center gap-3">
+            <div className="pt-4 border-t border-slate-200/80 dark:border-white/[0.06] flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-[#cf2e46] text-white font-bold flex items-center justify-center text-xs">
                 AR
               </div>
@@ -643,7 +647,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             </div>
           </div>
 
-          <div className="p-8 rounded-3xl bg-white dark:bg-[#0c0c0e] border border-slate-300/80 dark:border-zinc-800 hover:border-slate-400 dark:hover:border-zinc-700 shadow-xs hover:shadow-md transition-all space-y-5 flex flex-col justify-between">
+          <div className="p-8 rounded-3xl bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] border border-slate-200/80 dark:border-white/[0.08] hover:border-slate-300 dark:hover:border-white/[0.18] shadow-xs hover:shadow-md transition-all space-y-5 flex flex-col justify-between">
             <div className="space-y-3">
               <div className="flex items-center gap-1 text-[#cf2e46]">
                 {[...Array(5)].map((_, i) => (
@@ -660,7 +664,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                 "As an authorized cable stockist in Sharjah Industrial Area 13, SupplySouq sends pre-qualified RFQs straight to our sales desk. We quote directly to contractors with guaranteed 24h turnaround."
               </p>
             </div>
-            <div className="pt-4 border-t border-slate-200 dark:border-zinc-800 flex items-center gap-3">
+            <div className="pt-4 border-t border-slate-200/80 dark:border-white/[0.06] flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-rose-100 dark:bg-rose-950/50 text-[#cf2e46] font-bold flex items-center justify-center text-xs">
                 TW
               </div>
@@ -674,10 +678,10 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
       </section>
 
       {/* 8. TRANSPARENT LAUNCH PRICING SECTION - RICH CONCRETE GRAY BAND */}
-      <section id="pricing-section" className="py-20 sm:py-28 border-t border-b border-slate-300/80 dark:border-zinc-800 bg-[#eceef1] dark:bg-[#080809] relative">
+      <section id="pricing-section" className="py-20 sm:py-28 border-t border-b border-slate-200/80 dark:border-white/[0.08] bg-[#eceef1] dark:bg-[#080809] relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-3 mb-16 max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white dark:bg-zinc-900 text-[#cf2e46] border border-slate-300 dark:border-zinc-700 shadow-2xs">
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white dark:bg-white/[0.04] text-[#cf2e46] border border-slate-200/80 dark:border-white/[0.08] shadow-2xs">
               <DollarSign className="w-3.5 h-3.5" />
               <span>[SS®—RATES] Transparent Launch Pricing</span>
             </div>
@@ -698,7 +702,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
             
             {/* Tier 1: Contractors & Engineers */}
-            <div className="p-8 rounded-3xl bg-white dark:bg-[#0c0c0e] border border-slate-300/80 dark:border-zinc-800 hover:border-slate-400 dark:hover:border-zinc-700 shadow-sm transition-all flex flex-col justify-between space-y-8">
+            <div className="p-8 rounded-3xl bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] border border-slate-200/80 dark:border-white/[0.08] hover:border-slate-300 dark:hover:border-white/[0.18] shadow-sm transition-all flex flex-col justify-between space-y-8">
               <div className="space-y-4">
                 <div>
                   <span className="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-400 font-bold">For Buyers</span>
@@ -719,7 +723,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                   <span className="text-xs text-slate-500 dark:text-zinc-400 font-semibold">/ Free Forever</span>
                 </div>
 
-                <ul className="space-y-3 text-xs text-slate-700 dark:text-zinc-300 pt-4 border-t border-slate-200 dark:border-zinc-800">
+                <ul className="space-y-3 text-xs text-slate-700 dark:text-zinc-300 pt-4 border-t border-slate-200/80 dark:border-white/[0.06]">
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 text-[#cf2e46] shrink-0" />
                     <span>Unlimited RFQ &amp; BOQ Postings</span>
@@ -749,14 +753,14 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
 
               <button
                 onClick={() => handleStartBuyer()}
-                className="w-full py-3.5 rounded-full text-xs font-bold text-slate-900 dark:text-white bg-slate-50 dark:bg-zinc-900 hover:bg-slate-100 dark:hover:bg-zinc-800 border border-slate-300 dark:border-zinc-700 transition-all cursor-pointer"
+                className="w-full py-3.5 rounded-full text-xs font-bold text-slate-900 dark:text-white bg-slate-50 dark:bg-white/[0.04] hover:bg-slate-100 dark:hover:bg-white/[0.08] border border-slate-200/80 dark:border-white/[0.08] transition-all cursor-pointer"
               >
                 Post Live RFQ (Free)
               </button>
             </div>
 
             {/* Tier 2: Verified Stockists */}
-            <div className="p-8 rounded-3xl bg-white dark:bg-[#0c0c0e] border-2 border-[#cf2e46] shadow-xl flex flex-col justify-between space-y-8 relative group">
+            <div className="p-8 rounded-3xl bg-white dark:bg-gradient-to-b dark:from-[#161214] dark:to-[#0e0c0d] border-2 border-[#cf2e46]/60 shadow-xl flex flex-col justify-between space-y-8 relative group">
               <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#cf2e46] text-white text-[10px] font-black uppercase tracking-wider py-1 px-4 rounded-full shadow-md font-mono">
                 Launch Phase • 3 Months Free Trial
               </div>
@@ -824,7 +828,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             </div>
 
             {/* Tier 3: Enterprise Procurement */}
-            <div className="p-8 rounded-3xl bg-white dark:bg-[#0c0c0e] border border-slate-300/80 dark:border-zinc-800 hover:border-slate-400 dark:hover:border-zinc-700 shadow-sm transition-all flex flex-col justify-between space-y-8">
+            <div className="p-8 rounded-3xl bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] border border-slate-200/80 dark:border-white/[0.08] hover:border-slate-300 dark:hover:border-white/[0.18] shadow-sm transition-all flex flex-col justify-between space-y-8">
               <div className="space-y-4">
                 <div>
                   <span className="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-400 font-bold">For EPCs &amp; Developers</span>
@@ -845,7 +849,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                   <span className="text-xs text-slate-500 dark:text-zinc-400 font-semibold">/ Tailored SLA</span>
                 </div>
 
-                <ul className="space-y-3 text-xs text-slate-700 dark:text-zinc-300 pt-4 border-t border-slate-200 dark:border-zinc-800">
+                <ul className="space-y-3 text-xs text-slate-700 dark:text-zinc-300 pt-4 border-t border-slate-200/80 dark:border-white/[0.06]">
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 text-[#cf2e46] shrink-0" />
                     <span>Dedicated Procurement Operations Desk</span>
@@ -871,7 +875,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
 
               <button
                 onClick={() => setCurrentView('onboarding-guide')}
-                className="w-full py-3.5 rounded-full text-xs font-bold text-slate-900 dark:text-white bg-slate-50 dark:bg-zinc-900 hover:bg-slate-100 dark:hover:bg-zinc-800 border border-slate-300 dark:border-zinc-700 transition-all cursor-pointer"
+                className="w-full py-3.5 rounded-full text-xs font-bold text-slate-900 dark:text-white bg-slate-50 dark:bg-white/[0.04] hover:bg-slate-100 dark:hover:bg-white/[0.08] border border-slate-200/80 dark:border-white/[0.08] transition-all cursor-pointer"
               >
                 Contact Enterprise Desk
               </button>
@@ -884,7 +888,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
       {/* 9. FAQ ACCORDION */}
       <section className="py-20 sm:py-28 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative bg-[#f4f4f6] dark:bg-black">
         <div className="text-center space-y-3 mb-14">
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white dark:bg-zinc-900 text-[#cf2e46] border border-slate-300 dark:border-zinc-700 shadow-2xs">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white dark:bg-white/[0.04] text-[#cf2e46] border border-slate-200/80 dark:border-white/[0.08] shadow-2xs">
             <span>[SS®—FAQ] Frequently Asked Questions</span>
           </div>
           <div className="flex justify-center">
@@ -905,14 +909,14 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
           {faqs.map((faq, idx) => (
             <div
               key={idx}
-              className="rounded-2xl bg-white dark:bg-[#0c0c0e] border border-slate-300/80 dark:border-zinc-800 overflow-hidden shadow-2xs transition-all duration-200"
+              className="rounded-2xl bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] border border-slate-200/80 dark:border-white/[0.08] overflow-hidden shadow-2xs transition-all duration-200"
             >
               <button
                 onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
                 className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 focus:outline-none hover:text-[#cf2e46] dark:hover:text-[#cf2e46] transition-colors cursor-pointer"
               >
                 <span className="font-bold text-sm sm:text-base text-slate-900 dark:text-white">{faq.q}</span>
-                <div className="w-8 h-8 rounded-full bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 flex items-center justify-center shrink-0 text-slate-600 dark:text-zinc-300 shadow-2xs">
+                <div className="w-8 h-8 rounded-full bg-slate-50 dark:bg-white/[0.04] border border-slate-200/80 dark:border-white/[0.08] flex items-center justify-center shrink-0 text-slate-600 dark:text-zinc-300 shadow-2xs">
                   {openFaq === idx ? (
                     <ChevronDown className="w-4 h-4 text-[#cf2e46] rotate-180 transition-transform" />
                   ) : (
@@ -921,7 +925,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                 </div>
               </button>
               {openFaq === idx && (
-                <div className="px-5 sm:px-6 pb-6 text-xs sm:text-sm text-slate-600 dark:text-zinc-300 leading-relaxed border-t border-slate-100 dark:border-zinc-800 pt-3 bg-slate-50/50 dark:bg-[#121215]/50">
+                <div className="px-5 sm:px-6 pb-6 text-xs sm:text-sm text-slate-600 dark:text-zinc-300 leading-relaxed border-t border-slate-200/60 dark:border-white/[0.06] pt-3 bg-slate-50/50 dark:bg-white/[0.02]">
                   {faq.a}
                 </div>
               )}

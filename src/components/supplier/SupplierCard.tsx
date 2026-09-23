@@ -15,7 +15,7 @@ export const SupplierCard: React.FC<SupplierCardProps> = ({ supplier, onRequestQ
       <CardContent className="p-5">
         <div className="flex items-start justify-between gap-3 mb-3">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-slate-900 dark:bg-zinc-800 text-white font-bold flex items-center justify-center text-base shadow-sm shrink-0 border border-slate-700 dark:border-zinc-700">
+            <div className="w-12 h-12 rounded-xl bg-slate-900 dark:bg-white/[0.06] text-white font-bold flex items-center justify-center text-base shadow-sm shrink-0 border border-slate-700 dark:border-white/[0.1]">
               {supplier.name.slice(0, 2).toUpperCase()}
             </div>
             <div>
@@ -45,13 +45,13 @@ export const SupplierCard: React.FC<SupplierCardProps> = ({ supplier, onRequestQ
 
         <div className="flex flex-wrap gap-1.5 mb-4">
           {supplier.categories.map((cat, idx) => (
-            <span key={idx} className="text-[11px] font-medium bg-slate-100 dark:bg-zinc-900 text-slate-700 dark:text-zinc-300 px-2 py-0.5 rounded border border-slate-200/60 dark:border-zinc-800">
+            <span key={idx} className="text-[11px] font-medium bg-slate-100 dark:bg-white/[0.04] text-slate-700 dark:text-zinc-300 px-2.5 py-0.5 rounded-lg border border-slate-200/60 dark:border-white/[0.06]">
               {cat}
             </span>
           ))}
         </div>
 
-        <div className="grid grid-cols-3 gap-2 py-2.5 px-3 bg-slate-50 dark:bg-[#121215] rounded-lg text-center text-xs mb-4 border border-slate-100 dark:border-zinc-800">
+        <div className="grid grid-cols-3 gap-2 py-2.5 px-3 bg-slate-50/70 dark:bg-white/[0.02] rounded-xl text-center text-xs mb-4 border border-slate-100 dark:border-white/[0.06]">
           <div>
             <span className="text-[10px] text-slate-400 dark:text-zinc-500 block font-medium">Response Rate</span>
             <strong className="text-slate-800 dark:text-zinc-200 font-bold">{supplier.responseRatePercent}%</strong>
@@ -66,7 +66,7 @@ export const SupplierCard: React.FC<SupplierCardProps> = ({ supplier, onRequestQ
           </div>
         </div>
 
-        <div className="text-xs text-slate-500 dark:text-zinc-400 flex items-center justify-between pt-1 border-t border-slate-100 dark:border-zinc-800">
+        <div className="text-xs text-slate-500 dark:text-zinc-400 flex items-center justify-between pt-1 border-t border-slate-100 dark:border-white/[0.06]">
           <span>License: <strong className="text-slate-700 dark:text-zinc-300 font-mono">{supplier.tradeLicenseNumber}</strong></span>
           <span className="text-[#cf2e46] font-semibold">Active UAE Trader</span>
         </div>
@@ -76,7 +76,7 @@ export const SupplierCard: React.FC<SupplierCardProps> = ({ supplier, onRequestQ
         <Button
           variant="outline"
           size="sm"
-          className="w-full hover:bg-brand-50 dark:hover:bg-zinc-900 hover:text-brand-700 dark:hover:text-white hover:border-brand-200 dark:hover:border-zinc-700"
+          className="w-full hover:bg-brand-50 dark:hover:bg-white/[0.04] hover:text-brand-700 dark:hover:text-white hover:border-brand-200 dark:hover:border-white/[0.15]"
           onClick={() => onRequestQuote && onRequestQuote(supplier)}
         >
           Request Direct RFQ

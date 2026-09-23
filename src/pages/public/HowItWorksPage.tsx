@@ -89,21 +89,21 @@ export const HowItWorksPage: React.FC<{ onStartRFQ: () => void }> = ({ onStartRF
       </div>
 
       {/* Transparent Pricing Model */}
-      <div className="bg-[#0c0c0e] text-white rounded-3xl p-8 border border-zinc-800 shadow-xl space-y-6">
+      <div className="bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] text-slate-900 dark:text-white rounded-3xl p-8 border border-slate-200/80 dark:border-white/[0.08] shadow-sm space-y-6">
         <div className="text-center max-w-xl mx-auto space-y-2">
           <span className="text-xs font-bold text-[#cf2e46] uppercase tracking-widest">Transparent UAE Pricing</span>
-          <h2 className="text-2xl font-black">Zero Commissions During Launch</h2>
-          <p className="text-xs text-slate-400 leading-relaxed">
+          <h2 className="text-2xl font-black text-slate-900 dark:text-white">Zero Commissions During Launch</h2>
+          <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
             We are dedicated to building liquidity in the UAE construction and MEP wholesale market. Our standard 1.3% transaction commission is <strong>100% waived</strong> during our founder growth phase.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
           {/* Contractors */}
-          <div className="bg-[#141417] p-6 rounded-2xl border border-zinc-800 space-y-3">
+          <div className="bg-slate-50 dark:bg-[#141417] p-6 rounded-2xl sm:rounded-3xl border border-slate-200/80 dark:border-white/[0.08] space-y-3">
             <span className="text-xs font-extrabold uppercase tracking-wider text-[#cf2e46]">For MEP & Civil Contractors</span>
-            <div className="text-2xl font-black text-white">100% Free Forever</div>
-            <ul className="space-y-2 text-xs text-slate-300">
+            <div className="text-2xl font-black text-slate-900 dark:text-white">100% Free Forever</div>
+            <ul className="space-y-2 text-xs text-slate-600 dark:text-slate-300">
               <li className="flex items-center gap-2">✓ Unlimited RFQ & BOQ Uploads</li>
               <li className="flex items-center gap-2">✓ Fastest 5 Bids Rule (24-Hour SLA)</li>
               <li className="flex items-center gap-2">✓ Direct Supplier Side-by-Side Comparison</li>
@@ -112,16 +112,16 @@ export const HowItWorksPage: React.FC<{ onStartRFQ: () => void }> = ({ onStartRF
           </div>
 
           {/* Suppliers */}
-          <div className="bg-[#141417] p-6 rounded-2xl border border-[#cf2e46]/40 space-y-3 relative overflow-hidden">
+          <div className="bg-slate-50 dark:bg-[#141417] p-6 rounded-2xl sm:rounded-3xl border border-[#cf2e46]/40 space-y-3 relative overflow-hidden">
             <div className="absolute top-3 right-3 bg-[#cf2e46] text-white text-[10px] font-black uppercase px-2 py-0.5 rounded">
               Launch Special
             </div>
             <span className="text-xs font-extrabold uppercase tracking-wider text-[#cf2e46]">For Stockists & Distributors</span>
             <div>
-              <div className="text-2xl font-black text-white">First 3 Months Free</div>
+              <div className="text-2xl font-black text-slate-900 dark:text-white">First 3 Months Free</div>
               <div className="text-xs text-[#cf2e46] font-bold mt-0.5">Then only AED 1 / Day (AED 30 / month)</div>
             </div>
-            <ul className="space-y-2 text-xs text-slate-300">
+            <ul className="space-y-2 text-xs text-slate-600 dark:text-slate-300">
               <li className="flex items-center gap-2">✓ Receive direct matched contractor schedules</li>
               <li className="flex items-center gap-2">✓ 3-Month full access trial with 0 commitments</li>
               <li className="flex items-center gap-2">✓ Standard 1.3% commission waived during growth phase</li>
@@ -131,8 +131,8 @@ export const HowItWorksPage: React.FC<{ onStartRFQ: () => void }> = ({ onStartRF
         </div>
       </div>
 
-      <div className="text-center bg-[#0c0c0e] text-white rounded-3xl p-8 border border-zinc-800 space-y-4">
-        <h3 className="text-xl font-bold">Ready to Experience Faster Procurement?</h3>
+      <div className="text-center bg-slate-900 dark:bg-gradient-to-r dark:from-zinc-950 dark:via-[#0c0c0e] dark:to-black text-white rounded-3xl p-8 border border-slate-800 dark:border-white/[0.08] shadow-sm space-y-4">
+        <h3 className="text-xl font-bold text-white">Ready to Experience Faster Procurement?</h3>
         <p className="text-xs text-slate-300 max-w-md mx-auto">
           Post your first material RFQ and receive 3-5 verified quotations within 24 hours.
         </p>

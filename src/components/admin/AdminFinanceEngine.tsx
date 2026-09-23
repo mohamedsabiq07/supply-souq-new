@@ -155,7 +155,7 @@ export const AdminFinanceEngine: React.FC<AdminFinanceEngineProps> = ({
   return (
     <div className="space-y-6">
       {/* Finance Header Banner */}
-      <div className="p-5 bg-gradient-to-r from-black via-[#0c0c0e] to-black text-white rounded-2xl border border-zinc-800 shadow-xl space-y-4">
+      <div className="p-5 bg-gradient-to-r from-black via-[#0c0c0e] to-black text-white rounded-3xl border border-slate-800 dark:border-white/[0.08] shadow-xl space-y-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2 flex-wrap">

@@ -161,8 +161,8 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
 
       {/* Received Supplier Quotations Showcase Cards */}
       {rfqQuotes.length > 0 ? (
-        <Card className="p-5 border-brand-200 dark:border-zinc-800 bg-gradient-to-b from-brand-50/30 to-white dark:from-brand-950/20 dark:to-[#0c0c0e] space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-brand-100/60 dark:border-zinc-800 pb-3.5">
+        <Card className="p-5 border-brand-200 dark:border-white/[0.08] bg-gradient-to-b from-brand-50/30 to-white dark:from-brand-950/20 dark:to-[#0c0c0e] space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-brand-100/60 dark:border-white/[0.06] pb-3.5">
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-xs font-extrabold text-emerald-800 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800 flex items-center gap-1">
@@ -199,7 +199,7 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
             {visibleQuotes.map((quote, idx) => (
               <div
                 key={quote.id}
-                className="bg-white dark:bg-[#121215] p-4 rounded-xl border border-slate-200 dark:border-zinc-800 hover:border-brand-500 dark:hover:border-zinc-700 shadow-subtle flex flex-col justify-between space-y-3"
+                className="bg-white dark:bg-white/[0.03] p-4 rounded-2xl border border-slate-200/80 dark:border-white/[0.08] hover:border-brand-500 dark:hover:border-white/[0.18] shadow-subtle flex flex-col justify-between space-y-3 transition-colors"
               >
                 <div>
                   <div className="flex items-center justify-between text-[10px] text-slate-400 dark:text-zinc-500 mb-1">
@@ -218,12 +218,12 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
                   <h4 className="text-xs font-bold text-slate-900 dark:text-white line-clamp-1">{quote.supplierCompanyName}</h4>
                   <span className="text-[10px] text-slate-500 dark:text-zinc-400 block">{quote.supplierZone || quote.supplierEmirate}</span>
 
-                  <div className="my-2.5 p-2.5 bg-slate-900 dark:bg-black text-white rounded-lg border border-transparent dark:border-zinc-800">
-                    <span className="text-[9px] text-slate-400 block uppercase font-medium">Quoted Total (5% VAT Incl.)</span>
-                    <span className="text-base font-extrabold font-mono">{formatAED(quote.grandTotalAED)}</span>
+                  <div className="my-2.5 p-2.5 bg-slate-900 dark:bg-white/[0.04] text-white rounded-xl border border-transparent dark:border-white/[0.08]">
+                    <span className="text-[9px] text-slate-400 dark:text-zinc-400 block uppercase font-medium">Quoted Total (5% VAT Incl.)</span>
+                    <span className="text-base font-extrabold font-mono text-amber-300">{formatAED(quote.grandTotalAED)}</span>
                   </div>
 
-                  <div className="text-[11px] text-slate-600 dark:text-zinc-300 space-y-1 bg-slate-50 dark:bg-zinc-900/60 p-2 rounded-lg border border-slate-100 dark:border-zinc-800">
+                  <div className="text-[11px] text-slate-600 dark:text-zinc-300 space-y-1 bg-slate-50/70 dark:bg-white/[0.02] p-2.5 rounded-xl border border-slate-100 dark:border-white/[0.06]">
                     <div className="flex justify-between">
                       <span className="text-slate-400 dark:text-zinc-500">Lead Time:</span>
                       <strong className="text-slate-800 dark:text-zinc-200">{quote.leadTimeDisplay || `${quote.leadTimeDays} Days`}</strong>
@@ -279,7 +279,7 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
           </div>
         </Card>
       ) : (
-        <Card className="p-8 text-center space-y-3 border-dashed border-2 border-emerald-200 dark:border-zinc-800 bg-emerald-50/30 dark:bg-emerald-950/10">
+        <Card className="p-8 text-center space-y-3 border-dashed border-2 border-emerald-200 dark:border-emerald-800/60 bg-emerald-50/30 dark:bg-emerald-950/10">
           <div className="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 flex items-center justify-center mx-auto font-bold">
             <Clock className="w-6 h-6 animate-pulse text-emerald-700 dark:text-emerald-400" />
           </div>
@@ -291,7 +291,7 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
             {rfq.matchedSupplierNames && rfq.matchedSupplierNames.length > 0 && (
               <div className="pt-2 flex flex-wrap justify-center gap-1.5 text-[11px]">
                 {rfq.matchedSupplierNames.map((name, i) => (
-                  <span key={i} className="bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 px-2.5 py-1 rounded-full text-slate-700 dark:text-zinc-200 font-semibold shadow-xs">
+                  <span key={i} className="bg-white dark:bg-white/[0.06] border border-slate-200/80 dark:border-white/[0.08] px-2.5 py-1 rounded-full text-slate-700 dark:text-zinc-200 font-semibold shadow-xs">
                     ✓ {name}
                   </span>
                 ))}
@@ -316,7 +316,7 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
         </CardHeader>
         <CardContent className="p-0 overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 dark:bg-zinc-900 text-slate-600 dark:text-zinc-400 font-semibold border-b border-slate-200 dark:border-zinc-800">
+            <thead className="bg-slate-50 dark:bg-white/[0.03] text-slate-600 dark:text-zinc-400 font-semibold border-b border-slate-200/80 dark:border-white/[0.06]">
               <tr>
                 <th className="p-3">#</th>
                 <th className="p-3 min-w-[200px]">Description</th>
@@ -326,9 +326,9 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
                 <th className="p-3">Unit</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-zinc-800">
+            <tbody className="divide-y divide-slate-100 dark:divide-white/[0.06]">
               {rfq.items.map((item, idx) => (
-                <tr key={item.id || idx} className="hover:bg-slate-50/50 dark:hover:bg-zinc-800/40">
+                <tr key={item.id || idx} className="hover:bg-slate-50/50 dark:hover:bg-white/[0.03]">
                   <td className="p-3 font-mono text-slate-400 dark:text-zinc-500">{idx + 1}</td>
                   <td className="p-3 font-bold text-slate-900 dark:text-white">{item.description}</td>
                   <td className="p-3 text-slate-600 dark:text-zinc-400">{item.specification || 'Standard Spec'}</td>

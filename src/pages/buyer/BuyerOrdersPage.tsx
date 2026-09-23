@@ -62,12 +62,12 @@ export const BuyerOrdersPage: React.FC = () => {
       {myOrders.length > 0 ? (
         <div className="space-y-4">
           {myOrders.map((po) => (
-            <Card key={po.id} className="hover:border-slate-300 dark:hover:border-zinc-700 transition-all">
+            <Card key={po.id} className="hover:border-slate-300 dark:hover:border-white/[0.12] transition-all">
             <CardContent className="p-6">
-              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-4 border-b border-slate-100 dark:border-zinc-800">
+              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-4 border-b border-slate-100 dark:border-white/[0.06]">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="font-mono font-bold text-xs bg-slate-900 dark:bg-black text-white px-2 py-0.5 rounded border border-transparent dark:border-zinc-800">
+                    <span className="font-mono font-bold text-xs bg-slate-900 dark:bg-white text-white dark:text-black px-2.5 py-0.5 rounded-lg border border-transparent">
                       {po.poNumber}
                     </span>
                     <StatusBadge status={po.status} />
@@ -87,7 +87,7 @@ export const BuyerOrdersPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="py-4 my-2 border-b border-slate-100 dark:border-zinc-800">
+              <div className="py-4 my-2 border-b border-slate-100 dark:border-white/[0.06]">
                 <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500 dark:text-zinc-400">
                   <span className={po.status !== 'cancelled' ? 'text-brand-600 dark:text-brand-400 font-bold' : ''}>1. PO Issued</span>
                   <span className={['accepted', 'processing', 'dispatched', 'delivered', 'completed'].includes(po.status) ? 'text-brand-600 dark:text-brand-400 font-bold' : ''}>2. Accepted</span>
@@ -113,7 +113,7 @@ export const BuyerOrdersPage: React.FC = () => {
               </div>
 
               {po.trackingNotes && (
-                <div className="p-3 bg-slate-50 dark:bg-zinc-900/60 rounded-lg text-xs text-slate-700 dark:text-zinc-300 mt-3 border border-slate-200 dark:border-zinc-800">
+                <div className="p-3.5 bg-slate-50 dark:bg-white/[0.02] rounded-xl text-xs text-slate-700 dark:text-zinc-300 mt-3 border border-slate-200/80 dark:border-white/[0.06]">
                   <strong className="text-slate-900 dark:text-white block mb-0.5">Delivery Notes / Dispatch Log:</strong>
                   {po.trackingNotes}
                 </div>
@@ -151,7 +151,7 @@ export const BuyerOrdersPage: React.FC = () => {
         ))}
       </div>
     ) : (
-      <Card className="p-12 text-center space-y-4 border-dashed border-2 border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-[#0c0c0e]">
+      <Card className="p-12 text-center space-y-4 border-dashed border-2 border-slate-200 dark:border-white/[0.08] bg-slate-50/50 dark:bg-white/[0.02]">
         <div className="w-12 h-12 rounded-2xl bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 flex items-center justify-center mx-auto font-bold border border-brand-200 dark:border-brand-800">
           <Package className="w-6 h-6" />
         </div>
@@ -173,19 +173,19 @@ export const BuyerOrdersPage: React.FC = () => {
       >
         {selectedPO && (
           <div className="space-y-4 text-xs">
-            <div className="p-4 bg-slate-900 dark:bg-black text-white rounded-xl flex justify-between items-center border border-transparent dark:border-zinc-800">
+            <div className="p-4 bg-slate-900 dark:bg-black text-white rounded-2xl flex justify-between items-center border border-slate-800 dark:border-white/[0.08]">
               <div>
                 <h4 className="text-lg font-bold">SupplySouq B2B Purchase Order</h4>
                 <p className="text-slate-400 dark:text-zinc-500">{selectedPO.poNumber}</p>
               </div>
               <div className="text-right">
-                <span className="text-xs text-emerald-400 font-bold bg-emerald-950 px-2.5 py-1 rounded border border-emerald-800">
+                <span className="text-xs text-emerald-400 font-bold bg-emerald-950 px-2.5 py-1 rounded-lg border border-emerald-800">
                   5% UAE VAT Validated
                 </span>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 p-3 bg-slate-50 dark:bg-zinc-900/60 rounded-lg border border-slate-100 dark:border-zinc-800">
+            <div className="grid grid-cols-2 gap-4 p-4 bg-slate-50 dark:bg-white/[0.02] rounded-2xl border border-slate-100 dark:border-white/[0.06]">
               <div>
                 <strong className="block text-slate-500 dark:text-zinc-400">Buyer Entity:</strong>
                 <p className="font-bold text-slate-900 dark:text-white">{selectedPO.buyerCompanyName}</p>
@@ -198,33 +198,35 @@ export const BuyerOrdersPage: React.FC = () => {
               </div>
             </div>
 
-            <table className="w-full text-left text-xs border border-slate-200 dark:border-zinc-800">
-              <thead className="bg-slate-100 dark:bg-zinc-900 text-slate-900 dark:text-white font-bold border-b border-slate-200 dark:border-zinc-800">
-                <tr>
-                  <th className="p-2">Item</th>
-                  <th className="p-2">Brand</th>
-                  <th className="p-2">Qty</th>
-                  <th className="p-2 text-right">Unit AED</th>
-                  <th className="p-2 text-right">Total AED</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-zinc-800">
-                {selectedPO.items?.map((item, idx) => (
-                  <tr key={idx} className="hover:bg-slate-50/50 dark:hover:bg-zinc-800/40">
-                    <td className="p-2 font-medium text-slate-900 dark:text-white">{item.itemDescription}</td>
-                    <td className="p-2 text-slate-600 dark:text-zinc-400">{item.offeredBrand}</td>
-                    <td className="p-2 font-bold text-slate-900 dark:text-white">{item.quantity} {item.unit}</td>
-                    <td className="p-2 text-right text-slate-700 dark:text-zinc-300">{formatAED(item.unitPriceAED, true)}</td>
-                    <td className="p-2 text-right font-bold text-slate-900 dark:text-white">{formatAED(item.totalPriceAED)}</td>
+            <div className="border border-slate-200 dark:border-white/[0.08] rounded-2xl overflow-hidden shadow-2xs">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-slate-50 dark:bg-white/[0.03] text-slate-900 dark:text-white font-bold border-b border-slate-200 dark:border-white/[0.06]">
+                  <tr>
+                    <th className="p-2.5">Item</th>
+                    <th className="p-2.5">Brand</th>
+                    <th className="p-2.5">Qty</th>
+                    <th className="p-2.5 text-right">Unit AED</th>
+                    <th className="p-2.5 text-right">Total AED</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-slate-100 dark:divide-white/[0.05]">
+                  {selectedPO.items?.map((item, idx) => (
+                    <tr key={idx} className="hover:bg-slate-50/50 dark:hover:bg-white/[0.02]">
+                      <td className="p-2.5 font-medium text-slate-900 dark:text-white">{item.itemDescription}</td>
+                      <td className="p-2.5 text-slate-600 dark:text-zinc-400">{item.offeredBrand}</td>
+                      <td className="p-2.5 font-bold text-slate-900 dark:text-white">{item.quantity} {item.unit}</td>
+                      <td className="p-2.5 text-right text-slate-700 dark:text-zinc-300">{formatAED(item.unitPriceAED, true)}</td>
+                      <td className="p-2.5 text-right font-bold text-slate-900 dark:text-white">{formatAED(item.totalPriceAED)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
-            <div className="p-3 bg-slate-50 dark:bg-zinc-900/60 rounded-lg space-y-1 text-right border border-slate-100 dark:border-zinc-800 text-slate-700 dark:text-zinc-300">
+            <div className="p-4 bg-slate-50 dark:bg-white/[0.02] rounded-2xl space-y-1 text-right border border-slate-100 dark:border-white/[0.06] text-slate-700 dark:text-zinc-300">
               <p>Subtotal: <strong className="text-slate-900 dark:text-white">{formatAED(selectedPO.subtotalAED)}</strong></p>
               <p>5% UAE VAT: <strong className="text-slate-900 dark:text-white">{formatAED(selectedPO.vatAED)}</strong></p>
-              <p className="text-sm font-extrabold text-slate-900 dark:text-white pt-1 border-t border-slate-200 dark:border-zinc-800">
+              <p className="text-sm font-extrabold text-slate-900 dark:text-white pt-1 border-t border-slate-200 dark:border-white/[0.06]">
                 Total Purchase Order Value: {formatAED(selectedPO.totalAmountAED)}
               </p>
             </div>
@@ -248,7 +250,7 @@ export const BuyerOrdersPage: React.FC = () => {
                   type="button"
                   onClick={() => setRating(star)}
                   className={`p-2 text-base rounded-lg border ${
-                    rating >= star ? 'bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 border-amber-300 dark:border-amber-700 font-bold' : 'bg-slate-50 dark:bg-zinc-800 text-slate-400 dark:text-zinc-500 border-slate-200 dark:border-zinc-700'
+                    rating >= star ? 'bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 border-amber-300 dark:border-amber-700 font-bold' : 'bg-slate-50 dark:bg-white/[0.04] text-slate-400 dark:text-zinc-500 border-slate-200 dark:border-white/[0.08]'
                   }`}
                 >
                   ★ {star}
@@ -263,7 +265,7 @@ export const BuyerOrdersPage: React.FC = () => {
               <select
                 value={deliverySpeedRating}
                 onChange={(e) => setDeliverySpeedRating(Number(e.target.value))}
-                className="w-full p-2 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-[#111114] text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-brand-500"
+                className="w-full p-2 rounded-lg border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#111114] text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-brand-500"
               >
                 <option value={5}>5 - On Time / Early</option>
                 <option value={4}>4 - Minor Delay</option>
@@ -277,7 +279,7 @@ export const BuyerOrdersPage: React.FC = () => {
               <select
                 value={materialQualityRating}
                 onChange={(e) => setMaterialQualityRating(Number(e.target.value))}
-                className="w-full p-2 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-[#111114] text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-brand-500"
+                className="w-full p-2 rounded-lg border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#111114] text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-brand-500"
               >
                 <option value={5}>5 - Exact Spec & Certified</option>
                 <option value={4}>4 - Approved Equivalent</option>
@@ -292,7 +294,7 @@ export const BuyerOrdersPage: React.FC = () => {
               rows={3}
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              className="w-full p-2 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-[#111114] text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500"
+              className="w-full p-2 rounded-lg border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#111114] text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500"
             />
           </div>
 
