@@ -105,21 +105,10 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
   return (
     <div className="bg-[#f4f4f6] dark:bg-black text-slate-900 dark:text-zinc-100 selection:bg-[#cf2e46] selection:text-white overflow-x-clip font-sans transition-colors duration-200">
       
-      {/* 1. HERO SECTION - ARCHITECTURAL STUDIO GRAY & NEIDEN GRID */}
-      <section className="relative pt-16 sm:pt-24 pb-20 sm:pb-32 overflow-hidden border-b border-slate-200/80 dark:border-white/[0.08] bg-[#f4f4f6] dark:bg-black">
-        {/* Architectural Column Guide Lines (Neiden style) */}
-        <div className="absolute inset-0 pointer-events-none max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between z-0">
-          <div className="w-px h-full bg-slate-300/40 dark:bg-white/[0.05]" />
-          <div className="w-px h-full bg-slate-300/30 dark:bg-white/[0.03] hidden md:block" />
-          <div className="w-px h-full bg-slate-300/30 dark:bg-white/[0.03] hidden lg:block" />
-          <div className="w-px h-full bg-slate-300/40 dark:bg-white/[0.05]" />
-        </div>
-
-        {/* Subtle Architectural Grid with graceful radial mask */}
-        <div className="absolute inset-0 architectural-grid opacity-70 dark:opacity-30 [mask-image:radial-gradient(ellipse_70%_70%_at_50%_20%,black_30%,transparent_90%)] pointer-events-none z-0" />
-
-        {/* Dynamic Interactive Background Layer & Switcher Dock */}
-        <DynamicBackgroundHost className="z-0" />
+      {/* 1. HERO SECTION - CLEAN CANVAS WITH 100% CAPACITY SUPPLYMESH */}
+      <section className="relative pt-16 sm:pt-24 pb-20 sm:pb-32 overflow-hidden bg-[#f4f4f6] dark:bg-black">
+        {/* Dynamic Interactive Background Layer - SupplyMesh at 100% Capacity */}
+        <DynamicBackgroundHost className="z-0" defaultType="mesh" opacity={1.0} showControlDock={false} />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-4xl mx-auto text-center space-y-6">
@@ -233,7 +222,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
       <CinematicScrollSection setCurrentView={setCurrentView} />
 
       {/* 2. PARTNER / STOCKIST BRAND MARQUEE - RICH CONCRETE GRAY BAND */}
-      <section className="py-12 border-b border-slate-200/80 dark:border-white/[0.08] bg-[#eceef1] dark:bg-[#080809] relative overflow-hidden">
+      <section className="py-12 bg-[#eceef1] dark:bg-[#080809] relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-6">
           <p className="text-xs uppercase tracking-widest text-slate-600 dark:text-zinc-400 font-bold font-mono">
             Trusted by 250+ UAE Contractors &amp; Certified Stockists across Dubai, Sharjah &amp; Abu Dhabi
@@ -262,9 +251,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
 
 
       {/* 4. THE SOLUTION BENTO GRID - RICH CONCRETE GRAY BAND */}
-      <section className="py-20 sm:py-28 border-b border-slate-200/80 dark:border-white/[0.08] bg-[#eceef1] dark:bg-[#080809] relative overflow-hidden">
-        {/* Subtle Architectural grid texture */}
-        <div className="absolute inset-0 architectural-grid-subtle opacity-40 dark:opacity-20 pointer-events-none" />
+      <section className="py-20 sm:py-28 bg-[#eceef1] dark:bg-[#080809] relative overflow-hidden">
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center space-y-3 mb-16 max-w-3xl mx-auto">
@@ -435,13 +422,6 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
 
       {/* 5. HOW IT WORKS 3-STEP MODERN WORKFLOW */}
       <section className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative bg-[#f4f4f6] dark:bg-black">
-        {/* Subtle column guide lines */}
-        <div className="absolute inset-0 pointer-events-none max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between z-0">
-          <div className="w-px h-full bg-slate-300/30 dark:bg-zinc-800/40" />
-          <div className="w-px h-full bg-slate-300/20 dark:bg-zinc-800/30 hidden md:block" />
-          <div className="w-px h-full bg-slate-300/20 dark:bg-zinc-800/30 hidden lg:block" />
-          <div className="w-px h-full bg-slate-300/30 dark:bg-zinc-800/40" />
-        </div>
 
         <div className="text-center space-y-3 mb-16 max-w-3xl mx-auto relative z-10">
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white dark:bg-white/[0.04] text-[#cf2e46] border border-slate-200/80 dark:border-white/[0.08] shadow-2xs">
@@ -512,7 +492,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
       </section>
 
       {/* 6. BIG TELEMETRY & IMPACT STATS */}
-      <section className="py-16 border-t border-b border-slate-800/80 dark:border-white/[0.08] bg-[#0a0a0a] text-white">
+      <section className="py-16 bg-[#0a0a0a] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
             <div className="space-y-1">
@@ -563,13 +543,6 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
 
       {/* 7. CONTRACTOR & STOCKIST REVIEWS */}
       <section className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative bg-[#f4f4f6] dark:bg-black">
-        {/* Subtle column guide lines */}
-        <div className="absolute inset-0 pointer-events-none max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between z-0">
-          <div className="w-px h-full bg-slate-300/30 dark:bg-white/[0.04]" />
-          <div className="w-px h-full bg-slate-300/20 dark:bg-white/[0.02] hidden md:block" />
-          <div className="w-px h-full bg-slate-300/20 dark:bg-white/[0.02] hidden lg:block" />
-          <div className="w-px h-full bg-slate-300/30 dark:bg-white/[0.04]" />
-        </div>
 
         <div className="text-center space-y-3 mb-16 max-w-3xl mx-auto relative z-10">
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white dark:bg-white/[0.04] text-[#cf2e46] border border-slate-200 dark:border-white/[0.08] shadow-2xs">
@@ -678,7 +651,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
       </section>
 
       {/* 8. TRANSPARENT LAUNCH PRICING SECTION - RICH CONCRETE GRAY BAND */}
-      <section id="pricing-section" className="py-20 sm:py-28 border-t border-b border-slate-200/80 dark:border-white/[0.08] bg-[#eceef1] dark:bg-[#080809] relative">
+      <section id="pricing-section" className="py-20 sm:py-28 bg-[#eceef1] dark:bg-[#080809] relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-3 mb-16 max-w-3xl mx-auto">
             <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white dark:bg-white/[0.04] text-[#cf2e46] border border-slate-200/80 dark:border-white/[0.08] shadow-2xs">
@@ -935,7 +908,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
       </section>
 
       {/* 10. HIGH-IMPACT BOTTOM CLOSING CTA BANNER */}
-      <section className="py-20 sm:py-28 border-t border-slate-800 relative overflow-hidden bg-[#0a0a0a] text-white">
+      <section className="py-20 sm:py-28 relative overflow-hidden bg-[#0a0a0a] text-white">
         {/* Radial ambient glow */}
         <div className="absolute -bottom-40 left-1/2 -translate-x-1/2 w-[850px] h-[400px] bg-[#cf2e46]/20 blur-[140px] pointer-events-none" />
 

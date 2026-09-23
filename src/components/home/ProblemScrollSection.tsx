@@ -156,14 +156,7 @@ export const ProblemScrollSection: React.FC = () => {
   };
 
   return (
-    <section className="relative bg-[#f4f4f6] dark:bg-black border-b border-slate-200/80 dark:border-white/[0.08] pt-20 sm:pt-28 pb-32">
-      {/* Background Architectural Column Guide Lines (Neiden Studio Aesthetic) */}
-      <div className="absolute inset-0 pointer-events-none max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between z-0">
-        <div className="w-px h-full bg-slate-300/35 dark:bg-white/[0.04]" />
-        <div className="w-px h-full bg-slate-300/20 dark:bg-white/[0.02] hidden md:block" />
-        <div className="w-px h-full bg-slate-300/20 dark:bg-white/[0.02] hidden lg:block" />
-        <div className="w-px h-full bg-slate-300/35 dark:bg-white/[0.04]" />
-      </div>
+    <section className="relative bg-[#f4f4f6] dark:bg-black pt-20 sm:pt-28 pb-32">
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         

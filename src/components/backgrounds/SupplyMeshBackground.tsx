@@ -30,7 +30,7 @@ interface Packet {
 
 export const SupplyMeshBackground: React.FC<SupplyMeshBackgroundProps> = ({
   className = '',
-  opacity = 0.9,
+  opacity = 1.0,
   interactive = true,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -83,11 +83,11 @@ export const SupplyMeshBackground: React.FC<SupplyMeshBackgroundProps> = ({
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseleave', handleMouseLeave);
 
-    // 1. Generate Multi-Layered Nodes
-    const totalCount = Math.min(Math.floor((width * height) / 12500) || 55, 95);
+    // 1. Generate Multi-Layered Nodes (100% Full Capacity)
+    const totalCount = Math.min(Math.floor((width * height) / 10500) || 65, 110);
     const nodes: Node[] = Array.from({ length: totalCount }, (_, i) => {
       const isForeground = i % 3 !== 0;
-      const isHub = isForeground && Math.random() < 0.16;
+      const isHub = isForeground && Math.random() < 0.18;
       const rx = Math.random() * width;
       const ry = Math.random() * height;
 
@@ -96,10 +96,10 @@ export const SupplyMeshBackground: React.FC<SupplyMeshBackgroundProps> = ({
         y: ry,
         baseX: rx,
         baseY: ry,
-        vx: (Math.random() - 0.5) * (isForeground ? 0.35 : 0.18),
-        vy: (Math.random() - 0.5) * (isForeground ? 0.35 : 0.18),
+        vx: (Math.random() - 0.5) * (isForeground ? 0.38 : 0.2),
+        vy: (Math.random() - 0.5) * (isForeground ? 0.38 : 0.2),
         layer: isForeground ? 'fore' : 'back',
-        baseRadius: isHub ? 3.2 : isForeground ? 1.8 : 1.1,
+        baseRadius: isHub ? 3.4 : isForeground ? 1.9 : 1.1,
         isHub,
         pulsePhase: Math.random() * Math.PI * 2,
       };
@@ -107,7 +107,7 @@ export const SupplyMeshBackground: React.FC<SupplyMeshBackgroundProps> = ({
 
     // 2. Active RFQ Data Packets traveling along mesh links
     const packets: Packet[] = [];
-    const maxPackets = 12;
+    const maxPackets = 16;
 
     const spawnPacket = () => {
       if (packets.length >= maxPackets) return;
@@ -309,7 +309,7 @@ export const SupplyMeshBackground: React.FC<SupplyMeshBackgroundProps> = ({
 
   return (
     <div
-      className={`absolute inset-0 pointer-events-none select-none overflow-hidden transition-opacity duration-500 [mask-image:radial-gradient(ellipse_85%_75%_at_50%_35%,black_40%,transparent_90%)] ${className}`}
+      className={`absolute inset-0 pointer-events-none select-none overflow-hidden transition-opacity duration-500 [mask-image:radial-gradient(ellipse_95%_85%_at_50%_35%,black_50%,transparent_98%)] ${className}`}
       style={{ opacity }}
       aria-hidden="true"
     >

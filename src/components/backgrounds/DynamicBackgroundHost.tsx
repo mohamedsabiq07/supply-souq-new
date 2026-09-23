@@ -10,20 +10,24 @@ interface DynamicBackgroundHostProps {
   className?: string;
   defaultType?: BackgroundType;
   showControlDock?: boolean;
+  opacity?: number;
 }
 
 export const DynamicBackgroundHost: React.FC<DynamicBackgroundHostProps> = ({
   className = '',
-  defaultType = 'mesh', // Picked SupplyMesh as the premier default
-  showControlDock = true,
+  defaultType = 'mesh', // SupplyMesh default at 100% capacity
+  showControlDock = false,
+  opacity: propsOpacity,
 }) => {
   const [selectedBg, setSelectedBg] = useState<BackgroundType>(() => {
+    if (!showControlDock && defaultType) return defaultType;
     const saved = localStorage.getItem('preview_bg_type') as BackgroundType;
     return saved === 'mesh' || saved === 'waves' || saved === 'none' ? saved : defaultType;
   });
   const [opacity, setOpacity] = useState<number>(() => {
+    if (propsOpacity !== undefined) return propsOpacity;
     const saved = localStorage.getItem('preview_bg_opacity');
-    return saved ? parseFloat(saved) : 0.9;
+    return saved ? parseFloat(saved) : 1.0;
   });
   const [isDockOpen, setIsDockOpen] = useState<boolean>(true);
   const { isDark, toggleTheme } = useTheme();
@@ -36,10 +40,13 @@ export const DynamicBackgroundHost: React.FC<DynamicBackgroundHostProps> = ({
     localStorage.setItem('preview_bg_opacity', opacity.toString());
   }, [opacity]);
 
+  const effectiveOpacity = propsOpacity !== undefined ? propsOpacity : opacity;
+  const effectiveBg = !showControlDock && defaultType ? defaultType : selectedBg;
+
   const bgOptions: { id: BackgroundType; name: string; tag: string; desc: string }[] = [
     {
       id: 'mesh',
-      name: 'Supply Mesh (Recommended)',
+      name: 'Supply Mesh (Active)',
       tag: 'B2B Network',
       desc: 'UAE procurement network with traveling RFQ light packets & interactive stockist hubs',
     },
@@ -61,8 +68,8 @@ export const DynamicBackgroundHost: React.FC<DynamicBackgroundHostProps> = ({
     <>
       {/* 1. Background Renderer Container */}
       <div className={`absolute inset-0 pointer-events-none select-none overflow-hidden z-0 ${className}`}>
-        {selectedBg === 'mesh' && <SupplyMeshBackground opacity={opacity} />}
-        {selectedBg === 'waves' && <TopographicWaveBackground opacity={opacity} />}
+        {effectiveBg === 'mesh' && <SupplyMeshBackground opacity={effectiveOpacity} />}
+        {effectiveBg === 'waves' && <TopographicWaveBackground opacity={effectiveOpacity} />}
       </div>
 
       {/* 2. Interactive Switcher Dock (Compact, Luxury Floating Pill) */}
