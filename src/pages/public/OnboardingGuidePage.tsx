@@ -42,7 +42,7 @@ export const OnboardingGuidePage: React.FC<OnboardingGuidePageProps> = ({
       <div className="text-center max-w-3xl mx-auto space-y-3">
         <div className="inline-flex items-center gap-1.5 bg-brand-50 dark:bg-brand-950/40 text-brand-700 dark:text-brand-300 border border-brand-200 dark:border-brand-800/60 px-3 py-1 rounded-full text-xs font-bold">
           <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-          <span>SupplySouq Standard Operating Procedure (SOP) & Platform Workflow</span>
+          <span>ProcureSouq Standard Operating Procedure (SOP) & Platform Workflow</span>
         </div>
         <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight cursor-default select-none">
           <VariableFontCursorProximity
@@ -190,7 +190,7 @@ export const OnboardingGuidePage: React.FC<OnboardingGuidePageProps> = ({
               <div className="bg-slate-50/70 dark:bg-white/[0.03] p-5 rounded-2xl border border-slate-200/80 dark:border-white/[0.06] space-y-2">
                 <span className="font-bold text-sm text-slate-900 dark:text-white block">1. Transparent Multi-Stockist Distribution</span>
                 <p className="leading-relaxed text-slate-600 dark:text-zinc-400">
-                  When you submit an RFQ, SupplySouq automatically parses your line items and alerts verified authorized stockists in your material category. No middlemen or broker margins are added.
+                  When you submit an RFQ, ProcureSouq automatically parses your line items and alerts verified authorized stockists in your material category. No middlemen or broker margins are added.
                 </p>
               </div>
 
@@ -226,8 +226,8 @@ export const OnboardingGuidePage: React.FC<OnboardingGuidePageProps> = ({
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-600 dark:text-zinc-300">
                 <div className="p-4 bg-slate-50/70 dark:bg-white/[0.02] rounded-2xl border border-slate-200/80 dark:border-white/[0.06] space-y-1.5 shadow-2xs">
-                  <strong className="text-slate-900 dark:text-white block font-bold">Is SupplySouq free for contractors and MEP buyers?</strong>
-                  <p className="text-slate-600 dark:text-zinc-400 leading-relaxed">Yes! Buyers use SupplySouq 100% free of charge to post RFQs and receive up to 5 live quotations per requirement.</p>
+                  <strong className="text-slate-900 dark:text-white block font-bold">Is ProcureSouq free for contractors and MEP buyers?</strong>
+                  <p className="text-slate-600 dark:text-zinc-400 leading-relaxed">Yes! Buyers use ProcureSouq 100% free of charge to post RFQs and receive up to 5 live quotations per requirement.</p>
                 </div>
                 <div className="p-4 bg-slate-50/70 dark:bg-white/[0.02] rounded-2xl border border-slate-200/80 dark:border-white/[0.06] space-y-1.5 shadow-2xs">
                   <strong className="text-slate-900 dark:text-white block font-bold">How are suppliers vetted on the platform?</strong>

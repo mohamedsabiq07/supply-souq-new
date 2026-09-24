@@ -109,7 +109,7 @@ export const InvoiceAuditPage: React.FC<InvoiceAuditPageProps> = ({ onStartRFQWi
             </div>
             <h3 className="text-base font-bold text-slate-900 dark:text-white">Switch & Lock In Savings</h3>
             <p className="text-xs text-slate-500 dark:text-zinc-400 leading-relaxed">
-              Convert the audited item list into a live SupplySouq RFQ with 1-click to receive binding competitive offers within 24 hours.
+              Convert the audited item list into a live ProcureSouq RFQ with 1-click to receive binding competitive offers within 24 hours.
             </p>
           </CardContent>
         </Card>

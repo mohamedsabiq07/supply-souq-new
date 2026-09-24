@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
+import { BrandLogo } from '../../components/common/BrandLogo';
 import { Emirate } from '../../types';
 import { 
   Building2, 
@@ -165,12 +166,16 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ onSuccess, onNavigat
     <div className="max-w-2xl mx-auto py-10 px-4">
       <Card className="p-6 sm:p-8 space-y-6 shadow-xl border-slate-200/80 dark:border-white/[0.08]">
         {/* Header */}
-        <div className="text-center space-y-2">
+        <div className="text-center space-y-3 flex flex-col items-center">
+          <div className="pb-1">
+            <BrandLogo variant="glow" size="lg" className="hidden dark:flex mx-auto" />
+            <BrandLogo variant="full" size="lg" className="flex dark:hidden mx-auto" />
+          </div>
           <span className="inline-flex items-center gap-1 bg-brand-50 dark:bg-brand-950/40 text-brand-700 dark:text-brand-300 text-xs font-bold px-3 py-1 rounded-full border border-brand-200 dark:border-brand-800/60">
             <ShieldCheck className="w-4 h-4 text-brand-600 dark:text-brand-400" /> UAE Verified B2B Network (Dubai • Sharjah • Ajman)
           </span>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-            Create Your Corporate Account
+            Create Your ProcureSouq Account
           </h2>
           <p className="text-xs sm:text-sm text-slate-500 dark:text-zinc-400">
             Connect directly with verified UAE electrical, plumbing, HVAC & MEP stockists and contractors.

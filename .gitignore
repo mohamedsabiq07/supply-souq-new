@@ -31,3 +31,10 @@ dist-ssr
 
 # Superdesign
 .superdesign/
+
+# Local archives and scratch
+*.zip
+output/
+tmp/
+procure-souq-logo-kit/
+

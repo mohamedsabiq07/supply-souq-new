@@ -1,5 +1,6 @@
 import React from 'react';
 import { Layers, ShieldCheck, MapPin, Phone, Mail, CheckCircle2 } from 'lucide-react';
+import { BrandLogo } from '../common/BrandLogo';
 
 interface FooterProps {
   setCurrentView: (view: string) => void;
@@ -13,13 +14,8 @@ export const Footer: React.FC<FooterProps> = ({ setCurrentView }) => {
           
           {/* Col 1: Brand & UAE Mission */}
           <div className="lg:col-span-2 space-y-4">
-            <div className="flex items-center gap-2.5">
-              <div className="w-10 h-10 rounded-xl bg-white dark:bg-white/[0.04] border border-slate-200/80 dark:border-white/[0.08] flex items-center justify-center text-[#cf2e46] shadow-2xs">
-                <Layers className="w-5 h-5 text-[#cf2e46]" />
-              </div>
-              <span className="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                Supply<span className="text-[#cf2e46]">Souq</span>
-              </span>
+            <div className="cursor-pointer" onClick={() => setCurrentView('home')}>
+              <BrandLogo variant="full" size="md" />
             </div>
             <p className="text-xs text-slate-600 dark:text-zinc-400 leading-relaxed max-w-sm">
               The digital RFQ and multi-supplier quotation comparison network for the UAE construction and engineering sector. Streamlining procurement across Dubai, Sharjah, Abu Dhabi and the Northern Emirates.
@@ -135,7 +131,7 @@ export const Footer: React.FC<FooterProps> = ({ setCurrentView }) => {
         </div>
 
         <div className="pt-8 border-t border-slate-200/80 dark:border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-zinc-400">
-          <p>© 2026 SupplySouq FZCO. All rights reserved. UAE B2B Procurement Technology.</p>
+          <p>© 2026 ProcureSouq FZCO. All rights reserved. UAE B2B Procurement Technology.</p>
           <div className="flex items-center gap-4">
             <span className="hover:text-slate-900 dark:hover:text-white cursor-pointer">Terms of Procurement</span>
             <span>•</span>

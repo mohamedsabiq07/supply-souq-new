@@ -1,0 +1,29 @@
+PROCURE Souq - BLACK AND WHITE TRANSPARENT LOGOS
+
+BLACK folder: use on white or other light backgrounds.
+WHITE folder: use on black or other dark backgrounds.
+
+These are the clean logos with no glow and no background box.
+PNG and WebP contain real alpha transparency. SVG and EPS contain
+outlined artwork with no painted background.
+
+WHICH FILE TO USE
+- SVG: websites, design tools and scaling to any size.
+- PNG 8000: high-resolution 8000 x 2400 logo for general use.
+- PNG 4096: smaller everyday logo file for documents and uploads.
+- WebP: transparent web image.
+- EPS: scalable vector for print and production software.
+- Icon: compact PS monogram for apps, profile pictures and small spaces.
+
+Keep the logo's proportions when resizing.
+Choose the color that contrasts with the background. Black lettering
+will disappear on black; white lettering will disappear on white.
+For photos or mixed backgrounds, place the logo over an uncluttered
+area with enough contrast.
+
+A white transparent logo may look blank in a white image viewer.
+It is visible when placed on a dark background.
+
+JPEG is not included in this transparent bundle because it cannot
+retain transparency. Normal solid-background JPGs and all other
+formats remain in the complete PROCURE-Souq-Logo-Kit.zip.

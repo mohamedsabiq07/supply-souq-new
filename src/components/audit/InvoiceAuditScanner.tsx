@@ -320,7 +320,7 @@ export const InvoiceAuditScanner: React.FC<InvoiceAuditScannerProps> = ({ onSwit
 
             <Card className="border-rose-200 dark:border-rose-900/50 bg-rose-50/40 dark:bg-rose-950/20">
               <CardContent className="p-5 space-y-1">
-                <span className="text-xs font-semibold text-rose-800 dark:text-rose-400">SupplySouq Verified Price</span>
+                <span className="text-xs font-semibold text-rose-800 dark:text-rose-400">ProcureSouq Verified Price</span>
                 <div className="text-2xl font-extrabold text-rose-950 dark:text-rose-200">
                   {formatAED(activeInvoice.supplySouqTotalAED)}
                 </div>
@@ -384,7 +384,7 @@ export const InvoiceAuditScanner: React.FC<InvoiceAuditScannerProps> = ({ onSwit
                     <th className="p-3">Electrical Spec & Standards</th>
                     <th className="p-3">Qty</th>
                     <th className="p-3 text-right">You Paid</th>
-                    <th className="p-3 text-right">SupplySouq Price</th>
+                    <th className="p-3 text-right">ProcureSouq Price</th>
                     <th className="p-3 text-right">Overpaid / Savings</th>
                     <th className="p-3">Verified Stockist Match</th>
                   </tr>
@@ -438,7 +438,7 @@ export const InvoiceAuditScanner: React.FC<InvoiceAuditScannerProps> = ({ onSwit
                 Ready to save {formatAED(activeInvoice.totalSavingsAED)} on your electrical procurement?
               </h4>
               <p className="text-xs text-zinc-300">
-                SupplySouq broadcasts this bill of quantities to authorized UAE electrical stockists with guaranteed DEWA test certificates and 24h quotation turnaround.
+                ProcureSouq broadcasts this bill of quantities to authorized UAE electrical stockists with guaranteed DEWA test certificates and 24h quotation turnaround.
               </p>
             </div>
 

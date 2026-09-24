@@ -279,7 +279,7 @@ const AppContent: React.FC = () => {
               Ghost Mode Active
             </span>
             <span>
-              Operating SupplySouq as: <strong className="underline">{impersonatedUser.fullName}</strong> ({impersonatedUser.companyName} • <span className="capitalize">{impersonatedUser.role}</span>)
+              Operating ProcureSouq as: <strong className="underline">{impersonatedUser.fullName}</strong> ({impersonatedUser.companyName} • <span className="capitalize">{impersonatedUser.role}</span>)
             </span>
           </div>
           <button

@@ -3,6 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
 import { NotFoundPage } from '../public/NotFoundPage';
+import { BrandLogo } from '../../components/common/BrandLogo';
 import { UserRole } from '../../types';
 import { 
   Layers, 
@@ -225,12 +226,13 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigateToReg
   return (
     <div className="max-w-md mx-auto py-10 px-4">
       <Card className="p-8 space-y-6 shadow-xl border-slate-200/80 dark:border-white/[0.08]">
-        <div className="text-center space-y-2">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-600 to-zinc-950 flex items-center justify-center text-white mx-auto shadow-md shadow-brand-500/20">
-            <Layers className="w-6 h-6 text-amber-400" />
+        <div className="text-center space-y-3 flex flex-col items-center">
+          <div className="pb-1">
+            <BrandLogo variant="glow" size="lg" className="hidden dark:flex mx-auto" />
+            <BrandLogo variant="full" size="lg" className="flex dark:hidden mx-auto" />
           </div>
           <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-            {isActuallyAdmin ? 'Operations Desk Login' : 'Login to SupplySouq'}
+            {isActuallyAdmin ? 'Operations Desk Login' : 'Login to ProcureSouq'}
           </h2>
           <p className="text-xs text-slate-500 dark:text-zinc-400">
             {isActuallyAdmin

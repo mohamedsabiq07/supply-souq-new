@@ -10,6 +10,7 @@ import { AnimatedH3, ProximityText } from '../../components/ui/AnimatedHeading';
 import VariableFontCursorProximity from '../../components/fancy/text/variable-font-cursor-proximity';
 import { DynamicBackgroundHost } from '../../components/backgrounds/DynamicBackgroundHost';
 import { MetalFx } from 'metal-fx';
+import { BrandLogo } from '../../components/common/BrandLogo';
 import {
   Zap,
   Building2,
@@ -81,7 +82,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
       a: 'When an RFQ is posted, our matching engine broadcasts it to verified UAE stockists. Only the first 5 stockists who submit compliant, itemized prices are admitted. This creates keen price competition for the contractor while guaranteeing stockists that their quotation won\'t be buried in a sea of 50 competitors.'
     },
     {
-      q: 'How much does SupplySouq cost for contractors and suppliers?',
+      q: 'How much does ProcureSouq cost for contractors and suppliers?',
       a: 'For Contractors & Engineers: 100% Free Forever. Post unlimited RFQs, receive 5 verified quotes, and compare side-by-side with zero fees. For Verified Stockists: Enjoy a 3-Month Free Trial with 0% platform commission during launch. After 3 months, it is only AED 1 per day (AED 30/month) for unlimited RFQ quoting.'
     },
     {
@@ -94,7 +95,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
     },
     {
       q: 'How is site delivery and 5% UAE VAT handled?',
-      a: 'All quotations clearly display unit prices, total VAT (5%), and logistics terms (either Supplier Fleet or SupplySouq Managed Logistics with 1.5T Pickups or 7T Hiab cranes). Official FTA-compliant tax invoices and digital Purchase Orders are generated directly in the platform.'
+      a: 'All quotations clearly display unit prices, total VAT (5%), and logistics terms (either Supplier Fleet or ProcureSouq Managed Logistics with 1.5T Pickups or 7T Hiab cranes). Official FTA-compliant tax invoices and digital Purchase Orders are generated directly in the platform.'
     },
     {
       q: 'Which UAE areas are covered for direct job site dispatch?',
@@ -426,11 +427,11 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
         <div className="text-center space-y-3 mb-16 max-w-3xl mx-auto relative z-10">
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white dark:bg-white/[0.04] text-[#cf2e46] border border-slate-200/80 dark:border-white/[0.08] shadow-2xs">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>[SS®—WORKFLOW] Fast &amp; Transparent Execution</span>
+            <span>[PS®—WORKFLOW] Fast &amp; Transparent Execution</span>
           </div>
           <div className="flex justify-center">
             <AnimatedH3
-              text="How SupplySouq Works in 3 Steps"
+              text="How ProcureSouq Works in 3 Steps"
               className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight text-center"
               blurAmount={12}
               slideDistance={20}
@@ -547,11 +548,11 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
         <div className="text-center space-y-3 mb-16 max-w-3xl mx-auto relative z-10">
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white dark:bg-white/[0.04] text-[#cf2e46] border border-slate-200 dark:border-white/[0.08] shadow-2xs">
             <Star className="w-3.5 h-3.5 fill-[#cf2e46]" />
-            <span>[SS®—REVIEWS] Verified UAE Industry Feedback</span>
+            <span>[PS®—REVIEWS] Verified UAE Industry Feedback</span>
           </div>
           <div className="flex justify-center">
             <AnimatedH3
-              text="Procurement teams love SupplySouq."
+              text="Procurement teams love ProcureSouq."
               className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight text-center"
               blurAmount={12}
               slideDistance={20}
@@ -578,7 +579,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                 slideDistance={12}
               />
               <p className="text-xs text-slate-600 dark:text-zinc-300 leading-relaxed">
-                "We replaced endless supplier phone calls with SupplySouq. Posting an RFQ takes minutes, and receiving itemized bids directly from verified stockists saved us AED 34,000 on our substation order alone."
+                "We replaced endless supplier phone calls with ProcureSouq. Posting an RFQ takes minutes, and receiving itemized bids directly from verified stockists saved us AED 34,000 on our substation order alone."
               </p>
             </div>
             <div className="pt-4 border-t border-slate-200/80 dark:border-white/[0.06] flex items-center gap-3">
@@ -634,7 +635,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                 slideDistance={12}
               />
               <p className="text-xs text-slate-600 dark:text-zinc-300 leading-relaxed">
-                "As an authorized cable stockist in Sharjah Industrial Area 13, SupplySouq sends pre-qualified RFQs straight to our sales desk. We quote directly to contractors with guaranteed 24h turnaround."
+                "As an authorized cable stockist in Sharjah Industrial Area 13, ProcureSouq sends pre-qualified RFQs straight to our sales desk. We quote directly to contractors with guaranteed 24h turnaround."
               </p>
             </div>
             <div className="pt-4 border-t border-slate-200/80 dark:border-white/[0.06] flex items-center gap-3">
@@ -862,7 +863,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
       <section className="py-20 sm:py-28 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative bg-[#f4f4f6] dark:bg-black">
         <div className="text-center space-y-3 mb-14">
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white dark:bg-white/[0.04] text-[#cf2e46] border border-slate-200/80 dark:border-white/[0.08] shadow-2xs">
-            <span>[SS®—FAQ] Frequently Asked Questions</span>
+            <span>[PS®—FAQ] Frequently Asked Questions</span>
           </div>
           <div className="flex justify-center">
             <AnimatedH3
@@ -874,7 +875,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
             />
           </div>
           <p className="text-sm sm:text-base text-slate-600 dark:text-zinc-400 leading-relaxed font-normal">
-            Everything you need to know about buying or selling materials on SupplySouq.
+            Everything you need to know about buying or selling materials on ProcureSouq.
           </p>
         </div>
 
@@ -913,6 +914,10 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
         <div className="absolute -bottom-40 left-1/2 -translate-x-1/2 w-[850px] h-[400px] bg-[#cf2e46]/20 blur-[140px] pointer-events-none" />
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6 relative z-10">
+          <div className="flex justify-center pb-2">
+            <BrandLogo variant="glow" size="xl" className="mx-auto" />
+          </div>
+
           <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-[#ffb3bf] px-4 py-1.5 rounded-full text-xs font-mono font-bold tracking-wider uppercase shadow-xs">
             <span className="w-2 h-2 rounded-full bg-[#cf2e46] animate-ping" />
             <span>Ready for 24-Hour Procurement?</span>

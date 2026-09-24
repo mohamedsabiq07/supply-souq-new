@@ -20,6 +20,7 @@ import {
   Moon
 } from 'lucide-react';
 import VariableFontCursorProximity from '../fancy/text/variable-font-cursor-proximity';
+import { BrandLogo } from '../common/BrandLogo';
 
 interface NavbarProps {
   currentView: string;
@@ -77,45 +78,10 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
           <div className="flex items-center gap-6">
             <button
               onClick={() => setCurrentView('home')}
-              className="flex items-center gap-2.5 text-left focus:outline-none group/logo cursor-pointer"
+              className="flex items-center text-left focus:outline-none group/logo cursor-pointer py-1"
+              title="Procure Souq Home"
             >
-              <div className="w-10 h-10 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200/80 dark:border-rose-900/60 flex items-center justify-center text-[#cf2e46] shadow-xs group-hover/logo:scale-105 group-hover/logo:shadow-sm group-hover/logo:border-rose-300 transition-all">
-                <Layers className="w-5 h-5 text-[#cf2e46]" />
-              </div>
-              <div>
-                <div className="flex items-center gap-1.5">
-                  <span className="font-extrabold text-lg text-slate-900 dark:text-white tracking-tight">
-                    <VariableFontCursorProximity
-                      fromFontVariationSettings="'wght' 800, 'slnt' 0"
-                      toFontVariationSettings="'wght' 950, 'slnt' -8"
-                      radius={70}
-                      falloff="gaussian"
-                    >
-                      Supply
-                    </VariableFontCursorProximity>
-                    <span className="text-[#cf2e46]">
-                      <VariableFontCursorProximity
-                        fromFontVariationSettings="'wght' 800, 'slnt' 0"
-                        toFontVariationSettings="'wght' 950, 'slnt' -8"
-                        radius={70}
-                        falloff="gaussian"
-                      >
-                        Souq
-                      </VariableFontCursorProximity>
-                    </span>
-                  </span>
-                </div>
-                <span className="text-[10px] text-slate-500 dark:text-zinc-400 font-semibold block leading-none">
-                  <VariableFontCursorProximity
-                    fromFontVariationSettings="'wght' 500, 'slnt' 0"
-                    toFontVariationSettings="'wght' 800, 'slnt' -5"
-                    radius={60}
-                    falloff="gaussian"
-                  >
-                    B2B Procurement Marketplace
-                  </VariableFontCursorProximity>
-                </span>
-              </div>
+              <BrandLogo variant="full" size="md" showSubtitle />
             </button>
 
             {/* Desktop Navigation Links */}

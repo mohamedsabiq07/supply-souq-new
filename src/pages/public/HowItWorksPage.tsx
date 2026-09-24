@@ -15,7 +15,7 @@ export const HowItWorksPage: React.FC<{ onStartRFQ: () => void }> = ({ onStartRF
     {
       step: '02',
       title: 'Automated Supplier Matching',
-      desc: 'SupplySouq automatically routes the RFQ to verified traders & stockists matching your category and industrial radius in Dubai and Sharjah.',
+      desc: 'ProcureSouq automatically routes the RFQ to verified traders & stockists matching your category and industrial radius in Dubai and Sharjah.',
       icon: Search,
     },
     {
@@ -49,7 +49,7 @@ export const HowItWorksPage: React.FC<{ onStartRFQ: () => void }> = ({ onStartRF
             radius={140}
             falloff="gaussian"
           >
-            How SupplySouq Works
+            How ProcureSouq Works
           </VariableFontCursorProximity>
         </h1>
         <VariableFontCursorProximity

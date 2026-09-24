@@ -49,7 +49,7 @@ export const NotFoundPage: React.FC<NotFoundPageProps> = ({
             onClick={onNavigateHome}
             className="text-xs font-sans font-bold text-slate-600 hover:text-slate-900 underline"
           >
-            ← Return to SupplySouq Homepage
+            ← Return to ProcureSouq Homepage
           </button>
         </div>
 
