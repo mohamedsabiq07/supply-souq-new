@@ -292,29 +292,3 @@ html.dark::-webkit-scrollbar-thumb:active {
   animation: marquee 35s linear infinite;
 }
 
-@keyframes spin-chromatic {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes sweep-shimmer {
-  0% {
-    transform: translateX(-150%) skewX(-25deg);
-  }
-  100% {
-    transform: translateX(250%) skewX(-25deg);
-  }
-}
-
-.animate-spin-chromatic {
-  animation: spin-chromatic 4s linear infinite;
-}
-
-.animate-sweep-shimmer {
-  animation: sweep-shimmer 3.2s ease-in-out infinite;
-}
-
