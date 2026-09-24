@@ -5,6 +5,7 @@ interface BrandLogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
   className?: string;
   showSubtitle?: boolean;
+  wordmarkClassName?: string;
 }
 
 export const BrandLogo: React.FC<BrandLogoProps> = ({
@@ -12,22 +13,25 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
   size = 'md',
   className = '',
   showSubtitle = false,
+  wordmarkClassName,
 }) => {
-  // Height presets for the wordmark - scaled up for high-impact clarity & legibility
+  // Height presets for the wordmark - substantially enlarged for high-impact visibility & legibility
   const wordmarkHeights = {
-    sm: 'h-6 sm:h-7',
-    md: 'h-8 sm:h-9 md:h-10',
-    lg: 'h-11 sm:h-13 md:h-14',
-    xl: 'h-14 sm:h-18 md:h-20',
+    sm: 'h-8 sm:h-9',
+    md: 'h-10 sm:h-12 md:h-13 lg:h-14',
+    lg: 'h-14 sm:h-16 md:h-18',
+    xl: 'h-18 sm:h-22 md:h-26',
   };
 
   // Dimensions for the unboxed PS monogram
   const iconDimensions = {
     sm: 'w-7 h-7 sm:w-8 sm:h-8',
-    md: 'w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11',
-    lg: 'w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16',
+    md: 'w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10',
+    lg: 'w-11 h-11 sm:w-13 sm:h-13 md:w-14 md:h-14',
     xl: 'w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24',
   };
+
+  const actualWordmarkClass = wordmarkClassName || wordmarkHeights[size];
 
   // Standalone Icon Variant (unboxed with luminous ambient aura)
   if (variant === 'icon') {
@@ -60,7 +64,7 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
         <img
           src="/logos/logo-glow-transparent.svg"
           alt="Procure Souq"
-          className={`w-auto object-contain ${wordmarkHeights[size]}`}
+          className={`w-auto object-contain ${actualWordmarkClass}`}
           loading="eager"
         />
       </div>
@@ -75,13 +79,13 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
           <img
             src="/logos/logo-black-transparent.svg"
             alt="Procure Souq"
-            className={`w-auto object-contain dark:hidden ${wordmarkHeights[size]}`}
+            className={`w-auto object-contain dark:hidden ${actualWordmarkClass}`}
             loading="eager"
           />
           <img
             src="/logos/logo-white-transparent.svg"
             alt="Procure Souq"
-            className={`w-auto object-contain hidden dark:block ${wordmarkHeights[size]}`}
+            className={`w-auto object-contain hidden dark:block ${actualWordmarkClass}`}
             loading="eager"
           />
         </div>
@@ -94,7 +98,7 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
     );
   }
 
-  // Default 'full' variant: Elevated unboxed PS monogram with subtle aura + architectural divider + bold wordmark
+  // Default 'full' variant: Elevated unboxed PS monogram with subtle aura + architectural divider + enlarged wordmark
   return (
     <div className={`flex items-center gap-2 sm:gap-3 select-none ${className}`}>
       {/* Unboxed Monogram with Subtle Interactive Ambient Aura */}
@@ -119,19 +123,19 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
       {/* Elegant Hairline Divider */}
       <div className="h-6 sm:h-7 w-[1.5px] bg-gradient-to-b from-transparent via-slate-300 dark:via-white/20 to-transparent shrink-0 mx-0.5 hidden sm:block" />
 
-      {/* Scaled Wordmark */}
+      {/* Enlarged Prominent Wordmark */}
       <div className="flex flex-col justify-center">
         <div className="flex items-center">
           <img
             src="/logos/logo-black-transparent.svg"
             alt="Procure Souq"
-            className={`w-auto object-contain dark:hidden ${wordmarkHeights[size]}`}
+            className={`w-auto object-contain dark:hidden ${actualWordmarkClass}`}
             loading="eager"
           />
           <img
             src="/logos/logo-white-transparent.svg"
             alt="Procure Souq"
-            className={`w-auto object-contain hidden dark:block ${wordmarkHeights[size]}`}
+            className={`w-auto object-contain hidden dark:block ${actualWordmarkClass}`}
             loading="eager"
           />
         </div>

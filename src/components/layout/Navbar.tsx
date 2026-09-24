@@ -74,7 +74,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="flex items-center justify-between h-16 sm:h-18 gap-4">
+        <div className="flex items-center justify-between h-16 sm:h-20 gap-4">
           {/* Logo & Brand */}
           <div className="flex items-center gap-4 sm:gap-6">
             <button
@@ -190,21 +190,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
 
           {/* Right Action Buttons */}
           <div className="hidden sm:flex items-center gap-3">
-            {/* Theme Toggle Button */}
-            <button
-              onClick={toggleTheme}
-              data-testid="theme-toggle"
-              aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-              title={isDark ? "Switch to light mode" : "Switch to dark mode"}
-              className="p-2 rounded-xl border border-slate-200/80 dark:border-white/[0.08] bg-slate-50 dark:bg-white/[0.04] text-slate-700 dark:text-amber-400 hover:bg-slate-100 dark:hover:bg-white/[0.08] hover:text-slate-950 dark:hover:text-amber-300 transition-all duration-200 cursor-pointer shadow-2xs hover:scale-105 active:scale-95 group/theme"
-            >
-              {isDark ? (
-                <Sun className="w-4 h-4 text-amber-400 group-hover/theme:rotate-90 transition-transform duration-300" />
-              ) : (
-                <Moon className="w-4 h-4 text-slate-700 group-hover/theme:-rotate-12 transition-transform duration-300" />
-              )}
-            </button>
-
             {!isAuthenticated ? (
               <div className="flex items-center gap-3">
                 <button
@@ -264,15 +249,8 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
             )}
           </div>
 
-          {/* Mobile Actions: Theme Toggle & Menu Toggle */}
-          <div className="flex sm:hidden items-center gap-2">
-            <button
-              onClick={toggleTheme}
-              aria-label="Toggle theme"
-              className="p-2 rounded-lg border border-slate-200/80 dark:border-white/[0.08] bg-slate-50 dark:bg-white/[0.04] text-slate-700 dark:text-amber-400 hover:bg-slate-100 dark:hover:bg-white/[0.08] transition-colors"
-            >
-              {isDark ? <Sun className="w-5 h-5 text-amber-400" /> : <Moon className="w-5 h-5 text-slate-700" />}
-            </button>
+          {/* Mobile Actions: Menu Toggle */}
+          <div className="flex sm:hidden items-center">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 rounded-lg text-slate-700 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors cursor-pointer"
@@ -286,20 +264,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
       {/* Mobile Dropdown */}
       {mobileMenuOpen && (
         <div className="sm:hidden border-t border-slate-200/80 dark:border-white/[0.08] bg-white dark:bg-[#0c0c0e] px-4 pt-3 pb-6 space-y-3 shadow-lg transition-colors duration-200">
-          {/* Mobile Theme Switcher Bar */}
-          <div className="flex items-center justify-between p-2.5 rounded-xl border border-slate-200/80 dark:border-white/[0.08] bg-slate-50 dark:bg-white/[0.03]">
-            <span className="text-xs font-bold text-slate-700 dark:text-zinc-300 flex items-center gap-2">
-              {isDark ? <Moon className="w-4 h-4 text-amber-400" /> : <Sun className="w-4 h-4 text-[#cf2e46]" />}
-              Theme: <span className="capitalize text-[#cf2e46]">{theme} Mode</span>
-            </span>
-            <button
-              onClick={toggleTheme}
-              className="px-3 py-1 text-xs font-bold rounded-lg bg-white dark:bg-white/[0.06] text-slate-900 dark:text-white border border-slate-200/80 dark:border-white/[0.08] shadow-2xs cursor-pointer"
-            >
-              Switch to {isDark ? 'Light' : 'Dark'}
-            </button>
-          </div>
-
           <div className="flex flex-col gap-1 text-sm font-semibold text-slate-700 dark:text-zinc-300">
             <button
               onClick={() => {

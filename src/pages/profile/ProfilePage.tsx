@@ -20,8 +20,11 @@ import {
   Calendar,
   FolderOpen,
   Camera,
-  Trash2
+  Trash2,
+  Sun,
+  Moon
 } from 'lucide-react';
+import { useTheme } from '../../context/ThemeContext';
 
 const EMIRATES: Emirate[] = ['Dubai', 'Sharjah', 'Ajman'];
 
@@ -52,6 +55,7 @@ const AVAILABLE_CATEGORIES = [
 
 export const ProfilePage: React.FC = () => {
   const { currentUser, currentCompany, role, updateProfile } = useAuth();
+  const { theme, isDark, toggleTheme } = useTheme();
 
   const [isEditing, setIsEditing] = useState(false);
   const [activeTab, setActiveTab] = useState<'personal' | 'company' | 'security'>('personal');
@@ -343,6 +347,26 @@ export const ProfilePage: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-3 w-full sm:w-auto">
+            {/* Theme Appearance Badge */}
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs backdrop-blur-md border border-white/20 shadow-md transition-all hover:scale-[1.02] cursor-pointer"
+              title={`Switch to ${isDark ? 'Light' : 'Dark'} Mode`}
+            >
+              {isDark ? (
+                <>
+                  <Sun className="w-4 h-4 text-amber-400" />
+                  <span>Light Mode</span>
+                </>
+              ) : (
+                <>
+                  <Moon className="w-4 h-4 text-slate-300" />
+                  <span>Dark Mode</span>
+                </>
+              )}
+            </button>
+
             {!isEditing ? (
               <button
                 type="button"
@@ -454,6 +478,48 @@ export const ProfilePage: React.FC = () => {
         {/* TAB 1: PERSONAL ACCOUNT */}
         {activeTab === 'personal' && (
           <div className="space-y-6">
+            {/* Theme & Display Appearance Settings */}
+            <div className="bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] rounded-3xl border border-slate-200/80 dark:border-white/[0.08] shadow-sm p-5 sm:p-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    {isDark ? <Moon className="w-4 h-4 text-amber-400" /> : <Sun className="w-4 h-4 text-[#cf2e46]" />}
+                    Interface Appearance
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">
+                    Select your visual theme preference for the ProcureSouq marketplace workspace. Currently: <strong className="text-slate-900 dark:text-white capitalize">{theme} Mode</strong>
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2 bg-slate-100 dark:bg-white/[0.04] p-1.5 rounded-2xl border border-slate-200/80 dark:border-white/[0.08] shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => { if (isDark) toggleTheme(); }}
+                    className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                      !isDark 
+                        ? 'bg-white text-slate-900 shadow-sm border border-slate-200/80' 
+                        : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    <Sun className="w-4 h-4 text-amber-500" />
+                    <span>Light Mode</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { if (!isDark) toggleTheme(); }}
+                    className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                      isDark 
+                        ? 'bg-white/[0.12] text-white shadow-sm border border-white/[0.1]' 
+                        : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    <Moon className="w-4 h-4 text-amber-400" />
+                    <span>Dark Mode</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
             <div className="bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] rounded-3xl border border-slate-200/80 dark:border-white/[0.08] shadow-sm p-6 sm:p-8 space-y-6">
               <div>
                 <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">

@@ -139,26 +139,43 @@
 }
 
 /* Custom Scrollbar for High Information Density */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f8fafc;
+}
+
+.dark * {
+  scrollbar-color: #3f3f46 #121214;
+}
+
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f2f4;
+  background: #f8fafc;
 }
 
 .dark ::-webkit-scrollbar-track {
-  background: #09090b;
+  background: #121214;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cf2e46;
-  border-radius: 4px;
+  background: #cbd5e1;
+  border-radius: 6px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #b91c33;
+  background: #94a3b8;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #52525b;
 }
 
 /* Architectural Studio Grid & Layout Utilities */
