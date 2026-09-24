@@ -292,3 +292,22 @@ html.dark::-webkit-scrollbar-thumb:active {
   animation: marquee 35s linear infinite;
 }
 
+@keyframes glint-sweep {
+  0% {
+    transform: translateX(-80%);
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(180%);
+    opacity: 0.6;
+  }
+}
+
+.animate-glint-sweep {
+  animation: glint-sweep 3s ease-in-out infinite alternate;
+}
+
+
