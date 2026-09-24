@@ -9,6 +9,7 @@ import { ProblemScrollSection } from '../../components/home/ProblemScrollSection
 import { AnimatedH3, ProximityText } from '../../components/ui/AnimatedHeading';
 import VariableFontCursorProximity from '../../components/fancy/text/variable-font-cursor-proximity';
 import { DynamicBackgroundHost } from '../../components/backgrounds/DynamicBackgroundHost';
+import { SupplyMeshBackground } from '../../components/backgrounds/SupplyMeshBackground';
 import { MetalFx } from 'metal-fx';
 import { BrandLogo } from '../../components/common/BrandLogo';
 import {
@@ -104,13 +105,15 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
   ];
 
   return (
-    <div className="bg-[#f4f4f6] dark:bg-black text-slate-900 dark:text-zinc-100 selection:bg-[#cf2e46] selection:text-white overflow-x-clip font-sans transition-colors duration-200">
+    <div className="relative bg-[#f4f4f6] dark:bg-black text-slate-900 dark:text-zinc-100 selection:bg-[#cf2e46] selection:text-white overflow-x-clip font-sans transition-colors duration-200 min-h-screen">
       
-      {/* 1. HERO SECTION - CLEAN CANVAS WITH 100% CAPACITY SUPPLYMESH */}
-      <section className="relative pt-16 sm:pt-24 pb-20 sm:pb-32 overflow-hidden bg-[#f4f4f6] dark:bg-black">
-        {/* Dynamic Interactive Background Layer - SupplyMesh at 100% Capacity */}
-        <DynamicBackgroundHost className="z-0" defaultType="mesh" opacity={1.0} showControlDock={false} />
+      {/* Persistent Global Supply Mesh Background across Entire Homepage till the End */}
+      <div className="fixed inset-0 pointer-events-none select-none overflow-hidden z-0">
+        <SupplyMeshBackground opacity={1.0} fullPage={true} />
+      </div>
 
+      {/* 1. HERO SECTION */}
+      <section className="relative pt-16 sm:pt-24 pb-20 sm:pb-32 overflow-hidden bg-transparent z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-4xl mx-auto text-center space-y-6">
             {/* Shifted B2B Marketplace Hero Badge */}
@@ -228,8 +231,8 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
       {/* 1.5 CINEMATIC SCROLL-DRIVEN STORYTELLING SECTION */}
       <CinematicScrollSection setCurrentView={setCurrentView} />
 
-      {/* 2. PARTNER / STOCKIST BRAND MARQUEE - RICH CONCRETE GRAY BAND */}
-      <section className="py-12 bg-[#eceef1] dark:bg-[#080809] relative overflow-hidden">
+      {/* 2. PARTNER / STOCKIST BRAND MARQUEE - TRANSLUCENT GLASS BAND */}
+      <section className="py-12 bg-[#eceef1]/60 dark:bg-[#080809]/60 backdrop-blur-xs relative overflow-hidden border-y border-slate-200/50 dark:border-white/[0.05]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-6">
           <p className="text-xs uppercase tracking-widest text-slate-600 dark:text-zinc-400 font-bold font-mono">
             Trusted by 250+ UAE Contractors &amp; Certified Stockists across Dubai, Sharjah &amp; Abu Dhabi
@@ -257,8 +260,8 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
 
 
 
-      {/* 4. THE SOLUTION BENTO GRID - RICH CONCRETE GRAY BAND */}
-      <section className="py-20 sm:py-28 bg-[#eceef1] dark:bg-[#080809] relative overflow-hidden">
+      {/* 4. THE SOLUTION BENTO GRID - TRANSLUCENT GLASS BAND */}
+      <section className="py-20 sm:py-28 bg-[#eceef1]/60 dark:bg-[#080809]/60 backdrop-blur-xs relative overflow-hidden border-y border-slate-200/50 dark:border-white/[0.05]">
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center space-y-3 mb-16 max-w-3xl mx-auto">
@@ -428,7 +431,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
       </section>
 
       {/* 5. HOW IT WORKS 3-STEP MODERN WORKFLOW */}
-      <section className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative bg-[#f4f4f6] dark:bg-black">
+      <section className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative bg-transparent">
 
         <div className="text-center space-y-3 mb-16 max-w-3xl mx-auto relative z-10">
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white dark:bg-white/[0.04] text-[#cf2e46] border border-slate-200/80 dark:border-white/[0.08] shadow-2xs">
@@ -499,7 +502,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
       </section>
 
       {/* 6. BIG TELEMETRY & IMPACT STATS */}
-      <section className="py-16 bg-[#0a0a0a] text-white">
+      <section className="py-16 bg-[#0a0a0a]/80 backdrop-blur-sm text-white border-y border-white/[0.08] relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
             <div className="space-y-1">
@@ -549,7 +552,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
       </section>
 
       {/* 7. CONTRACTOR & STOCKIST REVIEWS */}
-      <section className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative bg-[#f4f4f6] dark:bg-black">
+      <section className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative bg-transparent">
 
         <div className="text-center space-y-3 mb-16 max-w-3xl mx-auto relative z-10">
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white dark:bg-white/[0.04] text-[#cf2e46] border border-slate-200 dark:border-white/[0.08] shadow-2xs">
@@ -657,8 +660,8 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
         </div>
       </section>
 
-      {/* 8. TRANSPARENT LAUNCH PRICING SECTION - RICH CONCRETE GRAY BAND */}
-      <section id="pricing-section" className="py-20 sm:py-28 bg-[#eceef1] dark:bg-[#080809] relative">
+      {/* 8. TRANSPARENT LAUNCH PRICING SECTION - TRANSLUCENT GLASS BAND */}
+      <section id="pricing-section" className="py-20 sm:py-28 bg-[#eceef1]/60 dark:bg-[#080809]/60 backdrop-blur-xs relative border-y border-slate-200/50 dark:border-white/[0.05]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-3 mb-16 max-w-3xl mx-auto">
             <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white dark:bg-white/[0.04] text-[#cf2e46] border border-slate-200/80 dark:border-white/[0.08] shadow-2xs">
@@ -866,7 +869,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
       </section>
 
       {/* 9. FAQ ACCORDION */}
-      <section className="py-20 sm:py-28 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative bg-[#f4f4f6] dark:bg-black">
+      <section className="py-20 sm:py-28 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative bg-transparent">
         <div className="text-center space-y-3 mb-14">
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white dark:bg-white/[0.04] text-[#cf2e46] border border-slate-200/80 dark:border-white/[0.08] shadow-2xs">
             <span>[PS®—FAQ] Frequently Asked Questions</span>
@@ -915,7 +918,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
       </section>
 
       {/* 10. HIGH-IMPACT BOTTOM CLOSING CTA BANNER */}
-      <section className="py-20 sm:py-28 relative overflow-hidden bg-[#0a0a0a] text-white">
+      <section className="py-20 sm:py-28 relative overflow-hidden bg-[#0a0a0a]/80 backdrop-blur-sm text-white border-t border-white/[0.08]">
         {/* Radial ambient glow */}
         <div className="absolute -bottom-40 left-1/2 -translate-x-1/2 w-[850px] h-[400px] bg-[#cf2e46]/20 blur-[140px] pointer-events-none" />
 

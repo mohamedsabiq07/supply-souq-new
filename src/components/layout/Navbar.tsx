@@ -83,9 +83,9 @@ export const Navbar: React.FC<NavbarProps> = ({
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="flex items-center justify-between h-16 gap-4">
-          {/* Logo & Brand */}
-          <div className="flex items-center gap-4 sm:gap-6">
+        <div className="flex items-center justify-between h-16 gap-4 relative">
+          {/* Logo & Brand (Left) */}
+          <div className="flex items-center shrink-0">
             <button
               onClick={() => setCurrentView('home')}
               className="flex items-center text-left focus:outline-none group/logo cursor-pointer py-1"
@@ -93,65 +93,90 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               <BrandLogo variant="full" size="md" />
             </button>
-
-            {/* Desktop Navigation Links */}
-            <nav className="hidden md:flex items-center gap-1 text-xs font-semibold text-slate-600 dark:text-zinc-300">
-              <button
-                onClick={() => setCurrentView('home')}
-                className={`px-3 py-2 rounded-xl transition-all duration-200 cursor-pointer active:scale-95 ${
-                  currentView === 'home'
-                    ? 'bg-slate-100 dark:bg-white/[0.1] text-slate-950 dark:text-white font-bold border border-slate-200/80 dark:border-white/[0.12] shadow-2xs'
-                    : 'hover:bg-slate-100/80 dark:hover:bg-white/[0.06] hover:text-slate-950 dark:hover:text-white'
-                }`}
-              >
-                <VariableFontCursorProximity
-                  fromFontVariationSettings="'wght' 500, 'slnt' 0"
-                  toFontVariationSettings="'wght' 800, 'slnt' -5"
-                  radius={50}
-                  falloff="gaussian"
-                >
-                  Home
-                </VariableFontCursorProximity>
-              </button>
-
-              <button
-                onClick={() => setCurrentView('how-it-works')}
-                className={`px-3 py-2 rounded-xl transition-all duration-200 cursor-pointer active:scale-95 ${
-                  currentView === 'how-it-works'
-                    ? 'bg-slate-100 dark:bg-white/[0.1] text-slate-950 dark:text-white font-bold border border-slate-200/80 dark:border-white/[0.12] shadow-2xs'
-                    : 'hover:bg-slate-100/80 dark:hover:bg-white/[0.06] hover:text-slate-950 dark:hover:text-white'
-                }`}
-              >
-                <VariableFontCursorProximity
-                  fromFontVariationSettings="'wght' 500, 'slnt' 0"
-                  toFontVariationSettings="'wght' 800, 'slnt' -5"
-                  radius={50}
-                  falloff="gaussian"
-                >
-                  How It Works
-                </VariableFontCursorProximity>
-              </button>
-
-              <button
-                onClick={() => setCurrentView('onboarding-guide')}
-                className={`px-3 py-2 rounded-xl transition-all duration-200 flex items-center gap-1.5 cursor-pointer active:scale-95 ${
-                  currentView === 'onboarding-guide'
-                    ? 'bg-slate-100 dark:bg-white/[0.1] text-slate-950 dark:text-white font-bold border border-slate-200/80 dark:border-white/[0.12] shadow-2xs'
-                    : 'hover:bg-slate-100/80 dark:hover:bg-white/[0.06] hover:text-slate-950 dark:hover:text-white'
-                }`}
-              >
-                <BookOpen className="w-3.5 h-3.5 text-[#cf2e46]" />
-                <VariableFontCursorProximity
-                  fromFontVariationSettings="'wght' 500, 'slnt' 0"
-                  toFontVariationSettings="'wght' 800, 'slnt' -5"
-                  radius={50}
-                  falloff="gaussian"
-                >
-                  Onboarding SOP
-                </VariableFontCursorProximity>
-              </button>
-            </nav>
           </div>
+
+          {/* Desktop Navigation Links (Centered Alignment) */}
+          <nav className="hidden md:flex items-center justify-center gap-1 text-xs font-semibold text-slate-600 dark:text-zinc-300 absolute left-1/2 -translate-x-1/2">
+            <button
+              onClick={() => setCurrentView('home')}
+              className={`px-3 py-2 rounded-xl transition-all duration-200 cursor-pointer active:scale-95 ${
+                currentView === 'home'
+                  ? 'bg-slate-100 dark:bg-white/[0.1] text-slate-950 dark:text-white font-bold border border-slate-200/80 dark:border-white/[0.12] shadow-2xs'
+                  : 'hover:bg-slate-100/80 dark:hover:bg-white/[0.06] hover:text-slate-950 dark:hover:text-white'
+              }`}
+            >
+              <VariableFontCursorProximity
+                fromFontVariationSettings="'wght' 500, 'slnt' 0"
+                toFontVariationSettings="'wght' 800, 'slnt' -5"
+                radius={50}
+                falloff="gaussian"
+              >
+                Home
+              </VariableFontCursorProximity>
+            </button>
+
+            <button
+              onClick={() => setCurrentView('how-it-works')}
+              className={`px-3 py-2 rounded-xl transition-all duration-200 cursor-pointer active:scale-95 ${
+                currentView === 'how-it-works'
+                  ? 'bg-slate-100 dark:bg-white/[0.1] text-slate-950 dark:text-white font-bold border border-slate-200/80 dark:border-white/[0.12] shadow-2xs'
+                  : 'hover:bg-slate-100/80 dark:hover:bg-white/[0.06] hover:text-slate-950 dark:hover:text-white'
+              }`}
+            >
+              <VariableFontCursorProximity
+                fromFontVariationSettings="'wght' 500, 'slnt' 0"
+                toFontVariationSettings="'wght' 800, 'slnt' -5"
+                radius={50}
+                falloff="gaussian"
+              >
+                How It Works
+              </VariableFontCursorProximity>
+            </button>
+
+            <button
+              onClick={() => {
+                if (currentView === 'home') {
+                  const el = document.getElementById('pricing-section');
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                  setCurrentView('home');
+                  setTimeout(() => {
+                    const el = document.getElementById('pricing-section');
+                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                  }, 100);
+                }
+              }}
+              className="px-3 py-2 rounded-xl transition-all duration-200 hover:bg-slate-100/80 dark:hover:bg-white/[0.06] hover:text-slate-950 dark:hover:text-white cursor-pointer active:scale-95"
+            >
+              <VariableFontCursorProximity
+                fromFontVariationSettings="'wght' 500, 'slnt' 0"
+                toFontVariationSettings="'wght' 800, 'slnt' -5"
+                radius={50}
+                falloff="gaussian"
+              >
+                Pricing
+              </VariableFontCursorProximity>
+            </button>
+
+            <button
+              onClick={() => setCurrentView('onboarding-guide')}
+              className={`px-3 py-2 rounded-xl transition-all duration-200 flex items-center gap-1.5 cursor-pointer active:scale-95 ${
+                currentView === 'onboarding-guide'
+                  ? 'bg-slate-100 dark:bg-white/[0.1] text-slate-950 dark:text-white font-bold border border-slate-200/80 dark:border-white/[0.12] shadow-2xs'
+                  : 'hover:bg-slate-100/80 dark:hover:bg-white/[0.06] hover:text-slate-950 dark:hover:text-white'
+              }`}
+            >
+              <BookOpen className="w-3.5 h-3.5 text-[#cf2e46]" />
+              <VariableFontCursorProximity
+                fromFontVariationSettings="'wght' 500, 'slnt' 0"
+                toFontVariationSettings="'wght' 800, 'slnt' -5"
+                radius={50}
+                falloff="gaussian"
+              >
+                Onboarding SOP
+              </VariableFontCursorProximity>
+            </button>
+          </nav>
 
           {/* Right Action Buttons */}
           <div className="hidden sm:flex items-center gap-2.5">
@@ -272,6 +297,24 @@ export const Navbar: React.FC<NavbarProps> = ({
               className="p-2.5 text-left hover:bg-slate-50 dark:hover:bg-zinc-900 rounded-lg cursor-pointer"
             >
               How It Works
+            </button>
+            <button
+              onClick={() => {
+                if (currentView === 'home') {
+                  const el = document.getElementById('pricing-section');
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                  setCurrentView('home');
+                  setTimeout(() => {
+                    const el = document.getElementById('pricing-section');
+                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                  }, 100);
+                }
+                setMobileMenuOpen(false);
+              }}
+              className="p-2.5 text-left hover:bg-slate-50 dark:hover:bg-zinc-900 rounded-lg cursor-pointer"
+            >
+              Pricing
             </button>
             <button
               onClick={() => {

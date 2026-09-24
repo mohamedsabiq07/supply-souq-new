@@ -5,6 +5,7 @@ export interface SupplyMeshBackgroundProps {
   className?: string;
   opacity?: number;
   interactive?: boolean;
+  fullPage?: boolean;
 }
 
 interface Node {
@@ -32,6 +33,7 @@ export const SupplyMeshBackground: React.FC<SupplyMeshBackgroundProps> = ({
   className = '',
   opacity = 1.0,
   interactive = true,
+  fullPage = false,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const { isDark } = useTheme();
@@ -309,7 +311,9 @@ export const SupplyMeshBackground: React.FC<SupplyMeshBackgroundProps> = ({
 
   return (
     <div
-      className={`absolute inset-0 pointer-events-none select-none overflow-hidden transition-opacity duration-500 [mask-image:radial-gradient(ellipse_95%_85%_at_50%_35%,black_50%,transparent_98%)] ${className}`}
+      className={`absolute inset-0 pointer-events-none select-none overflow-hidden transition-opacity duration-500 ${
+        fullPage ? '' : '[mask-image:radial-gradient(ellipse_95%_85%_at_50%_35%,black_50%,transparent_98%)]'
+      } ${className}`}
       style={{ opacity }}
       aria-hidden="true"
     >

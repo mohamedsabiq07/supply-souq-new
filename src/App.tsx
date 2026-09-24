@@ -121,8 +121,21 @@ const AppContent: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const lastScrollY = useRef(0);
 
-  // Top Taskbar Auto-Hide On Scroll: hides when scrolling down, pops back up on scroll up or top
+  // Top Taskbar Auto-Hide On Scroll: ONLY on workspace views (never on homepage)
   useEffect(() => {
+    // On homepage and public pages, the taskbar never hides while scrolling
+    const publicPages = [
+      'home', 'categories', 'suppliers', 'how-it-works', 'onboarding-guide',
+      'invoice-audit', 'create-rfq', 'login', 'admin-login', 'register',
+      'halftone', 'backgrounds'
+    ];
+    const isWorkspaceView = !publicPages.includes(currentView);
+
+    if (!isWorkspaceView) {
+      setNavVisible(true);
+      return;
+    }
+
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
@@ -130,10 +143,10 @@ const AppContent: React.FC = () => {
       if (currentScrollY <= 25) {
         setNavVisible(true);
       } else if (currentScrollY > lastScrollY.current && currentScrollY > 60) {
-        // Scrolling DOWN -> fade away / slide up
+        // Scrolling DOWN in workspace -> hide taskbar to maximize data visibility
         setNavVisible(false);
       } else if (currentScrollY < lastScrollY.current - 4) {
-        // Scrolling UP -> pop back up
+        // Scrolling UP in workspace -> pop back up
         setNavVisible(true);
       }
 
@@ -142,7 +155,7 @@ const AppContent: React.FC = () => {
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [currentView]);
 
   // Listen to path / hash / URL changes for secret /admin07 access & shortcuts
   React.useEffect(() => {
@@ -328,11 +341,13 @@ const AppContent: React.FC = () => {
         onMouseEnter={() => setNavVisible(true)}
       />
 
-      {/* Main Top Header Section: Sticky and Auto-hides on Scroll */}
+      {/* Main Top Header Section: Sticky (auto-hides ONLY in My Workspace, never on homepage) */}
       <div
-        onMouseEnter={() => setNavVisible(true)}
+        onMouseEnter={() => {
+          if (!isPublicPage) setNavVisible(true);
+        }}
         className={`sticky top-0 z-40 w-full transition-all duration-300 ease-out transform ${
-          (navVisible || mobileMenuOpen)
+          (isPublicPage || navVisible || mobileMenuOpen)
             ? 'translate-y-0 opacity-100 pointer-events-auto'
             : '-translate-y-full opacity-0 pointer-events-none'
         }`}

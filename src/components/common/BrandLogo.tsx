@@ -18,17 +18,17 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
   // Height presets for the wordmark - perfectly balanced to fit standard h-16 taskbar
   const wordmarkHeights = {
     sm: 'h-6 sm:h-6.5',
-    md: 'h-7 sm:h-7.5 md:h-8',
-    lg: 'h-10 sm:h-11 md:h-12',
-    xl: 'h-13 sm:h-15 md:h-16',
+    md: 'h-8 sm:h-8.5 md:h-9',
+    lg: 'h-11 sm:h-12 md:h-13',
+    xl: 'h-14 sm:h-16 md:h-18',
   };
 
   // Dimensions for the unboxed PS monogram
   const iconDimensions = {
-    sm: 'w-5.5 h-5.5 sm:w-6 sm:h-6',
-    md: 'w-6.5 h-6.5 sm:w-7 sm:h-7 md:w-7.5 md:h-7.5',
-    lg: 'w-9 h-9 sm:w-10 sm:h-10',
-    xl: 'w-12 h-12 sm:w-14 sm:h-14',
+    sm: 'w-6 h-6 sm:w-6.5 sm:h-6.5',
+    md: 'w-7.5 h-7.5 sm:w-8 sm:h-8 md:w-8.5 md:h-8.5',
+    lg: 'w-10 h-10 sm:w-11 sm:h-11',
+    xl: 'w-13 h-13 sm:w-15 sm:h-15',
   };
 
   const actualWordmarkClass = wordmarkClassName || wordmarkHeights[size];
@@ -121,7 +121,7 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
       </div>
 
       {/* Elegant Hairline Divider */}
-      <div className="h-5 sm:h-6 w-[1.5px] bg-gradient-to-b from-transparent via-slate-300 dark:via-white/20 to-transparent shrink-0 mx-0.5 hidden sm:block" />
+      <div className="h-6 sm:h-6.5 w-[1.5px] bg-gradient-to-b from-transparent via-slate-300 dark:via-white/20 to-transparent shrink-0 mx-0.5 hidden sm:block" />
 
       {/* Enlarged Prominent Wordmark */}
       <div className="flex flex-col justify-center">
