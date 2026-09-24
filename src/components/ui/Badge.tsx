@@ -17,25 +17,25 @@ export const Badge: React.FC<BadgeProps> = ({
   size = 'md',
 }) => {
   const variants = {
-    default: 'bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-700',
-    success: 'bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-300 border-rose-200 dark:border-rose-900',
-    warning: 'bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-900',
-    danger: 'bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-900',
-    info: 'bg-sky-50 dark:bg-sky-950/40 text-sky-700 dark:text-sky-300 border-sky-200 dark:border-sky-900',
-    purple: 'bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-900',
-    amber: 'bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-200 border-amber-300 dark:border-amber-700 font-semibold',
-    verified: 'bg-[#cf2e46] text-white border-red-700 font-medium',
+    default: 'bg-slate-100 dark:bg-white/[0.05] text-slate-700 dark:text-zinc-300 border-slate-200/80 dark:border-white/[0.08]',
+    success: 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 border-emerald-200/80 dark:border-emerald-500/20',
+    warning: 'bg-amber-50 dark:bg-amber-500/10 text-amber-800 dark:text-amber-300 border-amber-200/80 dark:border-amber-500/20',
+    danger: 'bg-rose-50 dark:bg-rose-500/10 text-rose-800 dark:text-rose-300 border-rose-200/80 dark:border-rose-500/20',
+    info: 'bg-sky-50 dark:bg-sky-500/10 text-sky-800 dark:text-sky-300 border-sky-200/80 dark:border-sky-500/20',
+    purple: 'bg-violet-50 dark:bg-violet-500/10 text-violet-800 dark:text-violet-300 border-violet-200/80 dark:border-violet-500/20',
+    amber: 'bg-amber-50 dark:bg-amber-500/15 text-amber-900 dark:text-amber-200 border-amber-200/80 dark:border-amber-500/30 font-semibold',
+    verified: 'bg-rose-50 dark:bg-rose-500/15 text-rose-700 dark:text-rose-300 border-rose-200/80 dark:border-rose-500/25 font-semibold',
   };
 
   const sizes = {
-    sm: 'px-2 py-0.5 text-xs',
-    md: 'px-2.5 py-1 text-xs',
+    sm: 'px-2 py-0.5 text-[11px]',
+    md: 'px-2.5 py-0.5 text-xs',
   };
 
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-md border font-medium transition-colors',
+        'inline-flex items-center gap-1.5 rounded-full border font-medium transition-colors select-none',
         variants[variant],
         sizes[size],
         className
@@ -50,39 +50,39 @@ export const StatusBadge: React.FC<{ status: RFQStatus | OrderStatus | Verificat
   switch (status) {
     // RFQ Statuses
     case 'draft':
-      return <Badge variant="default"><Clock className="w-3 h-3" /> Draft</Badge>;
+      return <Badge variant="default"><Clock className="w-3 h-3 text-slate-400" /> Draft</Badge>;
     case 'published':
-      return <Badge variant="info"><Zap className="w-3 h-3" /> Published</Badge>;
+      return <Badge variant="info"><Zap className="w-3 h-3 text-sky-500" /> Published</Badge>;
     case 'receiving_quotes':
-      return <Badge variant="warning"><Clock className="w-3 h-3" /> Receiving Quotes</Badge>;
+      return <Badge variant="warning"><Clock className="w-3 h-3 text-amber-500 animate-pulse" /> Receiving Quotes</Badge>;
     case 'evaluating':
-      return <Badge variant="purple"><AlertCircle className="w-3 h-3" /> Evaluating Quotes</Badge>;
+      return <Badge variant="purple"><AlertCircle className="w-3 h-3 text-violet-500" /> Evaluating Quotes</Badge>;
     case 'awarded':
-      return <Badge variant="success"><CheckCircle2 className="w-3 h-3" /> Awarded</Badge>;
+      return <Badge variant="success"><CheckCircle2 className="w-3 h-3 text-emerald-500" /> Awarded</Badge>;
     case 'closed':
       return <Badge variant="default">Closed</Badge>;
 
     // Order Statuses
     case 'po_created':
-      return <Badge variant="info"><Clock className="w-3 h-3" /> PO Issued</Badge>;
+      return <Badge variant="info"><Clock className="w-3 h-3 text-sky-500" /> PO Issued</Badge>;
     case 'accepted':
-      return <Badge variant="purple"><CheckCircle2 className="w-3 h-3" /> PO Accepted</Badge>;
+      return <Badge variant="purple"><CheckCircle2 className="w-3 h-3 text-violet-500" /> PO Accepted</Badge>;
     case 'processing':
-      return <Badge variant="warning"><Clock className="w-3 h-3" /> In Processing</Badge>;
+      return <Badge variant="warning"><Clock className="w-3 h-3 text-amber-500" /> In Processing</Badge>;
     case 'dispatched':
-      return <Badge variant="info"><Truck className="w-3 h-3" /> Out for Delivery</Badge>;
+      return <Badge variant="info"><Truck className="w-3 h-3 text-sky-500" /> Out for Delivery</Badge>;
     case 'delivered':
-      return <Badge variant="success"><CheckCircle2 className="w-3 h-3" /> Delivered</Badge>;
+      return <Badge variant="success"><CheckCircle2 className="w-3 h-3 text-emerald-500" /> Delivered</Badge>;
     case 'completed':
-      return <Badge variant="success"><Award className="w-3 h-3" /> Completed</Badge>;
+      return <Badge variant="success"><Award className="w-3 h-3 text-emerald-500" /> Completed</Badge>;
 
     // Verification Statuses
     case 'verified':
-      return <Badge variant="success"><ShieldCheck className="w-3 h-3 text-[#cf2e46]" /> Verified UAE Trader</Badge>;
+      return <Badge variant="verified"><ShieldCheck className="w-3 h-3 text-[#cf2e46]" /> Verified UAE Trader</Badge>;
     case 'pending':
-      return <Badge variant="warning"><Clock className="w-3 h-3 text-amber-600" /> Verification Pending</Badge>;
+      return <Badge variant="warning"><Clock className="w-3 h-3 text-amber-500" /> Verification Pending</Badge>;
     case 'rejected':
-      return <Badge variant="danger"><AlertCircle className="w-3 h-3" /> License Rejected</Badge>;
+      return <Badge variant="danger"><AlertCircle className="w-3 h-3 text-rose-500" /> License Rejected</Badge>;
 
     default:
       return <Badge>{status}</Badge>;
@@ -93,26 +93,26 @@ export const HighlightBadge: React.FC<{ type: 'best_price' | 'fastest' | 'top_ra
   switch (type) {
     case 'best_price':
       return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold bg-[#cf2e46] text-white shadow-sm">
-          <Zap className="w-3 h-3" /> BEST PRICE
+        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold tracking-wide uppercase bg-emerald-500/10 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/25">
+          <Zap className="w-3 h-3 text-emerald-500" /> Lowest Price
         </span>
       );
     case 'fastest':
       return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold bg-sky-600 text-white shadow-sm">
-          <Truck className="w-3 h-3" /> FASTEST DELIVERY
+        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold tracking-wide uppercase bg-sky-500/10 dark:bg-sky-500/15 text-sky-700 dark:text-sky-300 border border-sky-500/25">
+          <Truck className="w-3 h-3 text-sky-500" /> Fastest Delivery
         </span>
       );
     case 'top_rated':
       return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold bg-amber-500 text-slate-900 shadow-sm">
-          <Award className="w-3 h-3" /> TOP RATED (4.9★)
+        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold tracking-wide uppercase bg-amber-500/10 dark:bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/25">
+          <Award className="w-3 h-3 text-amber-500" /> Top Rated (4.9★)
         </span>
       );
     case 'best_value':
       return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold bg-indigo-600 text-white shadow-sm">
-          <Flame className="w-3 h-3" /> BEST VALUE
+        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold tracking-wide uppercase bg-brand-500/10 dark:bg-brand-500/15 text-brand-700 dark:text-brand-300 border border-brand-500/25">
+          <Flame className="w-3 h-3 text-brand-500" /> Best Overall Value
         </span>
       );
   }

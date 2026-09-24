@@ -1,5 +1,4 @@
 import React from 'react';
-import { Card } from './Card';
 import { cn } from '../../lib/utils';
 
 interface StatWidgetProps {
@@ -12,6 +11,7 @@ interface StatWidgetProps {
     isPositive: boolean;
   };
   className?: string;
+  onClick?: () => void;
 }
 
 export const StatWidget: React.FC<StatWidgetProps> = ({
@@ -21,25 +21,50 @@ export const StatWidget: React.FC<StatWidgetProps> = ({
   icon,
   trend,
   className,
+  onClick,
 }) => {
   return (
-    <Card className={cn('p-5 flex items-start justify-between relative overflow-hidden', className)}>
-      <div>
-        <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{title}</p>
-        <h4 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mt-1 tracking-tight">{value}</h4>
-        {subtitle && <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{subtitle}</p>}
-        {trend && (
-          <div className="flex items-center gap-1 mt-2 text-xs font-medium">
-            <span className={trend.isPositive ? 'text-[#cf2e46] font-bold' : 'text-slate-500 dark:text-slate-400'}>
+    <div
+      onClick={onClick}
+      className={cn(
+        'group p-6 rounded-3xl bg-white/90 dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] border border-slate-200/70 dark:border-white/[0.06] shadow-2xs hover:shadow-md transition-all duration-300 relative overflow-hidden flex flex-col justify-between',
+        onClick && 'cursor-pointer hover:border-slate-300 dark:hover:border-white/[0.15]',
+        className
+      )}
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div className="space-y-1">
+          <p className="text-[11px] font-mono font-bold text-slate-500 dark:text-zinc-400 uppercase tracking-widest">
+            {title}
+          </p>
+          <div className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight pt-0.5">
+            {value}
+          </div>
+        </div>
+
+        {/* Clean, de-boxed icon glyph with gentle radial aura */}
+        <div className="w-10 h-10 rounded-2xl flex items-center justify-center text-slate-600 dark:text-zinc-300 bg-slate-100/70 dark:bg-white/[0.05] group-hover:scale-105 transition-transform duration-300 shrink-0">
+          {icon}
+        </div>
+      </div>
+
+      {(subtitle || trend) && (
+        <div className="pt-4 mt-2 border-t border-slate-100/80 dark:border-white/[0.04] flex items-center justify-between text-xs">
+          {subtitle && (
+            <span className="text-slate-500 dark:text-zinc-400 text-[11px] font-medium truncate">
+              {subtitle}
+            </span>
+          )}
+          {trend && (
+            <span className={cn(
+              'font-mono text-[11px] font-bold shrink-0 ml-auto',
+              trend.isPositive ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-500 dark:text-zinc-400'
+            )}>
               {trend.isPositive ? '↑' : '↓'} {trend.value}
             </span>
-            <span className="text-slate-400 dark:text-slate-500">vs last month</span>
-          </div>
-        )}
-      </div>
-      <div className="p-3 bg-brand-50 dark:bg-brand-950/40 text-brand-600 dark:text-brand-400 rounded-xl border border-brand-100/80 dark:border-brand-900/60 shrink-0">
-        {icon}
-      </div>
-    </Card>
+          )}
+        </div>
+      )}
+    </div>
   );
 };

@@ -60,17 +60,31 @@ export const BuyerRFQsPage: React.FC<BuyerRFQsPageProps> = ({ onNavigate }) => {
         </BorderBeam>
 
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 text-xs">
-          {['all', 'published', 'receiving_quotes', 'evaluating', 'awarded', 'cancelled'].map((status) => (
+          {[
+            { id: 'all', label: 'All', count: myRFQs.length },
+            { id: 'published', label: 'Published', count: myRFQs.filter(r => r.status === 'published').length },
+            { id: 'receiving_quotes', label: 'Receiving Quotes', count: myRFQs.filter(r => r.status === 'receiving_quotes').length },
+            { id: 'evaluating', label: 'Evaluating', count: myRFQs.filter(r => r.status === 'evaluating').length },
+            { id: 'awarded', label: 'Awarded', count: myRFQs.filter(r => r.status === 'awarded').length },
+            { id: 'cancelled', label: 'Cancelled', count: myRFQs.filter(r => r.status === 'cancelled').length },
+          ].map((item) => (
             <button
-              key={status}
-              onClick={() => setStatusFilter(status)}
-              className={`px-3 py-1.5 rounded-xl font-semibold transition-all whitespace-nowrap capitalize ${
-                statusFilter === status
+              key={item.id}
+              onClick={() => setStatusFilter(item.id)}
+              className={`px-3 py-1.5 rounded-full font-medium transition-all whitespace-nowrap flex items-center gap-1.5 text-xs ${
+                statusFilter === item.id
                   ? 'bg-slate-900 dark:bg-white text-white dark:text-black font-bold shadow-xs'
-                  : 'bg-slate-100/80 dark:bg-white/[0.04] text-slate-600 dark:text-zinc-300 hover:bg-slate-200/70 dark:hover:bg-white/[0.08]'
+                  : 'bg-slate-100/80 dark:bg-white/[0.04] text-slate-600 dark:text-zinc-300 hover:bg-slate-200/70 dark:hover:bg-white/[0.08] border border-transparent dark:border-white/[0.04]'
               }`}
             >
-              {status.replace('_', ' ')}
+              <span>{item.label}</span>
+              <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                statusFilter === item.id
+                  ? 'bg-white/20 dark:bg-black/20 text-white dark:text-black font-extrabold'
+                  : 'bg-slate-200/80 dark:bg-white/[0.08] text-slate-500 dark:text-zinc-400'
+              }`}>
+                {item.count}
+              </span>
             </button>
           ))}
         </div>

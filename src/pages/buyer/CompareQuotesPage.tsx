@@ -115,33 +115,35 @@ export const CompareQuotesPage: React.FC<CompareQuotesPageProps> = ({ rfqId, onN
                 key={rfq.id}
                 type="button"
                 onClick={() => setSelectedRFQId(rfq.id)}
-                className={`text-left p-4 rounded-2xl border transition-all relative flex flex-col justify-between space-y-3 cursor-pointer ${
+                className={`text-left p-4 sm:p-5 rounded-2xl border transition-all relative flex flex-col justify-between space-y-3 cursor-pointer ${
                   isSelected
-                    ? 'bg-gradient-to-b from-brand-50/50 to-white dark:from-brand-950/30 dark:to-[#121215] border-brand-500 dark:border-brand-500 ring-2 ring-brand-500/20 shadow-md'
-                    : 'bg-slate-50/60 dark:bg-white/[0.02] border-slate-200 dark:border-white/[0.06] hover:border-slate-300 dark:hover:border-white/[0.12] hover:bg-white dark:hover:bg-white/[0.04]'
+                    ? 'bg-gradient-to-b from-brand-50/40 to-white dark:from-brand-950/20 dark:to-[#121215] border-brand-500/80 dark:border-brand-500/80 ring-2 ring-brand-500/20 shadow-md'
+                    : 'bg-slate-50/50 dark:bg-white/[0.02] border-slate-200/80 dark:border-white/[0.06] hover:border-slate-300 dark:hover:border-white/[0.12] hover:bg-white dark:hover:bg-white/[0.04]'
                 }`}
               >
                 <div className="space-y-1.5 w-full">
                   <div className="flex items-center justify-between gap-1">
-                    <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded-lg border ${
-                      isSelected ? 'bg-brand-500 text-white border-brand-600' : 'bg-white dark:bg-white/[0.06] text-slate-700 dark:text-zinc-300 border-slate-200 dark:border-white/[0.08]'
+                    <span className={`text-xs font-mono font-bold px-2.5 py-0.5 rounded-full border ${
+                      isSelected 
+                        ? 'bg-brand-500 text-white border-brand-600 shadow-xs' 
+                        : 'bg-white dark:bg-white/[0.05] text-slate-700 dark:text-zinc-300 border-slate-200/80 dark:border-white/[0.08]'
                     }`}>
                       {rfq.rfqNumber}
                     </span>
 
                     {isSelected ? (
-                      <span className="text-[10px] font-extrabold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-300 dark:border-emerald-800 flex items-center gap-1">
-                        <CheckCircle2 className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                      <span className="text-[10px] font-semibold bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 px-2.5 py-0.5 rounded-full border border-emerald-500/20 flex items-center gap-1">
+                        <CheckCircle2 className="w-3 h-3 text-emerald-500" />
                         <span>Active Selection</span>
                       </span>
                     ) : (
-                      <span className="text-[10px] font-semibold text-slate-400 dark:text-zinc-500">
+                      <span className="text-[10px] font-medium text-slate-400 dark:text-zinc-500">
                         Click to compare
                       </span>
                     )}
                   </div>
 
-                  <h4 className="text-sm font-extrabold text-slate-900 dark:text-white line-clamp-1">
+                  <h4 className="text-sm font-bold text-slate-900 dark:text-white line-clamp-1">
                     {rfq.title}
                   </h4>
 
@@ -150,25 +152,25 @@ export const CompareQuotesPage: React.FC<CompareQuotesPageProps> = ({ rfqId, onN
                   </p>
                 </div>
 
-                <div className="pt-2 border-t border-slate-200/60 dark:border-white/[0.06] flex items-center justify-between w-full text-xs">
+                <div className="pt-2.5 border-t border-slate-200/60 dark:border-white/[0.06] flex items-center justify-between w-full text-xs">
                   {quotesCount > 0 ? (
-                    <span className="font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800 flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                    <span className="font-semibold text-emerald-800 dark:text-emerald-300 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20 flex items-center gap-1">
+                      <CheckCircle2 className="w-3 h-3 text-emerald-500" />
                       <span>
                         {isUnlocked 
-                          ? `${quotesCount} Quotes (Unlocked)` 
-                          : `${Math.min(quotesCount, 5)} / 5 Quotes${quotesCount > 5 ? ` (+${quotesCount - 5} Locked)` : ''}`}
+                          ? `${quotesCount} Quotes (Extended)` 
+                          : `${Math.min(quotesCount, 5)} / 5 Quotes${quotesCount > 5 ? ` (+${quotesCount - 5})` : ''}`}
                       </span>
                     </span>
                   ) : (
-                    <span className="text-slate-500 dark:text-zinc-400 bg-slate-100 dark:bg-white/[0.05] px-2.5 py-0.5 rounded-lg border border-slate-200 dark:border-white/[0.08] text-[11px] flex items-center gap-1">
-                      <Clock className="w-3 h-3 text-slate-400 dark:text-zinc-500" />
-                      <span>0 Quotes • In Bidding</span>
+                    <span className="text-slate-500 dark:text-zinc-400 bg-slate-100 dark:bg-white/[0.05] px-2.5 py-0.5 rounded-full border border-slate-200/80 dark:border-white/[0.08] text-[11px] flex items-center gap-1">
+                      <Clock className="w-3 h-3 text-slate-400" />
+                      <span>In Stockist Quoting</span>
                     </span>
                   )}
 
                   {lowestPrice !== null && (
-                    <span className="font-extrabold text-slate-900 dark:text-white font-mono">
+                    <span className="font-extrabold text-slate-900 dark:text-white font-mono text-xs">
                       From {formatAED(lowestPrice)}
                     </span>
                   )}

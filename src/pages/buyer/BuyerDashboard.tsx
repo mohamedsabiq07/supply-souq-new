@@ -222,29 +222,29 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
                   </div>
 
                   {/* List of Collected Quotations for this Specific RFQ */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {visibleQuotes.map((quote) => {
                       const isLowest = lowestQuote && quote.id === lowestQuote.id;
                       return (
                         <div
                           key={quote.id}
-                          className={`p-4 rounded-xl border transition-all space-y-3 flex flex-col justify-between ${
+                          className={`p-4 sm:p-5 rounded-2xl border transition-all space-y-3 flex flex-col justify-between ${
                             isLowest 
-                              ? 'bg-gradient-to-b from-rose-50/50 to-white dark:from-rose-950/20 dark:to-[#121215] border-rose-300 dark:border-rose-900/60 shadow-xs' 
-                              : 'bg-slate-50/50 dark:bg-white/[0.02] border-slate-200 dark:border-white/[0.06] hover:border-slate-300 dark:hover:border-white/[0.12]'
+                              ? 'bg-gradient-to-b from-emerald-500/10 to-transparent border-emerald-500/30 shadow-xs' 
+                              : 'bg-slate-50/50 dark:bg-white/[0.02] border-slate-200/80 dark:border-white/[0.06] hover:border-slate-300 dark:hover:border-white/[0.12]'
                           }`}
                         >
-                          <div className="space-y-2">
+                          <div className="space-y-2.5">
                             <div className="flex items-center justify-between gap-1">
-                              <span className="font-mono text-xs font-bold text-slate-600 dark:text-zinc-400">{quote.quotationNumber}</span>
+                              <span className="font-mono text-xs font-bold text-brand-700 dark:text-brand-300 bg-brand-500/10 px-2 py-0.5 rounded-full">{quote.quotationNumber}</span>
                               <div className="flex items-center gap-1.5">
                                 {quote.buyerRating ? (
-                                  <span className="font-bold text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 px-1.5 py-0.5 rounded border border-amber-200 dark:border-amber-800 text-[10px]">
+                                  <span className="font-semibold text-amber-800 dark:text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20 text-[10px]">
                                     ★ {quote.buyerRating}/5
                                   </span>
                                 ) : null}
                                 {isLowest && (
-                                  <span className="bg-[#cf2e46] text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full">
+                                  <span className="bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border border-emerald-500/25 text-[10px] font-bold px-2 py-0.5 rounded-full">
                                     Lowest Price
                                   </span>
                                 )}
@@ -254,30 +254,30 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
                               <h5 className="font-bold text-slate-900 dark:text-white text-xs truncate">{quote.supplierCompanyName}</h5>
                               <p className="text-[11px] text-slate-500 dark:text-zinc-400">{quote.supplierZone || quote.supplierEmirate || 'Verified Stockist'}</p>
                             </div>
-                            <div className="pt-2 border-t border-slate-200/60 dark:border-white/[0.06]">
-                              <span className="text-[10px] text-slate-400 dark:text-zinc-500 block font-medium">Quoted Total (5% VAT Incl.)</span>
-                              <div className="text-base font-extrabold text-slate-900 dark:text-white font-mono">
+                            <div className="pt-2 border-t border-slate-100 dark:border-white/[0.06]">
+                              <span className="text-[10px] text-slate-400 dark:text-zinc-500 block font-semibold uppercase tracking-wider">Quoted Total (5% VAT Incl.)</span>
+                              <div className="text-lg font-extrabold text-slate-900 dark:text-white font-mono mt-0.5">
                                 {formatAED(quote.grandTotalAED)}
                               </div>
                             </div>
-                            <div className="text-[11px] space-y-1 text-slate-600 dark:text-zinc-300 pt-1">
+                            <div className="text-[11px] space-y-1 text-slate-600 dark:text-zinc-300 pt-0.5">
                               <div className="flex justify-between">
                                 <span className="text-slate-400 dark:text-zinc-500">Lead Time:</span>
                                 <strong className="text-slate-800 dark:text-zinc-200">{quote.leadTimeDisplay || `${quote.leadTimeDays} Days`}</strong>
                               </div>
                               <div className="flex justify-between">
                                 <span className="text-slate-400 dark:text-zinc-500">Payment:</span>
-                                <strong className="text-slate-800 dark:text-zinc-200 truncate">{quote.paymentTerms || '30 Days'}</strong>
+                                <strong className="text-slate-800 dark:text-zinc-200 truncate">{quote.paymentTerms || '30 Days PDC'}</strong>
                               </div>
                             </div>
                           </div>
 
-                          <div className="flex items-center gap-2 pt-2 border-t border-slate-200/60">
+                          <div className="flex items-center gap-2 pt-2 border-t border-slate-100 dark:border-white/[0.06]">
                             <Button
                               variant="outline"
                               size="sm"
                               onClick={() => onNavigate('rfq-detail', { rfqId: rfq.id })}
-                              className="text-xs py-1 px-2 flex-1"
+                              className="text-xs py-1.5 px-2 flex-1 rounded-xl"
                             >
                               Details
                             </Button>
@@ -285,7 +285,7 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
                               variant="primary"
                               size="sm"
                               onClick={() => onNavigate('buyer-compare', { rfqId: rfq.id })}
-                              className="text-xs py-1 px-2 flex-1 font-bold"
+                              className="text-xs py-1.5 px-2 flex-1 font-bold rounded-xl"
                             >
                               Compare
                             </Button>
@@ -297,11 +297,11 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
                     {lockedCount > 0 && (
                       <div
                         onClick={() => onNavigate('buyer-compare', { rfqId: rfq.id })}
-                        className="p-4 rounded-xl border-2 border-dashed border-amber-300 dark:border-amber-700/60 bg-amber-50/40 dark:bg-amber-950/20 hover:bg-amber-50 dark:hover:bg-amber-950/30 transition-all space-y-3 flex flex-col justify-between cursor-pointer"
+                        className="p-5 rounded-2xl border-2 border-dashed border-amber-400/40 dark:border-amber-500/30 bg-amber-500/5 hover:bg-amber-500/10 transition-all space-y-3 flex flex-col justify-between cursor-pointer"
                       >
                         <div className="space-y-2">
                           <div className="flex items-center justify-between">
-                            <span className="text-[10px] font-bold bg-amber-200 dark:bg-amber-900/60 text-amber-900 dark:text-amber-300 px-2 py-0.5 rounded">
+                            <span className="text-[10px] font-bold bg-amber-500/15 text-amber-800 dark:text-amber-300 px-2.5 py-0.5 rounded-full">
                               +5 Extended Pack
                             </span>
                             <span className="text-xs font-bold text-amber-800 dark:text-amber-300 font-mono">AED 49.00</span>
@@ -310,7 +310,7 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
                             <h5 className="font-bold text-slate-900 dark:text-white text-xs">+{lockedCount} More Supplier Quotations</h5>
                             <p className="text-[11px] text-slate-500 dark:text-zinc-400">Tier-2 factory importers & regional stockist bids</p>
                           </div>
-                          <p className="text-[11px] text-amber-800 dark:text-amber-300 bg-white/80 dark:bg-zinc-900/80 p-2 rounded border border-amber-200 dark:border-amber-900/60 leading-snug">
+                          <p className="text-[11px] text-amber-800 dark:text-amber-300 bg-amber-500/10 p-2.5 rounded-xl border border-amber-500/20 leading-relaxed">
                             Pay AED 49 to unlock 5 additional supplier quotations for this RFQ.
                           </p>
                         </div>
@@ -318,7 +318,7 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
                           variant="amber"
                           size="sm"
                           onClick={() => onNavigate('buyer-compare', { rfqId: rfq.id })}
-                          className="w-full text-xs font-bold shadow-xs"
+                          className="w-full text-xs font-bold shadow-xs rounded-xl"
                         >
                           Unlock 5 More Quotes
                         </Button>

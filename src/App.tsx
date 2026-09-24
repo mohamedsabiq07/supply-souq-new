@@ -3,6 +3,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { AppDataProvider } from './context/AppDataContext';
 import { Navbar } from './components/layout/Navbar';
+import { WorkspaceNav } from './components/layout/WorkspaceNav';
 import { Sidebar } from './components/layout/Sidebar';
 import { Footer } from './components/layout/Footer';
 
@@ -349,12 +350,12 @@ const AppContent: React.FC = () => {
           <Footer setCurrentView={handleNavigate} />
         </main>
       ) : (
-        <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex gap-6">
-          {/* Sidebar */}
-          <Sidebar currentView={currentView} setCurrentView={handleNavigate} />
+        <div className="flex-1 flex flex-col w-full">
+          {/* Top Horizontal Auto-Hiding Workspace Navigation */}
+          <WorkspaceNav currentView={currentView} setCurrentView={handleNavigate} />
 
-          {/* Active Workspace View */}
-          <main className="flex-1 min-w-0">
+          {/* Active Workspace View (Expansive full-width layout) */}
+          <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
             {/* Buyer Views */}
             {(currentView === 'buyer' || currentView === 'buyer-dashboard') && (
               <BuyerDashboard onNavigate={handleNavigate} />

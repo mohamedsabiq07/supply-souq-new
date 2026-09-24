@@ -385,17 +385,17 @@ export const ProfilePage: React.FC = () => {
       {/* Status Notifications */}
       {statusMessage && (
         <div
-          className={`p-4 rounded-xl flex items-center justify-between gap-3 text-xs font-semibold animate-fadeIn ${
+          className={`p-4 rounded-2xl flex items-center justify-between gap-3 text-xs font-semibold animate-fadeIn ${
             statusMessage.type === 'success'
-              ? 'bg-rose-50 text-rose-900 border border-rose-200'
-              : 'bg-red-50 text-red-900 border border-red-200'
+              ? 'bg-rose-500/10 text-rose-900 dark:text-rose-200 border border-rose-500/20'
+              : 'bg-red-500/10 text-red-900 dark:text-red-200 border border-red-500/20'
           }`}
         >
           <div className="flex items-center gap-2.5">
             {statusMessage.type === 'success' ? (
               <CheckCircle2 className="w-5 h-5 text-[#cf2e46] shrink-0" />
             ) : (
-              <AlertCircle className="w-5 h-5 text-red-600 shrink-0" />
+              <AlertCircle className="w-5 h-5 text-red-500 shrink-0" />
             )}
             <span>{statusMessage.text}</span>
           </div>
@@ -663,7 +663,7 @@ export const ProfilePage: React.FC = () => {
                       <p className="font-extrabold text-sm text-white">
                         {currentCompany.tradeLicenseNumber || 'TL-REGISTERED'}
                       </p>
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/40">
+                      <span className="text-[10px] font-semibold px-2.5 py-0.5 rounded-full bg-rose-500/15 text-rose-300 border border-rose-500/25">
                         {currentCompany.verificationStatus === 'verified' ? 'Verified by DET Dubai' : 'Review In Progress'}
                       </span>
                     </div>
@@ -675,7 +675,7 @@ export const ProfilePage: React.FC = () => {
 
                 <div className="flex items-center gap-2">
                   <span className="text-[11px] text-slate-300 dark:text-zinc-400 font-medium">Compliance:</span>
-                  <span className="text-[11px] font-bold text-rose-400 bg-rose-950/60 px-2.5 py-1 rounded-lg border border-rose-800">
+                  <span className="text-[11px] font-semibold text-rose-300 bg-rose-500/15 px-2.5 py-0.5 rounded-full border border-rose-500/25">
                     2026 UAE Trade Standards
                   </span>
                 </div>
@@ -876,7 +876,7 @@ export const ProfilePage: React.FC = () => {
                     </p>
                   </div>
                   {isEditing && (
-                    <span className="text-[11px] font-bold text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950/60 px-2 py-0.5 rounded border border-brand-200 dark:border-brand-800">
+                    <span className="text-[11px] font-semibold text-brand-700 dark:text-brand-300 bg-brand-500/10 px-2.5 py-0.5 rounded-full border border-brand-500/20">
                       {formData.categories.length} Selected
                     </span>
                   )}
@@ -891,10 +891,10 @@ export const ProfilePage: React.FC = () => {
                           key={cat}
                           type="button"
                           onClick={() => toggleCategory(cat)}
-                          className={`p-3 rounded-xl border text-left text-xs font-semibold transition-all flex items-center justify-between ${
+                          className={`p-3 rounded-2xl border text-left text-xs font-semibold transition-all flex items-center justify-between cursor-pointer ${
                             isSelected
-                              ? 'bg-brand-50/80 dark:bg-brand-950/40 border-brand-300 dark:border-brand-800 text-brand-900 dark:text-brand-300 shadow-xs'
-                              : 'bg-slate-50/60 dark:bg-white/[0.02] border-slate-200/80 dark:border-white/[0.06] text-slate-600 dark:text-zinc-400 hover:bg-slate-100 dark:hover:bg-white/[0.05]'
+                              ? 'bg-brand-500/10 border-brand-500/30 text-brand-900 dark:text-brand-300 shadow-xs'
+                              : 'bg-slate-50/50 dark:bg-white/[0.02] border-slate-200/80 dark:border-white/[0.06] text-slate-600 dark:text-zinc-400 hover:bg-slate-100 dark:hover:bg-white/[0.05]'
                           }`}
                         >
                           <span>{cat}</span>
@@ -911,7 +911,7 @@ export const ProfilePage: React.FC = () => {
                   <div className="flex flex-wrap gap-2">
                     {formData.categories.length > 0 ? (
                       formData.categories.map((cat, idx) => (
-                        <span key={idx} className="bg-brand-50 dark:bg-brand-950/60 text-brand-800 dark:text-brand-300 font-semibold text-xs px-3 py-1.5 rounded-lg border border-brand-200 dark:border-brand-800">
+                        <span key={idx} className="bg-brand-500/10 text-brand-700 dark:text-brand-300 font-medium text-xs px-3 py-1 rounded-full border border-brand-500/20">
                           ✓ {cat}
                         </span>
                       ))

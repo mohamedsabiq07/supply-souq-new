@@ -120,59 +120,63 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
         </div>
       </div>
 
-      {/* RFQ Meta Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <Card className="p-4">
-          <span className="text-slate-400 dark:text-zinc-500 text-xs font-medium block">Category</span>
-          <strong className="text-sm text-slate-900 dark:text-white font-bold truncate block">{rfq.category}</strong>
-          <span className="text-[11px] text-brand-600 dark:text-brand-400 font-semibold block mt-0.5">
-            {rfq.items.length} Material Items
-          </span>
-        </Card>
+      {/* RFQ Project Specification Dossier (De-boxed Unified Grid) */}
+      <div className="bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] rounded-2xl sm:rounded-3xl border border-slate-200/80 dark:border-white/[0.08] shadow-xs overflow-hidden">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-slate-100 dark:divide-white/[0.06]">
+          <div className="p-5 space-y-1">
+            <span className="text-slate-400 dark:text-zinc-500 text-[11px] font-semibold uppercase tracking-wider block">Material Category</span>
+            <strong className="text-sm sm:text-base text-slate-900 dark:text-white font-bold block truncate">{rfq.category}</strong>
+            <p className="text-xs text-brand-600 dark:text-brand-400 font-medium">
+              {rfq.items.length} Material Line Items Specified
+            </p>
+          </div>
 
-        <Card className="p-4">
-          <span className="text-slate-400 dark:text-zinc-500 text-xs font-medium block">Delivery Site</span>
-          <strong className="text-sm text-slate-900 dark:text-white font-bold">{rfq.deliveryEmirate}</strong>
-          <span className="text-[11px] text-slate-500 dark:text-zinc-400 block mt-0.5 truncate">
-            {rfq.deliveryAddress}
-          </span>
-        </Card>
+          <div className="p-5 space-y-1">
+            <span className="text-slate-400 dark:text-zinc-500 text-[11px] font-semibold uppercase tracking-wider block">Delivery Destination</span>
+            <strong className="text-sm sm:text-base text-slate-900 dark:text-white font-bold block truncate">{rfq.deliveryEmirate}</strong>
+            <p className="text-xs text-slate-500 dark:text-zinc-400 truncate">
+              {rfq.deliveryAddress || 'Site delivery direct'}
+            </p>
+          </div>
 
-        <Card className="p-4">
-          <span className="text-slate-400 dark:text-zinc-500 text-xs font-medium block">Compliance & Payment</span>
-          <strong className="text-sm text-brand-700 dark:text-brand-400 font-bold">
-            {rfq.authorityApproval || 'DEWA Standard'}
-          </strong>
-          <span className="text-[11px] text-slate-500 dark:text-zinc-400 block mt-0.5">
-            {rfq.paymentTermsPreference || 'PDC 30 Days'}
-          </span>
-        </Card>
+          <div className="p-5 space-y-1">
+            <span className="text-slate-400 dark:text-zinc-500 text-[11px] font-semibold uppercase tracking-wider block">Compliance & Commercial</span>
+            <strong className="text-sm sm:text-base text-slate-900 dark:text-white font-bold block truncate">
+              {rfq.authorityApproval || 'Standard UAE Spec'}
+            </strong>
+            <p className="text-xs text-slate-500 dark:text-zinc-400 truncate">
+              Payment Terms: <span className="font-semibold text-slate-700 dark:text-zinc-300">{rfq.paymentTermsPreference || '30 Days PDC'}</span>
+            </p>
+          </div>
 
-        <Card className="p-4">
-          <span className="text-slate-400 dark:text-zinc-500 text-xs font-medium block">Suppliers Quoting</span>
-          <strong className="text-sm text-slate-900 dark:text-white font-bold">5 Matched Stockists</strong>
-          <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold block mt-0.5">
-            {rfqQuotes.length > 0 
-              ? isUnlocked ? `${rfqQuotes.length} Quotes (Unlocked)` : `${Math.min(rfqQuotes.length, 5)} / 5 Quotes In`
-              : '24-Hour SLA Active'}
-          </span>
-        </Card>
+          <div className="p-5 space-y-1">
+            <span className="text-slate-400 dark:text-zinc-500 text-[11px] font-semibold uppercase tracking-wider block">Stockist Response SLA</span>
+            <strong className="text-sm sm:text-base text-slate-900 dark:text-white font-bold block">
+              {rfqQuotes.length > 0 
+                ? isUnlocked ? `${rfqQuotes.length} Quotes (Extended)` : `${Math.min(rfqQuotes.length, 5)} / 5 Bids Received`
+                : 'Broadcast in Progress'}
+            </strong>
+            <p className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
+              <Clock className="w-3 h-3" /> Closes: {formatDate(rfq.closingDate)}
+            </p>
+          </div>
+        </div>
       </div>
 
-      {/* Received Supplier Quotations Showcase Cards */}
+      {/* Received Supplier Quotations Showcase Cards (De-boxed) */}
       {rfqQuotes.length > 0 ? (
-        <Card className="p-5 border-brand-200 dark:border-white/[0.08] bg-gradient-to-b from-brand-50/30 to-white dark:from-brand-950/20 dark:to-[#0c0c0e] space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-brand-100/60 dark:border-white/[0.06] pb-3.5">
+        <div className="bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] rounded-2xl sm:rounded-3xl border border-slate-200/80 dark:border-white/[0.08] p-5 sm:p-6 shadow-xs space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-white/[0.06] pb-4">
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-extrabold text-emerald-800 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800 flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                <span className="text-xs font-semibold text-emerald-800 dark:text-emerald-300 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20 flex items-center gap-1">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
                   <span>
-                    {isUnlocked ? `${rfqQuotes.length} Quotations (Unlocked)` : `${Math.min(rfqQuotes.length, 5)} / 5 Free Quotations`}
+                    {isUnlocked ? `${rfqQuotes.length} Quotations Unlocked` : `${Math.min(rfqQuotes.length, 5)} of 5 Stockist Offers`}
                   </span>
                 </span>
                 {lockedCount > 0 && (
-                  <span className="text-xs font-bold text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 rounded border border-amber-200 dark:border-amber-800">
+                  <span className="text-xs font-semibold text-amber-800 dark:text-amber-300 bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/25">
                     +{lockedCount} More Locked (AED 49)
                   </span>
                 )}
@@ -180,7 +184,7 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
                   Received Supplier Quotations
                 </h3>
               </div>
-              <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">
+              <p className="text-xs text-slate-500 dark:text-zinc-400 mt-1">
                 Direct binding commercial offers from verified UAE stockists collected for RFQ #{rfq.rfqNumber}.
               </p>
             </div>
@@ -189,48 +193,63 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
               variant="primary"
               onClick={() => onNavigate('buyer-compare', { rfqId: rfq.id })}
               leftIcon={<GitCompare className="w-4 h-4 text-amber-300" />}
-              className="font-bold shadow-sm"
+              className="font-bold shadow-xs rounded-xl"
             >
               Compare {visibleQuotes.length} Quotation{visibleQuotes.length > 1 ? 's' : ''} in Matrix
             </Button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {visibleQuotes.map((quote, idx) => (
               <div
                 key={quote.id}
-                className="bg-white dark:bg-white/[0.03] p-4 rounded-2xl border border-slate-200/80 dark:border-white/[0.08] hover:border-brand-500 dark:hover:border-white/[0.18] shadow-subtle flex flex-col justify-between space-y-3 transition-colors"
+                className="bg-slate-50/50 dark:bg-white/[0.02] p-5 rounded-2xl border border-slate-200/80 dark:border-white/[0.06] hover:border-slate-300 dark:hover:border-white/[0.14] transition-all flex flex-col justify-between space-y-4"
               >
-                <div>
-                  <div className="flex items-center justify-between text-[10px] text-slate-400 dark:text-zinc-500 mb-1">
-                    <span className="font-mono font-bold text-slate-700 dark:text-zinc-300">{quote.quotationNumber}</span>
-                    <div className="flex items-center gap-1">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-mono font-bold text-brand-700 dark:text-brand-300 bg-brand-500/10 px-2 py-0.5 rounded-full text-[11px]">
+                      {quote.quotationNumber}
+                    </span>
+                    <div className="flex items-center gap-1.5">
                       {quote.buyerRating ? (
-                        <span className="font-bold text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 px-1.5 py-0.5 rounded border border-amber-200 dark:border-amber-800">
+                        <span className="font-semibold text-amber-800 dark:text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20 text-[10px]">
                           ★ {quote.buyerRating}/5
                         </span>
                       ) : null}
-                      <span className="font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-1.5 py-0.5 rounded border border-emerald-200 dark:border-emerald-800">
+                      <span className="font-medium text-slate-500 dark:text-zinc-400 text-[11px]">
                         Offer {idx + 1} of {visibleQuotes.length}
                       </span>
                     </div>
                   </div>
-                  <h4 className="text-xs font-bold text-slate-900 dark:text-white line-clamp-1">{quote.supplierCompanyName}</h4>
-                  <span className="text-[10px] text-slate-500 dark:text-zinc-400 block">{quote.supplierZone || quote.supplierEmirate}</span>
 
-                  <div className="my-2.5 p-2.5 bg-slate-900 dark:bg-white/[0.04] text-white rounded-xl border border-transparent dark:border-white/[0.08]">
-                    <span className="text-[9px] text-slate-400 dark:text-zinc-400 block uppercase font-medium">Quoted Total (5% VAT Incl.)</span>
-                    <span className="text-base font-extrabold font-mono text-amber-300">{formatAED(quote.grandTotalAED)}</span>
+                  <div>
+                    <h4 className="text-sm font-bold text-slate-900 dark:text-white line-clamp-1">{quote.supplierCompanyName}</h4>
+                    <span className="text-[11px] text-slate-500 dark:text-zinc-400 block">{quote.supplierZone || quote.supplierEmirate}</span>
                   </div>
 
-                  <div className="text-[11px] text-slate-600 dark:text-zinc-300 space-y-1 bg-slate-50/70 dark:bg-white/[0.02] p-2.5 rounded-xl border border-slate-100 dark:border-white/[0.06]">
-                    <div className="flex justify-between">
-                      <span className="text-slate-400 dark:text-zinc-500">Lead Time:</span>
-                      <strong className="text-slate-800 dark:text-zinc-200">{quote.leadTimeDisplay || `${quote.leadTimeDays} Days`}</strong>
+                  {/* Clean Hero Price - De-boxed */}
+                  <div className="pt-2 pb-1 border-t border-slate-200/60 dark:border-white/[0.06]">
+                    <span className="text-[10px] text-slate-400 dark:text-zinc-500 font-semibold uppercase tracking-wider block">
+                      Total Quoted Amount (5% VAT Incl.)
+                    </span>
+                    <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white mt-0.5">
+                      {formatAED(quote.grandTotalAED)}
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-slate-400 dark:text-zinc-500">Payment:</span>
-                      <strong className="text-slate-800 dark:text-zinc-200 truncate">{quote.paymentTerms || '30 Days'}</strong>
+                  </div>
+
+                  {/* Floating Operational Metrics */}
+                  <div className="grid grid-cols-2 gap-2 text-xs py-1">
+                    <div>
+                      <span className="text-[10px] text-slate-400 dark:text-zinc-500 block">Lead Time</span>
+                      <strong className="text-slate-800 dark:text-zinc-200 font-semibold">
+                        {quote.leadTimeDisplay || `${quote.leadTimeDays} Days`}
+                      </strong>
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-slate-400 dark:text-zinc-500 block">Payment Terms</span>
+                      <strong className="text-slate-800 dark:text-zinc-200 font-semibold truncate block">
+                        {quote.paymentTerms || '30 Days PDC'}
+                      </strong>
                     </div>
                   </div>
                 </div>
@@ -238,7 +257,7 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
                 <Button
                   variant="primary"
                   size="sm"
-                  className="w-full text-xs font-bold"
+                  className="w-full text-xs font-bold rounded-xl"
                   onClick={() => onNavigate('buyer-compare', { rfqId: rfq.id })}
                 >
                   Compare in Matrix
@@ -249,11 +268,11 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
             {lockedCount > 0 && (
               <div
                 onClick={() => onNavigate('buyer-compare', { rfqId: rfq.id })}
-                className="p-4 rounded-xl border-2 border-dashed border-amber-300 dark:border-amber-700/60 bg-amber-50/40 dark:bg-amber-950/20 hover:bg-amber-50 dark:hover:bg-amber-950/30 transition-all space-y-3 flex flex-col justify-between cursor-pointer"
+                className="p-5 rounded-2xl border-2 border-dashed border-amber-400/40 dark:border-amber-500/30 bg-amber-500/5 hover:bg-amber-500/10 transition-all space-y-3 flex flex-col justify-between cursor-pointer"
               >
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold bg-amber-200 dark:bg-amber-900/60 text-amber-900 dark:text-amber-300 px-2 py-0.5 rounded">
+                    <span className="text-[10px] font-bold bg-amber-500/15 text-amber-800 dark:text-amber-300 px-2.5 py-0.5 rounded-full">
                       +5 Extended Pack
                     </span>
                     <span className="text-xs font-bold text-amber-800 dark:text-amber-300 font-mono">AED 49.00</span>
@@ -262,7 +281,7 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
                     <h5 className="font-bold text-slate-900 dark:text-white text-xs">+{lockedCount} More Supplier Quotations</h5>
                     <p className="text-[11px] text-slate-500 dark:text-zinc-400">Tier-2 factory importers & regional stockist bids</p>
                   </div>
-                  <p className="text-[11px] text-amber-800 dark:text-amber-300 bg-white/80 dark:bg-zinc-900/80 p-2 rounded border border-amber-200 dark:border-amber-900/60 leading-snug">
+                  <p className="text-[11px] text-amber-800 dark:text-amber-300 bg-amber-500/10 p-2.5 rounded-xl border border-amber-500/20 leading-relaxed">
                     Pay AED 49 to unlock 5 additional supplier quotations for this RFQ.
                   </p>
                 </div>
@@ -270,18 +289,18 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
                   variant="amber"
                   size="sm"
                   onClick={() => onNavigate('buyer-compare', { rfqId: rfq.id })}
-                  className="w-full text-xs font-bold shadow-xs"
+                  className="w-full text-xs font-bold shadow-xs rounded-xl"
                 >
                   Unlock 5 More Quotes
                 </Button>
               </div>
             )}
           </div>
-        </Card>
+        </div>
       ) : (
-        <Card className="p-8 text-center space-y-3 border-dashed border-2 border-emerald-200 dark:border-emerald-800/60 bg-emerald-50/30 dark:bg-emerald-950/10">
-          <div className="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 flex items-center justify-center mx-auto font-bold">
-            <Clock className="w-6 h-6 animate-pulse text-emerald-700 dark:text-emerald-400" />
+        <div className="p-8 text-center space-y-3 rounded-2xl sm:rounded-3xl border border-dashed border-emerald-500/30 bg-emerald-500/5">
+          <div className="w-12 h-12 rounded-full bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 flex items-center justify-center mx-auto font-bold">
+            <Clock className="w-6 h-6 animate-pulse text-emerald-500" />
           </div>
           <div className="space-y-1 max-w-md mx-auto">
             <h4 className="text-base font-bold text-slate-900 dark:text-white">RFQ Dispatched to 5 Verified Stockists</h4>
@@ -298,7 +317,7 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
               </div>
             )}
           </div>
-        </Card>
+        </div>
       )}
 
       {/* Materials Schedule Table */}
@@ -318,42 +337,42 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
           <table className="w-full text-left text-xs">
             <thead className="bg-slate-50 dark:bg-white/[0.03] text-slate-600 dark:text-zinc-400 font-semibold border-b border-slate-200/80 dark:border-white/[0.06]">
               <tr>
-                <th className="p-3">#</th>
-                <th className="p-3 min-w-[200px]">Description</th>
-                <th className="p-3 min-w-[200px]">Technical Specification</th>
-                <th className="p-3">Preferred Brand</th>
-                <th className="p-3">Quantity</th>
-                <th className="p-3">Unit</th>
+                <th className="p-3.5">#</th>
+                <th className="p-3.5 min-w-[200px]">Description</th>
+                <th className="p-3.5 min-w-[220px]">Technical Specification</th>
+                <th className="p-3.5">Preferred Brand</th>
+                <th className="p-3.5">Quantity</th>
+                <th className="p-3.5">Unit</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-white/[0.06]">
               {rfq.items.map((item, idx) => (
-                <tr key={item.id || idx} className="hover:bg-slate-50/50 dark:hover:bg-white/[0.03]">
-                  <td className="p-3 font-mono text-slate-400 dark:text-zinc-500">{idx + 1}</td>
-                  <td className="p-3 font-bold text-slate-900 dark:text-white">{item.description}</td>
-                  <td className="p-3 text-slate-600 dark:text-zinc-400">{item.specification || 'Standard Spec'}</td>
-                  <td className="p-3 font-medium text-slate-800 dark:text-zinc-200">
-                    <div className="flex flex-wrap gap-1 items-center">
+                <tr key={item.id || idx} className="hover:bg-slate-50/50 dark:hover:bg-white/[0.03] transition-colors">
+                  <td className="p-3.5 font-mono text-slate-400 dark:text-zinc-500">{idx + 1}</td>
+                  <td className="p-3.5 font-bold text-slate-900 dark:text-white">{item.description}</td>
+                  <td className="p-3.5 text-slate-600 dark:text-zinc-400">{item.specification || 'Standard Mill Spec'}</td>
+                  <td className="p-3.5 font-medium text-slate-800 dark:text-zinc-200">
+                    <div className="flex flex-wrap gap-1.5 items-center">
                       {(item.preferredBrands && item.preferredBrands.length > 0) ? (
                         item.preferredBrands.map((b) => (
-                          <span key={b} className="bg-brand-50 dark:bg-brand-950/60 text-brand-700 dark:text-brand-300 border border-brand-200 dark:border-brand-800 font-bold px-2 py-0.5 rounded text-[10px]">
+                          <span key={b} className="bg-brand-500/10 text-brand-700 dark:text-brand-300 border border-brand-500/20 font-semibold px-2.5 py-0.5 rounded-full text-[10px]">
                             {b}
                           </span>
                         ))
                       ) : (
-                        <span className="bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 px-2 py-0.5 rounded text-[11px] font-medium">
+                        <span className="bg-slate-100 dark:bg-white/[0.05] text-slate-700 dark:text-zinc-300 border border-slate-200/80 dark:border-white/[0.08] px-2.5 py-0.5 rounded-full text-[11px] font-medium">
                           {item.preferredBrand || 'Open Spec'}
                         </span>
                       )}
                       {item.allowAlternatives && (
-                        <span className="text-[10px] text-emerald-700 dark:text-emerald-400 font-semibold bg-emerald-50 dark:bg-emerald-950/40 px-1.5 py-0.5 rounded border border-emerald-200 dark:border-emerald-800">
+                        <span className="text-[10px] text-emerald-700 dark:text-emerald-400 font-medium bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
                           (Equiv. OK)
                         </span>
                       )}
                     </div>
                   </td>
-                  <td className="p-3 font-extrabold text-slate-900 dark:text-white">{item.quantity}</td>
-                  <td className="p-3 text-slate-600 dark:text-zinc-400">{item.unit}</td>
+                  <td className="p-3.5 font-extrabold text-slate-900 dark:text-white font-mono text-sm">{item.quantity}</td>
+                  <td className="p-3.5 text-slate-600 dark:text-zinc-400 font-medium">{item.unit}</td>
                 </tr>
               ))}
             </tbody>
