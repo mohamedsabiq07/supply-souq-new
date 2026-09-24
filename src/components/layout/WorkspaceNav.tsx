@@ -10,7 +10,6 @@ import {
   ShieldCheck,
   PlusCircle,
   Building2,
-  User,
   LogOut,
   ChevronRight,
   Sparkles,
@@ -53,7 +52,6 @@ export const WorkspaceNav: React.FC<WorkspaceNavProps> = ({ currentView, setCurr
     { id: 'buyer-compare-quick', label: 'Compare Quotes', icon: GitCompare, count: comparingRFQs.length, highlight: true },
     { id: 'buyer-orders', label: 'Purchase Orders', icon: Package, count: buyerOrders.length },
     { id: 'buyer-messages', label: 'Messages', icon: MessageSquare, count: buyerUnreadMessages },
-    { id: 'buyer-profile', label: 'Company & Profile', icon: User },
   ];
 
   const supplierTabs = [
@@ -62,14 +60,12 @@ export const WorkspaceNav: React.FC<WorkspaceNavProps> = ({ currentView, setCurr
     { id: 'supplier-quotes', label: 'My Quotations', icon: GitCompare, count: supplierQuotes.length },
     { id: 'supplier-orders', label: 'Orders & POs', icon: Package, count: supplierOrders.length },
     { id: 'supplier-messages', label: 'Messages', icon: MessageSquare, count: supplierUnreadMessages },
-    { id: 'supplier-profile', label: 'Company & Profile', icon: Building2 },
   ];
 
   const adminTabs = [
     { id: 'admin-dashboard', label: 'Command Center', icon: LayoutDashboard },
     { id: 'admin-verifications', label: 'License Verification', icon: ShieldCheck, count: pendingVerifications, highlight: true },
     { id: 'admin-rfqs', label: 'Global RFQs Monitor', icon: FileText, count: rfqs.length },
-    { id: 'admin-profile', label: 'Admin Profile', icon: User },
   ];
 
   const tabs = role === 'buyer' ? buyerTabs : role === 'supplier' ? supplierTabs : adminTabs;
@@ -77,33 +73,13 @@ export const WorkspaceNav: React.FC<WorkspaceNavProps> = ({ currentView, setCurr
   return (
     <div className="w-full bg-white/95 dark:bg-[#0c0c0e]/95 backdrop-blur-xl border-b border-slate-200/80 dark:border-white/[0.08] shadow-xs transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between gap-4">
-        {/* Left: User / Company Quick Identity Pill */}
-        <button
-          type="button"
-          onClick={() => setCurrentView(role === 'buyer' ? 'buyer-profile' : role === 'supplier' ? 'supplier-profile' : 'admin-profile')}
-          className="flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-slate-100/80 dark:bg-white/[0.05] hover:bg-slate-200/80 dark:hover:bg-white/[0.1] border border-slate-200/70 dark:border-white/[0.08] transition-all group shrink-0 cursor-pointer text-left"
-          title="Click to view full Company Profile & Settings"
-        >
-          {currentUser.avatarUrl ? (
-            <img
-              src={currentUser.avatarUrl}
-              alt={currentUser.fullName}
-              className="w-7 h-7 rounded-full object-cover border border-slate-300 dark:border-white/[0.12] shrink-0"
-            />
-          ) : (
-            <div className="w-7 h-7 rounded-full bg-slate-900 dark:bg-white/[0.1] text-white font-bold flex items-center justify-center text-[10px] shrink-0">
-              {(currentUser.fullName || 'User').trim().split(/\s+/).map((w: string) => w[0]).join('').slice(0, 2).toUpperCase()}
-            </div>
-          )}
-          <div className="hidden sm:block overflow-hidden max-w-[170px]">
-            <p className="text-xs font-bold text-slate-900 dark:text-white truncate leading-tight group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">
-              {currentCompany.name}
-            </p>
-            <p className="text-[10px] text-slate-500 dark:text-zinc-400 truncate leading-tight">
-              {currentUser.fullName}
-            </p>
-          </div>
-          <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider ${
+        {/* Left: Organization Badge */}
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100/70 dark:bg-white/[0.04] border border-slate-200/60 dark:border-white/[0.06] shrink-0">
+          <Building2 className="w-3.5 h-3.5 text-slate-500 dark:text-zinc-400 shrink-0" />
+          <span className="text-xs font-bold text-slate-800 dark:text-zinc-200 truncate max-w-[160px]">
+            {currentCompany.name}
+          </span>
+          <span className={`text-[10px] font-extrabold px-1.5 py-0.5 rounded-full uppercase tracking-wider ${
             role === 'buyer'
               ? 'bg-rose-100 dark:bg-rose-950/60 text-[#cf2e46] dark:text-rose-300'
               : role === 'supplier'
@@ -112,7 +88,7 @@ export const WorkspaceNav: React.FC<WorkspaceNavProps> = ({ currentView, setCurr
           }`}>
             {role === 'buyer' ? 'Buyer' : role === 'supplier' ? 'Supplier' : 'Admin'}
           </span>
-        </button>
+        </div>
 
         {/* Center: Horizontal Navigation Tabs (Clean Pill Arrangement) */}
         <nav className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
@@ -121,9 +97,7 @@ export const WorkspaceNav: React.FC<WorkspaceNavProps> = ({ currentView, setCurr
             const isActive = currentView === tab.id ||
               (tab.id === 'buyer-rfqs' && (currentView === 'rfq-detail' || currentView === 'create-rfq')) ||
               (tab.id === 'buyer-compare-quick' && (currentView === 'buyer-compare' || currentView === 'buyer-compare-quick')) ||
-              (tab.id === 'supplier-inbox' && currentView === 'submit-quote') ||
-              (tab.id === 'buyer-profile' && currentView === 'profile') ||
-              (tab.id === 'supplier-profile' && currentView === 'profile');
+              (tab.id === 'supplier-inbox' && currentView === 'submit-quote');
 
             return (
               <button

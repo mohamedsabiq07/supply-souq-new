@@ -44,7 +44,20 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
 
-  const isPublic = ['home', 'categories', 'suppliers', 'how-it-works', 'onboarding-guide', 'login', 'register'].includes(currentView);
+  const isPublic = [
+    'home',
+    'categories',
+    'suppliers',
+    'how-it-works',
+    'onboarding-guide',
+    'login',
+    'admin-login',
+    'register',
+    'invoice-audit',
+    'create-rfq',
+    'halftone',
+    'backgrounds'
+  ].includes(currentView);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -216,7 +229,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => setCurrentView('create-rfq')}
                 />
               </div>
-            ) : (
+            ) : isPublic ? (
               <div className="flex items-center gap-2.5">
                 <button
                   onClick={() => {
@@ -229,6 +242,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <Zap className="w-3.5 h-3.5 fill-white" />
                   <span>My Workspace</span>
                 </button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2.5">
                 <button
                   onClick={() => {
                     if (role === 'buyer') setCurrentView('buyer-profile');
@@ -249,7 +265,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       {(currentUser.fullName || 'User').trim().split(/\s+/).map((w: string) => w[0]).join('').slice(0, 2).toUpperCase()}
                     </div>
                   )}
-                  <span className="text-xs font-bold text-slate-800 dark:text-zinc-200 hidden lg:inline max-w-[120px] truncate pr-2">{currentUser.fullName}</span>
+                  <span className="text-xs font-bold text-slate-800 dark:text-zinc-200 hidden sm:inline max-w-[130px] truncate pr-2">{currentUser.fullName}</span>
                 </button>
               </div>
             )}
@@ -368,28 +384,31 @@ export const Navbar: React.FC<NavbarProps> = ({
               </>
             ) : (
               <>
-                <button
-                  onClick={() => {
-                    if (role === 'buyer') setCurrentView('buyer-dashboard');
-                    else if (role === 'supplier') setCurrentView('supplier-dashboard');
-                    else setCurrentView('admin-dashboard');
-                    setMobileMenuOpen(false);
-                  }}
-                  className="w-full py-3 rounded-xl font-black bg-[#cf2e46] text-white shadow-sm cursor-pointer"
-                >
-                  Go to Workspace
-                </button>
-                <button
-                  onClick={() => {
-                    if (role === 'buyer') setCurrentView('buyer-profile');
-                    else if (role === 'supplier') setCurrentView('supplier-profile');
-                    else setCurrentView('admin-profile');
-                    setMobileMenuOpen(false);
-                  }}
-                  className="w-full py-2 rounded-xl text-xs font-bold text-slate-700 dark:text-zinc-300 border border-slate-200/80 dark:border-white/[0.08] hover:bg-slate-50 dark:hover:bg-white/[0.04] cursor-pointer"
-                >
-                  Profile & Settings
-                </button>
+                {isPublic ? (
+                  <button
+                    onClick={() => {
+                      if (role === 'buyer') setCurrentView('buyer-dashboard');
+                      else if (role === 'supplier') setCurrentView('supplier-dashboard');
+                      else setCurrentView('admin-dashboard');
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full py-3 rounded-xl font-black bg-[#cf2e46] text-white shadow-sm cursor-pointer"
+                  >
+                    Go to Workspace
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                      if (role === 'buyer') setCurrentView('buyer-profile');
+                      else if (role === 'supplier') setCurrentView('supplier-profile');
+                      else setCurrentView('admin-profile');
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full py-2.5 rounded-xl text-xs font-bold text-slate-700 dark:text-zinc-300 border border-slate-200/80 dark:border-white/[0.08] hover:bg-slate-50 dark:hover:bg-white/[0.04] cursor-pointer flex items-center justify-center gap-2"
+                  >
+                    <span>My Profile ({currentUser.fullName})</span>
+                  </button>
+                )}
                 <button
                   onClick={() => {
                     logout();
