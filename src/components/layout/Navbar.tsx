@@ -85,14 +85,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
               <BrandLogo variant="full" size="md" />
             </button>
 
-            {/* Shifted B2B Marketplace Badge - Clean, Distinct, & Prominent */}
-            <div className="hidden xl:flex items-center pl-4 border-l border-slate-200/80 dark:border-white/[0.1] h-8">
-              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-bold tracking-wide bg-slate-100/90 dark:bg-white/[0.06] text-slate-700 dark:text-zinc-300 border border-slate-200/80 dark:border-white/[0.08] shadow-2xs">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-                <span>B2B Procurement Marketplace</span>
-              </span>
-            </div>
-
             {/* Desktop Navigation Links */}
             <nav className="hidden md:flex items-center gap-1 text-xs font-semibold text-slate-600 dark:text-zinc-300">
               <button
@@ -294,12 +286,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
       {/* Mobile Dropdown */}
       {mobileMenuOpen && (
         <div className="sm:hidden border-t border-slate-200/80 dark:border-white/[0.08] bg-white dark:bg-[#0c0c0e] px-4 pt-3 pb-6 space-y-3 shadow-lg transition-colors duration-200">
-          {/* Mobile Identity Badge */}
-          <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-100/90 dark:bg-white/[0.04] border border-slate-200/80 dark:border-white/[0.06] text-xs font-bold text-slate-800 dark:text-zinc-200">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-            <span>UAE B2B Procurement Marketplace</span>
-          </div>
-
           {/* Mobile Theme Switcher Bar */}
           <div className="flex items-center justify-between p-2.5 rounded-xl border border-slate-200/80 dark:border-white/[0.08] bg-slate-50 dark:bg-white/[0.03]">
             <span className="text-xs font-bold text-slate-700 dark:text-zinc-300 flex items-center gap-2">
