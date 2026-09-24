@@ -438,10 +438,10 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                 : 'bg-slate-50 dark:bg-white/[0.03] text-slate-700 dark:text-zinc-300 border-slate-200 dark:border-white/[0.08] hover:bg-slate-100 dark:hover:bg-white/[0.06]'
             }`}
           >
-            <FileText className="w-5 h-5 text-sky-500 dark:text-sky-300 shrink-0 mt-0.5" />
+            <FileText className={`w-5 h-5 shrink-0 mt-0.5 ${wizardMode === 'detailed_boq' ? 'text-white' : 'text-sky-500 dark:text-sky-300'}`} />
             <div>
               <span className="block font-bold">Custom Electrical Line-Item BOQ</span>
-              <span className={`text-[11px] font-normal ${wizardMode === 'detailed_boq' ? 'text-white/80' : 'text-slate-500 dark:text-zinc-400'}`}>Search and select approved brands, specs, and quantities</span>
+              <span className={`text-[11px] font-normal ${wizardMode === 'detailed_boq' ? 'text-white/90' : 'text-slate-500 dark:text-zinc-400'}`}>Search and select approved brands, specs, and quantities</span>
             </div>
           </button>
 
@@ -457,10 +457,10 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                 : 'bg-slate-50 dark:bg-white/[0.03] text-slate-700 dark:text-zinc-300 border-slate-200 dark:border-white/[0.08] hover:bg-slate-100 dark:hover:bg-white/[0.06]'
             }`}
           >
-            <Camera className="w-5 h-5 text-rose-500 dark:text-rose-300 shrink-0 mt-0.5" />
+            <Camera className={`w-5 h-5 shrink-0 mt-0.5 ${wizardMode === 'photo_upload' ? 'text-white' : 'text-rose-500 dark:text-rose-300'}`} />
             <div>
               <span className="block font-bold">Snap Photo of BOQ / Previous Invoice</span>
-              <span className={`text-[11px] font-normal ${wizardMode === 'photo_upload' ? 'text-white/80' : 'text-slate-500 dark:text-zinc-400'}`}>Handwritten cable schedule, single-line diagram, or paper bill</span>
+              <span className={`text-[11px] font-normal ${wizardMode === 'photo_upload' ? 'text-white/90' : 'text-slate-500 dark:text-zinc-400'}`}>Handwritten cable schedule, single-line diagram, or paper bill</span>
             </div>
           </button>
         </div>

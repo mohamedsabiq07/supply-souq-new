@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @plugin "tailwindcss-animate";
+@config "../tailwind.config.js";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -26,6 +27,40 @@
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
+
+  --color-brand-50: #fff1f3;
+  --color-brand-100: #ffe4e8;
+  --color-brand-200: #fecdd5;
+  --color-brand-300: #fda4b2;
+  --color-brand-400: #fb7187;
+  --color-brand-500: #cf2e46;
+  --color-brand-600: #b91c33;
+  --color-brand-700: #9f1230;
+  --color-brand-800: #881329;
+  --color-brand-900: #4c0612;
+  --color-brand-950: #260208;
+
+  --color-souq-ink: #050505;
+  --color-souq-charcoal: #101010;
+  --color-souq-graphite: #191919;
+  --color-souq-paper: #f7f5f2;
+  --color-souq-mist: #ece9e4;
+  --color-souq-red: #cf2e46;
+  --color-souq-redSoft: #fb7187;
+  --color-souq-redDeep: #7a0716;
+
+  --color-navy-800: #1e293b;
+  --color-navy-900: #0f172a;
+  --color-navy-950: #090d16;
+
+  --color-obsidian-800: #0f1a2e;
+  --color-obsidian-850: #0b1322;
+  --color-obsidian-900: #070c15;
+  --color-obsidian-950: #04070d;
+
+  --shadow-subtle: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  --shadow-premium: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
 }
 
 @layer base {

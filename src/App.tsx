@@ -93,6 +93,18 @@ const checkIsBackgroundsRoute = () => {
 const AppContent: React.FC = () => {
   const { role, setRole, isAuthenticated, isImpersonating, impersonatedUser, stopImpersonating, panicLock } = useAuth();
   const [currentView, setCurrentView] = useState<string>(() => {
+    try {
+      const search = new URLSearchParams(window.location.search);
+      const viewParam = (search.get('view') || search.get('page') || '').toLowerCase();
+      if (viewParam) {
+        if (viewParam === 'admin07') return 'admin-login';
+        return viewParam;
+      }
+      const hash = window.location.hash.replace('#', '').toLowerCase().replace(/^\/+|\/+$/g, '');
+      if (hash && hash !== 'admin07' && hash !== 'halftone' && hash !== 'backgrounds') {
+        return hash;
+      }
+    } catch (e) {}
     if (checkIsAdminSecretRoute()) {
       return 'admin-login';
     }
