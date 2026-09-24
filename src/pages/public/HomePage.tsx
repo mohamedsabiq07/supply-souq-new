@@ -113,7 +113,13 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-4xl mx-auto text-center space-y-6">
-            
+            {/* Shifted B2B Marketplace Hero Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 dark:bg-white/[0.06] backdrop-blur-md border border-slate-200/80 dark:border-white/[0.1] shadow-xs text-xs font-bold text-slate-800 dark:text-zinc-200 mb-2">
+              <span className="w-2 h-2 rounded-full bg-[#cf2e46] animate-pulse" />
+              <span>UAE's Premier B2B Procurement Marketplace</span>
+              <span className="text-slate-300 dark:text-white/20">•</span>
+              <span className="text-brand-600 dark:text-brand-400 font-semibold">Verified Stockist Network</span>
+            </div>
 
             {/* Main Headline */}
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-950 dark:text-white leading-[1.1] cursor-default select-none">

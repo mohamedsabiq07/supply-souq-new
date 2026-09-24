@@ -14,8 +14,12 @@ export const Footer: React.FC<FooterProps> = ({ setCurrentView }) => {
           
           {/* Col 1: Brand & UAE Mission */}
           <div className="lg:col-span-2 space-y-4">
-            <div className="cursor-pointer" onClick={() => setCurrentView('home')}>
+            <div className="cursor-pointer space-y-2.5" onClick={() => setCurrentView('home')}>
               <BrandLogo variant="full" size="md" />
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-200/70 dark:bg-white/[0.06] text-[10px] font-bold text-slate-700 dark:text-zinc-300 border border-slate-300/60 dark:border-white/[0.08] w-fit">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span>UAE B2B Procurement Marketplace</span>
+              </div>
             </div>
             <p className="text-xs text-slate-600 dark:text-zinc-400 leading-relaxed max-w-sm">
               The digital RFQ and multi-supplier quotation comparison network for the UAE construction and engineering sector. Streamlining procurement across Dubai, Sharjah, Abu Dhabi and the Northern Emirates.
