@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import VariableFontCursorProximity from '../fancy/text/variable-font-cursor-proximity';
 import { BrandLogo } from '../common/BrandLogo';
+import { CreateRFQButton } from '../common/CreateRFQButton';
 
 interface NavbarProps {
   currentView: string;
@@ -219,20 +220,10 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
                     Log in
                   </VariableFontCursorProximity>
                 </button>
-                <button
+                <CreateRFQButton
+                  size="sm"
                   onClick={() => setCurrentView('create-rfq')}
-                  className="px-4 py-2 rounded-full text-xs font-black bg-gradient-to-r from-[#cf2e46] to-[#b91c33] text-white hover:from-[#b91c33] hover:to-[#9f1230] shadow-md shadow-[#cf2e46]/20 transition-all flex items-center gap-1.5 hover:scale-105 active:scale-95 cursor-pointer"
-                >
-                  <Zap className="w-3.5 h-3.5 fill-white" />
-                  <VariableFontCursorProximity
-                    fromFontVariationSettings="'wght' 700, 'slnt' 0"
-                    toFontVariationSettings="'wght' 950, 'slnt' -8"
-                    radius={60}
-                    falloff="gaussian"
-                  >
-                    Post RFQ (Free)
-                  </VariableFontCursorProximity>
-                </button>
+                />
               </div>
             ) : (
               <div className="flex items-center gap-2.5">
@@ -365,16 +356,16 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
           <div className="pt-2 border-t border-slate-200/80 dark:border-white/[0.06] space-y-2">
             {!isAuthenticated ? (
               <>
-                <button
+                <CreateRFQButton
+                  size="md"
+                  className="w-full justify-center py-2.5"
                   onClick={() => {
                     setCurrentView('create-rfq');
                     setMobileMenuOpen(false);
                   }}
-                  className="w-full py-3 rounded-xl font-black bg-[#cf2e46] text-white shadow-sm flex items-center justify-center gap-2 cursor-pointer"
                 >
-                  <Zap className="w-4 h-4 fill-white" />
-                  <span>Post RFQ (100% Free)</span>
-                </button>
+                  Create New RFQ
+                </CreateRFQButton>
                 <button
                   onClick={() => {
                     setCurrentView('login');

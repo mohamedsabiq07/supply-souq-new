@@ -17,6 +17,7 @@ import {
   Zap,
   ArrowUpRight
 } from 'lucide-react';
+import { CreateRFQButton } from '../common/CreateRFQButton';
 
 interface WorkspaceNavProps {
   currentView: string;
@@ -197,14 +198,13 @@ export const WorkspaceNav: React.FC<WorkspaceNavProps> = ({ currentView, setCurr
         {/* Right: Fast Action CTA */}
         <div className="flex items-center gap-2 shrink-0">
           {role === 'buyer' && (
-            <button
-              type="button"
+            <CreateRFQButton
+              size="sm"
               onClick={() => setCurrentView('create-rfq')}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#cf2e46] hover:bg-[#b02237] text-white text-xs font-bold shadow-xs hover:shadow transition-all active:scale-95 cursor-pointer"
             >
-              <PlusCircle className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Post RFQ</span>
-            </button>
+              <span className="sm:hidden">RFQ</span>
+            </CreateRFQButton>
           )}
 
           {role === 'supplier' && (

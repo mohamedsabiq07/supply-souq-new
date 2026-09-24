@@ -20,8 +20,6 @@ import {
   ArrowRight,
   Trash2
 } from 'lucide-react';
-import { MetalFx, MetalBadge } from 'metal-fx';
-import { useTheme } from '../../context/ThemeContext';
 
 interface RFQDetailPageProps {
   rfqId: string;
@@ -30,7 +28,6 @@ interface RFQDetailPageProps {
 
 export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate }) => {
   const { rfqs, quotations, isRFQExtendedUnlocked, cancelRFQByBuyer } = useAppData();
-  const { isDark } = useTheme();
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
 
   const rfq = rfqs.find(r => r.id === rfqId || r.rfqNumber === rfqId);
@@ -99,23 +96,14 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
           )}
 
           {rfqQuotes.length > 0 && rfq.status !== 'cancelled' && (
-            <MetalFx
-              preset="chromatic"
-              strength={0.85}
-              theme={isDark ? 'dark' : 'light'}
-              borderRadius={8}
-              style={{ background: '#0284c7' }}
-              className="rounded-lg shadow-sm"
+            <button
+              type="button"
+              onClick={() => onNavigate('buyer-compare', { rfqId: rfq.id })}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-rose-500/10 hover:bg-rose-500/20 text-rose-700 dark:text-rose-300 border border-rose-300/80 dark:border-rose-800/50 hover:border-rose-400 dark:hover:border-rose-700 transition-all shadow-2xs active:scale-[0.99] cursor-pointer shrink-0"
             >
-              <Button
-                variant="primary"
-                onClick={() => onNavigate('buyer-compare', { rfqId: rfq.id })}
-                leftIcon={<GitCompare className="w-4 h-4" />}
-                className="font-bold shadow-none border-none bg-transparent"
-              >
-                Compare {visibleQuotes.length} Quotations in Matrix
-              </Button>
-            </MetalFx>
+              <GitCompare className="w-4 h-4 text-rose-600 dark:text-rose-400" />
+              <span>Compare {visibleQuotes.length} Quotation{visibleQuotes.length > 1 ? 's' : ''} in Matrix</span>
+            </button>
           )}
         </div>
       </div>
@@ -189,14 +177,14 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
               </p>
             </div>
 
-            <Button
-              variant="primary"
+            <button
+              type="button"
               onClick={() => onNavigate('buyer-compare', { rfqId: rfq.id })}
-              leftIcon={<GitCompare className="w-4 h-4 text-amber-300" />}
-              className="font-bold shadow-xs rounded-xl"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-rose-500/10 hover:bg-rose-500/20 text-rose-700 dark:text-rose-300 border border-rose-300/80 dark:border-rose-800/50 hover:border-rose-400 dark:hover:border-rose-700 transition-all shadow-2xs active:scale-[0.99] cursor-pointer"
             >
-              Compare {visibleQuotes.length} Quotation{visibleQuotes.length > 1 ? 's' : ''} in Matrix
-            </Button>
+              <GitCompare className="w-4 h-4 text-rose-600 dark:text-rose-400" />
+              <span>Compare {visibleQuotes.length} Quotation{visibleQuotes.length > 1 ? 's' : ''} in Matrix</span>
+            </button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -253,15 +241,6 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
                     </div>
                   </div>
                 </div>
-
-                <Button
-                  variant="primary"
-                  size="sm"
-                  className="w-full text-xs font-bold rounded-xl"
-                  onClick={() => onNavigate('buyer-compare', { rfqId: rfq.id })}
-                >
-                  Compare in Matrix
-                </Button>
               </div>
             ))}
 
@@ -325,10 +304,7 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
         <CardHeader>
           <div className="flex items-center justify-between w-full">
             <div>
-              <div className="flex items-center gap-2.5">
-                <h3 className="text-base font-bold text-slate-900 dark:text-white">Materials Schedule (BOQ)</h3>
-                <MetalBadge theme={isDark ? 'dark' : 'light'} strength={0.85}>Verified BOQ</MetalBadge>
-              </div>
+              <h3 className="text-base font-bold text-slate-900 dark:text-white">Materials Schedule (BOQ)</h3>
               <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">{rfq.items.length} line items specified for procurement.</p>
             </div>
           </div>

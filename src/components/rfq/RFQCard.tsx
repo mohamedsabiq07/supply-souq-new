@@ -235,15 +235,14 @@ export const RFQCard: React.FC<RFQCardProps> = ({
                 </button>
               )}
               {rfq.quotesCount > 0 && rfq.status !== 'cancelled' ? (
-                <Button
-                  variant="primary"
-                  size="sm"
+                <button
+                  type="button"
                   onClick={() => onCompare && onCompare(rfq)}
-                  leftIcon={<GitCompare className="w-4 h-4" />}
-                  className="font-bold rounded-xl"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-rose-500/10 hover:bg-rose-500/20 text-rose-700 dark:text-rose-300 border border-rose-300/80 dark:border-rose-800/50 transition-colors cursor-pointer shadow-2xs"
                 >
-                  Compare {Math.min(rfq.quotesCount, maxQuotes)} Quotation{rfq.quotesCount > 1 ? 's' : ''}
-                </Button>
+                  <GitCompare className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
+                  <span>Compare {Math.min(rfq.quotesCount, maxQuotes)} Quotation{rfq.quotesCount > 1 ? 's' : ''}</span>
+                </button>
               ) : rfq.status === 'cancelled' ? (
                 <span className="text-xs font-semibold text-rose-700 dark:text-rose-300 bg-rose-500/10 px-2.5 py-1 rounded-full border border-rose-500/20">
                   Cancelled

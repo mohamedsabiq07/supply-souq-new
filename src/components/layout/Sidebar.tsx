@@ -16,6 +16,7 @@ import {
   User,
   LogOut
 } from 'lucide-react';
+import { CreateRFQButton } from '../common/CreateRFQButton';
 
 interface SidebarProps {
   currentView: string;
@@ -111,13 +112,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView })
 
         {/* Action Button */}
         {role === 'buyer' && (
-          <button
-            onClick={() => setCurrentView('create-rfq')}
-            className="w-full mb-5 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm shadow-sm transition-all hover:shadow cursor-pointer"
-          >
-            <PlusCircle className="w-4 h-4" />
-            <span>Create New RFQ</span>
-          </button>
+          <div className="mb-5">
+            <CreateRFQButton
+              size="md"
+              className="w-full justify-center"
+              onClick={() => setCurrentView('create-rfq')}
+            />
+          </div>
         )}
 
         {/* Navigation Items */}

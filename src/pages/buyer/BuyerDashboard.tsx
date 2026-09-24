@@ -20,8 +20,7 @@ import {
   Zap,
   CheckCircle2
 } from 'lucide-react';
-import { MetalFx } from 'metal-fx';
-import { useTheme } from '../../context/ThemeContext';
+import { CreateRFQButton } from '../../components/common/CreateRFQButton';
 
 interface BuyerDashboardProps {
   onNavigate: (view: string, params?: any) => void;
@@ -29,7 +28,6 @@ interface BuyerDashboardProps {
 
 export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) => {
   const { currentCompany } = useAuth();
-  const { isDark } = useTheme();
   const { rfqs, quotations, purchaseOrders, isRFQExtendedUnlocked } = useAppData();
 
   const myRFQs = rfqs
@@ -68,23 +66,10 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
           </p>
         </div>
 
-        <MetalFx
-          preset="chromatic"
-          strength={0.85}
-          theme={isDark ? 'dark' : 'light'}
-          borderRadius={8}
-          style={{ background: '#0284c7' }}
-          className="rounded-lg shadow-sm"
-        >
-          <Button
-            variant="primary"
-            onClick={() => onNavigate('create-rfq')}
-            leftIcon={<PlusCircle className="w-4 h-4" />}
-            className="shadow-none border-none bg-transparent font-bold text-white"
-          >
-            Create New RFQ
-          </Button>
-        </MetalFx>
+        <CreateRFQButton
+          onClick={() => onNavigate('create-rfq')}
+          size="md"
+        />
       </div>
 
       {/* Action Alert for Evaluating Quotes */}
@@ -103,24 +88,15 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
               </p>
             </div>
           </div>
-          <MetalFx
-            preset="gold"
-            strength={0.85}
-            theme={isDark ? 'dark' : 'light'}
-            borderRadius={8}
-            style={{ background: '#d97706' }}
-            className="rounded-lg shadow-sm"
+          <Button
+            variant="amber"
+            size="sm"
+            onClick={() => onNavigate('buyer-compare', { rfqId: evaluatingRFQs[0].id })}
+            rightIcon={<ArrowRight className="w-4 h-4" />}
+            className="font-bold shadow-sm shrink-0"
           >
-            <Button
-              variant="amber"
-              size="sm"
-              onClick={() => onNavigate('buyer-compare', { rfqId: evaluatingRFQs[0].id })}
-              rightIcon={<ArrowRight className="w-4 h-4" />}
-              className="font-bold border-none bg-transparent text-white"
-            >
-              Open Comparison Matrix
-            </Button>
-          </MetalFx>
+            Open Comparison Matrix
+          </Button>
         </div>
       )}
 
@@ -211,14 +187,13 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
                       </p>
                     </div>
 
-                    <Button
-                      variant="primary"
+                    <button
                       onClick={() => onNavigate('buyer-compare', { rfqId: rfq.id })}
-                      leftIcon={<GitCompare className="w-4 h-4 text-amber-300" />}
-                      className="font-bold shrink-0 shadow-sm"
+                      className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-rose-500/10 hover:bg-rose-500/20 text-rose-700 dark:text-rose-300 border border-rose-300/80 dark:border-rose-800/50 transition-colors shrink-0 shadow-xs"
                     >
-                      Compare {visibleQuotes.length} Quotation{visibleQuotes.length > 1 ? 's' : ''} in Matrix
-                    </Button>
+                      <GitCompare className="w-4 h-4 text-rose-600 dark:text-rose-400" />
+                      <span>Compare {visibleQuotes.length} Quotation{visibleQuotes.length > 1 ? 's' : ''} in Matrix</span>
+                    </button>
                   </div>
 
                   {/* List of Collected Quotations for this Specific RFQ */}
@@ -272,22 +247,14 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
                             </div>
                           </div>
 
-                          <div className="flex items-center gap-2 pt-2 border-t border-slate-100 dark:border-white/[0.06]">
+                          <div className="pt-2 border-t border-slate-100 dark:border-white/[0.06]">
                             <Button
                               variant="outline"
                               size="sm"
                               onClick={() => onNavigate('rfq-detail', { rfqId: rfq.id })}
-                              className="text-xs py-1.5 px-2 flex-1 rounded-xl"
+                              className="w-full text-xs py-1.5 rounded-xl font-medium hover:bg-slate-100 dark:hover:bg-white/[0.06]"
                             >
-                              Details
-                            </Button>
-                            <Button
-                              variant="primary"
-                              size="sm"
-                              onClick={() => onNavigate('buyer-compare', { rfqId: rfq.id })}
-                              className="text-xs py-1.5 px-2 flex-1 font-bold rounded-xl"
-                            >
-                              Compare
+                              View Quotation Details
                             </Button>
                           </div>
                         </div>
@@ -368,14 +335,14 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
                 Post your material requirements (e.g., Ducab cables, switchgear, LED fixtures) or upload your BOQ sheet to receive up to 5 verified stockist quotes.
               </p>
             </div>
-            <Button
-              variant="primary"
-              onClick={() => onNavigate('create-rfq')}
-              leftIcon={<PlusCircle className="w-4 h-4" />}
-              className="font-bold shadow-md mx-auto"
-            >
-              Post Your First RFQ (100% Free)
-            </Button>
+            <div className="flex justify-center">
+              <CreateRFQButton
+                onClick={() => onNavigate('create-rfq')}
+                size="md"
+              >
+                Post Your First RFQ (100% Free)
+              </CreateRFQButton>
+            </div>
           </Card>
         )}
       </div>

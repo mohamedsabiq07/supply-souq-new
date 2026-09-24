@@ -7,6 +7,7 @@ import { BuyerCancelRFQModal } from '../../components/rfq/BuyerCancelRFQModal';
 import { Button } from '../../components/ui/Button';
 import { PlusCircle, Search } from 'lucide-react';
 import { RFQ } from '../../types';
+import { CreateRFQButton } from '../../components/common/CreateRFQButton';
 
 interface BuyerRFQsPageProps {
   onNavigate: (view: string, params?: any) => void;
@@ -36,13 +37,10 @@ export const BuyerRFQsPage: React.FC<BuyerRFQsPageProps> = ({ onNavigate }) => {
           <h1 className="text-2xl font-bold text-slate-900 dark:text-white">My Requests for Quotation (RFQs)</h1>
           <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">Manage material requirements, active vendor bids, and quote evaluations.</p>
         </div>
-        <Button
-          variant="primary"
+        <CreateRFQButton
+          size="md"
           onClick={() => onNavigate('create-rfq')}
-          leftIcon={<PlusCircle className="w-4 h-4" />}
-        >
-          Create New RFQ
-        </Button>
+        />
       </div>
 
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] p-3.5 sm:p-4 rounded-2xl border border-slate-200/80 dark:border-white/[0.08] shadow-xs">

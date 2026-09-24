@@ -5,6 +5,7 @@ import { QuotationComparisonTable } from '../../components/rfq/QuotationComparis
 import { Button } from '../../components/ui/Button';
 import { formatAED } from '../../lib/utils';
 import { ArrowLeft, GitCompare, CheckCircle2, Sparkles, ShieldCheck, Layers, Clock, AlertCircle } from 'lucide-react';
+import { CreateRFQButton } from '../../components/common/CreateRFQButton';
 
 interface CompareQuotesPageProps {
   rfqId?: string;
@@ -39,9 +40,14 @@ export const CompareQuotesPage: React.FC<CompareQuotesPageProps> = ({ rfqId, onN
           <p className="text-base font-bold text-slate-900 dark:text-white">No RFQs Available</p>
           <p className="text-xs text-slate-500 dark:text-zinc-400">You haven't posted any material RFQs yet. Post an RFQ to start receiving supplier quotes.</p>
         </div>
-        <Button variant="primary" onClick={() => onNavigate('create-rfq')}>
-          Create Your First RFQ
-        </Button>
+        <div className="flex justify-center">
+          <CreateRFQButton
+            size="md"
+            onClick={() => onNavigate('create-rfq')}
+          >
+            Create Your First RFQ
+          </CreateRFQButton>
+        </div>
       </div>
     );
   }
