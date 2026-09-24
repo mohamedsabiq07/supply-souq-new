@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { AppDataProvider } from './context/AppDataContext';
@@ -117,6 +117,32 @@ const AppContent: React.FC = () => {
     return 'home';
   });
   const [viewParams, setViewParams] = useState<any>({});
+  const [navVisible, setNavVisible] = useState(true);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const lastScrollY = useRef(0);
+
+  // Top Taskbar Auto-Hide On Scroll: hides when scrolling down, pops back up on scroll up or top
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      // Always visible when near the top
+      if (currentScrollY <= 25) {
+        setNavVisible(true);
+      } else if (currentScrollY > lastScrollY.current && currentScrollY > 60) {
+        // Scrolling DOWN -> fade away / slide up
+        setNavVisible(false);
+      } else if (currentScrollY < lastScrollY.current - 4) {
+        // Scrolling UP -> pop back up
+        setNavVisible(true);
+      }
+
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Listen to path / hash / URL changes for secret /admin07 access & shortcuts
   React.useEffect(() => {
@@ -215,6 +241,8 @@ const AppContent: React.FC = () => {
     } else {
       setCurrentView(view);
     }
+    setNavVisible(true);
+    setMobileMenuOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -294,8 +322,31 @@ const AppContent: React.FC = () => {
         </div>
       )}
 
-      {/* Main Brand Navbar at the Top */}
-      <Navbar currentView={currentView} setCurrentView={handleNavigate} />
+      {/* Invisible Hover Zone at top of viewport: brings back taskbar when cursor hovers at top */}
+      <div
+        className="fixed top-0 left-0 right-0 h-3 z-50 pointer-events-auto"
+        onMouseEnter={() => setNavVisible(true)}
+      />
+
+      {/* Main Top Header Section: Sticky and Auto-hides on Scroll */}
+      <div
+        onMouseEnter={() => setNavVisible(true)}
+        className={`sticky top-0 z-40 w-full transition-all duration-300 ease-out transform ${
+          (navVisible || mobileMenuOpen)
+            ? 'translate-y-0 opacity-100 pointer-events-auto'
+            : '-translate-y-full opacity-0 pointer-events-none'
+        }`}
+      >
+        <Navbar
+          currentView={currentView}
+          setCurrentView={handleNavigate}
+          mobileMenuOpen={mobileMenuOpen}
+          setMobileMenuOpen={setMobileMenuOpen}
+        />
+        {!isPublicPage && (
+          <WorkspaceNav currentView={currentView} setCurrentView={handleNavigate} />
+        )}
+      </div>
 
       {/* Main Content Body */}
       {isPublicPage ? (
@@ -363,9 +414,6 @@ const AppContent: React.FC = () => {
         </main>
       ) : (
         <div className="flex-1 flex flex-col w-full">
-          {/* Top Horizontal Auto-Hiding Workspace Navigation */}
-          <WorkspaceNav currentView={currentView} setCurrentView={handleNavigate} />
-
           {/* Active Workspace View (Expansive full-width layout) */}
           <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
             {/* Buyer Views */}

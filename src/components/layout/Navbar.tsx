@@ -26,12 +26,21 @@ import { CreateRFQButton } from '../common/CreateRFQButton';
 interface NavbarProps {
   currentView: string;
   setCurrentView: (view: string, params?: any) => void;
+  mobileMenuOpen?: boolean;
+  setMobileMenuOpen?: (open: boolean) => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) => {
+export const Navbar: React.FC<NavbarProps> = ({
+  currentView,
+  setCurrentView,
+  mobileMenuOpen: externalMobileMenuOpen,
+  setMobileMenuOpen: externalSetMobileMenuOpen,
+}) => {
   const { role, currentCompany, currentUser, isAuthenticated, logout } = useAuth();
   const { theme, isDark, toggleTheme } = useTheme();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [internalMobileMenuOpen, setInternalMobileMenuOpen] = useState(false);
+  const mobileMenuOpen = externalMobileMenuOpen !== undefined ? externalMobileMenuOpen : internalMobileMenuOpen;
+  const setMobileMenuOpen = externalSetMobileMenuOpen || setInternalMobileMenuOpen;
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
 
@@ -51,7 +60,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="sticky top-0 z-40 bg-white/90 dark:bg-[#070709]/90 backdrop-blur-2xl border-b border-slate-200/80 dark:border-white/[0.08] text-slate-900 dark:text-zinc-100 shadow-xs transition-all duration-300 relative group"
+      className="w-full bg-white/90 dark:bg-[#070709]/90 backdrop-blur-2xl border-b border-slate-200/80 dark:border-white/[0.08] text-slate-900 dark:text-zinc-100 shadow-xs transition-all duration-300 relative group"
     >
       {/* Dynamic Cursor Spotlight Beam on Hover */}
       <div
@@ -74,7 +83,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="flex items-center justify-between h-16 sm:h-20 gap-4">
+        <div className="flex items-center justify-between h-16 gap-4">
           {/* Logo & Brand */}
           <div className="flex items-center gap-4 sm:gap-6">
             <button
@@ -124,31 +133,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
               </button>
 
               <button
-                onClick={() => {
-                  if (currentView === 'home') {
-                    const el = document.getElementById('pricing-section');
-                    if (el) el.scrollIntoView({ behavior: 'smooth' });
-                  } else {
-                    setCurrentView('home');
-                    setTimeout(() => {
-                      const el = document.getElementById('pricing-section');
-                      if (el) el.scrollIntoView({ behavior: 'smooth' });
-                    }, 100);
-                  }
-                }}
-                className="px-3 py-2 rounded-xl transition-all duration-200 hover:bg-slate-100/80 dark:hover:bg-white/[0.06] hover:text-slate-950 dark:hover:text-white cursor-pointer active:scale-95"
-              >
-                <VariableFontCursorProximity
-                  fromFontVariationSettings="'wght' 500, 'slnt' 0"
-                  toFontVariationSettings="'wght' 800, 'slnt' -5"
-                  radius={50}
-                  falloff="gaussian"
-                >
-                  Pricing
-                </VariableFontCursorProximity>
-              </button>
-
-              <button
                 onClick={() => setCurrentView('onboarding-guide')}
                 className={`px-3 py-2 rounded-xl transition-all duration-200 flex items-center gap-1.5 cursor-pointer active:scale-95 ${
                   currentView === 'onboarding-guide'
@@ -166,32 +150,29 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
                   Onboarding SOP
                 </VariableFontCursorProximity>
               </button>
-
-              <button
-                onClick={() => setCurrentView('invoice-audit')}
-                className={`px-3.5 py-2 rounded-xl transition-all duration-200 flex items-center gap-1.5 font-bold cursor-pointer hover:scale-105 active:scale-95 ${
-                  currentView === 'invoice-audit'
-                    ? 'bg-rose-50 dark:bg-rose-950/60 text-[#cf2e46] dark:text-rose-400 border border-rose-300 dark:border-rose-900 shadow-xs'
-                    : 'bg-rose-50/70 dark:bg-rose-950/30 hover:bg-rose-100 dark:hover:bg-rose-950/50 text-[#cf2e46] dark:text-rose-400 border border-rose-200/80 dark:border-rose-900/60 hover:shadow-xs'
-                }`}
-              >
-                <Sparkles className="w-3.5 h-3.5 text-[#cf2e46] animate-pulse" />
-                <VariableFontCursorProximity
-                  fromFontVariationSettings="'wght' 600, 'slnt' 0"
-                  toFontVariationSettings="'wght' 900, 'slnt' -6"
-                  radius={50}
-                  falloff="gaussian"
-                >
-                  Free Cost Audit
-                </VariableFontCursorProximity>
-              </button>
             </nav>
           </div>
 
           {/* Right Action Buttons */}
-          <div className="hidden sm:flex items-center gap-3">
+          <div className="hidden sm:flex items-center gap-2.5">
+            {/* Subtle Minimalist Theme Toggle */}
+            <button
+              type="button"
+              onClick={toggleTheme}
+              data-testid="theme-toggle"
+              aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+              title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+              className="p-1.5 rounded-lg text-slate-500 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-white/[0.06] transition-colors cursor-pointer mr-1"
+            >
+              {isDark ? (
+                <Sun className="w-4 h-4 text-amber-400 hover:rotate-45 transition-transform duration-200" />
+              ) : (
+                <Moon className="w-4 h-4 text-slate-600 hover:-rotate-12 transition-transform duration-200" />
+              )}
+            </button>
+
             {!isAuthenticated ? (
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2.5">
                 <button
                   onClick={() => setCurrentView('login')}
                   className="px-3 py-2 text-xs font-bold text-slate-700 dark:text-zinc-300 hover:text-[#cf2e46] dark:hover:text-rose-400 transition-colors cursor-pointer"
@@ -249,8 +230,17 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
             )}
           </div>
 
-          {/* Mobile Actions: Menu Toggle */}
-          <div className="flex sm:hidden items-center">
+          {/* Mobile Actions: Subtle Theme Toggle + Menu Toggle */}
+          <div className="flex sm:hidden items-center gap-1">
+            <button
+              type="button"
+              onClick={toggleTheme}
+              aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+              title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+              className="p-2 rounded-lg text-slate-500 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors cursor-pointer"
+            >
+              {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-600" />}
+            </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 rounded-lg text-slate-700 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors cursor-pointer"
@@ -285,35 +275,28 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView }) =
             </button>
             <button
               onClick={() => {
-                const el = document.getElementById('pricing-section');
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-                setMobileMenuOpen(false);
-              }}
-              className="p-2.5 text-left hover:bg-slate-50 dark:hover:bg-zinc-900 rounded-lg cursor-pointer"
-            >
-              Pricing
-            </button>
-            <button
-              onClick={() => {
                 setCurrentView('onboarding-guide');
                 setMobileMenuOpen(false);
               }}
-              className="p-2.5 text-left text-[#cf2e46] bg-rose-50 dark:bg-rose-950/40 font-bold rounded-lg border border-rose-200 dark:border-rose-900/80 cursor-pointer"
+              className="p-2.5 text-left text-[#cf2e46] bg-rose-50 dark:bg-rose-950/40 font-bold rounded-lg border border-rose-200 dark:border-rose-900/80 cursor-pointer flex items-center gap-2"
             >
-              Onboarding SOP
+              <BookOpen className="w-4 h-4 text-[#cf2e46]" />
+              <span>Onboarding SOP</span>
             </button>
+          </div>
+
+          {/* Theme Quick Switcher in Mobile Drawer */}
+          <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-200/60 dark:border-white/[0.06] text-xs font-semibold text-slate-600 dark:text-zinc-400">
+            <span className="flex items-center gap-2">
+              {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-600" />}
+              <span>{isDark ? 'Dark Mode' : 'Light Mode'}</span>
+            </span>
             <button
-              onClick={() => {
-                setCurrentView('invoice-audit');
-                setMobileMenuOpen(false);
-              }}
-              className="p-2.5 text-left text-[#cf2e46] bg-rose-50 dark:bg-rose-950/40 font-bold rounded-lg border border-rose-200 dark:border-rose-900/80 flex items-center justify-between cursor-pointer"
+              type="button"
+              onClick={toggleTheme}
+              className="text-[11px] font-bold text-[#cf2e46] hover:underline"
             >
-              <span className="flex items-center gap-1.5">
-                <Sparkles className="w-4 h-4 text-[#cf2e46]" />
-                Free Cost Audit
-              </span>
-              <span className="text-[10px] bg-[#cf2e46] text-white px-2 py-0.5 rounded-full uppercase tracking-wider font-extrabold">Save 15%+</span>
+              Switch to {isDark ? 'Light' : 'Dark'}
             </button>
           </div>
 

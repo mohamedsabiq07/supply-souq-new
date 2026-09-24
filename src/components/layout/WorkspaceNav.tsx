@@ -28,36 +28,6 @@ export const WorkspaceNav: React.FC<WorkspaceNavProps> = ({ currentView, setCurr
   const { role, currentUser, currentCompany, logout } = useAuth();
   const { rfqs, quotations, purchaseOrders, messages, verifications } = useAppData();
 
-  // Scroll visibility state: hides on scroll down, reappears when scrolling up or at top
-  const [isVisible, setIsVisible] = useState(true);
-  const [isScrolledPastTop, setIsScrolledPastTop] = useState(false);
-  const lastScrollY = useRef(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-
-      if (currentScrollY <= 20) {
-        setIsVisible(true);
-        setIsScrolledPastTop(false);
-      } else {
-        setIsScrolledPastTop(true);
-        if (currentScrollY > lastScrollY.current && currentScrollY > 70) {
-          // Scrolling DOWN -> Hide
-          setIsVisible(false);
-        } else if (currentScrollY < lastScrollY.current) {
-          // Scrolling UP -> Reveal
-          setIsVisible(true);
-        }
-      }
-
-      lastScrollY.current = currentScrollY;
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   if (!currentUser || !currentCompany) {
     return null;
   }
@@ -105,16 +75,8 @@ export const WorkspaceNav: React.FC<WorkspaceNavProps> = ({ currentView, setCurr
   const tabs = role === 'buyer' ? buyerTabs : role === 'supplier' ? supplierTabs : adminTabs;
 
   return (
-    <div
-      className={`sticky top-16 z-30 w-full transition-all duration-300 ease-out transform ${
-        isVisible ? 'translate-y-0 opacity-100 pointer-events-auto' : '-translate-y-full opacity-0 pointer-events-none'
-      } ${
-        isScrolledPastTop
-          ? 'bg-white/95 dark:bg-[#0c0c0e]/95 backdrop-blur-xl border-b border-slate-200/80 dark:border-white/[0.08] shadow-md'
-          : 'bg-white/90 dark:bg-[#0c0c0e]/90 backdrop-blur-md border-b border-slate-200/60 dark:border-white/[0.06]'
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center justify-between gap-4">
+    <div className="w-full bg-white/95 dark:bg-[#0c0c0e]/95 backdrop-blur-xl border-b border-slate-200/80 dark:border-white/[0.08] shadow-xs transition-colors duration-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between gap-4">
         {/* Left: User / Company Quick Identity Pill */}
         <button
           type="button"
