@@ -53,14 +53,9 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
-              Procurement Command Dashboard
-            </h1>
-            <span className="bg-brand-50 dark:bg-brand-950/60 text-brand-700 dark:text-brand-300 text-xs font-bold px-2 py-0.5 rounded border border-brand-200 dark:border-brand-800">
-              {currentCompany.name || 'Contractor Portal'}
-            </span>
-          </div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
+            Procurement Command Dashboard
+          </h1>
           <p className="text-xs sm:text-sm text-slate-500 dark:text-zinc-400 mt-1">
             Manage your project material RFQs, compare multi-vendor quotations, and track UAE site deliveries.
           </p>

@@ -44,14 +44,9 @@ export const SupplierDashboard: React.FC<SupplierDashboardProps> = ({ onNavigate
       {/* Top Header & Verification Status */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
-              Supplier Sales Desk
-            </h1>
-            <span className="bg-amber-100 text-amber-900 text-xs font-bold px-2 py-0.5 rounded border border-amber-300">
-              {currentCompany.name || 'Supplier Portal'}
-            </span>
-          </div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
+            Supplier Sales Desk
+          </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
             Receive matched contractor RFQs in Dubai & Sharjah, quote competitive prices with 5% VAT, and fulfill Purchase Orders.
           </p>
