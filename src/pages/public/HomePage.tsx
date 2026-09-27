@@ -38,7 +38,8 @@ import {
   DollarSign,
   Truck,
   TrendingUp,
-  MapPin
+  MapPin,
+  LayoutDashboard
 } from 'lucide-react';
 
 interface HomePageProps {
@@ -47,7 +48,7 @@ interface HomePageProps {
 }
 
 export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, role } = useAuth();
   const { isDark } = useTheme();
   const { categories, companies, rfqs } = useAppData();
 
@@ -153,8 +154,8 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
               Upload your material list or BOQ in 60 seconds. Top verified UAE stockists compete to give you the best wholesale prices within 24 hours.
             </VariableFontCursorProximity>
 
-            {/* Primary Hero CTA */}
-            <div className="flex items-center justify-center pt-4">
+            {/* Primary Hero CTA & Direct Dashboard Shortcut */}
+            <div className="flex flex-col items-center justify-center pt-4 gap-3">
               <MetalFx
                 preset="chromatic"
                 strength={0.85}
@@ -172,6 +173,21 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
               </MetalFx>
+
+              <button
+                onClick={() => {
+                  if (isAuthenticated) {
+                    const dest = role === 'supplier' ? 'supplier-dashboard' : role === 'admin' ? 'admin-dashboard' : 'buyer-dashboard';
+                    setCurrentView(dest);
+                  } else {
+                    setCurrentView('login');
+                  }
+                }}
+                className="inline-flex items-center gap-2 text-xs font-bold text-slate-600 dark:text-zinc-300 hover:text-[#cf2e46] dark:hover:text-rose-400 transition-colors cursor-pointer py-1 px-3.5 rounded-full hover:bg-slate-200/60 dark:hover:bg-white/[0.08]"
+              >
+                <LayoutDashboard className="w-3.5 h-3.5 text-[#cf2e46]" />
+                <span>{isAuthenticated ? 'Open Workspace Dashboard →' : 'Looking for your Dashboard? Sign in here →'}</span>
+              </button>
             </div>
 
 
