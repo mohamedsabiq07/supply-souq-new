@@ -286,7 +286,13 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [messages, setMessages] = useState<Message[]>(() => {
     try {
       const saved = localStorage.getItem(`${STORAGE_KEY}_msgs`);
-      return saved ? JSON.parse(saved) : initialMessages;
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          return parsed.filter((m: any) => m.id !== 'msg-1' && m.id !== 'msg-2-voice');
+        }
+      }
+      return initialMessages;
     } catch (e) {
       return initialMessages;
     }
@@ -625,7 +631,8 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
         // 5. Merge Messages
         if (result.messages && result.messages.length > 0) {
-          setMessages((prev) => mergeEntities(prev, result.messages));
+          const cleanMsgs = result.messages.filter(m => m.id !== 'msg-1' && m.id !== 'msg-2-voice');
+          setMessages((prev) => mergeEntities(prev, cleanMsgs));
         }
 
         // 6. Merge Verifications
@@ -730,7 +737,9 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
       .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, (payload) => {
         if (payload.eventType === 'INSERT') {
           const newMsg = mapMessageFromDB(payload.new);
-          setMessages((prev) => [...prev.filter((m) => m.id !== newMsg.id), newMsg]);
+          if (newMsg.id !== 'msg-1' && newMsg.id !== 'msg-2-voice') {
+            setMessages((prev) => [...prev.filter((m) => m.id !== newMsg.id), newMsg]);
+          }
         }
       })
       .subscribe();

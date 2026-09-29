@@ -448,7 +448,7 @@ const AppContent: React.FC = () => {
               <BuyerOrdersPage />
             )}
             {currentView === 'buyer-messages' && (
-              <BuyerMessagesPage />
+              <BuyerMessagesPage onNavigate={handleNavigate} />
             )}
 
             {/* Supplier Views */}
@@ -468,7 +468,7 @@ const AppContent: React.FC = () => {
               <SupplierOrdersPage />
             )}
             {currentView === 'supplier-messages' && (
-              <BuyerMessagesPage />
+              <BuyerMessagesPage onNavigate={handleNavigate} />
             )}
 
             {/* Universal Profile & Settings View */}
