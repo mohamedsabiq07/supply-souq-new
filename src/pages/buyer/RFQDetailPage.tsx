@@ -457,9 +457,6 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
         </CardContent>
       </Card>
 
-      {/* Direct Text Box for Customer Service & Procurement Officers */}
-      <SupportDeskInlineBox defaultRfqNumber={rfq.rfqNumber} />
-
       {/* Buyer Cancel RFQ Modal */}
       {!isSupplier && (
         <BuyerCancelRFQModal

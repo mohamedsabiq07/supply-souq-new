@@ -810,9 +810,6 @@ export const CompareQuotesPage: React.FC<CompareQuotesPageProps> = ({ rfqId, onN
           </Card>
         </div>
       )}
-
-      {/* Direct Text Box for Customer Service & Procurement Officers */}
-      <SupportDeskInlineBox defaultRfqNumber={targetRFQ.rfqNumber} />
     </div>
   );
 };

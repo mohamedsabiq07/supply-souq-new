@@ -491,8 +491,8 @@ const AppContent: React.FC = () => {
         </div>
       )}
 
-      {/* Floating Customer Service & Procurement Officers Chat Box (Buyers & Suppliers) */}
-      {isAuthenticated && <SupportChatWidget />}
+      {/* Customer Service & Procurement Officers Chat Box (Bottom-right button ONLY on Home page; in Dashboard, triggered only by top-right button) */}
+      <SupportChatWidget showFloatingButton={currentView === 'home'} />
     </div>
   );
 };

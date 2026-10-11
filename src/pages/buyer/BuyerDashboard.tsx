@@ -202,9 +202,6 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
         />
       </div>
 
-      {/* Direct Text Box for Customer Service & Procurement Officers */}
-      <SupportDeskInlineBox />
-
       {/* Action Banner when Qualified Offers are Ready */}
       {rfqsWithPublishedOffers.length > 0 && (
         <div className="p-5 bg-gradient-to-r from-slate-900 via-[#1f0910] to-slate-900 text-white rounded-2xl border border-[#cf2e46]/40 shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">

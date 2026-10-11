@@ -417,11 +417,18 @@ export const SupportDeskInlineBox: React.FC<SupportDeskInlineBoxProps> = ({
   );
 };
 
+interface SupportChatWidgetProps {
+  showFloatingButton?: boolean;
+}
+
 /**
- * Floating Bottom-Right Chat Box for Buyers & Suppliers so they can text
- * Customer Service & Procurement Officers from any screen without a separate page.
+ * Chat Box for Buyers, Suppliers, and Visitors:
+ * - On the Home page (showFloatingButton === true), shows the bottom-right floating launcher button.
+ * - In the Dashboard / Workspace section (showFloatingButton === false), hides the bottom-right button so ONLY the top-right "Text Procurement Officer" button in the workspace navbar is visible.
  */
-export const SupportChatWidget: React.FC = () => {
+export const SupportChatWidget: React.FC<SupportChatWidgetProps> = ({
+  showFloatingButton = true,
+}) => {
   const {
     currentCompany,
     currentUser,
@@ -439,7 +446,7 @@ export const SupportChatWidget: React.FC = () => {
 
   useEffect(() => {
     const handleOpenChat = () => {
-      setIsOpen(true);
+      setIsOpen((prev) => !prev);
     };
     window.addEventListener('open-support-chat', handleOpenChat as EventListener);
     (window as any).__openSupportChat = () => {
@@ -456,7 +463,12 @@ export const SupportChatWidget: React.FC = () => {
     }
   }, [isOpen, threadMessages.length]);
 
-  if (!currentCompany || !currentUser || role === 'admin') {
+  if (role === 'admin' && !showFloatingButton) {
+    return null;
+  }
+
+  // In the Dashboard section (showFloatingButton === false), if the chat window is closed, hide the bottom-right button completely!
+  if (!showFloatingButton && !isOpen) {
     return null;
   }
 
@@ -467,11 +479,11 @@ export const SupportChatWidget: React.FC = () => {
     sendMessage({
       rfqId: 'procuresouq-general-support',
       rfqNumber: 'PS-SUPPORT',
-      senderId: currentUser.id || 'user',
-      senderName: currentUser.fullName || currentCompany.name || 'User',
-      senderCompanyId: currentCompany.id,
-      senderCompanyName: currentCompany.name,
-      senderRole: role,
+      senderId: currentUser?.id || 'visitor',
+      senderName: currentUser?.fullName || currentCompany?.name || 'Website Visitor',
+      senderCompanyId: currentCompany?.id || 'guest-visitor',
+      senderCompanyName: currentCompany?.name || 'Website Visitor',
+      senderRole: role === 'supplier' ? 'supplier' : 'buyer',
       recipientCompanyId: 'procuresouq-admin',
       recipientCompanyName: deskTitle,
       messageText: inputText.trim(),
@@ -481,9 +493,15 @@ export const SupportChatWidget: React.FC = () => {
   };
 
   return (
-    <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end">
+    <div
+      className={
+        showFloatingButton
+          ? 'fixed bottom-5 right-5 z-50 flex flex-col items-end'
+          : 'fixed top-28 right-4 sm:right-8 z-50 flex flex-col items-end'
+      }
+    >
       {isOpen ? (
-        <div className="w-[350px] sm:w-[400px] rounded-2xl bg-white dark:bg-[#111114] border border-slate-200 dark:border-white/[0.12] shadow-2xl overflow-hidden flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-200">
+        <div className="w-[350px] sm:w-[400px] rounded-2xl bg-white dark:bg-[#111114] border border-slate-200 dark:border-white/[0.12] shadow-2xl overflow-hidden flex flex-col animate-in fade-in duration-200">
           {/* Header */}
           <div className="p-3.5 bg-gradient-to-r from-slate-900 via-[#1f0910] to-slate-900 text-white flex items-center justify-between gap-2">
             <div className="flex items-center gap-2.5 min-w-0">
@@ -505,9 +523,9 @@ export const SupportChatWidget: React.FC = () => {
               type="button"
               onClick={() => setIsOpen(false)}
               className="p-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
-              title="Minimize chat box"
+              title="Close chat box"
             >
-              <Minimize2 className="w-4 h-4" />
+              <X className="w-4 h-4" />
             </button>
           </div>
 
@@ -519,8 +537,9 @@ export const SupportChatWidget: React.FC = () => {
             {threadMessages.length > 0 ? (
               threadMessages.map((msg) => {
                 const isMe =
-                  msg.senderCompanyId === currentCompany.id ||
-                  (currentUser.id && msg.senderId === currentUser.id);
+                  (currentCompany?.id && msg.senderCompanyId === currentCompany.id) ||
+                  (currentUser?.id && msg.senderId === currentUser.id) ||
+                  (!currentCompany?.id && msg.senderCompanyId === 'guest-visitor');
                 return (
                   <div
                     key={msg.id}

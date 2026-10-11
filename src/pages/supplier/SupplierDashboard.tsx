@@ -149,9 +149,6 @@ export const SupplierDashboard: React.FC<SupplierDashboardProps> = ({ onNavigate
         />
       </div>
 
-      {/* Direct Text Box for Customer Service & Procurement Officers */}
-      <SupportDeskInlineBox />
-
       {/* Live RFQ Opportunities */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
