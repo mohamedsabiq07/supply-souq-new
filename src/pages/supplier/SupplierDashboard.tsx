@@ -28,7 +28,7 @@ interface SupplierDashboardProps {
 
 export const SupplierDashboard: React.FC<SupplierDashboardProps> = ({ onNavigate }) => {
   const { currentCompany } = useAuth();
-  const { rfqs, quotations, purchaseOrders, isRFQDeclinedBySupplier, declineRFQ, hasSupplierQuoted, isRFQExtendedUnlocked } = useAppData();
+  const { rfqs, quotations, purchaseOrders, supplierPOs, isRFQDeclinedBySupplier, declineRFQ, hasSupplierQuoted, isRFQExtendedUnlocked } = useAppData();
   const [targetDecliningRFQ, setTargetDecliningRFQ] = useState<RFQ | null>(null);
 
   const matchingRFQs = rfqs.filter(r => 
@@ -36,7 +36,9 @@ export const SupplierDashboard: React.FC<SupplierDashboardProps> = ({ onNavigate
     !isRFQDeclinedBySupplier(r.id, currentCompany.id)
   );
   const myQuotations = quotations.filter(q => q.supplierCompanyId === currentCompany.id);
+  const mySPOs = supplierPOs.filter(s => s.supplierCompanyId === currentCompany.id);
   const myOrders = purchaseOrders.filter(p => p.supplierCompanyId === currentCompany.id);
+  const totalSupplierOrdersCount = mySPOs.length + myOrders.length;
   const isPending = currentCompany.verificationStatus === 'pending';
 
   return (
@@ -133,9 +135,9 @@ export const SupplierDashboard: React.FC<SupplierDashboardProps> = ({ onNavigate
           icon={<Zap className="w-6 h-6 text-brand-600" />}
         />
         <StatWidget
-          title="Won Purchase Orders"
-          value={myOrders.length}
-          subtitle={myOrders.length > 0 ? "Orders awarded" : "0 orders won"}
+          title="Supplier POs (`PS-SPO`)"
+          value={totalSupplierOrdersCount}
+          subtitle={totalSupplierOrdersCount > 0 ? "Orders awarded by ProcureSouq" : "0 orders won"}
           icon={<PackageCheck className="w-6 h-6 text-emerald-600" />}
         />
         <StatWidget
@@ -151,7 +153,7 @@ export const SupplierDashboard: React.FC<SupplierDashboardProps> = ({ onNavigate
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" />
-            <h3 className="text-lg font-bold text-slate-900">Live RFQ Opportunities Ready for Quoting</h3>
+            <h3 className="text-lg font-bold text-slate-900">Assigned RFQs Ready for Quoting</h3>
           </div>
           <button
             onClick={() => onNavigate('supplier-inbox')}
@@ -195,27 +197,67 @@ export const SupplierDashboard: React.FC<SupplierDashboardProps> = ({ onNavigate
       <Card>
         <CardHeader>
           <div>
-            <h3 className="text-base font-bold text-slate-900">Active Purchase Orders to Fulfill</h3>
-            <p className="text-xs text-slate-500">Track delivery deadlines and site gate receipt confirmations.</p>
+            <h3 className="text-base font-bold text-slate-900">Supplier Purchase Orders Received (`PS-SPO`)</h3>
+            <p className="text-xs text-slate-500">Official Supplier POs issued by ProcureSouq Managed Procurement Desk.</p>
           </div>
-          {myOrders.length > 0 && (
+          {totalSupplierOrdersCount > 0 && (
             <Button
               variant="outline"
               size="sm"
               onClick={() => onNavigate('supplier-orders')}
             >
-              All Orders
+              Manage Fulfilment & PODs
             </Button>
           )}
         </CardHeader>
-        {myOrders.length > 0 ? (
+        {mySPOs.length > 0 ? (
+          <CardContent className="p-0 overflow-x-auto">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
+                <tr>
+                  <th className="p-3">Supplier PO #</th>
+                  <th className="p-3">Contracting Counterparty</th>
+                  <th className="p-3">Delivery Destination</th>
+                  <th className="p-3">Agreed PO Value (AED)</th>
+                  <th className="p-3">Expected Date</th>
+                  <th className="p-3">Status</th>
+                  <th className="p-3 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {mySPOs.map((spo) => (
+                  <tr key={spo.id} className="hover:bg-slate-50/60">
+                    <td className="p-3 font-mono font-bold text-brand-700">{spo.spoNumber}</td>
+                    <td className="p-3 font-semibold text-slate-900">ProcureSouq Managed Procurement Desk</td>
+                    <td className="p-3 text-slate-600">{spo.deliveryDestination}</td>
+                    <td className="p-3 font-extrabold text-slate-900 font-mono">{formatAED(spo.supplierTotalAED)}</td>
+                    <td className="p-3 text-slate-600">{formatDate(spo.expectedDispatchDate)}</td>
+                    <td className="p-3">
+                      <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 uppercase">
+                        {spo.status.replace(/_/g, ' ')}
+                      </span>
+                    </td>
+                    <td className="p-3 text-right">
+                      <button
+                        onClick={() => onNavigate('supplier-orders')}
+                        className="text-brand-600 hover:text-brand-800 font-bold"
+                      >
+                        Manage Dispatch & POD
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </CardContent>
+        ) : myOrders.length > 0 ? (
           <CardContent className="p-0 overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead className="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
                 <tr>
                   <th className="p-3">PO Number</th>
-                  <th className="p-3">Contractor Buyer</th>
-                  <th className="p-3">Project / Site</th>
+                  <th className="p-3">Contracting Counterparty</th>
+                  <th className="p-3">Delivery Destination</th>
                   <th className="p-3">Total Value (AED)</th>
                   <th className="p-3">Required Date</th>
                   <th className="p-3">Status</th>
@@ -226,7 +268,7 @@ export const SupplierDashboard: React.FC<SupplierDashboardProps> = ({ onNavigate
                 {myOrders.map((po) => (
                   <tr key={po.id} className="hover:bg-slate-50/60">
                     <td className="p-3 font-mono font-bold text-brand-700">{po.poNumber}</td>
-                    <td className="p-3 font-semibold text-slate-900">{po.buyerCompanyName}</td>
+                    <td className="p-3 font-semibold text-slate-900">ProcureSouq Managed Desk</td>
                     <td className="p-3 text-slate-600">{po.deliveryAddress}</td>
                     <td className="p-3 font-extrabold text-slate-900">{formatAED(po.totalAmountAED)}</td>
                     <td className="p-3 text-slate-600">{formatDate(po.expectedDeliveryDate)}</td>
@@ -248,8 +290,8 @@ export const SupplierDashboard: React.FC<SupplierDashboardProps> = ({ onNavigate
           </CardContent>
         ) : (
           <CardContent className="p-8 text-center text-xs text-slate-500">
-            <p className="font-semibold text-slate-700">No active purchase orders awarded yet</p>
-            <p className="text-slate-400 mt-1">Submit competitive quotations on contractor RFQs to win contracts and receive purchase orders.</p>
+            <p className="font-semibold text-slate-700">No active Supplier Purchase Orders (`PS-SPO`) awarded yet</p>
+            <p className="text-slate-400 mt-1">Submit competitive quotations on assigned RFQs to receive official Supplier Purchase Orders from ProcureSouq.</p>
           </CardContent>
         )}
       </Card>

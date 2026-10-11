@@ -15,8 +15,10 @@ export const SupplierQuotationsPage: React.FC = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">Submitted Quotations</h1>
-        <p className="text-xs text-slate-500 mt-0.5">Track your commercial bids, evaluation states, and won contracts.</p>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">My Quotations to ProcureSouq</h1>
+        <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">
+          Track your confidential commercial quotations submitted to ProcureSouq’s Managed Procurement Desk.
+        </p>
       </div>
 
       {myQuotes.length > 0 ? (
@@ -26,23 +28,26 @@ export const SupplierQuotationsPage: React.FC = () => {
               <CardContent className="p-6">
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-4 border-b border-slate-100">
                   <div>
-                    <div className="flex items-center gap-2 mb-1">
+                    <div className="flex items-center gap-2 mb-1 flex-wrap">
                       <span className="font-mono font-bold text-xs bg-amber-100 text-amber-900 px-2 py-0.5 rounded">
                         {quote.quotationNumber}
                       </span>
                       <span className="text-xs font-mono text-slate-500">RFQ: {quote.rfqNumber}</span>
+                      <span className="text-[11px] font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+                        Counterparty: ProcureSouq Managed Desk
+                      </span>
                       {quote.status === 'awarded' ? (
                         <span className="text-xs font-bold text-rose-800 bg-rose-100 px-2 py-0.5 rounded border border-rose-300">
-                          ✓ Won & Awarded
+                          ✓ Selected for Supplier PO (PS-SPO)
                         </span>
                       ) : (
                         <span className="text-xs font-bold text-sky-800 bg-sky-50 px-2 py-0.5 rounded border border-sky-200">
-                          Under Buyer Evaluation
+                          Under ProcureSouq Technical & Commercial Review
                         </span>
                       )}
                     </div>
-                    <h3 className="text-base font-bold text-slate-900">{quote.rfqTitle}</h3>
-                    <p className="text-xs text-slate-500 mt-0.5">Submitted on: {formatDate(quote.submittedAt)}</p>
+                    <h3 className="text-base font-bold text-slate-900 dark:text-white">{quote.rfqTitle}</h3>
+                    <p className="text-xs text-slate-500 mt-0.5">Submitted to ProcureSouq on: {formatDate(quote.submittedAt)}</p>
                   </div>
 
                   <div className="sm:text-right">

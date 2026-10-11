@@ -2,7 +2,7 @@ import React from 'react';
 import { Company } from '../../types';
 import { Card, CardContent } from '../ui/Card';
 import { Button } from '../ui/Button';
-import { ShieldCheck, MapPin, Star, Phone, Mail, Building2 } from 'lucide-react';
+import { ShieldCheck, MapPin, Star, Lock } from 'lucide-react';
 
 interface SupplierCardProps {
   supplier: Company;
@@ -10,17 +10,21 @@ interface SupplierCardProps {
 }
 
 export const SupplierCard: React.FC<SupplierCardProps> = ({ supplier, onRequestQuote }) => {
+  const poolCode = `PS-PARTNER-${supplier.id.replace(/[^a-zA-Z0-9]/g, '').slice(-4).toUpperCase()}`;
+
   return (
     <Card className="hover:border-brand-300 dark:hover:border-brand-500 transition-all flex flex-col justify-between">
       <CardContent className="p-5">
         <div className="flex items-start justify-between gap-3 mb-3">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-slate-900 dark:bg-white/[0.06] text-white font-bold flex items-center justify-center text-base shadow-sm shrink-0 border border-slate-700 dark:border-white/[0.1]">
-              {supplier.name.slice(0, 2).toUpperCase()}
+            <div className="w-12 h-12 rounded-xl bg-slate-900 dark:bg-white/[0.06] text-white font-bold flex items-center justify-center text-xs shadow-sm shrink-0 border border-slate-700 dark:border-white/[0.1]">
+              PS
             </div>
             <div>
               <div className="flex items-center gap-1.5 flex-wrap">
-                <h4 className="text-base font-bold text-slate-900 dark:text-white">{supplier.name}</h4>
+                <h4 className="text-base font-bold text-slate-900 dark:text-white">
+                  Verified UAE Stockist ({supplier.emirate})
+                </h4>
                 {supplier.verificationStatus === 'verified' && (
                   <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold bg-rose-100 dark:bg-rose-950/50 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-900/60">
                     <ShieldCheck className="w-3.5 h-3.5 text-[#cf2e46]" /> DET Verified
@@ -67,8 +71,11 @@ export const SupplierCard: React.FC<SupplierCardProps> = ({ supplier, onRequestQ
         </div>
 
         <div className="text-xs text-slate-500 dark:text-zinc-400 flex items-center justify-between pt-1 border-t border-slate-100 dark:border-white/[0.06]">
-          <span>License: <strong className="text-slate-700 dark:text-zinc-300 font-mono">{supplier.tradeLicenseNumber}</strong></span>
-          <span className="text-[#cf2e46] font-semibold">Active UAE Trader</span>
+          <span className="inline-flex items-center gap-1">
+            <Lock className="w-3 h-3 text-slate-400" />
+            Pool ID: <strong className="text-slate-700 dark:text-zinc-300 font-mono">{poolCode}</strong>
+          </span>
+          <span className="text-[#cf2e46] font-semibold">Managed via ProcureSouq</span>
         </div>
       </CardContent>
 
@@ -79,7 +86,7 @@ export const SupplierCard: React.FC<SupplierCardProps> = ({ supplier, onRequestQ
           className="w-full hover:bg-brand-50 dark:hover:bg-white/[0.04] hover:text-brand-700 dark:hover:text-white hover:border-brand-200 dark:hover:border-white/[0.15]"
           onClick={() => onRequestQuote && onRequestQuote(supplier)}
         >
-          Request Direct RFQ
+          Submit Managed RFQ for This Category
         </Button>
       </div>
     </Card>

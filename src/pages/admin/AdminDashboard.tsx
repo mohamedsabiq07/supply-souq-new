@@ -49,6 +49,7 @@ import { AdminLogisticsDispute } from '../../components/admin/AdminLogisticsDisp
 import { AdminAnalyticsExport } from '../../components/admin/AdminAnalyticsExport';
 import { AdminRBACSelector } from '../../components/admin/AdminRBACSelector';
 import { AdminSecurityDesk } from '../../components/admin/AdminSecurityDesk';
+import { AdminProcurementOps } from '../../components/admin/AdminProcurementOps';
 
 interface AdminDashboardProps {
   onNavigate: (view: string, params?: any) => void;
@@ -82,8 +83,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
   } = useAuth();
 
   // Tab State
-  type AdminTab = 'sla' | 'telemetry' | 'kyb' | 'finance' | 'protection' | 'logistics' | 'analytics' | 'users' | 'rfqs' | 'security';
-  const [activeTab, setActiveTab] = useState<AdminTab>('sla');
+  type AdminTab = 'v2_ops' | 'sla' | 'telemetry' | 'kyb' | 'finance' | 'protection' | 'logistics' | 'analytics' | 'users' | 'rfqs' | 'security';
+  const [activeTab, setActiveTab] = useState<AdminTab>('v2_ops');
   const [adminRole, setAdminRole] = useState<AdminRole>('super_admin');
   const [isMaskingEnabled, setIsMaskingEnabled] = useState<boolean>(true);
 
@@ -449,6 +450,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
       {/* Main Tabs Navigation */}
       <div className="flex items-center gap-2 border-b border-slate-200 pb-2 overflow-x-auto text-xs font-bold scrollbar-thin">
         <button
+          onClick={() => setActiveTab('v2_ops')}
+          className={`py-2.5 px-4 rounded-xl flex items-center gap-2 transition-all shrink-0 ${
+            activeTab === 'v2_ops'
+              ? 'bg-[#9e1c2e] text-white font-black shadow-md'
+              : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+          }`}
+        >
+          <Sparkles className="w-4 h-4" />
+          <span>🏛️ V2 Managed Procurement Desk</span>
+        </button>
+
+        <button
           onClick={() => setActiveTab('sla')}
           className={`py-2.5 px-4 rounded-xl flex items-center gap-2 transition-all shrink-0 ${
             activeTab === 'sla'
@@ -568,6 +581,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
           <span>🛡️ Fortress & Security Logs</span>
         </button>
       </div>
+
+      {/* ---------------- TAB 0: PROCURESOUQ V2 MANAGED PROCUREMENT DESK ---------------- */}
+      {activeTab === 'v2_ops' && <AdminProcurementOps />}
 
       {/* ---------------- TAB 1: SLA CONTROL TOWER ---------------- */}
       {activeTab === 'sla' && (

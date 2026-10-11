@@ -13,6 +13,21 @@ import {
   OrderStatus,
   VerificationStatus,
   TelemetryItem,
+  CommercialSettings,
+  SupplierRFQInvitation,
+  QuotationEvaluation,
+  PricingRule,
+  InternalCostBreakdown,
+  CustomerOffer,
+  CustomerPurchaseOrder,
+  SupplierPurchaseOrder,
+  OrderFulfilment,
+  FulfilmentStage,
+  FulfilmentMode,
+  DeliveryRecord,
+  DeliveryDocument,
+  ApprovalHistoryRecord,
+  PlatformNotification,
 } from '../types';
 import {
   initialRFQs,
@@ -23,6 +38,19 @@ import {
   initialMessages,
   initialReviews,
   initialVerifications,
+  defaultCommercialSettings,
+  defaultPricingRules,
+  v2TestInvitations,
+  v2TestEvaluations,
+  v2TestInternalCosts,
+  v2TestCustomerOffers,
+  v2TestCustomerPOs,
+  v2TestSupplierPOs,
+  v2TestFulfilments,
+  v2TestDeliveries,
+  v2TestDeliveryDocuments,
+  v2TestApprovalHistory,
+  v2TestNotifications,
 } from '../data/seedData';
 import { supabase } from '../lib/supabase';
 import { 
@@ -45,6 +73,21 @@ interface AppDataContextType {
   declinedRFQs: DeclineRFQRecord[];
   isSupabaseConnected: boolean;
   isSyncing: boolean;
+
+  // --- PROCURESOUQ V2 MANAGED PROCUREMENT ENTITIES ---
+  commercialSettings: CommercialSettings;
+  pricingRules: PricingRule[];
+  supplierInvitations: SupplierRFQInvitation[];
+  quotationEvaluations: QuotationEvaluation[];
+  internalCosts: InternalCostBreakdown[];
+  customerOffers: CustomerOffer[];
+  customerPOs: CustomerPurchaseOrder[];
+  supplierPOs: SupplierPurchaseOrder[];
+  orderFulfilments: OrderFulfilment[];
+  deliveryRecords: DeliveryRecord[];
+  deliveryDocuments: DeliveryDocument[];
+  approvalHistory: ApprovalHistoryRecord[];
+  notifications: PlatformNotification[];
   
   // RFQ Methods
   createRFQ: (newRFQ: Omit<RFQ, 'id' | 'rfqNumber' | 'createdAt' | 'updatedAt' | 'quotesCount' | 'invitedCount'>) => RFQ;
@@ -67,6 +110,50 @@ interface AppDataContextType {
   awardQuotation: (rfqId: string, quotationId: string) => PurchaseOrder;
   updateOrderStatus: (orderId: string, status: OrderStatus, trackingNotes?: string) => void;
   getOrderById: (orderId: string) => PurchaseOrder | undefined;
+
+  // --- PROCURESOUQ V2 MANAGED PROCUREMENT METHODS ---
+  updateCommercialSettings: (updates: Partial<CommercialSettings>, approvedBy?: string) => void;
+  updateRFQAdminWorkflow: (rfqId: string, updates: Partial<RFQ>, actorName?: string) => void;
+  inviteSuppliersToRFQ: (rfqId: string, supplierIds: string[], channel: 'portal' | 'email' | 'whatsapp_future' | 'manual_admin', deadline?: string, invitedBy?: string) => SupplierRFQInvitation[];
+  uploadManualSupplierQuote: (quoteData: Omit<Quotation, 'id' | 'quotationNumber' | 'submittedAt' | 'status'>) => Quotation;
+  evaluateSupplierQuote: (evalData: Omit<QuotationEvaluation, 'id' | 'evaluatedAt'>) => QuotationEvaluation;
+  calculateAndSaveInternalCost: (params: {
+    rfqId: string;
+    quotationId: string;
+    freightDeliveryCostAED: number;
+    otherProcurementCostAED: number;
+    otherCostDescription?: string;
+    markupType: 'percentage' | 'fixed_fee' | 'hybrid';
+    markupPercent: number;
+    fixedFeeAED: number;
+    createdBy?: string;
+  }) => InternalCostBreakdown;
+  publishCustomerOffersForRFQ: (rfqId: string, selectedQuoteIds: string[], actorName?: string) => CustomerOffer[];
+  getCustomerOffersForRFQ: (rfqId: string) => CustomerOffer[];
+  selectOfferAndCreateCustomerPO: (params: {
+    rfqId: string;
+    customerOfferId: string;
+    orderingMethod: 'uploaded_po' | 'platform_generated_po';
+    customerPoReference?: string;
+    uploadedPoFileName?: string;
+    uploadedPoUrl?: string;
+    notes?: string;
+  }) => CustomerPurchaseOrder;
+  approveCustomerPOAndCreateSupplierPO: (params: {
+    cpoId: string;
+    fulfilmentMode: FulfilmentMode;
+    expectedDispatchDate: string;
+    internalNotes?: string;
+    approvedBy?: string;
+  }) => SupplierPurchaseOrder;
+  requestCustomerPOCancellation: (cpoId: string, reason: string, requestedByRole: 'buyer' | 'admin') => void;
+  confirmSupplierPO: (spoId: string, status: 'confirmed' | 'rejected_or_delayed', notes?: string) => void;
+  updateFulfilmentStage: (fulfilmentId: string, stage: FulfilmentStage, updates?: Partial<OrderFulfilment>, actorName?: string) => void;
+  uploadDeliveryDocument: (doc: Omit<DeliveryDocument, 'id' | 'createdAt'>) => DeliveryDocument;
+  acknowledgeDeliveryReceipt: (fulfilmentId: string, notes?: string) => void;
+  reportDeliveryIssue: (fulfilmentId: string, issueNotes: string) => void;
+  markNotificationRead: (notifId: string) => void;
+  markAllNotificationsRead: (role: string, companyId?: string) => void;
   
   // Messaging
   sendMessage: (msg: Omit<Message, 'id' | 'createdAt' | 'isRead'>) => Message;
@@ -106,7 +193,7 @@ interface AppDataContextType {
 
 const AppDataContext = createContext<AppDataContextType | undefined>(undefined);
 
-const STORAGE_KEY = 'supplysouq_production_clean_v10';
+const STORAGE_KEY = 'procuresouq_v2_managed_v1';
 
 export const defaultTelemetryItems: TelemetryItem[] = [
   {
@@ -331,6 +418,124 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
       return saved ? JSON.parse(saved) : [];
     } catch (e) {
       return [];
+    }
+  });
+
+  // --- PROCURESOUQ V2 MANAGED PROCUREMENT STATES ---
+  const [commercialSettings, setCommercialSettings] = useState<CommercialSettings>(() => {
+    try {
+      const saved = localStorage.getItem(`${STORAGE_KEY}_commercial_settings`);
+      return saved ? JSON.parse(saved) : defaultCommercialSettings;
+    } catch (e) {
+      return defaultCommercialSettings;
+    }
+  });
+
+  const [pricingRules, setPricingRules] = useState<PricingRule[]>(() => {
+    try {
+      const saved = localStorage.getItem(`${STORAGE_KEY}_pricing_rules`);
+      return saved ? JSON.parse(saved) : defaultPricingRules;
+    } catch (e) {
+      return defaultPricingRules;
+    }
+  });
+
+  const [supplierInvitations, setSupplierInvitations] = useState<SupplierRFQInvitation[]>(() => {
+    try {
+      const saved = localStorage.getItem(`${STORAGE_KEY}_supplier_invitations`);
+      return saved ? JSON.parse(saved) : v2TestInvitations;
+    } catch (e) {
+      return v2TestInvitations;
+    }
+  });
+
+  const [quotationEvaluations, setQuotationEvaluations] = useState<QuotationEvaluation[]>(() => {
+    try {
+      const saved = localStorage.getItem(`${STORAGE_KEY}_quote_evaluations`);
+      return saved ? JSON.parse(saved) : v2TestEvaluations;
+    } catch (e) {
+      return v2TestEvaluations;
+    }
+  });
+
+  const [internalCosts, setInternalCosts] = useState<InternalCostBreakdown[]>(() => {
+    try {
+      const saved = localStorage.getItem(`${STORAGE_KEY}_internal_costs`);
+      return saved ? JSON.parse(saved) : v2TestInternalCosts;
+    } catch (e) {
+      return v2TestInternalCosts;
+    }
+  });
+
+  const [customerOffers, setCustomerOffers] = useState<CustomerOffer[]>(() => {
+    try {
+      const saved = localStorage.getItem(`${STORAGE_KEY}_customer_offers`);
+      return saved ? JSON.parse(saved) : v2TestCustomerOffers;
+    } catch (e) {
+      return v2TestCustomerOffers;
+    }
+  });
+
+  const [customerPOs, setCustomerPOs] = useState<CustomerPurchaseOrder[]>(() => {
+    try {
+      const saved = localStorage.getItem(`${STORAGE_KEY}_customer_pos`);
+      return saved ? JSON.parse(saved) : v2TestCustomerPOs;
+    } catch (e) {
+      return v2TestCustomerPOs;
+    }
+  });
+
+  const [supplierPOs, setSupplierPOs] = useState<SupplierPurchaseOrder[]>(() => {
+    try {
+      const saved = localStorage.getItem(`${STORAGE_KEY}_supplier_pos`);
+      return saved ? JSON.parse(saved) : v2TestSupplierPOs;
+    } catch (e) {
+      return v2TestSupplierPOs;
+    }
+  });
+
+  const [orderFulfilments, setOrderFulfilments] = useState<OrderFulfilment[]>(() => {
+    try {
+      const saved = localStorage.getItem(`${STORAGE_KEY}_order_fulfilments`);
+      return saved ? JSON.parse(saved) : v2TestFulfilments;
+    } catch (e) {
+      return v2TestFulfilments;
+    }
+  });
+
+  const [deliveryRecords, setDeliveryRecords] = useState<DeliveryRecord[]>(() => {
+    try {
+      const saved = localStorage.getItem(`${STORAGE_KEY}_delivery_records`);
+      return saved ? JSON.parse(saved) : v2TestDeliveries;
+    } catch (e) {
+      return v2TestDeliveries;
+    }
+  });
+
+  const [deliveryDocuments, setDeliveryDocuments] = useState<DeliveryDocument[]>(() => {
+    try {
+      const saved = localStorage.getItem(`${STORAGE_KEY}_delivery_documents`);
+      return saved ? JSON.parse(saved) : v2TestDeliveryDocuments;
+    } catch (e) {
+      return v2TestDeliveryDocuments;
+    }
+  });
+
+  const [approvalHistory, setApprovalHistory] = useState<ApprovalHistoryRecord[]>(() => {
+    try {
+      const saved = localStorage.getItem(`${STORAGE_KEY}_approval_history`);
+      return saved ? JSON.parse(saved) : v2TestApprovalHistory;
+    } catch (e) {
+      return v2TestApprovalHistory;
+    }
+  });
+
+  const [notifications, setNotifications] = useState<PlatformNotification[]>(() => {
+    try {
+      const saved = localStorage.getItem(`${STORAGE_KEY}_notifications`);
+      return saved ? JSON.parse(saved) : v2TestNotifications;
+    } catch (e) {
+      return v2TestNotifications;
     }
   });
 
@@ -778,8 +983,60 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
     localStorage.setItem(`${STORAGE_KEY}_verifs`, JSON.stringify(verifications));
   }, [verifications]);
 
+  useEffect(() => {
+    localStorage.setItem(`${STORAGE_KEY}_commercial_settings`, JSON.stringify(commercialSettings));
+  }, [commercialSettings]);
+
+  useEffect(() => {
+    localStorage.setItem(`${STORAGE_KEY}_pricing_rules`, JSON.stringify(pricingRules));
+  }, [pricingRules]);
+
+  useEffect(() => {
+    localStorage.setItem(`${STORAGE_KEY}_supplier_invitations`, JSON.stringify(supplierInvitations));
+  }, [supplierInvitations]);
+
+  useEffect(() => {
+    localStorage.setItem(`${STORAGE_KEY}_quote_evaluations`, JSON.stringify(quotationEvaluations));
+  }, [quotationEvaluations]);
+
+  useEffect(() => {
+    localStorage.setItem(`${STORAGE_KEY}_internal_costs`, JSON.stringify(internalCosts));
+  }, [internalCosts]);
+
+  useEffect(() => {
+    localStorage.setItem(`${STORAGE_KEY}_customer_offers`, JSON.stringify(customerOffers));
+  }, [customerOffers]);
+
+  useEffect(() => {
+    localStorage.setItem(`${STORAGE_KEY}_customer_pos`, JSON.stringify(customerPOs));
+  }, [customerPOs]);
+
+  useEffect(() => {
+    localStorage.setItem(`${STORAGE_KEY}_supplier_pos`, JSON.stringify(supplierPOs));
+  }, [supplierPOs]);
+
+  useEffect(() => {
+    localStorage.setItem(`${STORAGE_KEY}_order_fulfilments`, JSON.stringify(orderFulfilments));
+  }, [orderFulfilments]);
+
+  useEffect(() => {
+    localStorage.setItem(`${STORAGE_KEY}_delivery_records`, JSON.stringify(deliveryRecords));
+  }, [deliveryRecords]);
+
+  useEffect(() => {
+    localStorage.setItem(`${STORAGE_KEY}_delivery_documents`, JSON.stringify(deliveryDocuments));
+  }, [deliveryDocuments]);
+
+  useEffect(() => {
+    localStorage.setItem(`${STORAGE_KEY}_approval_history`, JSON.stringify(approvalHistory));
+  }, [approvalHistory]);
+
+  useEffect(() => {
+    localStorage.setItem(`${STORAGE_KEY}_notifications`, JSON.stringify(notifications));
+  }, [notifications]);
+
   const createRFQ = (newRFQData: Omit<RFQ, 'id' | 'rfqNumber' | 'createdAt' | 'updatedAt' | 'quotesCount' | 'invitedCount'>): RFQ => {
-    const randomNum = Math.floor(10000 + Math.random() * 90000);
+    const randomNum = Math.floor(1000 + Math.random() * 9000);
     
     // 1. Get all registered suppliers in the system
     const supplierPool = companies.filter((c) => c.companyType === 'supplier');
@@ -818,11 +1075,13 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const newRFQ: RFQ = {
       ...newRFQData,
       id: `rfq-${Date.now()}`,
-      rfqNumber: `SS-${randomNum}`,
+      rfqNumber: `PS-RFQ-2026-${randomNum}`,
       targetSupplierId: targetSupplier?.id || newRFQData.targetSupplierId,
       targetSupplierName: targetSupplier?.name || newRFQData.targetSupplierName,
-      status: 'published',
-      invitedCount: Math.min(5, allRecipients.length) || 5,
+      status: 'submitted_to_ops',
+      adminStatus: 'submitted_to_ops',
+      publishedOffersCount: 0,
+      invitedCount: allRecipients.length || 5,
       quotesCount: 0,
       matchedSupplierCompanyIds,
       matchedSupplierNames,
@@ -833,45 +1092,49 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
     setRfqs((prev) => [newRFQ, ...prev]);
 
-    // Deliver direct notification messages to each vendor in this category
-    if (allRecipients.length > 0) {
-      allRecipients.forEach(sup => {
-        const supMsg: Message = {
-          id: `msg-${Date.now()}-${sup.id}`,
-          rfqId: newRFQ.id,
-          rfqNumber: newRFQ.rfqNumber,
-          senderId: newRFQ.buyerCompanyId,
-          senderName: newRFQ.buyerCompanyName,
-          senderCompanyId: newRFQ.buyerCompanyId,
-          senderCompanyName: newRFQ.buyerCompanyName,
-          senderRole: 'buyer',
-          recipientCompanyId: sup.id,
-          recipientCompanyName: sup.name,
-          messageText: `[Category RFQ Dispatch] ${newRFQ.buyerCompanyName} submitted RFQ #${newRFQ.rfqNumber} for "${newRFQ.title}" in your registered category (${newRFQ.category}). Please review and submit your quotation within 24 hours.`,
-          createdAt: new Date().toISOString(),
-          isRead: false,
-        };
-        setMessages((prev) => [...prev, supMsg]);
-        supabaseService.sendMessage(supMsg).catch(console.error);
-      });
-    } else {
-      const sysMsg: Message = {
-        id: `msg-${Date.now()}-general`,
-        rfqId: newRFQ.id,
-        rfqNumber: newRFQ.rfqNumber,
-        senderId: 'system-dispatch',
-        senderName: 'SupplySouq Market Engine',
-        senderCompanyId: newRFQ.buyerCompanyId,
-        senderCompanyName: newRFQ.buyerCompanyName,
-        senderRole: 'buyer',
-        recipientCompanyId: newRFQ.buyerCompanyId,
-        recipientCompanyName: newRFQ.buyerCompanyName,
-        messageText: `RFQ #${newRFQ.rfqNumber} for "${newRFQ.title}" has been published. All registered UAE vendors in ${newRFQ.category} will receive this requirement directly on their sales desk.`,
-        createdAt: new Date().toISOString(),
-        isRead: false,
-      };
-      setMessages((prev) => [...prev, sysMsg]);
-    }
+    // Add Admin & Buyer Notifications for Managed Procurement Intake
+    const adminNotif: PlatformNotification = {
+      id: `notif-${Date.now()}-admin`,
+      recipientRole: 'admin',
+      title: `New Incoming RFQ: ${newRFQ.rfqNumber}`,
+      message: `${newRFQ.buyerCompanyName} submitted "${newRFQ.title}" (${newRFQ.items.length} BOQ items) for managed sourcing.`,
+      category: 'rfq',
+      relatedEntityId: newRFQ.id,
+      targetView: 'admin-dashboard',
+      isRead: false,
+      createdAt: new Date().toISOString(),
+    };
+    const buyerNotif: PlatformNotification = {
+      id: `notif-${Date.now()}-buyer`,
+      recipientRole: 'buyer',
+      recipientCompanyId: newRFQ.buyerCompanyId,
+      title: `RFQ ${newRFQ.rfqNumber} Received by ProcureSouq Desk`,
+      message: `Our procurement engineers are reviewing your BOQ and sourcing up to 5 competitive supplier quotations.`,
+      category: 'rfq',
+      relatedEntityId: newRFQ.id,
+      targetView: 'buyer-dashboard',
+      isRead: false,
+      createdAt: new Date().toISOString(),
+    };
+    setNotifications((prev) => [adminNotif, buyerNotif, ...prev]);
+
+    // Deliver ProcureSouq Managed Desk confirmation message to Buyer
+    const sysMsg: Message = {
+      id: `msg-${Date.now()}-managed`,
+      rfqId: newRFQ.id,
+      rfqNumber: newRFQ.rfqNumber,
+      senderId: 'procuresouq-ops',
+      senderName: 'ProcureSouq Managed Procurement Desk',
+      senderCompanyId: 'procuresouq-ops',
+      senderCompanyName: 'ProcureSouq Managed Procurement Desk',
+      senderRole: 'admin',
+      recipientCompanyId: newRFQ.buyerCompanyId,
+      recipientCompanyName: newRFQ.buyerCompanyName,
+      messageText: `[ProcureSouq Managed Desk] Your RFQ #${newRFQ.rfqNumber} ("${newRFQ.title}") has been received. Our procurement engineering team is validating specifications and sourcing competitive quotations from verified UAE stockists. You will be notified once up to 5 qualified offers are ready for comparison.`,
+      createdAt: new Date().toISOString(),
+      isRead: false,
+    };
+    setMessages((prev) => [...prev, sysMsg]);
 
     // Persist to Supabase in background
     supabaseService.createRFQ(newRFQ).catch(console.error);
@@ -1367,6 +1630,1163 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
     supabaseService.updateVerificationStatus(companyId, status, notes).catch(console.error);
   };
 
+  // --- PROCURESOUQ V2 MANAGED PROCUREMENT METHODS ---
+
+  const recordApprovalAction = (
+    entityType: ApprovalHistoryRecord['entityType'],
+    entityId: string,
+    action: string,
+    approvedBy: string,
+    role: 'admin' | 'buyer' | 'supplier',
+    previousState?: string,
+    newState?: string,
+    notes?: string
+  ) => {
+    const rec: ApprovalHistoryRecord = {
+      id: `appr-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+      entityType,
+      entityId,
+      action,
+      approvedBy,
+      role,
+      previousState,
+      newState,
+      notes,
+      createdAt: new Date().toISOString(),
+    };
+    setApprovalHistory((prev) => [rec, ...prev]);
+    supabaseService.insertApprovalHistory(rec).catch(console.error);
+  };
+
+  const updateCommercialSettings = (updates: Partial<CommercialSettings>, approvedBy = 'Admin Commercial Desk') => {
+    setCommercialSettings((prev) => {
+      const next: CommercialSettings = {
+        ...prev,
+        ...updates,
+        updatedAt: new Date().toISOString(),
+      };
+      supabaseService.upsertCommercialSettings(next).catch(console.error);
+      recordApprovalAction(
+        'commercial_settings',
+        next.id,
+        'COMMERCIAL_SETTINGS_UPDATED',
+        approvedBy,
+        'admin',
+        prev.operatingModel,
+        next.operatingModel,
+        `Contracting Entity: ${next.contractingEntityName} | Binding PO Approved: ${next.isCommercialConfigApproved}`
+      );
+      return next;
+    });
+    broadcastSync();
+  };
+
+  const updateRFQAdminWorkflow = (rfqId: string, updates: Partial<RFQ>, actorName = 'ProcureSouq Admin Desk') => {
+    setRfqs((prev) =>
+      prev.map((r) => {
+        if (r.id === rfqId || r.rfqNumber === rfqId) {
+          const updated: RFQ = {
+            ...r,
+            ...updates,
+            updatedAt: new Date().toISOString(),
+          };
+          supabaseService.upsertRFQAdminDetails(updated).catch(console.error);
+          recordApprovalAction(
+            'rfq',
+            r.id,
+            'RFQ_ADMIN_WORKFLOW_UPDATED',
+            actorName,
+            'admin',
+            r.adminStatus || r.status,
+            updated.adminStatus || updated.status,
+            updates.clarificationRequest || updates.internalOpsNotes || `Assigned to ${updated.assignedStaffName || 'Ops'}`
+          );
+          return updated;
+        }
+        return r;
+      })
+    );
+    broadcastSync();
+  };
+
+  const inviteSuppliersToRFQ = (
+    rfqId: string,
+    supplierIds: string[],
+    channel: 'portal' | 'email' | 'whatsapp_future' | 'manual_admin',
+    deadline?: string,
+    invitedBy = 'Eng. Khalid Al-blooshi (ProcureSouq Ops)'
+  ): SupplierRFQInvitation[] => {
+    const targetRFQ = rfqs.find((r) => r.id === rfqId || r.rfqNumber === rfqId);
+    if (!targetRFQ) return [];
+
+    const createdInvitations: SupplierRFQInvitation[] = [];
+    const now = new Date().toISOString();
+
+    supplierIds.forEach((supId) => {
+      const supComp = companies.find((c) => c.id === supId);
+      if (!supComp) return;
+      const existing = supplierInvitations.find(
+        (inv) => inv.rfqId === targetRFQ.id && inv.supplierCompanyId === supId
+      );
+      const inv: SupplierRFQInvitation = existing
+        ? {
+            ...existing,
+            invitationChannel: channel,
+            quotationDeadline: deadline || existing.quotationDeadline,
+            invitedBy,
+          }
+        : {
+            id: `inv-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+            rfqId: targetRFQ.id,
+            rfqNumber: targetRFQ.rfqNumber,
+            supplierCompanyId: supComp.id,
+            supplierCompanyName: supComp.name,
+            supplierEmail: supComp.email,
+            invitationChannel: channel,
+            status: 'invited',
+            quotationDeadline: deadline || targetRFQ.supplierQuoteDeadline || targetRFQ.closingDate,
+            invitedBy,
+            createdAt: now,
+          };
+      createdInvitations.push(inv);
+      supabaseService.upsertSupplierInvitation(inv).catch(console.error);
+
+      // Notify supplier
+      const supNotif: PlatformNotification = {
+        id: `notif-${Date.now()}-${supComp.id}`,
+        recipientRole: 'supplier',
+        recipientCompanyId: supComp.id,
+        title: `New ProcureSouq RFQ Assigned: ${targetRFQ.rfqNumber}`,
+        message: `ProcureSouq Sourcing Desk invited your team to quote on "${targetRFQ.title}" (${targetRFQ.items.length} BOQ items).`,
+        category: 'rfq',
+        relatedEntityId: targetRFQ.id,
+        targetView: 'supplier-inbox',
+        isRead: false,
+        createdAt: now,
+      };
+      setNotifications((prev) => [supNotif, ...prev]);
+    });
+
+    setSupplierInvitations((prev) => {
+      const map = new Map<string, SupplierRFQInvitation>();
+      prev.forEach((i) => map.set(`${i.rfqId}_${i.supplierCompanyId}`, i));
+      createdInvitations.forEach((i) => map.set(`${i.rfqId}_${i.supplierCompanyId}`, i));
+      return Array.from(map.values());
+    });
+
+    // Update RFQ matchedSupplierCompanyIds & invitedCount
+    setRfqs((prev) =>
+      prev.map((r) => {
+        if (r.id === targetRFQ.id) {
+          const mergedSupIds = Array.from(new Set([...(r.matchedSupplierCompanyIds || []), ...supplierIds]));
+          const updated: RFQ = {
+            ...r,
+            status: r.status === 'submitted_to_ops' ? 'sourcing_suppliers' : r.status,
+            adminStatus: 'sourcing_suppliers',
+            invitedCount: mergedSupIds.length,
+            matchedSupplierCompanyIds: mergedSupIds,
+            supplierQuoteDeadline: deadline || r.supplierQuoteDeadline,
+            updatedAt: now,
+          };
+          supabaseService.upsertRFQAdminDetails(updated).catch(console.error);
+          return updated;
+        }
+        return r;
+      })
+    );
+
+    broadcastSync();
+    return createdInvitations;
+  };
+
+  const uploadManualSupplierQuote = (
+    quoteData: Omit<Quotation, 'id' | 'quotationNumber' | 'submittedAt' | 'status'>
+  ): Quotation => {
+    const randomNum = Math.floor(1000 + Math.random() * 9000);
+    const targetRFQ = rfqs.find((r) => r.id === quoteData.rfqId || r.rfqNumber === quoteData.rfqId);
+    if (!targetRFQ) throw new Error('Target RFQ not found');
+
+    const quotedCount = quoteData.items.filter((i) => i.isQuoted !== false && i.unitPriceAED > 0).length;
+    const totalCount = targetRFQ.items.length || quoteData.items.length;
+
+    const newQuote: Quotation = {
+      ...quoteData,
+      id: `quote-manual-${Date.now()}`,
+      quotationNumber: `PS-SQ-2026-${randomNum}`,
+      quoteReference: quoteData.quoteReference || `MANUAL-REF-${randomNum}`,
+      buyerCompanyId: targetRFQ.buyerCompanyId,
+      buyerCompanyName: targetRFQ.buyerCompanyName,
+      isPartialQuote: quotedCount < totalCount,
+      quotedItemsCount: quotedCount,
+      totalRfqItemsCount: totalCount,
+      manualUploadByAdmin: true,
+      adminReviewStatus: 'under_review',
+      status: 'submitted',
+      submittedAt: new Date().toISOString(),
+    };
+
+    setQuotations((prev) => [newQuote, ...prev]);
+
+    // Update RFQ quotesCount
+    setRfqs((prev) =>
+      prev.map((r) => {
+        if (r.id === targetRFQ.id) {
+          const nextCount = quotations.filter((q) => q.rfqId === targetRFQ.id).length + 1;
+          const updated: RFQ = {
+            ...r,
+            quotesCount: nextCount,
+            status: 'receiving_quotes',
+            adminStatus: 'receiving_quotes',
+            updatedAt: new Date().toISOString(),
+          };
+          supabaseService.upsertRFQAdminDetails(updated).catch(console.error);
+          return updated;
+        }
+        return r;
+      })
+    );
+
+    supabaseService.submitQuotation(newQuote).catch(console.error);
+    broadcastSync();
+    return newQuote;
+  };
+
+  const evaluateSupplierQuote = (evalData: Omit<QuotationEvaluation, 'id' | 'evaluatedAt'>): QuotationEvaluation => {
+    const existing = quotationEvaluations.find((e) => e.quotationId === evalData.quotationId);
+    const evaluation: QuotationEvaluation = {
+      ...evalData,
+      id: existing?.id || `eval-${Date.now()}`,
+      evaluatedAt: new Date().toISOString(),
+    };
+
+    setQuotationEvaluations((prev) => [
+      evaluation,
+      ...prev.filter((e) => e.quotationId !== evalData.quotationId),
+    ]);
+
+    setQuotations((prev) =>
+      prev.map((q) => {
+        if (q.id === evalData.quotationId) {
+          const updated: Quotation = {
+            ...q,
+            technicalComplianceStatus: evalData.technicalCompliance,
+            deviationNotes: evalData.deviationNotes,
+            adminReviewStatus: evalData.approvedForComparison ? 'approved_for_comparison' : 'rejected',
+            status: evalData.approvedForComparison ? 'approved_for_comparison' : 'rejected_by_admin',
+          };
+          supabaseService.submitQuotation(updated).catch(console.error);
+          return updated;
+        }
+        return q;
+      })
+    );
+
+    supabaseService.upsertQuotationEvaluation(evaluation).catch(console.error);
+    recordApprovalAction(
+      'supplier_quote',
+      evalData.quotationId,
+      evalData.approvedForComparison ? 'SUPPLIER_QUOTE_APPROVED_FOR_COMPARISON' : 'SUPPLIER_QUOTE_FLAGGED_OR_REJECTED',
+      evalData.evaluatorName,
+      'admin',
+      'pending',
+      evalData.technicalCompliance,
+      evalData.deviationNotes
+    );
+    broadcastSync();
+    return evaluation;
+  };
+
+  const calculateAndSaveInternalCost = (params: {
+    rfqId: string;
+    quotationId: string;
+    freightDeliveryCostAED: number;
+    otherProcurementCostAED: number;
+    otherCostDescription?: string;
+    markupType: 'percentage' | 'fixed_fee' | 'hybrid';
+    markupPercent: number;
+    fixedFeeAED: number;
+    createdBy?: string;
+  }): InternalCostBreakdown => {
+    const quote = quotations.find((q) => q.id === params.quotationId);
+    const supplierCostExVatAED = quote ? quote.subtotalAED - (quote.discountAED || 0) : 0;
+    const vatRate = commercialSettings.vatRatePercent || 5.0;
+
+    let calculatedMarginAED = 0;
+    if (params.markupType === 'percentage') {
+      calculatedMarginAED = Math.round(supplierCostExVatAED * (params.markupPercent / 100) * 100) / 100;
+    } else if (params.markupType === 'fixed_fee') {
+      calculatedMarginAED = params.fixedFeeAED;
+    } else {
+      calculatedMarginAED =
+        Math.round(supplierCostExVatAED * (params.markupPercent / 100) * 100) / 100 + params.fixedFeeAED;
+    }
+
+    const customerSellingPriceBeforeVatAED =
+      Math.round(
+        (supplierCostExVatAED +
+          params.freightDeliveryCostAED +
+          params.otherProcurementCostAED +
+          calculatedMarginAED) *
+          100
+      ) / 100;
+    const customerVatAED = Math.round(customerSellingPriceBeforeVatAED * (vatRate / 100) * 100) / 100;
+    const customerLandedTotalAED = Math.round((customerSellingPriceBeforeVatAED + customerVatAED) * 100) / 100;
+    const grossProfitAED = calculatedMarginAED;
+    const grossMarginPercent =
+      customerSellingPriceBeforeVatAED > 0
+        ? Math.round((grossProfitAED / customerSellingPriceBeforeVatAED) * 10000) / 100
+        : 0;
+
+    const existing = internalCosts.find((c) => c.quotationId === params.quotationId);
+    const now = new Date().toISOString();
+
+    const record: InternalCostBreakdown = {
+      id: existing?.id || `cost-${Date.now()}-${Math.random().toString(36).substring(2, 5)}`,
+      rfqId: params.rfqId,
+      quotationId: params.quotationId,
+      customerOfferId: existing?.customerOfferId,
+      supplierCostExVatAED,
+      freightDeliveryCostAED: params.freightDeliveryCostAED,
+      otherProcurementCostAED: params.otherProcurementCostAED,
+      otherCostDescription: params.otherCostDescription,
+      markupType: params.markupType,
+      markupPercent: params.markupPercent,
+      fixedFeeAED: params.fixedFeeAED,
+      calculatedMarginAED,
+      customerSellingPriceBeforeVatAED,
+      vatRatePercent: vatRate,
+      customerVatAED,
+      customerLandedTotalAED,
+      grossProfitAED,
+      grossMarginPercent,
+      createdBy: params.createdBy || 'Eng. Khalid Al-blooshi',
+      createdAt: existing?.createdAt || now,
+      updatedAt: now,
+    };
+
+    setInternalCosts((prev) => [record, ...prev.filter((c) => c.quotationId !== params.quotationId)]);
+    supabaseService.upsertInternalCost(record).catch(console.error);
+    broadcastSync();
+    return record;
+  };
+
+  const publishCustomerOffersForRFQ = (
+    rfqId: string,
+    selectedQuoteIds: string[],
+    actorName = 'Eng. Khalid Al-blooshi (ProcureSouq Ops)'
+  ): CustomerOffer[] => {
+    const targetRFQ = rfqs.find((r) => r.id === rfqId || r.rfqNumber === rfqId);
+    if (!targetRFQ) return [];
+
+    // Cap at maximum 5 offers; never invent missing offers
+    const cappedQuoteIds = selectedQuoteIds.slice(0, 5);
+    const validQuotes = cappedQuoteIds
+      .map((id) => quotations.find((q) => q.id === id))
+      .filter((q): q is Quotation => Boolean(q));
+
+    if (validQuotes.length === 0) return [];
+
+    const now = new Date().toISOString();
+    const defaultMarkupPct = commercialSettings.defaultMarkupPercent || 5.0;
+    const vatRate = commercialSettings.vatRatePercent || 5.0;
+
+    // Build draft offers
+    const builtOffers: CustomerOffer[] = validQuotes.map((q, idx) => {
+      const slot = idx + 1;
+      const existingEval = quotationEvaluations.find((e) => e.quotationId === q.id);
+      const existingCost = internalCosts.find((c) => c.quotationId === q.id);
+
+      const markupMultiplier =
+        existingCost && existingCost.supplierCostExVatAED > 0
+          ? (existingCost.supplierCostExVatAED + existingCost.calculatedMarginAED) /
+            existingCost.supplierCostExVatAED
+          : 1 + defaultMarkupPct / 100;
+
+      const offerId = `offer-${targetRFQ.id}-${slot}`;
+      const offerItems = q.items.map((item, itemIdx) => {
+        const isIncluded = item.isQuoted !== false && item.unitPriceAED > 0;
+        const customerUnit = isIncluded ? Math.round(item.unitPriceAED * markupMultiplier * 100) / 100 : 0;
+        return {
+          id: `${offerId}-item-${itemIdx + 1}`,
+          customerOfferId: offerId,
+          rfqItemId: item.rfqItemId,
+          itemNumber: itemIdx + 1,
+          description: item.itemDescription,
+          offeredBrand: item.offeredBrand,
+          specificationCompliance: (!isIncluded
+            ? 'Not Quoted'
+            : item.isAlternative
+            ? 'Alternative'
+            : 'Compliant') as any,
+          isIncluded,
+          isAlternative: item.isAlternative,
+          quantity: item.quantity,
+          unit: item.unit,
+          customerUnitPriceAED: customerUnit,
+          customerLineTotalAED: isIncluded ? Math.round(customerUnit * item.quantity * 100) / 100 : 0,
+          availability: isIncluded ? q.stockAvailability || 'In Stock (UAE)' : 'Not Quoted',
+          leadTimeDays: isIncluded ? q.leadTimeDays : 0,
+          deviationNote: item.isAlternative ? item.remarks : undefined,
+        };
+      });
+
+      const sellingSubtotalAED =
+        existingCost
+          ? existingCost.supplierCostExVatAED + existingCost.calculatedMarginAED
+          : Math.round(offerItems.reduce((sum, i) => sum + i.customerLineTotalAED, 0) * 100) / 100;
+      const deliveryFeeAED =
+        existingCost
+          ? existingCost.freightDeliveryCostAED + existingCost.otherProcurementCostAED
+          : q.deliveryChargeAED || 0;
+      const vatAED = Math.round((sellingSubtotalAED + deliveryFeeAED) * (vatRate / 100) * 100) / 100;
+      const estimatedLandedTotalAED = Math.round((sellingSubtotalAED + deliveryFeeAED + vatAED) * 100) / 100;
+
+      const quotedItemsCount = offerItems.filter((i) => i.isIncluded).length;
+      const totalRfqItemsCount = targetRFQ.items.length || offerItems.length;
+      const isPartialOffer = Boolean(q.isPartialQuote || quotedItemsCount < totalRfqItemsCount);
+      const hasDeviation = Boolean(
+        isPartialOffer ||
+          existingEval?.hasDeviation ||
+          q.technicalComplianceStatus === 'minor_deviation' ||
+          offerItems.some((i) => i.isAlternative)
+      );
+
+      const uniqueBrands = Array.from(
+        new Set(offerItems.filter((i) => i.isIncluded && i.offeredBrand).map((i) => i.offeredBrand))
+      ).join(' / ');
+
+      const techLabel = isPartialOffer
+        ? 'Partial Coverage'
+        : existingEval?.technicalCompliance === 'minor_deviation' || offerItems.some((i) => i.isAlternative)
+        ? 'Approved Equivalent'
+        : '100% Compliant to BOQ';
+
+      return {
+        id: offerId,
+        offerNumber: `PS-OFFER-2026-${Math.floor(100 + Math.random() * 899)}`,
+        offerSlot: slot,
+        rfqId: targetRFQ.id,
+        rfqNumber: targetRFQ.rfqNumber,
+        buyerCompanyId: targetRFQ.buyerCompanyId,
+        sourceQuotationId: q.id,
+        offerLabel: `Offer ${slot}`,
+        brandOffered: uniqueBrands || 'Approved UAE Specification',
+        technicalCompliance: techLabel as any,
+        hasDeviation,
+        deviationWarning: existingEval?.deviationNotes || q.deviationNotes,
+        isPartialOffer,
+        quotedItemsCount,
+        totalRfqItemsCount,
+        items: offerItems,
+        sellingSubtotalAED,
+        deliveryFeeAED,
+        vatAED,
+        estimatedLandedTotalAED,
+        leadTimeDays: q.leadTimeDays,
+        leadTimeDisplay: q.leadTimeDisplay || `${q.leadTimeDays} Business Days`,
+        availabilityStatus: q.stockAvailability || 'In Stock (UAE)',
+        warrantyTerms: q.warrantyPeriod || '1 Year Manufacturer Warranty',
+        paymentTerms: q.paymentTerms || '30 Days Credit',
+        validityDate: q.validityDate,
+        ruleRecommendations: [],
+        disclosedSupplierName: commercialSettings.discloseSupplierIdentityToBuyer
+          ? q.supplierCompanyName
+          : undefined,
+        status: 'published',
+        publishedAt: now,
+      };
+    });
+
+    // Transparent Rule-Based Recommendations (computed only across full-coverage offers if available)
+    const fullCoverageOffers = builtOffers.filter((o) => !o.isPartialOffer);
+    const pool = fullCoverageOffers.length > 0 ? fullCoverageOffers : builtOffers;
+
+    const minPrice = Math.min(...pool.map((o) => o.estimatedLandedTotalAED));
+    const minLead = Math.min(...pool.map((o) => o.leadTimeDays));
+
+    builtOffers.forEach((offer) => {
+      const recs: CustomerOffer['ruleRecommendations'] = [];
+      if (!offer.isPartialOffer && offer.estimatedLandedTotalAED === minPrice) {
+        recs.push('Lowest Price');
+      }
+      if (!offer.isPartialOffer && offer.leadTimeDays === minLead) {
+        recs.push('Fastest Delivery');
+      }
+      if (!offer.isPartialOffer && !offer.hasDeviation && offer.technicalCompliance === '100% Compliant to BOQ') {
+        recs.push('Best Technical Match');
+      }
+      if (recs.length >= 2) {
+        recs.unshift('Best Overall Value');
+      }
+      offer.ruleRecommendations = recs;
+      supabaseService.upsertCustomerOffer(offer).catch(console.error);
+    });
+
+    // Save Customer Offers for this RFQ
+    setCustomerOffers((prev) => [
+      ...builtOffers,
+      ...prev.filter((o) => o.rfqId !== targetRFQ.id),
+    ]);
+
+    // Update RFQ status to 'offers_published'
+    setRfqs((prev) =>
+      prev.map((r) => {
+        if (r.id === targetRFQ.id) {
+          const updated: RFQ = {
+            ...r,
+            status: 'offers_published',
+            adminStatus: 'offers_published',
+            publishedOffersCount: builtOffers.length,
+            updatedAt: now,
+          };
+          supabaseService.upsertRFQAdminDetails(updated).catch(console.error);
+          return updated;
+        }
+        return r;
+      })
+    );
+
+    // Notify Buyer
+    const buyerNotif: PlatformNotification = {
+      id: `notif-${Date.now()}-offers`,
+      recipientRole: 'buyer',
+      recipientCompanyId: targetRFQ.buyerCompanyId,
+      title: `${builtOffers.length} Qualified Offers Ready — ${targetRFQ.rfqNumber}`,
+      message: `ProcureSouq has completed technical evaluation and published ${builtOffers.length} customer offer(s) for comparison.`,
+      category: 'offer',
+      relatedEntityId: targetRFQ.id,
+      targetView: 'buyer-compare',
+      isRead: false,
+      createdAt: now,
+    };
+    setNotifications((prev) => [buyerNotif, ...prev]);
+
+    recordApprovalAction(
+      'customer_offer',
+      targetRFQ.id,
+      'CUSTOMER_OFFERS_PUBLISHED',
+      actorName,
+      'admin',
+      targetRFQ.adminStatus,
+      'offers_published',
+      `Published ${builtOffers.length} verified ProcureSouq customer offer(s) for ${targetRFQ.rfqNumber}.`
+    );
+
+    broadcastSync();
+    return builtOffers;
+  };
+
+  const getCustomerOffersForRFQ = (rfqId: string): CustomerOffer[] => {
+    const targetRFQ = rfqs.find((r) => r.id === rfqId || r.rfqNumber === rfqId);
+    const idToMatch = targetRFQ?.id || rfqId;
+    const numToMatch = targetRFQ?.rfqNumber || rfqId;
+    return customerOffers
+      .filter((o) => o.rfqId === idToMatch || o.rfqNumber === numToMatch)
+      .sort((a, b) => a.offerSlot - b.offerSlot);
+  };
+
+  const selectOfferAndCreateCustomerPO = (params: {
+    rfqId: string;
+    customerOfferId: string;
+    orderingMethod: 'uploaded_po' | 'platform_generated_po';
+    customerPoReference?: string;
+    uploadedPoFileName?: string;
+    uploadedPoUrl?: string;
+    notes?: string;
+  }): CustomerPurchaseOrder => {
+    const targetRFQ = rfqs.find((r) => r.id === params.rfqId || r.rfqNumber === params.rfqId);
+    const selectedOffer = customerOffers.find((o) => o.id === params.customerOfferId);
+    if (!targetRFQ || !selectedOffer) {
+      throw new Error('Target RFQ or Customer Offer not found');
+    }
+
+    const seq = String(customerPOs.length + 1).padStart(4, '0');
+    const cpoNumber = `PS-CPO-2026-${seq}`;
+    const now = new Date().toISOString();
+
+    const isLegallyBinding = Boolean(
+      commercialSettings.isCommercialConfigApproved &&
+        (params.orderingMethod === 'uploaded_po' || commercialSettings.allowBindingPoGeneration)
+    );
+    const commercialApprovalStatus = commercialSettings.requireAdminPoApproval
+      ? 'pending_admin_approval'
+      : 'approved';
+
+    const newCPO: CustomerPurchaseOrder = {
+      id: `cpo-${Date.now()}`,
+      cpoNumber,
+      rfqId: targetRFQ.id,
+      rfqNumber: targetRFQ.rfqNumber,
+      rfqTitle: targetRFQ.title,
+      customerOfferId: selectedOffer.id,
+      offerNumber: `${selectedOffer.offerNumber} (${selectedOffer.offerLabel})`,
+      buyerCompanyId: targetRFQ.buyerCompanyId,
+      buyerCompanyName: targetRFQ.buyerCompanyName,
+      buyerContactName: targetRFQ.buyerContactName,
+      buyerPhone: targetRFQ.buyerPhone,
+      contractingEntityName: commercialSettings.contractingEntityName,
+      orderingMethod: params.orderingMethod,
+      customerPoReference: params.customerPoReference || cpoNumber,
+      uploadedPoUrl: params.uploadedPoUrl,
+      uploadedPoFileName: params.uploadedPoFileName,
+      items: selectedOffer.items,
+      sellingSubtotalAED: selectedOffer.sellingSubtotalAED,
+      deliveryFeeAED: selectedOffer.deliveryFeeAED,
+      vatAED: selectedOffer.vatAED,
+      totalPayableAED: selectedOffer.estimatedLandedTotalAED,
+      paymentTerms: selectedOffer.paymentTerms,
+      deliveryAddress: targetRFQ.deliveryAddress,
+      deliveryEmirate: targetRFQ.deliveryEmirate,
+      estimatedDeliveryDate: targetRFQ.requiredDeliveryDate,
+      termsAccepted: true,
+      termsAcceptedAt: now,
+      commercialApprovalStatus,
+      isLegallyBinding,
+      orderStatus: commercialApprovalStatus === 'approved' ? 'confirmed' : 'awaiting_admin_approval',
+      notes: params.notes,
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    setCustomerPOs((prev) => [newCPO, ...prev]);
+    supabaseService.upsertCustomerPO(newCPO).catch(console.error);
+
+    // Mark selected offer
+    setCustomerOffers((prev) =>
+      prev.map((o) => {
+        if (o.rfqId === targetRFQ.id) {
+          const updated: CustomerOffer = {
+            ...o,
+            status: o.id === selectedOffer.id ? 'selected' : o.status,
+          };
+          supabaseService.upsertCustomerOffer(updated).catch(console.error);
+          return updated;
+        }
+        return o;
+      })
+    );
+
+    // Update RFQ status
+    setRfqs((prev) =>
+      prev.map((r) => {
+        if (r.id === targetRFQ.id) {
+          const updated: RFQ = {
+            ...r,
+            status: 'customer_po_issued',
+            adminStatus: 'customer_po_submitted',
+            awardedQuotationId: selectedOffer.sourceQuotationId,
+            updatedAt: now,
+          };
+          supabaseService.upsertRFQAdminDetails(updated).catch(console.error);
+          return updated;
+        }
+        return r;
+      })
+    );
+
+    // Create initial OrderFulfilment at stage 1 (order_confirmed)
+    const initialFulfilment: OrderFulfilment = {
+      id: `ful-${Date.now()}`,
+      cpoId: newCPO.id,
+      cpoNumber: newCPO.cpoNumber,
+      rfqId: targetRFQ.id,
+      buyerCompanyId: targetRFQ.buyerCompanyId,
+      fulfilmentMode: 'procuresouq_arranged',
+      currentStage: 'order_confirmed',
+      stageTimestamps: {
+        order_confirmed: now,
+      },
+      deliveryAddress: targetRFQ.deliveryAddress,
+      isPartialDelivery: selectedOffer.isPartialOffer,
+      deliveredItemsSummary: `${selectedOffer.quotedItemsCount} of ${selectedOffer.totalRfqItemsCount} BOQ items scheduled`,
+      hasDeliveryIssue: false,
+      customerAcknowledged: false,
+      createdAt: now,
+      updatedAt: now,
+    };
+    setOrderFulfilments((prev) => [initialFulfilment, ...prev]);
+    supabaseService.upsertFulfilment(initialFulfilment).catch(console.error);
+
+    // Save PO document record if uploaded
+    if (params.uploadedPoFileName) {
+      const poDoc: DeliveryDocument = {
+        id: `ddoc-${Date.now()}`,
+        cpoId: newCPO.id,
+        documentType: 'customer_po',
+        documentNumber: newCPO.cpoNumber,
+        fileName: params.uploadedPoFileName,
+        fileUrl: params.uploadedPoUrl || `#${params.uploadedPoFileName}`,
+        uploadedByRole: 'buyer',
+        uploadedByName: targetRFQ.buyerContactName,
+        visibleToBuyer: true,
+        createdAt: now,
+      };
+      setDeliveryDocuments((prev) => [poDoc, ...prev]);
+      supabaseService.upsertDeliveryDocument(poDoc).catch(console.error);
+    }
+
+    // Notify Admin & Buyer
+    setNotifications((prev) => [
+      {
+        id: `notif-${Date.now()}-cpo-admin`,
+        recipientRole: 'admin',
+        title: `New Customer PO Submitted: ${newCPO.cpoNumber}`,
+        message: `${newCPO.buyerCompanyName} selected ${selectedOffer.offerLabel} (AED ${newCPO.totalPayableAED.toLocaleString()}) for ${targetRFQ.rfqNumber}. Ready for Supplier PO generation.`,
+        category: 'order',
+        relatedEntityId: newCPO.id,
+        targetView: 'admin-dashboard',
+        isRead: false,
+        createdAt: now,
+      },
+      {
+        id: `notif-${Date.now()}-cpo-buyer`,
+        recipientRole: 'buyer',
+        recipientCompanyId: newCPO.buyerCompanyId,
+        title: `Order Placed — ${newCPO.cpoNumber}`,
+        message: `Your order for ${selectedOffer.offerLabel} (AED ${newCPO.totalPayableAED.toLocaleString()} incl. VAT) has been registered with ProcureSouq.`,
+        category: 'order',
+        relatedEntityId: newCPO.id,
+        targetView: 'buyer-orders',
+        isRead: false,
+        createdAt: now,
+      },
+      ...prev,
+    ]);
+
+    recordApprovalAction(
+      'customer_po',
+      newCPO.id,
+      'CUSTOMER_ISSUED_PO',
+      targetRFQ.buyerContactName,
+      'buyer',
+      'offers_published',
+      newCPO.orderStatus,
+      `Customer selected ${selectedOffer.offerLabel} via ${params.orderingMethod}. Ref: ${newCPO.cpoNumber}`
+    );
+
+    broadcastSync();
+    return newCPO;
+  };
+
+  const approveCustomerPOAndCreateSupplierPO = (params: {
+    cpoId: string;
+    fulfilmentMode: FulfilmentMode;
+    expectedDispatchDate: string;
+    internalNotes?: string;
+    approvedBy?: string;
+  }): SupplierPurchaseOrder => {
+    const targetCPO = customerPOs.find((c) => c.id === params.cpoId || c.cpoNumber === params.cpoId);
+    if (!targetCPO) throw new Error('Customer PO not found');
+
+    const selectedOffer = customerOffers.find((o) => o.id === targetCPO.customerOfferId);
+    const sourceQuote = quotations.find((q) => q.id === selectedOffer?.sourceQuotationId);
+    if (!sourceQuote) throw new Error('Source Supplier Quotation not found for this Customer Offer');
+
+    const seq = String(supplierPOs.length + 1).padStart(4, '0');
+    const spoNumber = `PS-SPO-2026-${seq}`;
+    const now = new Date().toISOString();
+
+    const supplierSubtotalAED = sourceQuote.subtotalAED - (sourceQuote.discountAED || 0);
+    const freightCostAED = sourceQuote.deliveryChargeAED || 0;
+    const vatAED = sourceQuote.vatAED || Math.round((supplierSubtotalAED + freightCostAED) * 0.05 * 100) / 100;
+    const supplierTotalAED = Math.round((supplierSubtotalAED + freightCostAED + vatAED) * 100) / 100;
+
+    const newSPO: SupplierPurchaseOrder = {
+      id: `spo-${Date.now()}`,
+      spoNumber,
+      cpoId: targetCPO.id,
+      cpoNumber: targetCPO.cpoNumber,
+      rfqId: targetCPO.rfqId,
+      rfqNumber: targetCPO.rfqNumber,
+      sourceQuotationId: sourceQuote.id,
+      supplierCompanyId: sourceQuote.supplierCompanyId,
+      supplierCompanyName: sourceQuote.supplierCompanyName,
+      supplierPhone: '+971 4 320 4455',
+      items: sourceQuote.items,
+      supplierSubtotalAED,
+      freightCostAED,
+      vatAED,
+      supplierTotalAED,
+      paymentTerms: sourceQuote.paymentTerms,
+      fulfilmentMode: params.fulfilmentMode,
+      deliveryDestination: `${targetCPO.deliveryAddress} (Coordinated by ProcureSouq Desk)`,
+      expectedDispatchDate: params.expectedDispatchDate,
+      supplierConfirmationStatus: 'pending_confirmation',
+      status: 'issued_to_supplier',
+      internalNotes:
+        params.internalNotes ||
+        `Linked to Customer PO ${targetCPO.cpoNumber}. Customer Selling Total: AED ${targetCPO.totalPayableAED.toLocaleString()} | Supplier Cost Total: AED ${supplierTotalAED.toLocaleString()}.`,
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    setSupplierPOs((prev) => [newSPO, ...prev]);
+    supabaseService.upsertSupplierPO(newSPO).catch(console.error);
+
+    // Update Customer PO status to procurement_processing
+    setCustomerPOs((prev) =>
+      prev.map((c) => {
+        if (c.id === targetCPO.id) {
+          const updated: CustomerPurchaseOrder = {
+            ...c,
+            commercialApprovalStatus: 'approved',
+            isLegallyBinding: true,
+            orderStatus: 'procurement_processing',
+            updatedAt: now,
+          };
+          supabaseService.upsertCustomerPO(updated).catch(console.error);
+          return updated;
+        }
+        return c;
+      })
+    );
+
+    // Update OrderFulfilment to link SPO and advance stage to procurement_processing
+    setOrderFulfilments((prev) =>
+      prev.map((ful) => {
+        if (ful.cpoId === targetCPO.id) {
+          const updated: OrderFulfilment = {
+            ...ful,
+            spoId: newSPO.id,
+            spoNumber: newSPO.spoNumber,
+            supplierCompanyId: newSPO.supplierCompanyId,
+            fulfilmentMode: params.fulfilmentMode,
+            currentStage: 'procurement_processing',
+            stageTimestamps: {
+              ...ful.stageTimestamps,
+              order_confirmed: ful.stageTimestamps.order_confirmed || now,
+              procurement_processing: now,
+            },
+            updatedAt: now,
+          };
+          supabaseService.upsertFulfilment(updated).catch(console.error);
+          return updated;
+        }
+        return ful;
+      })
+    );
+
+    // Notify Supplier & Buyer
+    setNotifications((prev) => [
+      {
+        id: `notif-${Date.now()}-spo-sup`,
+        recipientRole: 'supplier',
+        recipientCompanyId: newSPO.supplierCompanyId,
+        title: `New Purchase Order Received: ${newSPO.spoNumber}`,
+        message: `ProcureSouq Operations issued Supplier PO ${newSPO.spoNumber} (AED ${newSPO.supplierTotalAED.toLocaleString()}) against your quotation ${sourceQuote.quotationNumber}. Please confirm stock & dispatch readiness.`,
+        category: 'order',
+        relatedEntityId: newSPO.id,
+        targetView: 'supplier-orders',
+        isRead: false,
+        createdAt: now,
+      },
+      ...prev,
+    ]);
+
+    recordApprovalAction(
+      'supplier_po',
+      newSPO.id,
+      'CUSTOMER_PO_APPROVED_AND_SPO_ISSUED',
+      params.approvedBy || 'Admin Commercial Desk',
+      'admin',
+      'pending_admin_approval',
+      'issued_to_supplier',
+      `Approved ${targetCPO.cpoNumber} and generated linked internal Supplier PO ${newSPO.spoNumber}.`
+    );
+
+    broadcastSync();
+    return newSPO;
+  };
+
+  const requestCustomerPOCancellation = (
+    cpoId: string,
+    reason: string,
+    requestedByRole: 'buyer' | 'admin'
+  ) => {
+    const now = new Date().toISOString();
+    setCustomerPOs((prev) =>
+      prev.map((c) => {
+        if (c.id === cpoId || c.cpoNumber === cpoId) {
+          const updated: CustomerPurchaseOrder = {
+            ...c,
+            orderStatus: requestedByRole === 'admin' ? 'cancelled' : 'cancellation_requested',
+            cancellationReason: reason,
+            updatedAt: now,
+          };
+          supabaseService.upsertCustomerPO(updated).catch(console.error);
+          return updated;
+        }
+        return c;
+      })
+    );
+    broadcastSync();
+  };
+
+  const confirmSupplierPO = (
+    spoId: string,
+    status: 'confirmed' | 'rejected_or_delayed',
+    notes?: string
+  ) => {
+    const now = new Date().toISOString();
+    const targetSPO = supplierPOs.find((s) => s.id === spoId || s.spoNumber === spoId);
+    if (!targetSPO) return;
+
+    setSupplierPOs((prev) =>
+      prev.map((s) => {
+        if (s.id === targetSPO.id) {
+          const updated: SupplierPurchaseOrder = {
+            ...s,
+            supplierConfirmationStatus: status,
+            supplierConfirmedAt: status === 'confirmed' ? now : undefined,
+            status: status === 'confirmed' ? 'supplier_confirmed' : s.status,
+            internalNotes: notes ? `${s.internalNotes || ''} | Supplier Note: ${notes}` : s.internalNotes,
+            updatedAt: now,
+          };
+          supabaseService.upsertSupplierPO(updated).catch(console.error);
+          return updated;
+        }
+        return s;
+      })
+    );
+
+    if (status === 'confirmed') {
+      updateFulfilmentStage(
+        targetSPO.cpoId,
+        'supplier_confirmed',
+        {},
+        targetSPO.supplierCompanyName
+      );
+    }
+    broadcastSync();
+  };
+
+  const updateFulfilmentStage = (
+    fulfilmentOrCpoId: string,
+    stage: FulfilmentStage,
+    updates: Partial<OrderFulfilment> = {},
+    actorName = 'ProcureSouq Fulfilment Desk'
+  ) => {
+    const now = new Date().toISOString();
+    const targetFul = orderFulfilments.find(
+      (f) => f.id === fulfilmentOrCpoId || f.cpoId === fulfilmentOrCpoId || f.cpoNumber === fulfilmentOrCpoId
+    );
+    if (!targetFul) return;
+
+    const updatedFul: OrderFulfilment = {
+      ...targetFul,
+      ...updates,
+      currentStage: stage,
+      stageTimestamps: {
+        ...targetFul.stageTimestamps,
+        [stage]: now,
+      },
+      updatedAt: now,
+    };
+
+    setOrderFulfilments((prev) => prev.map((f) => (f.id === targetFul.id ? updatedFul : f)));
+    supabaseService.upsertFulfilment(updatedFul).catch(console.error);
+
+    // Sync CPO status
+    setCustomerPOs((prev) =>
+      prev.map((c) => {
+        if (c.id === targetFul.cpoId) {
+          const nextOrderStatus: CustomerPurchaseOrder['orderStatus'] =
+            stage === 'delivered'
+              ? 'completed'
+              : stage === 'in_transit' || stage === 'ready_for_dispatch'
+              ? 'in_fulfilment'
+              : 'procurement_processing';
+          const updatedCPO: CustomerPurchaseOrder = {
+            ...c,
+            orderStatus: nextOrderStatus,
+            updatedAt: now,
+          };
+          supabaseService.upsertCustomerPO(updatedCPO).catch(console.error);
+          return updatedCPO;
+        }
+        return c;
+      })
+    );
+
+    // Sync SPO status
+    if (targetFul.spoId) {
+      setSupplierPOs((prev) =>
+        prev.map((s) => {
+          if (s.id === targetFul.spoId) {
+            const nextSpoStatus: SupplierPurchaseOrder['status'] =
+              stage === 'delivered'
+                ? 'delivered'
+                : stage === 'in_transit'
+                ? 'dispatched'
+                : stage === 'ready_for_dispatch'
+                ? 'ready_for_dispatch'
+                : stage === 'supplier_confirmed'
+                ? 'supplier_confirmed'
+                : s.status;
+            const updatedSPO: SupplierPurchaseOrder = {
+              ...s,
+              status: nextSpoStatus,
+              updatedAt: now,
+            };
+            supabaseService.upsertSupplierPO(updatedSPO).catch(console.error);
+            return updatedSPO;
+          }
+          return s;
+        })
+      );
+    }
+
+    // Create or update DeliveryRecord when in_transit or delivered
+    if (stage === 'in_transit' || stage === 'delivered') {
+      const existingDel = deliveryRecords.find((d) => d.fulfilmentId === targetFul.id);
+      const delRecord: DeliveryRecord = existingDel
+        ? {
+            ...existingDel,
+            status: updatedFul.isPartialDelivery
+              ? 'partially_delivered'
+              : stage === 'delivered'
+              ? 'delivered'
+              : 'in_transit',
+            logisticsProvider: updatedFul.logisticsProvider || existingDel.logisticsProvider,
+            driverOrContactName: updatedFul.deliveryContactName || existingDel.driverOrContactName,
+            contactPhone: updatedFul.deliveryContactPhone || existingDel.contactPhone,
+            trackingReference: updatedFul.trackingReference || existingDel.trackingReference,
+            isPartial: updatedFul.isPartialDelivery,
+            itemsDeliveredSummary:
+              updatedFul.deliveredItemsSummary || existingDel.itemsDeliveredSummary,
+            dispatchedAt: existingDel.dispatchedAt || now,
+            deliveredAt: stage === 'delivered' ? now : existingDel.deliveredAt,
+          }
+        : {
+            id: `del-${Date.now()}`,
+            fulfilmentId: targetFul.id,
+            cpoId: targetFul.cpoId,
+            cpoNumber: targetFul.cpoNumber,
+            deliveryNumber: `PS-DN-2026-${String(deliveryRecords.length + 1).padStart(4, '0')}`,
+            fulfilmentMode: updatedFul.fulfilmentMode,
+            status: stage === 'delivered' ? 'delivered' : 'in_transit',
+            logisticsProvider: updatedFul.logisticsProvider || 'Coordinated UAE Flatbed Partner',
+            driverOrContactName: updatedFul.deliveryContactName || 'ProcureSouq Dispatch Desk',
+            contactPhone: updatedFul.deliveryContactPhone || '+971 52 991 4020',
+            trackingReference: updatedFul.trackingReference || `PS-TRK-${Math.floor(10000 + Math.random() * 89999)}`,
+            deliveryNoteRef: `DN-${targetFul.cpoNumber}`,
+            isPartial: updatedFul.isPartialDelivery,
+            itemsDeliveredSummary: updatedFul.deliveredItemsSummary || 'Full BOQ Order Lot',
+            dispatchedAt: now,
+            deliveredAt: stage === 'delivered' ? now : undefined,
+            customerAcknowledged: false,
+            createdAt: now,
+          };
+
+      setDeliveryRecords((prev) => [
+        delRecord,
+        ...prev.filter((d) => d.id !== delRecord.id),
+      ]);
+      supabaseService.upsertDeliveryRecord(delRecord).catch(console.error);
+    }
+
+    // Notify Buyer
+    setNotifications((prev) => [
+      {
+        id: `notif-${Date.now()}-ful`,
+        recipientRole: 'buyer',
+        recipientCompanyId: targetFul.buyerCompanyId,
+        title: `Order ${targetFul.cpoNumber} Update: ${stage.replace(/_/g, ' ').toUpperCase()}`,
+        message: `Fulfilment status for ${targetFul.cpoNumber} is now "${stage.replace(/_/g, ' ')}" (${actorName}).`,
+        category: 'delivery',
+        relatedEntityId: targetFul.cpoId,
+        targetView: 'buyer-orders',
+        isRead: false,
+        createdAt: now,
+      },
+      ...prev,
+    ]);
+
+    broadcastSync();
+  };
+
+  const uploadDeliveryDocument = (
+    docData: Omit<DeliveryDocument, 'id' | 'createdAt'>
+  ): DeliveryDocument => {
+    const newDoc: DeliveryDocument = {
+      ...docData,
+      id: `ddoc-${Date.now()}-${Math.random().toString(36).substring(2, 5)}`,
+      createdAt: new Date().toISOString(),
+    };
+    setDeliveryDocuments((prev) => [newDoc, ...prev]);
+    supabaseService.upsertDeliveryDocument(newDoc).catch(console.error);
+    broadcastSync();
+    return newDoc;
+  };
+
+  const acknowledgeDeliveryReceipt = (fulfilmentId: string, notes?: string) => {
+    const now = new Date().toISOString();
+    setOrderFulfilments((prev) =>
+      prev.map((f) => {
+        if (f.id === fulfilmentId || f.cpoId === fulfilmentId) {
+          const updated: OrderFulfilment = {
+            ...f,
+            customerAcknowledged: true,
+            customerAcknowledgedAt: now,
+            customerAcknowledgementNotes: notes || 'Materials received and verified on site.',
+            updatedAt: now,
+          };
+          supabaseService.upsertFulfilment(updated).catch(console.error);
+          return updated;
+        }
+        return f;
+      })
+    );
+    setDeliveryRecords((prev) =>
+      prev.map((d) => {
+        if (d.fulfilmentId === fulfilmentId || d.cpoId === fulfilmentId) {
+          const updated = { ...d, customerAcknowledged: true };
+          supabaseService.upsertDeliveryRecord(updated).catch(console.error);
+          return updated;
+        }
+        return d;
+      })
+    );
+    broadcastSync();
+  };
+
+  const reportDeliveryIssue = (fulfilmentId: string, issueNotes: string) => {
+    const now = new Date().toISOString();
+    setOrderFulfilments((prev) =>
+      prev.map((f) => {
+        if (f.id === fulfilmentId || f.cpoId === fulfilmentId) {
+          const updated: OrderFulfilment = {
+            ...f,
+            hasDeliveryIssue: true,
+            deliveryIssueNotes: issueNotes,
+            updatedAt: now,
+          };
+          supabaseService.upsertFulfilment(updated).catch(console.error);
+          return updated;
+        }
+        return f;
+      })
+    );
+    broadcastSync();
+  };
+
+  const markNotificationRead = (notifId: string) => {
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === notifId ? { ...n, isRead: true } : n))
+    );
+  };
+
+  const markAllNotificationsRead = (role: string, companyId?: string) => {
+    setNotifications((prev) =>
+      prev.map((n) => {
+        if (n.recipientRole === role && (!companyId || !n.recipientCompanyId || n.recipientCompanyId === companyId)) {
+          return { ...n, isRead: true };
+        }
+        return n;
+      })
+    );
+  };
+
   const resetToDefaults = () => {
     setRfqs(initialRFQs);
     setQuotations(initialQuotations);
@@ -1375,6 +2795,19 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
     setMessages(initialMessages);
     setReviews(initialReviews);
     setVerifications(initialVerifications);
+    setCommercialSettings(defaultCommercialSettings);
+    setPricingRules(defaultPricingRules);
+    setSupplierInvitations(v2TestInvitations);
+    setQuotationEvaluations(v2TestEvaluations);
+    setInternalCosts(v2TestInternalCosts);
+    setCustomerOffers(v2TestCustomerOffers);
+    setCustomerPOs(v2TestCustomerPOs);
+    setSupplierPOs(v2TestSupplierPOs);
+    setOrderFulfilments(v2TestFulfilments);
+    setDeliveryRecords(v2TestDeliveries);
+    setDeliveryDocuments(v2TestDeliveryDocuments);
+    setApprovalHistory(v2TestApprovalHistory);
+    setNotifications(v2TestNotifications);
     localStorage.clear();
   };
 
@@ -1392,6 +2825,19 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
         declinedRFQs,
         isSupabaseConnected,
         isSyncing,
+        commercialSettings,
+        pricingRules,
+        supplierInvitations,
+        quotationEvaluations,
+        internalCosts,
+        customerOffers,
+        customerPOs,
+        supplierPOs,
+        orderFulfilments,
+        deliveryRecords,
+        deliveryDocuments,
+        approvalHistory,
+        notifications,
         createRFQ,
         updateRFQStatus,
         getRFQById,
@@ -1408,6 +2854,24 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
         awardQuotation,
         updateOrderStatus,
         getOrderById,
+        updateCommercialSettings,
+        updateRFQAdminWorkflow,
+        inviteSuppliersToRFQ,
+        uploadManualSupplierQuote,
+        evaluateSupplierQuote,
+        calculateAndSaveInternalCost,
+        publishCustomerOffersForRFQ,
+        getCustomerOffersForRFQ,
+        selectOfferAndCreateCustomerPO,
+        approveCustomerPOAndCreateSupplierPO,
+        requestCustomerPOCancellation,
+        confirmSupplierPO,
+        updateFulfilmentStage,
+        uploadDeliveryDocument,
+        acknowledgeDeliveryReceipt,
+        reportDeliveryIssue,
+        markNotificationRead,
+        markAllNotificationsRead,
         sendMessage,
         getMessagesForRFQ,
         submitReview,

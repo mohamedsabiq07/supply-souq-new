@@ -1086,7 +1086,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
             <div className="p-3 bg-amber-50 dark:bg-amber-950/30 rounded-xl border border-amber-200 dark:border-amber-900/50 text-amber-900 dark:text-amber-200 flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-amber-700 dark:text-amber-400 shrink-0" />
               <span>
-                100% Free for Buyers. The first 5 stockists to submit itemized prices will deliver directly to your dashboard within 24 hours.
+                100% Free for Buyers. ProcureSouq Managed Procurement Desk reviews your BOQ, requests quotations from verified UAE suppliers, and publishes up to 5 qualified offers for your comparison.
               </span>
             </div>
 
@@ -1110,7 +1110,7 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
                 leftIcon={<Zap className="w-5 h-5 text-amber-300 fill-amber-300" />}
                 className="font-bold px-6 border-none bg-transparent text-white"
               >
-                Broadcast RFQ to Suppliers
+                Submit RFQ
               </Button>
             </MetalFx>
           </CardFooter>
@@ -1121,8 +1121,8 @@ export const RFQWizard: React.FC<RFQWizardProps> = ({
       <Modal
         isOpen={showAuthGateModal}
         onClose={() => setShowAuthGateModal(false)}
-        title={authMode === 'login' ? 'Sign In to Broadcast Your RFQ' : 'Create Account to Broadcast Your RFQ'}
-        subtitle="Your RFQ line items and specs are ready! Sign in to distribute directly to 5 verified UAE stockists."
+        title={authMode === 'login' ? 'Sign In to Submit Your RFQ' : 'Create Account to Submit Your RFQ'}
+        subtitle="Your RFQ line items and specs are ready! Sign in to submit your requirement to ProcureSouq Managed Procurement Desk."
         maxWidth="md"
       >
         <div className="space-y-4 text-xs">

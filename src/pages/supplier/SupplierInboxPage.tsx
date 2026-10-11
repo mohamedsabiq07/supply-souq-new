@@ -5,7 +5,7 @@ import { useAppData } from '../../context/AppDataContext';
 import { RFQCard } from '../../components/rfq/RFQCard';
 import { DeclineRFQModal } from '../../components/rfq/DeclineRFQModal';
 import { Card } from '../../components/ui/Card';
-import { Search, Zap, CheckCircle2, ShieldCheck, Filter, XCircle } from 'lucide-react';
+import { Search, Zap, ShieldCheck, XCircle, Lock } from 'lucide-react';
 import { RFQ } from '../../types';
 
 interface SupplierInboxPageProps {
@@ -14,18 +14,33 @@ interface SupplierInboxPageProps {
 
 export const SupplierInboxPage: React.FC<SupplierInboxPageProps> = ({ onNavigate }) => {
   const { currentCompany } = useAuth();
-  const { rfqs, declineRFQ, isRFQDeclinedBySupplier, declinedRFQs, hasSupplierQuoted, isRFQExtendedUnlocked } = useAppData();
+  const {
+    rfqs,
+    supplierInvitations,
+    declineRFQ,
+    isRFQDeclinedBySupplier,
+    declinedRFQs,
+    hasSupplierQuoted,
+    isRFQExtendedUnlocked
+  } = useAppData();
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeTab, setActiveTab] = useState<'all' | 'direct' | 'cables' | 'switchgear' | 'containment' | 'lighting' | 'earthing' | 'solar' | 'declined'>('all');
+  const [activeTab, setActiveTab] = useState<'assigned' | 'all' | 'cables' | 'switchgear' | 'containment' | 'lighting' | 'earthing' | 'solar' | 'declined'>('assigned');
   const [targetDecliningRFQ, setTargetDecliningRFQ] = useState<RFQ | null>(null);
+
+  const isAssignedToSupplier = (r: RFQ) => {
+    const invited = supplierInvitations.some(
+      inv => (inv.rfqId === r.id || inv.rfqNumber === r.rfqNumber) && inv.supplierCompanyId === currentCompany.id
+    );
+    const matched = r.targetSupplierId === currentCompany.id ||
+      (r.matchedSupplierCompanyIds && r.matchedSupplierCompanyIds.includes(currentCompany.id));
+    return Boolean(invited || matched);
+  };
 
   const openRFQs = rfqs.filter(r => r.status !== 'draft' && r.status !== 'cancelled');
   const myDeclinedRecords = declinedRFQs.filter(d => d.supplierCompanyId === currentCompany.id);
 
-  const directCount = openRFQs.filter(r => 
-    !isRFQDeclinedBySupplier(r.id, currentCompany.id) &&
-    (r.targetSupplierId === currentCompany.id || 
-    (r.matchedSupplierCompanyIds && r.matchedSupplierCompanyIds.includes(currentCompany.id)))
+  const assignedCount = openRFQs.filter(r =>
+    !isRFQDeclinedBySupplier(r.id, currentCompany.id) && isAssignedToSupplier(r)
   ).length;
 
   const activeRFQsCount = openRFQs.filter(r => !isRFQDeclinedBySupplier(r.id, currentCompany.id)).length;
@@ -33,18 +48,14 @@ export const SupplierInboxPage: React.FC<SupplierInboxPageProps> = ({ onNavigate
   const filtered = openRFQs.filter(r => {
     const isDeclined = isRFQDeclinedBySupplier(r.id, currentCompany.id);
 
-    // If declined tab is selected
     if (activeTab === 'declined') {
       if (!isDeclined) return false;
     } else {
-      // Hide declined RFQs from active tabs
       if (isDeclined) return false;
     }
 
-    // Tab filter
-    if (activeTab === 'direct') {
-      const isDirect = r.targetSupplierId === currentCompany.id || (r.matchedSupplierCompanyIds && r.matchedSupplierCompanyIds.includes(currentCompany.id));
-      if (!isDirect) return false;
+    if (activeTab === 'assigned') {
+      if (!isAssignedToSupplier(r)) return false;
     } else if (activeTab === 'cables') {
       const isCables = (r.category && (r.category.toLowerCase().includes('cable') || r.category.toLowerCase().includes('wire'))) ||
                        (r.title && (r.title.toLowerCase().includes('cable') || r.title.toLowerCase().includes('wire')));
@@ -71,7 +82,6 @@ export const SupplierInboxPage: React.FC<SupplierInboxPageProps> = ({ onNavigate
       if (!isSolar) return false;
     }
 
-    // Search query
     const query = searchTerm.toLowerCase();
     const matchesSearch = !searchTerm ||
       (r.title && r.title.toLowerCase().includes(query)) ||
@@ -87,36 +97,38 @@ export const SupplierInboxPage: React.FC<SupplierInboxPageProps> = ({ onNavigate
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-slate-900">Live Contractor Electrical RFQ Inbox</h1>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Direct electrical material requirements from verified UAE contractors ready for competitive quoting.
+          <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white">Assigned RFQs — ProcureSouq Managed Desk</h1>
+          <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">
+            RFQs assigned to <strong>{currentCompany.name}</strong> by ProcureSouq Procurement Operations. All quotations are submitted confidentially to ProcureSouq.
           </p>
         </div>
         <div className="flex items-center gap-2 text-xs font-bold text-rose-800 bg-rose-50 px-3 py-1.5 rounded-xl border border-rose-200">
           <ShieldCheck className="w-4 h-4 text-[#cf2e46]" />
-          <span>24-Hour SLA Quoting Active</span>
+          <span>Managed Intermediary Desk</span>
         </div>
       </div>
 
-      {/* 5-Bids Algorithm Rules Banner */}
-      <div className="bg-gradient-to-r from-amber-50 to-orange-50 p-3.5 rounded-xl border border-amber-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+      {/* Confidentiality & Managed Sourcing Banner */}
+      <div className="bg-slate-900 text-white p-3.5 rounded-xl border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
         <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-lg bg-amber-500 text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
-            ⚡
+          <div className="w-7 h-7 rounded-lg bg-amber-500 text-slate-950 flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
+            <Lock className="w-4 h-4" />
           </div>
           <div>
-            <strong className="text-slate-900 font-bold">First 5 Suppliers Rule: </strong>
-            <span className="text-slate-600">Only the first 5 stockists to submit a quotation reach the contractor buyer. Once 5 bids are submitted, bidding closes automatically.</span>
+            <strong className="text-white font-bold">ProcureSouq Managed Sourcing Policy: </strong>
+            <span className="text-slate-300">
+              Suppliers interact exclusively with ProcureSouq. End-buyer contact information is masked, and your quotation remains strictly confidential from competing suppliers.
+            </span>
           </div>
         </div>
         <div className="flex items-center gap-2 shrink-0">
-          <span className="font-bold text-amber-900 bg-amber-100/90 px-2.5 py-1 rounded-md border border-amber-300 text-[11px]">
-            Fastest Submissions Win
+          <span className="font-bold text-amber-300 bg-amber-500/20 px-2.5 py-1 rounded-md border border-amber-400/30 text-[11px]">
+            Single Counterparty: ProcureSouq
           </span>
         </div>
       </div>
 
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white p-3.5 rounded-xl border border-slate-200 shadow-subtle">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white dark:bg-[#111114] p-3.5 rounded-xl border border-slate-200 dark:border-white/[0.08] shadow-subtle">
         <BorderBeam size="line" theme="light" className="flex-1">
           <div className="relative w-full">
             <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
@@ -132,6 +144,17 @@ export const SupplierInboxPage: React.FC<SupplierInboxPageProps> = ({ onNavigate
 
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 text-xs">
           <button
+            onClick={() => setActiveTab('assigned')}
+            className={`px-3 py-1.5 rounded-lg font-bold transition-all whitespace-nowrap flex items-center gap-1 ${
+              activeTab === 'assigned'
+                ? 'bg-amber-500 text-slate-950 shadow-xs'
+                : 'bg-amber-50 text-amber-900 border border-amber-200 hover:bg-amber-100'
+            }`}
+          >
+            <Zap className="w-3.5 h-3.5" />
+            <span>Assigned to You ({assignedCount})</span>
+          </button>
+          <button
             onClick={() => setActiveTab('all')}
             className={`px-3 py-1.5 rounded-lg font-semibold transition-all whitespace-nowrap ${
               activeTab === 'all'
@@ -139,18 +162,7 @@ export const SupplierInboxPage: React.FC<SupplierInboxPageProps> = ({ onNavigate
                 : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
             }`}
           >
-            All Live RFQs ({activeRFQsCount})
-          </button>
-          <button
-            onClick={() => setActiveTab('direct')}
-            className={`px-3 py-1.5 rounded-lg font-bold transition-all whitespace-nowrap flex items-center gap-1 ${
-              activeTab === 'direct'
-                ? 'bg-amber-500 text-slate-950 shadow-xs'
-                : 'bg-amber-50 text-amber-900 border border-amber-200 hover:bg-amber-100'
-            }`}
-          >
-            <Zap className="w-3.5 h-3.5" />
-            <span>Matched to You ({directCount})</span>
+            Category Pool ({activeRFQsCount})
           </button>
           <button
             onClick={() => setActiveTab('cables')}
@@ -191,26 +203,6 @@ export const SupplierInboxPage: React.FC<SupplierInboxPageProps> = ({ onNavigate
             }`}
           >
             💡 LED Lighting
-          </button>
-          <button
-            onClick={() => setActiveTab('earthing')}
-            className={`px-3 py-1.5 rounded-lg font-semibold transition-all whitespace-nowrap ${
-              activeTab === 'earthing'
-                ? 'bg-slate-900 text-white font-bold'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-            }`}
-          >
-            ⚡ Earthing & Lightning
-          </button>
-          <button
-            onClick={() => setActiveTab('solar')}
-            className={`px-3 py-1.5 rounded-lg font-semibold transition-all whitespace-nowrap ${
-              activeTab === 'solar'
-                ? 'bg-slate-900 text-white font-bold'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-            }`}
-          >
-            ☀️ Solar & Power
           </button>
           {myDeclinedRecords.length > 0 && (
             <button
@@ -258,13 +250,13 @@ export const SupplierInboxPage: React.FC<SupplierInboxPageProps> = ({ onNavigate
           </div>
           <div className="space-y-1 max-w-sm mx-auto">
             <h3 className="text-base font-bold text-slate-900">
-              {activeTab === 'declined' ? 'No Declined RFQs' : 'No RFQs Matching Filter'}
+              {activeTab === 'declined' ? 'No Declined RFQs' : 'No Assigned RFQs Matching Filter'}
             </h3>
             <p className="text-xs text-slate-500">
-              {activeTab === 'direct' 
-                ? "No direct RFQs targeted to your company currently. Switch to 'All Live RFQs' to browse open contractor requirements across UAE." 
+              {activeTab === 'assigned'
+                ? "No RFQs directly assigned to your company match this filter. Switch to 'Category Pool' to view open category requirements."
                 : activeTab === 'declined'
-                ? "You haven't declined any contractor RFQs yet. Declined RFQs will appear here for your records."
+                ? "You haven't declined any RFQs yet."
                 : "Try clearing your search or switching to another category tab."}
             </p>
           </div>
@@ -276,7 +268,7 @@ export const SupplierInboxPage: React.FC<SupplierInboxPageProps> = ({ onNavigate
               }}
               className="text-xs font-bold text-brand-600 hover:underline"
             >
-              Show All Live RFQs
+              Browse Category Pool RFQs
             </button>
           )}
         </Card>

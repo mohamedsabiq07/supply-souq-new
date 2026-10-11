@@ -80,28 +80,28 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
 
   const faqs = [
     {
-      q: 'How does the Fastest 5 Bids Rule work?',
-      a: 'When an RFQ is posted, our matching engine broadcasts it to verified UAE stockists. Only the first 5 stockists who submit compliant, itemized prices are admitted. This creates keen price competition for the contractor while guaranteeing stockists that their quotation won\'t be buried in a sea of 50 competitors.'
+      q: 'How does ProcureSouq V2 Managed Procurement work?',
+      a: 'Instead of managing dozens of suppliers yourself, you submit a single RFQ to ProcureSouq. Our internal procurement team requests quotations from verified UAE stockists, evaluates technical compliance and stock availability, and prepares a clean comparison of up to 5 qualified ProcureSouq offers (Offer 1 to Offer 5). You select your preferred offer and place your order through ProcureSouq — your single point of contact from RFQ to site delivery.'
     },
     {
-      q: 'How much does ProcureSouq cost for contractors and suppliers?',
-      a: 'For Contractors & Engineers: 100% Free Forever. Post unlimited RFQs, receive 5 verified quotes, and compare side-by-side with zero fees. For Verified Stockists: Enjoy a 3-Month Free Trial with 0% platform commission during launch. After 3 months, it is only AED 1 per day (AED 30/month) for unlimited RFQ quoting.'
+      q: 'Why are Supplier and Buyer identities kept confidential?',
+      a: 'ProcureSouq operates as a managed procurement intermediary. Buyers compare up to 5 vetted ProcureSouq commercial offers without supplier spam, and suppliers quote directly to ProcureSouq’s procurement desk. All clarifications and support are handled through ProcureSouq’s dedicated messaging desk.'
     },
     {
-      q: 'How do you verify supplier trade licenses and authenticity?',
-      a: 'Every stockist is required to upload a valid UAE Commercial Trade License issued by DET (Dubai Economy & Tourism) or DED Sharjah/Abu Dhabi. Our verification team confirms their licensed commercial activities ("Building Materials Trading", "Electrical Equipment Trading") and valid TRN before they can bid on RFQs.'
+      q: 'How do you verify supplier trade licenses and technical compliance?',
+      a: 'Every supplier in our network is vetted for a valid UAE Commercial Trade License (DET/DED) and TRN. Before any quotation reaches your comparison dashboard, our procurement engineers verify brand compatibility, BOQ quantities, lead time feasibility, and flag any technical deviations.'
     },
     {
-      q: 'Can I upload handwritten site notes or Excel BOQs?',
-      a: 'Yes! You can upload an Excel spreadsheet, a PDF material schedule, or simply take a photo of a handwritten requisition sheet from your site foreman. Our system standardizes line items, quantities, and technical specifications into clean bidding packages.'
+      q: 'Can I upload Excel BOQs, PDF quotation requests, or technical specs?',
+      a: 'Yes! You can enter materials manually or upload Excel BOQs, PDF quotation requests, and technical specifications. Our procurement team reviews your submission, checks for any missing specifications, and standardizes the tender before requesting supplier quotations.'
     },
     {
-      q: 'How is site delivery and 5% UAE VAT handled?',
-      a: 'All quotations clearly display unit prices, total VAT (5%), and logistics terms (either Supplier Fleet or ProcureSouq Managed Logistics with 1.5T Pickups or 7T Hiab cranes). Official FTA-compliant tax invoices and digital Purchase Orders are generated directly in the platform.'
+      q: 'How do Purchase Orders (POs) and site deliveries work?',
+      a: 'Once you select one of the 5 qualified offers, you can upload your official Purchase Order or generate a PO reference through ProcureSouq. Our team coordinates supplier purchasing and tracks your order across 6 live stages: Order Confirmed → Procurement Processing → Supplier Confirmed → Ready for Dispatch → In Transit → Delivered (with Delivery Note & POD).'
     },
     {
-      q: 'Which UAE areas are covered for direct job site dispatch?',
-      a: 'We cover all 7 Emirates: Dubai (Al Quoz, JAFZA, Dubai South, Downtown), Sharjah (Industrial Areas 1–17, SAIF Zone), Abu Dhabi (Mussafah, ICAD, Khalifa City), Ajman, RAK, and Fujairah.'
+      q: 'Which UAE areas are covered for coordinated delivery?',
+      a: 'We coordinate supplier direct deliveries and arranged logistics across all 7 Emirates: Dubai (Al Quoz, JAFZA, Dubai South, Business Bay), Sharjah (Industrial Areas 1–18, SAIF Zone), Abu Dhabi (Mussafah, ICAD), Ajman, RAK, UAQ, and Fujairah.'
     }
   ];
 
@@ -117,12 +117,12 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
       <section className="relative pt-16 sm:pt-24 pb-20 sm:pb-32 overflow-hidden bg-transparent z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-4xl mx-auto text-center space-y-6">
-            {/* Shifted B2B Marketplace Hero Badge */}
+            {/* ProcureSouq V2 Managed B2B Procurement Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 dark:bg-white/[0.06] backdrop-blur-md border border-slate-200/80 dark:border-white/[0.1] shadow-xs text-xs font-bold text-slate-800 dark:text-zinc-200 mb-2">
-              <span className="w-2 h-2 rounded-full bg-[#cf2e46] animate-pulse" />
-              <span>UAE's Premier B2B Procurement Marketplace</span>
+              <span className="w-2 h-2 rounded-full bg-[#cf2e46] animate-ping" />
+              <span>ProcureSouq V2 — Managed B2B Procurement Platform</span>
               <span className="text-slate-300 dark:text-white/20">•</span>
-              <span className="text-brand-600 dark:text-brand-400 font-semibold">Verified Stockist Network</span>
+              <span className="text-[#cf2e46] font-extrabold">Single Point of Contact</span>
             </div>
 
             {/* Main Headline */}
@@ -134,11 +134,11 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                 radius={200}
                 falloff="gaussian"
               >
-                UAE Procurement,
+                Managed UAE Procurement,
               </VariableFontCursorProximity>
               <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-rose-700 to-[#cf2e46] dark:from-white dark:via-rose-400 dark:to-[#cf2e46]">
-                Simplified.
+                One RFQ. Five Vetted Offers.
               </span>
             </h1>
 
@@ -151,7 +151,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
               radius={150}
               falloff="gaussian"
             >
-              Upload your material list or BOQ in 60 seconds. Top verified UAE stockists compete to give you the best wholesale prices within 24 hours.
+              Submit one RFQ. ProcureSouq internally sources, evaluates, and prepares up to 5 qualified commercial offers. Select your preferred offer and let our team coordinate purchasing, fulfilment, and UAE site delivery.
             </VariableFontCursorProximity>
 
             {/* Primary Hero CTA & Direct Dashboard Shortcut */}
@@ -169,7 +169,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
                   className="w-full sm:w-auto px-8 py-4 rounded-full text-sm font-black text-white flex items-center justify-center gap-2 group cursor-pointer border-none bg-transparent"
                 >
                   <Zap className="w-4 h-4 fill-white" />
-                  <span>Post Live RFQ (100% Free)</span>
+                  <span>Submit Managed RFQ</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
               </MetalFx>
@@ -357,11 +357,11 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
               {/* Interactive Visual: 5 Slot Display */}
               <div className="grid grid-cols-5 gap-2 pt-2 text-center">
                 {[
-                  { slot: '1', name: 'Apex', price: 'AED 38.50', status: 'Filled' },
-                  { slot: '2', name: 'Emirates', price: 'AED 39.20', status: 'Filled' },
-                  { slot: '3', name: 'Gulf Cb', price: 'AED 38.90', status: 'Filled' },
-                  { slot: '4', name: 'Al Quoz', price: 'AED 40.00', status: 'Filled' },
-                  { slot: '5', name: 'Open', price: 'Available', status: 'Open' }
+                  { slot: '1', name: 'Offer 1', price: 'AED 38.50', status: 'Filled' },
+                  { slot: '2', name: 'Offer 2', price: 'AED 39.20', status: 'Filled' },
+                  { slot: '3', name: 'Offer 3', price: 'AED 38.90', status: 'Filled' },
+                  { slot: '4', name: 'Offer 4', price: 'AED 40.00', status: 'Filled' },
+                  { slot: '5', name: 'Offer 5', price: 'Available', status: 'Open' }
                 ].map((s, idx) => (
                   <div
                     key={idx}
@@ -472,20 +472,20 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentView }) => {
           {[
             {
               step: '01',
-              title: 'Post Material BOQ or Photo',
-              desc: 'Upload your Excel cable schedule, enter line items, or snap a photo of a site note. Our engine parses specs and notifies stockists instantly.',
+              title: 'Submit One RFQ or BOQ',
+              desc: 'Enter required materials manually or upload your Excel BOQ, PDF quotation request, and technical specifications with delivery date and location.',
               icon: FileSpreadsheet
             },
             {
               step: '02',
-              title: 'Receive 5 Live Wholesale Quotes',
-              desc: 'Verified UAE stockists submit prices within 24 hours under the Fastest 5 Bids Rule. Compare side-by-side on price, brand, and lead times.',
+              title: 'Compare 5 Vetted ProcureSouq Offers',
+              desc: 'ProcureSouq internally sources, verifies technical compliance, and prepares up to 5 anonymized commercial offers (Offer 1–5) sorted by price, speed, or best value.',
               icon: GitCompare
             },
             {
               step: '03',
-              title: '1-Click PO & Job Site Delivery',
-              desc: 'Award the best quote to generate an official digital PO. Track dispatch directly to your project site in Dubai, Sharjah, or Abu Dhabi.',
+              title: 'Select Offer & Managed Delivery',
+              desc: 'Issue your PO to ProcureSouq. Our operations team handles supplier purchasing, fulfilment coordination, and 6-stage tracked delivery to your UAE site.',
               icon: PackageCheck
             }
           ].map((item, idx) => {

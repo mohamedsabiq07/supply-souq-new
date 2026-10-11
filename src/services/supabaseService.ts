@@ -86,6 +86,14 @@ export const mapRFQFromDB = (row: any): RFQ => ({
   priority: row.priority || 'normal',
   targetSupplierScope: row.target_supplier_scope || 'all_verified',
   status: (row.status as RFQStatus) || 'published',
+  adminStatus: row.admin_status || 'submitted_to_ops',
+  assignedStaffId: row.assigned_staff_id || undefined,
+  assignedStaffName: row.assigned_staff_name || undefined,
+  clarificationRequest: row.clarification_request || undefined,
+  internalOpsNotes: row.internal_ops_notes || undefined,
+  supplierQuoteDeadline: row.supplier_quote_deadline || undefined,
+  specialRequirements: row.special_requirements || undefined,
+  publishedOffersCount: Number(row.published_offers_count) || 0,
   authorityApproval: row.authority_approval || 'DEWA Approved (Dubai Standard)',
   consultantName: row.consultant_name || '',
   offloadingRequired: Boolean(row.offloading_required),
@@ -126,6 +134,14 @@ export const mapRFQToDB = (r: RFQ) => ({
   priority: r.priority,
   target_supplier_scope: r.targetSupplierScope,
   status: r.status,
+  admin_status: r.adminStatus || 'submitted_to_ops',
+  assigned_staff_id: r.assignedStaffId || null,
+  assigned_staff_name: r.assignedStaffName || null,
+  clarification_request: r.clarificationRequest || null,
+  internal_ops_notes: r.internalOpsNotes || null,
+  supplier_quote_deadline: r.supplierQuoteDeadline || null,
+  special_requirements: r.specialRequirements || null,
+  published_offers_count: r.publishedOffersCount || 0,
   authority_approval: r.authorityApproval,
   consultant_name: r.consultantName,
   offloading_required: r.offloadingRequired,
@@ -149,6 +165,7 @@ export const mapRFQToDB = (r: RFQ) => ({
 export const mapQuotationFromDB = (row: any): Quotation => ({
   id: row.id,
   quotationNumber: row.quotation_number || ('QT-' + row.id.replace('quote-', '')),
+  quoteReference: row.quote_reference || row.quotation_number,
   rfqId: row.rfq_id,
   rfqNumber: row.rfq_number,
   rfqTitle: row.rfq_title || '',
@@ -163,16 +180,25 @@ export const mapQuotationFromDB = (row: any): Quotation => ({
   items: Array.isArray(row.items) ? row.items : [],
   subtotalAED: Number(row.subtotal_aed) || 0,
   discountAED: Number(row.discount_aed) || 0,
+  vatTreatment: row.vat_treatment || 'standard_5_percent',
   vatAED: Number(row.vat_aed) || 0,
   deliveryChargeAED: Number(row.delivery_charge_aed) || 0,
   grandTotalAED: Number(row.total_amount_aed || row.grand_total_aed) || 0,
+  stockAvailability: row.stock_availability || 'In Stock',
   leadTimeDays: Number(row.delivery_days || row.lead_time_days) || 3,
-  leadTimeDisplay: row.lead_time_display || '3 Business Days',
+  leadTimeDisplay: row.lead_time_display || row.delivery_terms || '3 Business Days',
   warrantyPeriod: row.warranty_period || '1 Year Standard Manufacturer Warranty',
   paymentTerms: row.payment_terms || '30 Days Credit',
-  validityDate: row.valid_until || row.validity_date || '2026-09-30',
+  validityDate: row.valid_until || row.validity_date || '2026-10-30',
   notes: row.notes,
   quotationPdfUrl: row.quotation_pdf_url,
+  isPartialQuote: Boolean(row.is_partial_quote),
+  quotedItemsCount: row.quoted_items_count ? Number(row.quoted_items_count) : undefined,
+  totalRfqItemsCount: row.total_rfq_items_count ? Number(row.total_rfq_items_count) : undefined,
+  technicalComplianceStatus: row.technical_compliance_status || 'pending_review',
+  deviationNotes: row.deviation_notes || undefined,
+  adminReviewStatus: row.admin_review_status || 'pending',
+  manualUploadByAdmin: Boolean(row.manual_upload_by_admin),
   status: (row.status as any) || 'submitted',
   submittedAt: row.submitted_at || new Date().toISOString(),
   deliveryMethod: row.delivery_method || 'supplier_fleet',
@@ -184,8 +210,11 @@ export const mapQuotationFromDB = (row: any): Quotation => ({
 
 export const mapQuotationToDB = (q: Quotation) => ({
   id: q.id,
+  quotation_number: q.quotationNumber,
+  quote_reference: q.quoteReference || q.quotationNumber,
   rfq_id: q.rfqId,
   rfq_number: q.rfqNumber,
+  rfq_title: q.rfqTitle,
   buyer_company_id: q.buyerCompanyId,
   buyer_company_name: q.buyerCompanyName,
   supplier_company_id: q.supplierCompanyId,
@@ -196,14 +225,30 @@ export const mapQuotationToDB = (q: Quotation) => ({
   supplier_verified: q.supplierVerified,
   items: q.items,
   subtotal_aed: q.subtotalAED,
+  discount_aed: q.discountAED || 0,
+  vat_treatment: q.vatTreatment || 'standard_5_percent',
   vat_aed: q.vatAED,
   delivery_charge_aed: q.deliveryChargeAED || 0,
   total_amount_aed: q.grandTotalAED,
+  grand_total_aed: q.grandTotalAED,
+  stock_availability: q.stockAvailability || 'In Stock',
   delivery_days: q.leadTimeDays,
+  lead_time_days: q.leadTimeDays,
   delivery_terms: q.leadTimeDisplay,
+  lead_time_display: q.leadTimeDisplay,
+  warranty_period: q.warrantyPeriod,
   payment_terms: q.paymentTerms,
   valid_until: q.validityDate,
+  validity_date: q.validityDate,
   notes: q.notes,
+  quotation_pdf_url: q.quotationPdfUrl || null,
+  is_partial_quote: Boolean(q.isPartialQuote),
+  quoted_items_count: q.quotedItemsCount || q.items.length,
+  total_rfq_items_count: q.totalRfqItemsCount || q.items.length,
+  technical_compliance_status: q.technicalComplianceStatus || 'pending_review',
+  deviation_notes: q.deviationNotes || null,
+  admin_review_status: q.adminReviewStatus || 'pending',
+  manual_upload_by_admin: Boolean(q.manualUploadByAdmin),
   status: q.status,
   submitted_at: q.submittedAt,
   delivery_method: q.deliveryMethod || 'supplier_fleet',
@@ -609,5 +654,335 @@ export const supabaseService = {
     } catch (e) {
       console.error('Error updating quotation rating in Supabase:', e);
     }
-  }
+  },
+
+  // --- PROCURESOUQ V2 MANAGED PROCUREMENT PERSISTENCE ---
+  async upsertRFQAdminDetails(rfq: RFQ) {
+    try {
+      await supabase.from('rfqs').upsert([mapRFQToDB(rfq)]);
+    } catch (e) {
+      console.error('Error upserting V2 RFQ admin details:', e);
+    }
+  },
+
+  async upsertCommercialSettings(settings: any) {
+    try {
+      await supabase.from('commercial_settings').upsert([{
+        id: settings.id || 'default',
+        operating_model: settings.operatingModel,
+        contracting_entity_name: settings.contractingEntityName,
+        legal_entity_address: settings.legalEntityAddress,
+        trn_number: settings.trnNumber,
+        vat_rate_percent: settings.vatRatePercent,
+        default_markup_type: settings.defaultMarkupType,
+        default_markup_percent: settings.defaultMarkupPercent,
+        default_service_fee_aed: settings.defaultServiceFeeAED,
+        is_commercial_config_approved: settings.isCommercialConfigApproved,
+        allow_binding_po_generation: settings.allowBindingPoGeneration,
+        allow_binding_invoicing: settings.allowBindingInvoicing,
+        disclose_supplier_identity_to_buyer: settings.discloseSupplierIdentityToBuyer,
+        require_admin_po_approval: settings.requireAdminPoApproval,
+        updated_at: new Date().toISOString(),
+      }]);
+    } catch (e) {
+      console.error('Error upserting commercial_settings:', e);
+    }
+  },
+
+  async upsertSupplierInvitation(inv: any) {
+    try {
+      await supabase.from('supplier_rfq_invitations').upsert([{
+        id: inv.id,
+        rfq_id: inv.rfqId,
+        rfq_number: inv.rfqNumber,
+        supplier_company_id: inv.supplierCompanyId,
+        supplier_company_name: inv.supplierCompanyName,
+        supplier_email: inv.supplierEmail || null,
+        invitation_channel: inv.invitationChannel,
+        status: inv.status,
+        quotation_deadline: inv.quotationDeadline || null,
+        invited_by: inv.invitedBy,
+        responded_at: inv.respondedAt || null,
+        notes: inv.notes || null,
+        created_at: inv.createdAt,
+      }]);
+    } catch (e) {
+      console.error('Error upserting supplier_rfq_invitations:', e);
+    }
+  },
+
+  async upsertQuotationEvaluation(ev: any) {
+    try {
+      await supabase.from('quotation_evaluations').upsert([{
+        id: ev.id,
+        rfq_id: ev.rfqId,
+        quotation_id: ev.quotationId,
+        evaluator_name: ev.evaluatorName,
+        technical_compliance: ev.technicalCompliance,
+        brand_compatibility: ev.brandCompatibility,
+        quantity_verified: ev.quantityVerified,
+        availability_verified: ev.availabilityVerified,
+        delivery_feasible: ev.deliveryFeasible,
+        pricing_accurate: ev.pricingAccurate,
+        supplier_reliability_score: ev.supplierReliabilityScore,
+        has_deviation: ev.hasDeviation,
+        deviation_notes: ev.deviationNotes || null,
+        approved_for_comparison: ev.approvedForComparison,
+        offer_slot_assigned: ev.offerSlotAssigned || null,
+        evaluated_at: ev.evaluatedAt,
+      }]);
+    } catch (e) {
+      console.error('Error upserting quotation_evaluations:', e);
+    }
+  },
+
+  async upsertInternalCost(cost: any) {
+    try {
+      await supabase.from('internal_costs').upsert([{
+        id: cost.id,
+        rfq_id: cost.rfqId,
+        quotation_id: cost.quotationId,
+        customer_offer_id: cost.customerOfferId || null,
+        supplier_cost_ex_vat_aed: cost.supplierCostExVatAED,
+        freight_delivery_cost_aed: cost.freightDeliveryCostAED,
+        other_procurement_cost_aed: cost.otherProcurementCostAED,
+        other_cost_description: cost.otherCostDescription || null,
+        markup_type: cost.markupType,
+        markup_percent: cost.markupPercent,
+        fixed_fee_aed: cost.fixedFeeAED,
+        calculated_margin_aed: cost.calculatedMarginAED,
+        customer_selling_price_before_vat_aed: cost.customerSellingPriceBeforeVatAED,
+        vat_rate_percent: cost.vatRatePercent,
+        customer_vat_aed: cost.customerVatAED,
+        customer_landed_total_aed: cost.customerLandedTotalAED,
+        gross_profit_aed: cost.grossProfitAED,
+        gross_margin_percent: cost.grossMarginPercent,
+        created_by: cost.createdBy,
+        created_at: cost.createdAt,
+        updated_at: cost.updatedAt,
+      }]);
+    } catch (e) {
+      console.error('Error upserting internal_costs:', e);
+    }
+  },
+
+  async upsertCustomerOffer(offer: any) {
+    try {
+      await supabase.from('customer_offers').upsert([{
+        id: offer.id,
+        offer_number: offer.offerNumber,
+        offer_slot: offer.offerSlot,
+        rfq_id: offer.rfqId,
+        rfq_number: offer.rfqNumber,
+        buyer_company_id: offer.buyerCompanyId,
+        source_quotation_id: offer.sourceQuotationId,
+        offer_label: offer.offerLabel,
+        brand_offered: offer.brandOffered,
+        technical_compliance: offer.technicalCompliance,
+        has_deviation: offer.hasDeviation,
+        deviation_warning: offer.deviationWarning || null,
+        is_partial_offer: offer.isPartialOffer,
+        quoted_items_count: offer.quotedItemsCount,
+        total_rfq_items_count: offer.totalRfqItemsCount,
+        items: offer.items,
+        selling_subtotal_aed: offer.sellingSubtotalAED,
+        delivery_fee_aed: offer.deliveryFeeAED,
+        vat_aed: offer.vatAED,
+        estimated_landed_total_aed: offer.estimatedLandedTotalAED,
+        lead_time_days: offer.leadTimeDays,
+        lead_time_display: offer.leadTimeDisplay,
+        availability_status: offer.availabilityStatus,
+        warranty_terms: offer.warrantyTerms,
+        payment_terms: offer.paymentTerms,
+        validity_date: offer.validityDate,
+        rule_recommendations: offer.ruleRecommendations,
+        disclosed_supplier_name: offer.disclosedSupplierName || null,
+        status: offer.status,
+        published_at: offer.publishedAt,
+      }]);
+    } catch (e) {
+      console.error('Error upserting customer_offers:', e);
+    }
+  },
+
+  async upsertCustomerPO(cpo: any) {
+    try {
+      await supabase.from('customer_purchase_orders').upsert([{
+        id: cpo.id,
+        cpo_number: cpo.cpoNumber,
+        rfq_id: cpo.rfqId,
+        rfq_number: cpo.rfqNumber,
+        rfq_title: cpo.rfqTitle,
+        customer_offer_id: cpo.customerOfferId,
+        offer_number: cpo.offerNumber,
+        buyer_company_id: cpo.buyerCompanyId,
+        buyer_company_name: cpo.buyerCompanyName,
+        buyer_contact_name: cpo.buyerContactName,
+        buyer_phone: cpo.buyerPhone,
+        contracting_entity_name: cpo.contractingEntityName,
+        ordering_method: cpo.orderingMethod,
+        customer_po_reference: cpo.customerPoReference || null,
+        uploaded_po_url: cpo.uploadedPoUrl || null,
+        uploaded_po_file_name: cpo.uploadedPoFileName || null,
+        items: cpo.items,
+        selling_subtotal_aed: cpo.sellingSubtotalAED,
+        delivery_fee_aed: cpo.deliveryFeeAED,
+        vat_aed: cpo.vatAED,
+        total_payable_aed: cpo.totalPayableAED,
+        payment_terms: cpo.paymentTerms,
+        delivery_address: cpo.deliveryAddress,
+        delivery_emirate: cpo.deliveryEmirate,
+        estimated_delivery_date: cpo.estimatedDeliveryDate,
+        terms_accepted: cpo.termsAccepted,
+        terms_accepted_at: cpo.termsAcceptedAt,
+        commercial_approval_status: cpo.commercialApprovalStatus,
+        is_legally_binding: cpo.isLegallyBinding,
+        order_status: cpo.orderStatus,
+        cancellation_reason: cpo.cancellationReason || null,
+        notes: cpo.notes || null,
+        created_at: cpo.createdAt,
+        updated_at: cpo.updatedAt,
+      }]);
+    } catch (e) {
+      console.error('Error upserting customer_purchase_orders:', e);
+    }
+  },
+
+  async upsertSupplierPO(spo: any) {
+    try {
+      await supabase.from('supplier_purchase_orders').upsert([{
+        id: spo.id,
+        spo_number: spo.spoNumber,
+        cpo_id: spo.cpoId,
+        cpo_number: spo.cpoNumber,
+        rfq_id: spo.rfqId,
+        rfq_number: spo.rfqNumber,
+        source_quotation_id: spo.sourceQuotationId,
+        supplier_company_id: spo.supplierCompanyId,
+        supplier_company_name: spo.supplierCompanyName,
+        supplier_phone: spo.supplierPhone,
+        items: spo.items,
+        supplier_subtotal_aed: spo.supplierSubtotalAED,
+        freight_cost_aed: spo.freightCostAED,
+        vat_aed: spo.vatAED,
+        supplier_total_aed: spo.supplierTotalAED,
+        payment_terms: spo.paymentTerms,
+        fulfilment_mode: spo.fulfilmentMode,
+        delivery_destination: spo.deliveryDestination,
+        expected_dispatch_date: spo.expectedDispatchDate,
+        supplier_confirmation_status: spo.supplierConfirmationStatus,
+        supplier_confirmed_at: spo.supplierConfirmedAt || null,
+        status: spo.status,
+        internal_notes: spo.internalNotes || null,
+        created_at: spo.createdAt,
+        updated_at: spo.updatedAt,
+      }]);
+    } catch (e) {
+      console.error('Error upserting supplier_purchase_orders:', e);
+    }
+  },
+
+  async upsertFulfilment(ful: any) {
+    try {
+      await supabase.from('order_fulfilments').upsert([{
+        id: ful.id,
+        cpo_id: ful.cpoId,
+        cpo_number: ful.cpoNumber,
+        spo_id: ful.spoId || null,
+        spo_number: ful.spoNumber || null,
+        rfq_id: ful.rfqId,
+        buyer_company_id: ful.buyerCompanyId,
+        supplier_company_id: ful.supplierCompanyId || null,
+        fulfilment_mode: ful.fulfilmentMode,
+        current_stage: ful.currentStage,
+        stage_timestamps: ful.stageTimestamps,
+        logistics_provider: ful.logisticsProvider || null,
+        delivery_contact_name: ful.deliveryContactName || null,
+        delivery_contact_phone: ful.deliveryContactPhone || null,
+        tracking_reference: ful.trackingReference || null,
+        delivery_address: ful.deliveryAddress,
+        is_partial_delivery: ful.isPartialDelivery,
+        delivered_items_summary: ful.deliveredItemsSummary || null,
+        has_delivery_issue: ful.hasDeliveryIssue,
+        delivery_issue_notes: ful.deliveryIssueNotes || null,
+        customer_acknowledged: ful.customerAcknowledged,
+        customer_acknowledged_at: ful.customerAcknowledgedAt || null,
+        customer_acknowledgement_notes: ful.customerAcknowledgementNotes || null,
+        created_at: ful.createdAt,
+        updated_at: ful.updatedAt,
+      }]);
+    } catch (e) {
+      console.error('Error upserting order_fulfilments:', e);
+    }
+  },
+
+  async upsertDeliveryRecord(del: any) {
+    try {
+      await supabase.from('delivery_records').upsert([{
+        id: del.id,
+        fulfilment_id: del.fulfilmentId,
+        cpo_id: del.cpoId,
+        cpo_number: del.cpoNumber,
+        delivery_number: del.deliveryNumber,
+        fulfilment_mode: del.fulfilmentMode,
+        status: del.status,
+        logistics_provider: del.logisticsProvider || null,
+        driver_or_contact_name: del.driverOrContactName || null,
+        contact_phone: del.contactPhone || null,
+        tracking_reference: del.trackingReference || null,
+        delivery_note_ref: del.deliveryNoteRef || null,
+        is_partial: del.isPartial,
+        items_delivered_summary: del.itemsDeliveredSummary,
+        dispatched_at: del.dispatchedAt || null,
+        delivered_at: del.deliveredAt || null,
+        customer_acknowledged: del.customerAcknowledged,
+        issue_reported: del.issueReported || null,
+        notes: del.notes || null,
+        created_at: del.createdAt,
+      }]);
+    } catch (e) {
+      console.error('Error upserting delivery_records:', e);
+    }
+  },
+
+  async upsertDeliveryDocument(doc: any) {
+    try {
+      await supabase.from('delivery_documents').upsert([{
+        id: doc.id,
+        cpo_id: doc.cpoId,
+        spo_id: doc.spoId || null,
+        delivery_record_id: doc.deliveryRecordId || null,
+        document_type: doc.documentType,
+        document_number: doc.documentNumber,
+        file_name: doc.fileName,
+        file_url: doc.fileUrl,
+        uploaded_by_role: doc.uploadedByRole,
+        uploaded_by_name: doc.uploadedByName,
+        visible_to_buyer: doc.visibleToBuyer,
+        created_at: doc.createdAt,
+      }]);
+    } catch (e) {
+      console.error('Error upserting delivery_documents:', e);
+    }
+  },
+
+  async insertApprovalHistory(rec: any) {
+    try {
+      await supabase.from('approval_history').upsert([{
+        id: rec.id,
+        entity_type: rec.entityType,
+        entity_id: rec.entityId,
+        action: rec.action,
+        approved_by: rec.approvedBy,
+        role: rec.role,
+        previous_state: rec.previousState || null,
+        new_state: rec.newState || null,
+        notes: rec.notes || null,
+        created_at: rec.createdAt,
+      }]);
+    } catch (e) {
+      console.error('Error inserting approval_history:', e);
+    }
+  },
 };
+

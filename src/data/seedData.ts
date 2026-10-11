@@ -326,10 +326,19 @@ export const initialQuickBundles: QuickBundle[] = [
   }
 ];
 
-export const initialCompanies: Company[] = [];
-export const initialRFQs: RFQ[] = [];
-export const initialQuotations: Quotation[] = [];
+import {
+  v2TestSuppliers,
+  v2TestRFQs,
+  v2TestQuotations,
+} from './v2SeedData';
+
+export * from './v2SeedData';
+
+export const initialCompanies: Company[] = [...v2TestSuppliers];
+export const initialRFQs: RFQ[] = [...v2TestRFQs];
+export const initialQuotations: Quotation[] = [...v2TestQuotations];
 export const initialPurchaseOrders: PurchaseOrder[] = [];
 export const initialMessages: Message[] = [];
 export const initialReviews: Review[] = [];
 export const initialVerifications: VerificationRequest[] = [];
+

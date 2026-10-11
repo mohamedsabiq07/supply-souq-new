@@ -23,7 +23,7 @@ interface WorkspaceNavProps {
 
 export const WorkspaceNav: React.FC<WorkspaceNavProps> = ({ currentView, setCurrentView }) => {
   const { role, currentUser, currentCompany, logout } = useAuth();
-  const { rfqs, quotations, purchaseOrders, messages, verifications } = useAppData();
+  const { rfqs, quotations, purchaseOrders, customerOffers, customerPOs, supplierPOs, messages, verifications } = useAppData();
 
   if (!currentUser || !currentCompany) {
     return null;
@@ -34,29 +34,38 @@ export const WorkspaceNav: React.FC<WorkspaceNavProps> = ({ currentView, setCurr
 
   // Buyer counts
   const buyerRFQs = rfqs.filter(r => r.buyerCompanyId === companyId);
-  const comparingRFQs = buyerRFQs.filter(r => (r.quotesCount && r.quotesCount > 0) || r.status === 'evaluating' || r.status === 'receiving_quotes');
-  const buyerOrders = purchaseOrders.filter(p => p.buyerCompanyId === companyId);
+  const comparingRFQs = buyerRFQs.filter(r =>
+    customerOffers.some(o => o.rfqId === r.id && o.status !== 'withdrawn') ||
+    (r.quotesCount && r.quotesCount > 0) ||
+    r.status === 'evaluating' ||
+    r.status === 'receiving_quotes'
+  );
+  const buyerOrdersCount =
+    customerPOs.filter(c => c.buyerCompanyId === companyId).length +
+    purchaseOrders.filter(p => p.buyerCompanyId === companyId).length;
   const buyerUnreadMessages = messages.filter(m => m.recipientCompanyId === companyId && !m.isRead).length;
 
   // Supplier counts
-  const supplierLiveRFQs = rfqs.filter(r => r.status !== 'draft');
+  const supplierLiveRFQs = rfqs.filter(r => r.status !== 'draft' && r.status !== 'cancelled');
   const supplierQuotes = quotations.filter(q => q.supplierCompanyId === companyId);
-  const supplierOrders = purchaseOrders.filter(p => p.supplierCompanyId === companyId);
+  const supplierOrdersCount =
+    supplierPOs.filter(s => s.supplierCompanyId === companyId).length +
+    purchaseOrders.filter(p => p.supplierCompanyId === companyId).length;
   const supplierUnreadMessages = messages.filter(m => m.recipientCompanyId === companyId && !m.isRead).length;
 
   const buyerTabs = [
-    { id: 'buyer-dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { id: 'buyer-dashboard', label: 'Overview', icon: LayoutDashboard },
     { id: 'buyer-rfqs', label: 'My RFQs', icon: FileText, count: buyerRFQs.length },
-    { id: 'buyer-compare-quick', label: 'Compare Quotes', icon: GitCompare, count: comparingRFQs.length, highlight: true },
-    { id: 'buyer-orders', label: 'Purchase Orders', icon: Package, count: buyerOrders.length },
+    { id: 'buyer-compare-quick', label: 'Quote Comparisons', icon: GitCompare, count: comparingRFQs.length, highlight: true },
+    { id: 'buyer-orders', label: 'POs, Orders & Deliveries', icon: Package, count: buyerOrdersCount },
     { id: 'buyer-messages', label: 'Messages', icon: MessageSquare, count: buyerUnreadMessages },
   ];
 
   const supplierTabs = [
     { id: 'supplier-dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'supplier-inbox', label: 'RFQ Inbox (Live)', icon: FileText, count: supplierLiveRFQs.length, highlight: true },
+    { id: 'supplier-inbox', label: 'Available RFQs', icon: FileText, count: supplierLiveRFQs.length, highlight: true },
     { id: 'supplier-quotes', label: 'My Quotations', icon: GitCompare, count: supplierQuotes.length },
-    { id: 'supplier-orders', label: 'Orders & POs', icon: Package, count: supplierOrders.length },
+    { id: 'supplier-orders', label: 'POs Received & Fulfilment', icon: Package, count: supplierOrdersCount },
     { id: 'supplier-messages', label: 'Messages', icon: MessageSquare, count: supplierUnreadMessages },
   ];
 

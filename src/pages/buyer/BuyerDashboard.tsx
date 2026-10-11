@@ -1,24 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useAppData } from '../../context/AppDataContext';
 import { StatWidget } from '../../components/ui/StatWidget';
 import { RFQCard } from '../../components/rfq/RFQCard';
 import { Button } from '../../components/ui/Button';
 import { Card, CardHeader, CardContent } from '../../components/ui/Card';
-import { StatusBadge } from '../../components/ui/Badge';
 import { formatAED, formatDate } from '../../lib/utils';
 import {
   FileText,
   GitCompare,
   Package,
-  TrendingDown,
   PlusCircle,
   Clock,
   ArrowRight,
   ShieldCheck,
-  AlertCircle,
-  Zap,
-  CheckCircle2
+  CheckCircle2,
+  Truck,
+  Bell,
+  FolderOpen,
+  Building2,
 } from 'lucide-react';
 import { CreateRFQButton } from '../../components/common/CreateRFQButton';
 
@@ -28,280 +28,347 @@ interface BuyerDashboardProps {
 
 export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) => {
   const { currentCompany } = useAuth();
-  const { rfqs, quotations, purchaseOrders, isRFQExtendedUnlocked } = useAppData();
+  const {
+    rfqs,
+    customerOffers,
+    customerPOs,
+    orderFulfilments,
+    deliveryDocuments,
+    notifications,
+    commercialSettings,
+    markNotificationRead,
+  } = useAppData();
+
+  const [showNotificationsDrawer, setShowNotificationsDrawer] = useState(false);
 
   const myRFQs = rfqs
-    .filter(r => r.buyerCompanyId === currentCompany.id)
-    .sort((a, b) => new Date(b.updatedAt || b.createdAt).getTime() - new Date(a.updatedAt || a.createdAt).getTime());
-  const myRFQIds = myRFQs.map(r => r.id);
-  const myQuotes = quotations
-    .filter(q => 
-      (q.buyerCompanyId && q.buyerCompanyId === currentCompany.id) || 
-      myRFQIds.includes(q.rfqId) ||
-      myRFQs.some(r => r.rfqNumber === q.rfqNumber)
-    )
-    .sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime());
-  const evaluatingRFQs = myRFQs.filter(r => r.quotesCount > 0 && r.status !== 'closed' && r.status !== 'awarded');
-  const activeOrders = purchaseOrders.filter(p => p.buyerCompanyId === currentCompany.id);
+    .filter((r) => r.buyerCompanyId === currentCompany.id)
+    .sort(
+      (a, b) =>
+        new Date(b.updatedAt || b.createdAt).getTime() -
+        new Date(a.updatedAt || a.createdAt).getTime()
+    );
+  const myRFQIds = new Set(myRFQs.map((r) => r.id));
 
-  // Calculate real material spend and real procurement savings strictly for this company
-  const totalSpend = activeOrders.reduce((sum, po) => sum + po.totalAmountAED, 0);
-  const estimatedSavings = totalSpend > 0 ? totalSpend * 0.15 : 0;
+  const myCustomerOffers = customerOffers.filter(
+    (o) => o.buyerCompanyId === currentCompany.id || myRFQIds.has(o.rfqId)
+  );
+  const myCPOs = customerPOs.filter((c) => c.buyerCompanyId === currentCompany.id);
+  const myFulfilments = orderFulfilments.filter((f) => f.buyerCompanyId === currentCompany.id);
+  const completedDeliveries = myFulfilments.filter((f) => f.currentStage === 'delivered');
+  const pendingApprovalsCount =
+    myRFQs.filter((r) => r.adminStatus === 'offers_published' && !myCPOs.some((c) => c.rfqId === r.id))
+      .length +
+    myCPOs.filter((c) => c.commercialApprovalStatus === 'pending_admin_approval').length;
+
+  const myNotifications = notifications.filter(
+    (n) =>
+      n.recipientRole === 'buyer' &&
+      (!n.recipientCompanyId || n.recipientCompanyId === currentCompany.id)
+  );
+  const unreadNotifs = myNotifications.filter((n) => !n.isRead);
+
+  const rfqsWithPublishedOffers = myRFQs.filter((r) =>
+    myCustomerOffers.some((o) => o.rfqId === r.id)
+  );
 
   return (
     <div className="space-y-8">
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="px-2.5 py-0.5 rounded-full bg-rose-50 text-[#9e1c2e] border border-rose-200 text-[10px] font-extrabold uppercase tracking-wider">
+              Managed B2B Procurement Desk
+            </span>
+            <span className="text-xs text-slate-500">
+              Single Point of Contact: <strong>{commercialSettings.contractingEntityName}</strong>
+            </span>
+          </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
-            Procurement Command Dashboard
+            Customer Procurement Dashboard
           </h1>
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-zinc-400 mt-1">
-            Manage your project material RFQs, compare multi-vendor quotations, and track UAE site deliveries.
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-zinc-400 mt-0.5">
+            Submit RFQs, compare up to 5 qualified ProcureSouq offers, issue Purchase Orders (`PS-CPO`), and track 6-stage UAE site deliveries.
           </p>
         </div>
 
-        <CreateRFQButton
-          onClick={() => onNavigate('create-rfq')}
-          size="md"
+        <div className="flex items-center gap-2.5">
+          <button
+            type="button"
+            onClick={() => setShowNotificationsDrawer(!showNotificationsDrawer)}
+            className="relative px-3.5 py-2.5 rounded-xl bg-white dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.08] text-xs font-bold text-slate-700 dark:text-zinc-200 flex items-center gap-2 hover:bg-slate-50 cursor-pointer"
+          >
+            <Bell className="w-4 h-4 text-[#9e1c2e]" />
+            <span>Notifications</span>
+            {unreadNotifs.length > 0 && (
+              <span className="px-1.5 py-0.5 rounded-full bg-[#cf2e46] text-white text-[10px] font-black">
+                {unreadNotifs.length}
+              </span>
+            )}
+          </button>
+
+          <CreateRFQButton onClick={() => onNavigate('create-rfq')} size="md" />
+        </div>
+      </div>
+
+      {/* Collapsible Notifications Panel */}
+      {showNotificationsDrawer && (
+        <Card className="p-5 border-slate-200 bg-white space-y-3">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-extrabold text-slate-900">
+              Procurement & Delivery Notifications ({myNotifications.length})
+            </h3>
+            <button
+              onClick={() => setShowNotificationsDrawer(false)}
+              className="text-xs font-bold text-slate-500 hover:text-slate-900"
+            >
+              Close
+            </button>
+          </div>
+          {myNotifications.length > 0 ? (
+            <div className="space-y-2">
+              {myNotifications.map((n) => (
+                <div
+                  key={n.id}
+                  onClick={() => {
+                    markNotificationRead(n.id);
+                    if (n.targetView) onNavigate(n.targetView, { rfqId: n.relatedEntityId });
+                  }}
+                  className={`p-3 rounded-xl border text-xs flex items-center justify-between cursor-pointer ${
+                    n.isRead
+                      ? 'bg-slate-50 border-slate-200 text-slate-600'
+                      : 'bg-rose-50/40 border-rose-200 text-slate-900 font-semibold'
+                  }`}
+                >
+                  <div>
+                    <div className="font-extrabold text-slate-900">{n.title}</div>
+                    <div className="text-slate-600">{n.message}</div>
+                  </div>
+                  <span className="text-[10px] text-slate-400 shrink-0 ml-3">
+                    {formatDate(n.createdAt)}
+                  </span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-xs text-slate-500">No notifications yet.</p>
+          )}
+        </Card>
+      )}
+
+      {/* Section 3: Required 5 Customer Dashboard KPIs (Real Database / Labelled Test Records) */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+        <StatWidget
+          title="Active RFQs"
+          value={myRFQs.length}
+          subtitle={myRFQs.length > 0 ? 'Managed by ProcureSouq' : '0 submitted'}
+          icon={<FileText className="w-6 h-6 text-brand-600" />}
+        />
+        <StatWidget
+          title="Quotations Ready"
+          value={myCustomerOffers.length}
+          subtitle={
+            rfqsWithPublishedOffers.length > 0
+              ? `Across ${rfqsWithPublishedOffers.length} RFQ(s)`
+              : 'In sourcing'
+          }
+          icon={<GitCompare className="w-6 h-6 text-amber-600" />}
+        />
+        <StatWidget
+          title="Pending Approvals"
+          value={pendingApprovalsCount}
+          subtitle="Offers / POs awaiting action"
+          icon={<Clock className="w-6 h-6 text-rose-600" />}
+        />
+        <StatWidget
+          title="Active Orders"
+          value={myCPOs.length}
+          subtitle={
+            myCPOs.length > 0
+              ? formatAED(myCPOs.reduce((s, c) => s + c.totalPayableAED, 0))
+              : '0 active orders'
+          }
+          icon={<Package className="w-6 h-6 text-indigo-600" />}
+        />
+        <StatWidget
+          title="Completed Deliveries"
+          value={completedDeliveries.length}
+          subtitle={
+            completedDeliveries.length > 0 ? 'POD verified on site' : '0 delivered yet'
+          }
+          icon={<Truck className="w-6 h-6 text-emerald-600" />}
         />
       </div>
 
-      {/* Action Alert for Evaluating Quotes */}
-      {evaluatingRFQs.length > 0 && (
-        <div className="p-4 bg-gradient-to-r from-brand-900 via-[#0c0c0e] to-black text-white rounded-2xl border border-brand-700 dark:border-white/[0.08] shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-brand-500/30 border border-brand-400/40 flex items-center justify-center text-amber-400 shrink-0">
+      {/* Action Banner when Qualified Offers are Ready */}
+      {rfqsWithPublishedOffers.length > 0 && (
+        <div className="p-5 bg-gradient-to-r from-slate-900 via-[#1f0910] to-slate-900 text-white rounded-2xl border border-[#cf2e46]/40 shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3.5">
+            <div className="w-11 h-11 rounded-xl bg-[#cf2e46]/20 border border-[#cf2e46]/40 flex items-center justify-center text-amber-400 shrink-0">
               <GitCompare className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="text-sm font-bold text-white">
-                {evaluatingRFQs[0].quotesCount} Quotation{evaluatingRFQs[0].quotesCount > 1 ? 's' : ''} Ready for Evaluation ({evaluatingRFQs[0].rfqNumber})
+              <div className="flex items-center gap-2">
+                <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-black uppercase">
+                  Technical Review Complete
+                </span>
+                <span className="font-mono text-xs text-rose-300 font-bold">
+                  {rfqsWithPublishedOffers[0].rfqNumber}
+                </span>
+              </div>
+              <h4 className="text-sm sm:text-base font-extrabold text-white mt-0.5">
+                {myCustomerOffers.filter((o) => o.rfqId === rfqsWithPublishedOffers[0].id).length}{' '}
+                Qualified ProcureSouq Offers Ready for Comparison
               </h4>
-              <p className="text-xs text-slate-300 dark:text-zinc-400">
-                Suppliers have submitted official offers for "{evaluatingRFQs[0].title}".
+              <p className="text-xs text-slate-300">
+                Compare Offer 1–5 side-by-side (brands, technical compliance, partial quote flags, and landed cost) and issue your Purchase Order.
               </p>
             </div>
           </div>
           <Button
             variant="amber"
             size="sm"
-            onClick={() => onNavigate('buyer-compare', { rfqId: evaluatingRFQs[0].id })}
+            onClick={() =>
+              onNavigate('buyer-compare', { rfqId: rfqsWithPublishedOffers[0].id })
+            }
             rightIcon={<ArrowRight className="w-4 h-4" />}
-            className="font-bold shadow-sm shrink-0"
+            className="font-extrabold shrink-0"
           >
-            Open Comparison Matrix
+            Compare Qualified Offers
           </Button>
         </div>
       )}
 
-      {/* KPI Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatWidget
-          title="Active RFQs"
-          value={myRFQs.length}
-          subtitle={myRFQs.length > 0 ? "In evaluation & bidding" : "No active RFQs"}
-          icon={<FileText className="w-6 h-6 text-brand-600" />}
-        />
-        <StatWidget
-          title="Quotations Received"
-          value={myQuotes.length}
-          subtitle={myQuotes.length > 0 ? "From verified UAE stockists" : "Awaiting RFQ submissions"}
-          icon={<GitCompare className="w-6 h-6 text-amber-600" />}
-        />
-        <StatWidget
-          title="Active Purchase Orders"
-          value={activeOrders.length}
-          subtitle={activeOrders.length > 0 ? "In processing & delivery" : "0 orders placed"}
-          icon={<Package className="w-6 h-6 text-indigo-600" />}
-        />
-        <StatWidget
-          title="Estimated Procurement Savings"
-          value={formatAED(estimatedSavings)}
-          subtitle={totalSpend > 0 ? "Savings across awarded POs" : "Start quoting to save"}
-          icon={<TrendingDown className="w-6 h-6 text-[#cf2e46]" />}
-        />
-      </div>
-
-      {/* Grouped Quotations by Specific RFQ */}
-      {myQuotes.length > 0 && (
-        <div className="space-y-6">
+      {/* Qualified Customer Offers Grouped by RFQ */}
+      {rfqsWithPublishedOffers.length > 0 && (
+        <div className="space-y-5">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 flex items-center justify-center font-bold">
-                <GitCompare className="w-4 h-4" />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-                  Quotations Collected by RFQ ({myQuotes.length} Total Offers)
-                </h3>
-                <p className="text-xs text-slate-500 dark:text-zinc-400">
-                  Supplier quotations are collected under each respective material RFQ for multi-vendor comparison and PO awarding.
-                </p>
-              </div>
+            <div>
+              <h3 className="text-lg font-extrabold text-slate-900 dark:text-white">
+                Qualified ProcureSouq Customer Offers ({myCustomerOffers.length} Published)
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-zinc-400">
+                Vetted by ProcureSouq Engineering. Confidential supplier identities and internal procurement costs are protected.
+              </p>
             </div>
           </div>
 
-          <div className="space-y-5">
-            {myRFQs.filter(rfq => myQuotes.some(q => q.rfqId === rfq.id || q.rfqNumber === rfq.rfqNumber)).map((rfq) => {
-              const quotesForThisRFQ = myQuotes.filter(q => q.rfqId === rfq.id || q.rfqNumber === rfq.rfqNumber);
-              const isUnlocked = isRFQExtendedUnlocked(rfq.id);
-              const visibleQuotes = isUnlocked ? quotesForThisRFQ : quotesForThisRFQ.slice(0, 5);
-              const lockedCount = isUnlocked ? 0 : Math.max(0, quotesForThisRFQ.length - 5);
-              const lowestQuote = visibleQuotes.length > 0 
-                ? [...visibleQuotes].sort((a, b) => a.grandTotalAED - b.grandTotalAED)[0]
-                : null;
-
-              return (
-                <div key={rfq.id} className="bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] rounded-2xl sm:rounded-3xl border border-slate-200/80 dark:border-white/[0.08] p-5 sm:p-6 shadow-sm space-y-4">
-                  {/* RFQ Group Header */}
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-white/[0.06] pb-3.5">
-                    <div className="space-y-1">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="font-mono font-bold text-xs bg-brand-50 dark:bg-brand-950/60 text-brand-700 dark:text-brand-400 px-2.5 py-0.5 rounded border border-brand-200 dark:border-brand-800">
-                          RFQ #{rfq.rfqNumber}
-                        </span>
-                        <span className="text-xs font-bold text-rose-800 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/40 px-2.5 py-0.5 rounded-full border border-rose-200 dark:border-rose-900/60 flex items-center gap-1">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-[#cf2e46]" />
-                          <span>
-                            {isUnlocked ? `${quotesForThisRFQ.length} Quotations (Unlocked)` : `${Math.min(quotesForThisRFQ.length, 5)} / 5 Free Quotations`}
-                          </span>
-                        </span>
-                        {lockedCount > 0 && (
-                          <span className="text-xs font-bold text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 rounded border border-amber-200 dark:border-amber-800">
-                            +{lockedCount} More Locked (AED 49)
-                          </span>
-                        )}
-                        <span className="text-xs text-slate-500 dark:text-zinc-400 hidden sm:inline">
-                          • {rfq.category}
-                        </span>
-                      </div>
-                      <h4 className="text-base font-extrabold text-slate-900 dark:text-white">{rfq.title}</h4>
-                      <p className="text-xs text-slate-500 dark:text-zinc-400">
-                        Project: <strong className="text-slate-700 dark:text-zinc-200">{rfq.projectName}</strong> • Delivery: <strong>{rfq.deliveryEmirate}</strong>
-                      </p>
+          {rfqsWithPublishedOffers.map((rfq) => {
+            const offers = myCustomerOffers
+              .filter((o) => o.rfqId === rfq.id)
+              .sort((a, b) => a.offerSlot - b.offerSlot);
+            return (
+              <Card
+                key={rfq.id}
+                className="p-5 sm:p-6 border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#111114] space-y-4"
+              >
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-white/[0.06] pb-3.5">
+                  <div>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="font-mono font-bold text-xs bg-slate-900 text-white px-2.5 py-0.5 rounded">
+                        {rfq.rfqNumber}
+                      </span>
+                      <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold">
+                        {offers.length} / 5 Qualified Offers Published
+                      </span>
+                      <span className="text-xs text-slate-500">
+                        • {rfq.items.length} BOQ Materials
+                      </span>
                     </div>
-
-                    <button
-                      onClick={() => onNavigate('buyer-compare', { rfqId: rfq.id })}
-                      className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-rose-500/10 hover:bg-rose-500/20 text-rose-700 dark:text-rose-300 border border-rose-300/80 dark:border-rose-800/50 transition-colors shrink-0 shadow-xs"
-                    >
-                      <GitCompare className="w-4 h-4 text-rose-600 dark:text-rose-400" />
-                      <span>Compare {visibleQuotes.length} Quotation{visibleQuotes.length > 1 ? 's' : ''} in Matrix</span>
-                    </button>
+                    <h4 className="text-base font-extrabold text-slate-900 dark:text-white mt-1">
+                      {rfq.title}
+                    </h4>
                   </div>
 
-                  {/* List of Collected Quotations for this Specific RFQ */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {visibleQuotes.map((quote) => {
-                      const isLowest = lowestQuote && quote.id === lowestQuote.id;
-                      return (
-                        <div
-                          key={quote.id}
-                          className={`p-4 sm:p-5 rounded-2xl border transition-all space-y-3 flex flex-col justify-between ${
-                            isLowest 
-                              ? 'bg-gradient-to-b from-emerald-500/10 to-transparent border-emerald-500/30 shadow-xs' 
-                              : 'bg-slate-50/50 dark:bg-white/[0.02] border-slate-200/80 dark:border-white/[0.06] hover:border-slate-300 dark:hover:border-white/[0.12]'
-                          }`}
-                        >
-                          <div className="space-y-2.5">
-                            <div className="flex items-center justify-between gap-1">
-                              <span className="font-mono text-xs font-bold text-brand-700 dark:text-brand-300 bg-brand-500/10 px-2 py-0.5 rounded-full">{quote.quotationNumber}</span>
-                              <div className="flex items-center gap-1.5">
-                                {quote.buyerRating ? (
-                                  <span className="font-semibold text-amber-800 dark:text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20 text-[10px]">
-                                    ★ {quote.buyerRating}/5
-                                  </span>
-                                ) : null}
-                                {isLowest && (
-                                  <span className="bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border border-emerald-500/25 text-[10px] font-bold px-2 py-0.5 rounded-full">
-                                    Lowest Price
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-                            <div>
-                              <h5 className="font-bold text-slate-900 dark:text-white text-xs truncate">{quote.supplierCompanyName}</h5>
-                              <p className="text-[11px] text-slate-500 dark:text-zinc-400">{quote.supplierZone || quote.supplierEmirate || 'Verified Stockist'}</p>
-                            </div>
-                            <div className="pt-2 border-t border-slate-100 dark:border-white/[0.06]">
-                              <span className="text-[10px] text-slate-400 dark:text-zinc-500 block font-semibold uppercase tracking-wider">Quoted Total (5% VAT Incl.)</span>
-                              <div className="text-lg font-extrabold text-slate-900 dark:text-white font-mono mt-0.5">
-                                {formatAED(quote.grandTotalAED)}
-                              </div>
-                            </div>
-                            <div className="text-[11px] space-y-1 text-slate-600 dark:text-zinc-300 pt-0.5">
-                              <div className="flex justify-between">
-                                <span className="text-slate-400 dark:text-zinc-500">Lead Time:</span>
-                                <strong className="text-slate-800 dark:text-zinc-200">{quote.leadTimeDisplay || `${quote.leadTimeDays} Days`}</strong>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-slate-400 dark:text-zinc-500">Payment:</span>
-                                <strong className="text-slate-800 dark:text-zinc-200 truncate">{quote.paymentTerms || '30 Days PDC'}</strong>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="pt-2 border-t border-slate-100 dark:border-white/[0.06]">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => onNavigate('rfq-detail', { rfqId: rfq.id })}
-                              className="w-full text-xs py-1.5 rounded-xl font-medium hover:bg-slate-100 dark:hover:bg-white/[0.06]"
-                            >
-                              View Quotation Details
-                            </Button>
-                          </div>
-                        </div>
-                      );
-                    })}
-
-                    {lockedCount > 0 && (
-                      <div
-                        onClick={() => onNavigate('buyer-compare', { rfqId: rfq.id })}
-                        className="p-5 rounded-2xl border-2 border-dashed border-amber-400/40 dark:border-amber-500/30 bg-amber-500/5 hover:bg-amber-500/10 transition-all space-y-3 flex flex-col justify-between cursor-pointer"
-                      >
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between">
-                            <span className="text-[10px] font-bold bg-amber-500/15 text-amber-800 dark:text-amber-300 px-2.5 py-0.5 rounded-full">
-                              +5 Extended Pack
-                            </span>
-                            <span className="text-xs font-bold text-amber-800 dark:text-amber-300 font-mono">AED 49.00</span>
-                          </div>
-                          <div>
-                            <h5 className="font-bold text-slate-900 dark:text-white text-xs">+{lockedCount} More Supplier Quotations</h5>
-                            <p className="text-[11px] text-slate-500 dark:text-zinc-400">Tier-2 factory importers & regional stockist bids</p>
-                          </div>
-                          <p className="text-[11px] text-amber-800 dark:text-amber-300 bg-amber-500/10 p-2.5 rounded-xl border border-amber-500/20 leading-relaxed">
-                            Pay AED 49 to unlock 5 additional supplier quotations for this RFQ.
-                          </p>
-                        </div>
-                        <Button
-                          variant="amber"
-                          size="sm"
-                          onClick={() => onNavigate('buyer-compare', { rfqId: rfq.id })}
-                          className="w-full text-xs font-bold shadow-xs rounded-xl"
-                        >
-                          Unlock 5 More Quotes
-                        </Button>
-                      </div>
-                    )}
-                  </div>
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={() => onNavigate('buyer-compare', { rfqId: rfq.id })}
+                    rightIcon={<ArrowRight className="w-4 h-4" />}
+                  >
+                    Compare All {offers.length} Offers Side-by-Side
+                  </Button>
                 </div>
-              );
-            })}
-          </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3.5">
+                  {offers.map((offer) => (
+                    <div
+                      key={offer.id}
+                      onClick={() => onNavigate('buyer-compare', { rfqId: rfq.id })}
+                      className={`p-4 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between space-y-3 ${
+                        offer.status === 'selected'
+                          ? 'border-emerald-500 bg-emerald-50/30 shadow-sm'
+                          : 'border-slate-200 hover:border-[#9e1c2e] bg-slate-50/60'
+                      }`}
+                    >
+                      <div className="space-y-1.5">
+                        <div className="flex items-center justify-between">
+                          <span className="px-2 py-0.5 rounded bg-slate-900 text-white font-black text-xs">
+                            {offer.offerLabel}
+                          </span>
+                          <span className="font-mono text-[10px] text-slate-500">
+                            {offer.offerNumber}
+                          </span>
+                        </div>
+
+                        {offer.ruleRecommendations.length > 0 && (
+                          <div className="flex flex-wrap gap-1">
+                            {offer.ruleRecommendations.slice(0, 2).map((rec) => (
+                              <span
+                                key={rec}
+                                className="px-1.5 py-0.5 rounded bg-rose-50 text-[#9e1c2e] border border-rose-200 text-[9px] font-extrabold"
+                              >
+                                ★ {rec}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+
+                        <div className="text-xs font-bold text-slate-900 line-clamp-1">
+                          {offer.brandOffered}
+                        </div>
+                        <div className="text-[11px] text-slate-500">
+                          {offer.isPartialOffer ? (
+                            <span className="text-amber-700 font-bold">
+                              ⚠️ Partial ({offer.quotedItemsCount}/{offer.totalRfqItemsCount} items)
+                            </span>
+                          ) : (
+                            <span className="text-emerald-700 font-semibold">
+                              ✓ {offer.technicalCompliance}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="pt-2 border-t border-slate-200/80">
+                        <span className="text-[10px] uppercase font-bold text-slate-400 block">
+                          Landed Total (Incl. VAT)
+                        </span>
+                        <div className="text-base font-black text-[#9e1c2e] font-mono">
+                          {formatAED(offer.estimatedLandedTotalAED)}
+                        </div>
+                        <span className="text-[10px] text-slate-500 block">
+                          {offer.leadTimeDisplay}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            );
+          })}
         </div>
       )}
 
       {/* Active RFQs Section */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-bold text-slate-900 dark:text-white">Active Material RFQs</h3>
+          <h3 className="text-lg font-bold text-slate-900 dark:text-white">My Material RFQs</h3>
           {myRFQs.length > 0 && (
             <button
               onClick={() => onNavigate('buyer-rfqs')}
-              className="text-xs font-bold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 flex items-center gap-1"
+              className="text-xs font-bold text-brand-600 hover:text-brand-700 flex items-center gap-1"
             >
               View All ({myRFQs.length}) <ArrowRight className="w-3.5 h-3.5" />
             </button>
@@ -320,90 +387,94 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
             ))}
           </div>
         ) : (
-          <Card className="p-8 text-center space-y-4 border-dashed border-2 border-slate-200/80 dark:border-white/[0.08] bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e]">
-            <div className="w-12 h-12 rounded-2xl bg-brand-50 dark:bg-brand-950/60 border border-brand-200 dark:border-brand-800 flex items-center justify-center text-brand-600 dark:text-brand-400 mx-auto">
+          <Card className="p-8 text-center space-y-4 border-dashed border-2 border-slate-200/80 bg-white">
+            <div className="w-12 h-12 rounded-2xl bg-brand-50 border border-brand-200 flex items-center justify-center text-brand-600 mx-auto">
               <PlusCircle className="w-6 h-6" />
             </div>
             <div className="space-y-1 max-w-md mx-auto">
-              <h4 className="text-base font-bold text-slate-900 dark:text-white">No Material RFQs Posted Yet</h4>
-              <p className="text-xs text-slate-500 dark:text-zinc-400">
-                Post your material requirements (e.g., Ducab cables, switchgear, LED fixtures) or upload your BOQ sheet to receive up to 5 verified stockist quotes.
+              <h4 className="text-base font-bold text-slate-900">No Material RFQs Submitted Yet</h4>
+              <p className="text-xs text-slate-500">
+                Submit your material requirements or upload your Excel BOQ / PDF specifications. ProcureSouq will source and verify up to 5 competitive supplier quotations for you.
               </p>
             </div>
             <div className="flex justify-center">
-              <CreateRFQButton
-                onClick={() => onNavigate('create-rfq')}
-                size="md"
-              >
-                Post Your First RFQ (100% Free)
+              <CreateRFQButton onClick={() => onNavigate('create-rfq')} size="md">
+                Submit Your First RFQ
               </CreateRFQButton>
             </div>
           </Card>
         )}
       </div>
 
-      {/* Recent Orders Table */}
+      {/* Recent Customer Purchase Orders & Deliveries */}
       <Card>
         <CardHeader>
           <div>
-            <h3 className="text-base font-bold text-slate-900 dark:text-white">Recent Purchase Orders & Deliveries</h3>
-            <p className="text-xs text-slate-500 dark:text-zinc-400">Track PO dispatch, site gate receipts, and supplier ratings.</p>
+            <h3 className="text-base font-bold text-slate-900 dark:text-white">
+              My Purchase Orders (`PS-CPO`) & 6-Stage Site Deliveries
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-zinc-400">
+              Track order processing, coordinated site dispatch, Delivery Notes (`DN`), and Proof of Delivery (`POD`).
+            </p>
           </div>
-          {activeOrders.length > 0 && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => onNavigate('buyer-orders')}
-            >
-              All Orders
+          {myCPOs.length > 0 && (
+            <Button variant="outline" size="sm" onClick={() => onNavigate('buyer-orders')}>
+              Open Orders & Deliveries
             </Button>
           )}
         </CardHeader>
-        {activeOrders.length > 0 ? (
+        {myCPOs.length > 0 ? (
           <CardContent className="p-0 overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 dark:bg-white/[0.02] text-slate-600 dark:text-zinc-400 font-semibold border-b border-slate-200/80 dark:border-white/[0.06]">
+              <thead className="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200/80">
                 <tr>
-                  <th className="p-3">PO Number</th>
+                  <th className="p-3">Customer PO Ref</th>
                   <th className="p-3">Project / RFQ</th>
-                  <th className="p-3">Awarded Supplier</th>
-                  <th className="p-3">Total (AED)</th>
-                  <th className="p-3">Expected Date</th>
-                  <th className="p-3">Status</th>
+                  <th className="p-3">Selected Offer</th>
+                  <th className="p-3">Total Payable (Incl. VAT)</th>
+                  <th className="p-3">Fulfilment Stage</th>
                   <th className="p-3 text-right">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-white/[0.04]">
-                {activeOrders.map((po) => (
-                  <tr key={po.id} className="hover:bg-slate-50/60 dark:hover:bg-zinc-800/40">
-                    <td className="p-3 font-mono font-bold text-brand-700 dark:text-brand-400">{po.poNumber}</td>
-                    <td className="p-3">
-                      <p className="font-semibold text-slate-900 dark:text-white">{po.rfqTitle}</p>
-                      <span className="text-[10px] text-slate-400 dark:text-zinc-500 font-mono">{po.rfqNumber}</span>
-                    </td>
-                    <td className="p-3 font-semibold text-slate-800 dark:text-zinc-200">{po.supplierCompanyName}</td>
-                    <td className="p-3 font-extrabold text-slate-900 dark:text-white">{formatAED(po.totalAmountAED)}</td>
-                    <td className="p-3 text-slate-600 dark:text-zinc-400">{formatDate(po.expectedDeliveryDate)}</td>
-                    <td className="p-3">
-                      <StatusBadge status={po.status} />
-                    </td>
-                    <td className="p-3 text-right">
-                      <button
-                        onClick={() => onNavigate('buyer-orders')}
-                        className="text-brand-600 dark:text-brand-400 hover:text-brand-800 dark:hover:text-brand-300 font-bold"
-                      >
-                        Track PO
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+              <tbody className="divide-y divide-slate-100">
+                {myCPOs.map((cpo) => {
+                  const ful = myFulfilments.find((f) => f.cpoId === cpo.id);
+                  return (
+                    <tr key={cpo.id} className="hover:bg-slate-50/60">
+                      <td className="p-3 font-mono font-bold text-[#9e1c2e]">{cpo.cpoNumber}</td>
+                      <td className="p-3">
+                        <p className="font-semibold text-slate-900">{cpo.rfqTitle}</p>
+                        <span className="text-[10px] text-slate-400 font-mono">{cpo.rfqNumber}</span>
+                      </td>
+                      <td className="p-3 font-semibold text-slate-800">{cpo.offerNumber}</td>
+                      <td className="p-3 font-extrabold text-slate-900 font-mono">
+                        {formatAED(cpo.totalPayableAED)}
+                      </td>
+                      <td className="p-3">
+                        <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold uppercase text-[10px]">
+                          {(ful?.currentStage || cpo.orderStatus).replace(/_/g, ' ')}
+                        </span>
+                      </td>
+                      <td className="p-3 text-right">
+                        <button
+                          onClick={() => onNavigate('buyer-orders')}
+                          className="text-[#9e1c2e] hover:underline font-bold cursor-pointer"
+                        >
+                          Track Delivery & POD →
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </CardContent>
         ) : (
-          <CardContent className="p-8 text-center text-xs text-slate-500 dark:text-zinc-400">
-            <p className="font-semibold text-slate-700 dark:text-zinc-300">No purchase orders issued yet</p>
-            <p className="text-slate-400 dark:text-zinc-500 mt-1">Once you compare quotes and award a supplier, your digital POs and site tracking receipts will appear here.</p>
+          <CardContent className="p-8 text-center text-xs text-slate-500">
+            <p className="font-semibold text-slate-700">No purchase orders issued yet</p>
+            <p className="text-slate-400 mt-1">
+              Once you select an offer and place an order, your Customer PO (`PS-CPO`) and 6-stage site delivery tracker will appear here.
+            </p>
           </CardContent>
         )}
       </Card>

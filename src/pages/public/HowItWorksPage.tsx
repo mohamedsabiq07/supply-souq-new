@@ -1,47 +1,61 @@
 import React from 'react';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
-import { FileSpreadsheet, Search, Store, GitCompare, PackageCheck, Zap } from 'lucide-react';
+import {
+  FileSpreadsheet,
+  Search,
+  Store,
+  GitCompare,
+  PackageCheck,
+  Zap,
+  ShieldCheck,
+  FileCheck2,
+  Truck,
+  Lock,
+} from 'lucide-react';
 import VariableFontCursorProximity from '../../components/fancy/text/variable-font-cursor-proximity';
 
 export const HowItWorksPage: React.FC<{ onStartRFQ: () => void }> = ({ onStartRFQ }) => {
   const steps = [
     {
       step: '01',
-      title: 'Create RFQ or Upload BOQ',
-      desc: 'Add items directly or upload your Excel/PDF material schedule. Define delivery location (e.g. Al Quoz or Business Bay) and required delivery date.',
+      title: 'Customer Submits One RFQ to ProcureSouq',
+      desc: 'Enter required materials manually or upload Excel BOQs, PDF quotation requests, and technical specifications. Specify preferred brands, delivery Emirate, required delivery date, and special project requirements.',
       icon: FileSpreadsheet,
     },
     {
       step: '02',
-      title: 'Automated Supplier Matching',
-      desc: 'ProcureSouq automatically routes the RFQ to verified traders & stockists matching your category and industrial radius in Dubai and Sharjah.',
+      title: 'Internal Procurement Review & Supplier Sourcing',
+      desc: 'ProcureSouq’s procurement team reviews your requirements, checks for missing specifications, assigns a specialist, and invites multiple verified UAE stockists while keeping your company identity strictly confidential.',
       icon: Search,
     },
     {
       step: '03',
-      title: 'Receive Digital Quotations',
-      desc: 'Suppliers input itemized unit prices, brand certifications, delivery lead times, warranty periods, and 5% UAE VAT in a standardized digital format.',
-      icon: Store,
+      title: 'Collection & Technical Evaluation of Quotations',
+      desc: 'ProcureSouq collects competitive supplier quotations and evaluates technical compliance, brand compatibility, stock availability, lead time feasibility, and pricing accuracy — flagging any deviations or partial offers.',
+      icon: FileCheck2,
     },
     {
       step: '04',
-      title: 'Side-by-Side Comparison Matrix',
-      desc: 'Compare offers instantly. Sort by Lowest Total AED, Fastest Delivery, or Best Rated. Expand item-by-item line pricing.',
+      title: 'Five-Quote Customer Comparison Dashboard',
+      desc: 'Compare up to 5 qualified ProcureSouq offers (Offer 1 to Offer 5) side-by-side on unit price, landed cost, lead time, warranty, and payment terms. Sort by Lowest Price, Fastest Delivery, Best Technical Match, or Best Overall Value.',
       icon: GitCompare,
     },
     {
       step: '05',
-      title: 'Issue PO & Site Delivery',
-      desc: '1-Click Purchase Order generation. The winning supplier accepts and delivers straight to your project gate with full test certificates.',
-      icon: PackageCheck,
+      title: 'Single-Point-of-Contact Order & 6-Stage Delivery',
+      desc: 'Select your preferred offer and upload or generate your Purchase Order with ProcureSouq. Our team coordinates supplier purchasing (PS-SPO), dispatch, and tracked delivery through Proof of Delivery (POD).',
+      icon: Truck,
     },
   ];
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
       <div className="text-center max-w-2xl mx-auto space-y-3">
-        <span className="text-xs font-bold text-brand-600 uppercase tracking-widest">Simple 5-Step Process</span>
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800 text-xs font-bold text-[#cf2e46]">
+          <ShieldCheck className="w-3.5 h-3.5" />
+          <span>ProcureSouq V2 — Managed B2B Procurement Model</span>
+        </div>
         <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white cursor-default select-none">
           <VariableFontCursorProximity
             fromFontVariationSettings="'wght' 700, 'slnt' 0"
@@ -49,7 +63,7 @@ export const HowItWorksPage: React.FC<{ onStartRFQ: () => void }> = ({ onStartRF
             radius={140}
             falloff="gaussian"
           >
-            How ProcureSouq Works
+            How Managed Procurement Works
           </VariableFontCursorProximity>
         </h1>
         <VariableFontCursorProximity
@@ -60,7 +74,7 @@ export const HowItWorksPage: React.FC<{ onStartRFQ: () => void }> = ({ onStartRF
           radius={100}
           falloff="gaussian"
         >
-          Transforming manual WhatsApp RFQs and endless spreadsheet comparisons into a fast, transparent digital procurement loop.
+          One single point of contact from RFQ to UAE site delivery — with complete counterparty confidentiality and technical verification.
         </VariableFontCursorProximity>
       </div>
 
@@ -88,56 +102,62 @@ export const HowItWorksPage: React.FC<{ onStartRFQ: () => void }> = ({ onStartRF
         })}
       </div>
 
-      {/* Transparent Pricing Model */}
+      {/* Counterparty Confidentiality & Anti-Circumvention Guarantee */}
       <div className="bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] text-slate-900 dark:text-white rounded-3xl p-8 border border-slate-200/80 dark:border-white/[0.08] shadow-sm space-y-6">
         <div className="text-center max-w-xl mx-auto space-y-2">
-          <span className="text-xs font-bold text-[#cf2e46] uppercase tracking-widest">Transparent UAE Pricing</span>
-          <h2 className="text-2xl font-black text-slate-900 dark:text-white">Zero Commissions During Launch</h2>
+          <span className="inline-flex items-center gap-1 text-xs font-bold text-[#cf2e46] uppercase tracking-widest">
+            <Lock className="w-3.5 h-3.5" /> Managed Intermediary Architecture
+          </span>
+          <h2 className="text-2xl font-black text-slate-900 dark:text-white">
+            Why Businesses Choose ProcureSouq V2
+          </h2>
           <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-            We are dedicated to building liquidity in the UAE construction and MEP wholesale market. Our standard 1.3% transaction commission is <strong>100% waived</strong> during our founder growth phase.
+            ProcureSouq acts as your dedicated procurement intermediary — eliminating supplier spam for buyers and providing pre-vetted, serious orders for UAE stockists.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-          {/* Contractors */}
+          {/* Buyers */}
           <div className="bg-slate-50 dark:bg-[#141417] p-6 rounded-2xl sm:rounded-3xl border border-slate-200/80 dark:border-white/[0.08] space-y-3">
-            <span className="text-xs font-extrabold uppercase tracking-wider text-[#cf2e46]">For MEP & Civil Contractors</span>
-            <div className="text-2xl font-black text-slate-900 dark:text-white">100% Free Forever</div>
+            <span className="text-xs font-extrabold uppercase tracking-wider text-[#cf2e46]">
+              For Buyers & Contractors
+            </span>
+            <div className="text-xl font-black text-slate-900 dark:text-white">
+              Single Point of Contact
+            </div>
             <ul className="space-y-2 text-xs text-slate-600 dark:text-slate-300">
-              <li className="flex items-center gap-2">✓ Unlimited RFQ & BOQ Uploads</li>
-              <li className="flex items-center gap-2">✓ Fastest 5 Bids Rule (24-Hour SLA)</li>
-              <li className="flex items-center gap-2">✓ Direct Supplier Side-by-Side Comparison</li>
-              <li className="flex items-center gap-2">✓ 0% Platform Commission</li>
+              <li className="flex items-center gap-2">✓ Submit one RFQ — receive up to 5 vetted ProcureSouq offers</li>
+              <li className="flex items-center gap-2">✓ Zero cold calls or spam from unverified traders</li>
+              <li className="flex items-center gap-2">✓ Transparent rule-based comparison (Lowest Price, Fastest, Best Value)</li>
+              <li className="flex items-center gap-2">✓ Direct support channel with ProcureSouq’s Procurement Desk</li>
             </ul>
           </div>
 
           {/* Suppliers */}
           <div className="bg-slate-50 dark:bg-[#141417] p-6 rounded-2xl sm:rounded-3xl border border-[#cf2e46]/40 space-y-3 relative overflow-hidden">
-            <div className="absolute top-3 right-3 bg-[#cf2e46] text-white text-[10px] font-black uppercase px-2 py-0.5 rounded">
-              Launch Special
-            </div>
-            <span className="text-xs font-extrabold uppercase tracking-wider text-[#cf2e46]">For Stockists & Distributors</span>
-            <div>
-              <div className="text-2xl font-black text-slate-900 dark:text-white">First 3 Months Free</div>
-              <div className="text-xs text-[#cf2e46] font-bold mt-0.5">Then only AED 1 / Day (AED 30 / month)</div>
+            <span className="text-xs font-extrabold uppercase tracking-wider text-[#cf2e46]">
+              For Verified UAE Suppliers
+            </span>
+            <div className="text-xl font-black text-slate-900 dark:text-white">
+              Deal Directly With ProcureSouq
             </div>
             <ul className="space-y-2 text-xs text-slate-600 dark:text-slate-300">
-              <li className="flex items-center gap-2">✓ Receive direct matched contractor schedules</li>
-              <li className="flex items-center gap-2">✓ 3-Month full access trial with 0 commitments</li>
-              <li className="flex items-center gap-2">✓ Standard 1.3% commission waived during growth phase</li>
-              <li className="flex items-center gap-2">✓ AED 1/day thereafter for unlimited quotes</li>
+              <li className="flex items-center gap-2">✓ Receive structured, pre-verified RFQ packages from ProcureSouq</li>
+              <li className="flex items-center gap-2">✓ Your quotations remain strictly confidential from competing suppliers</li>
+              <li className="flex items-center gap-2">✓ Official Supplier Purchase Orders (PS-SPO) issued by ProcureSouq</li>
+              <li className="flex items-center gap-2">✓ Direct operations & support messaging desk with ProcureSouq’s team</li>
             </ul>
           </div>
         </div>
       </div>
 
       <div className="text-center bg-slate-900 dark:bg-gradient-to-r dark:from-zinc-950 dark:via-[#0c0c0e] dark:to-black text-white rounded-3xl p-8 border border-slate-800 dark:border-white/[0.08] shadow-sm space-y-4">
-        <h3 className="text-xl font-bold text-white">Ready to Experience Faster Procurement?</h3>
+        <h3 className="text-xl font-bold text-white">Ready to Start Your Managed RFQ?</h3>
         <p className="text-xs text-slate-300 max-w-md mx-auto">
-          Post your first material RFQ and receive 3-5 verified quotations within 24 hours.
+          Submit your material requirement and let ProcureSouq’s procurement team prepare up to 5 qualified offers for your comparison.
         </p>
         <Button variant="primary" size="lg" onClick={onStartRFQ} leftIcon={<Zap className="w-4 h-4 text-amber-300" />}>
-          Post an RFQ Now
+          Submit Managed RFQ Now
         </Button>
       </div>
     </div>

@@ -174,7 +174,7 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
                   </span>
                 </div>
                 <h4 className="text-sm font-bold text-slate-900 dark:text-white truncate">
-                  {bestOverallQuote.supplierCompanyName}
+                  ProcureSouq Verified Offer (Best Value)
                 </h4>
                 <div className="text-lg font-extrabold font-mono text-slate-900 dark:text-white mt-1">
                   {formatAED(bestOverallQuote.grandTotalAED)}
@@ -210,7 +210,7 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
                   )}
                 </div>
                 <h4 className="text-sm font-bold text-slate-900 dark:text-white truncate">
-                  {lowestPriceQuote.supplierCompanyName}
+                  ProcureSouq Verified Offer (Lowest Price)
                 </h4>
                 <div className="text-lg font-extrabold font-mono text-emerald-700 dark:text-emerald-400 mt-1">
                   {formatAED(lowestPriceQuote.grandTotalAED)}
@@ -244,7 +244,7 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
                   </span>
                 </div>
                 <h4 className="text-sm font-bold text-slate-900 dark:text-white truncate">
-                  {fastestQuote.supplierCompanyName}
+                  ProcureSouq Verified Offer (Fastest Delivery)
                 </h4>
                 <div className="text-lg font-extrabold font-mono text-sky-700 dark:text-sky-400 mt-1">
                   {fastestQuote.leadTimeDisplay || `${fastestQuote.leadTimeDays} Days`}
@@ -278,7 +278,7 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
                   </span>
                 </div>
                 <h4 className="text-sm font-bold text-slate-900 dark:text-white truncate">
-                  {topRatedQuote.supplierCompanyName}
+                  ProcureSouq Verified Offer (Top Rated)
                 </h4>
                 <div className="text-lg font-extrabold font-mono text-slate-900 dark:text-white mt-1">
                   {formatAED(topRatedQuote.grandTotalAED)}
@@ -461,7 +461,7 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
                           </div>
 
                           <div className="font-bold text-sm text-slate-900 dark:text-white line-clamp-1">
-                            {quote.supplierCompanyName}
+                            {`ProcureSouq Offer ${idx + 1}`}
                           </div>
 
                           <div className="flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-zinc-400">
@@ -753,7 +753,7 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
                     </div>
 
                     <h4 className="text-base font-bold text-slate-900 dark:text-white">
-                      {quote.supplierCompanyName}
+                      {`ProcureSouq Offer ${index + 1}`}
                     </h4>
                     <p className="text-xs text-slate-500 dark:text-zinc-400 flex items-center gap-1.5">
                       <Building2 className="w-3.5 h-3.5 text-slate-400 shrink-0" />
@@ -1003,8 +1003,8 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
 
             <div className="p-4 bg-slate-50/70 dark:bg-white/[0.03] rounded-2xl border border-slate-200/80 dark:border-white/[0.08] space-y-2.5">
               <div className="flex items-center justify-between">
-                <span className="text-slate-500 dark:text-zinc-400 font-medium">Selected Supplier:</span>
-                <strong className="text-slate-900 dark:text-white font-bold">{selectedAwardQuote.supplierCompanyName}</strong>
+                <span className="text-slate-500 dark:text-zinc-400 font-medium">Selected Counterparty:</span>
+                <strong className="text-slate-900 dark:text-white font-bold">ProcureSouq Managed Supply</strong>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-500 dark:text-zinc-400 font-medium">Quotation Reference:</span>
@@ -1027,7 +1027,7 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
             <div className="p-3 bg-amber-500/10 rounded-xl border border-amber-500/25 text-amber-900 dark:text-amber-200 flex items-start gap-2">
               <AlertCircle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
               <p className="text-[11px] leading-relaxed">
-                Issuing this Purchase Order will generate an official UAE standard digital PO document, notify <strong className="text-slate-900 dark:text-white">{selectedAwardQuote.supplierCompanyName}</strong>, and notify other quoting suppliers that the bid has concluded.
+                Issuing this Purchase Order will generate an official UAE standard digital PO document, notify <strong className="text-slate-900 dark:text-white">ProcureSouq Managed Procurement Desk</strong>, and lock your selected commercial offer.
               </p>
             </div>
 
@@ -1052,15 +1052,15 @@ export const QuotationComparisonTable: React.FC<QuotationComparisonTableProps> =
       <Modal
         isOpen={!!ratingModalQuote}
         onClose={() => setRatingModalQuote(null)}
-        title="Rate Supplier Quotation & Pricing"
-        subtitle={`RFQ #${rfq.rfqNumber} • ${ratingModalQuote?.supplierCompanyName}`}
+        title="Rate Commercial Offer & Pricing"
+        subtitle={`RFQ #${rfq.rfqNumber} • ${ratingModalQuote?.quotationNumber}`}
         maxWidth="md"
       >
         {ratingModalQuote && (
           <div className="space-y-4 text-xs">
             <div className="p-3.5 bg-slate-50/70 dark:bg-white/[0.03] border border-slate-200/80 dark:border-white/[0.08] rounded-2xl space-y-1">
               <div className="flex items-center justify-between">
-                <span className="font-bold text-slate-900 dark:text-white text-sm">{ratingModalQuote.supplierCompanyName}</span>
+                <span className="font-bold text-slate-900 dark:text-white text-sm">ProcureSouq Verified Offer ({ratingModalQuote.quotationNumber})</span>
                 <span className="font-mono font-bold text-slate-800 dark:text-zinc-200 text-sm">
                   {formatAED(ratingModalQuote.grandTotalAED)}
                 </span>

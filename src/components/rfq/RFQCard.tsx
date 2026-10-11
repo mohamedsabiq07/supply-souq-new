@@ -76,9 +76,28 @@ export const RFQCard: React.FC<RFQCardProps> = ({
               {rfq.title}
             </h3>
             <p className="text-xs text-slate-500 dark:text-zinc-400 mt-1 font-medium">
-              Project: <span className="text-slate-800 dark:text-zinc-200 font-semibold">{rfq.projectName}</span>
-              {rfq.consultantName && (
-                <span className="ml-1 text-slate-400 dark:text-zinc-500">({rfq.consultantName})</span>
+              {isSupplierView ? (
+                <>
+                  Counterparty:{' '}
+                  <span className="text-slate-800 dark:text-zinc-200 font-semibold">
+                    ProcureSouq Managed Procurement Desk
+                  </span>
+                  <span className="ml-1 text-slate-400 dark:text-zinc-500">
+                    (Confidential End-Client)
+                  </span>
+                </>
+              ) : (
+                <>
+                  Project:{' '}
+                  <span className="text-slate-800 dark:text-zinc-200 font-semibold">
+                    {rfq.projectName}
+                  </span>
+                  {rfq.consultantName && (
+                    <span className="ml-1 text-slate-400 dark:text-zinc-500">
+                      ({rfq.consultantName})
+                    </span>
+                  )}
+                </>
               )}
               {rfq.category && (
                 <span className="ml-2 text-slate-400 dark:text-zinc-500">• Category: <strong className="text-slate-700 dark:text-zinc-300 font-semibold">{rfq.category}</strong></span>
