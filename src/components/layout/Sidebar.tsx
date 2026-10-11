@@ -34,14 +34,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView })
   const buyerRFQs = rfqs.filter(r => r.buyerCompanyId === companyId);
   const comparingRFQs = buyerRFQs.filter(r => (r.quotesCount && r.quotesCount > 0) || r.status === 'evaluating' || r.status === 'receiving_quotes');
   const buyerOrders = purchaseOrders.filter(p => p.buyerCompanyId === companyId);
-  const buyerUnreadMessages = messages.filter(m => m.recipientCompanyId === companyId && !m.isRead).length;
 
   const buyerLinks = [
     { id: 'buyer-dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'buyer-rfqs', label: 'My RFQs', icon: FileText, count: buyerRFQs.length },
     { id: 'buyer-compare-quick', label: 'Compare Quotes', icon: GitCompare, count: comparingRFQs.length, highlight: true },
     { id: 'buyer-orders', label: 'Purchase Orders', icon: Package, count: buyerOrders.length },
-    { id: 'buyer-messages', label: 'Messages', icon: MessageSquare, count: buyerUnreadMessages },
     { id: 'buyer-profile', label: 'Company & Profile', icon: User },
   ];
 
@@ -49,7 +47,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView })
   const supplierLiveRFQs = rfqs.filter(r => r.status !== 'draft');
   const supplierQuotes = quotations.filter(q => q.supplierCompanyId === companyId);
   const supplierOrders = purchaseOrders.filter(p => p.supplierCompanyId === companyId);
-  const supplierUnreadMessages = messages.filter(m => m.recipientCompanyId === companyId && !m.isRead).length;
 
   const supplierLinks = [
     { id: 'supplier-dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -57,7 +54,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView })
     { id: 'supplier-quotes', label: 'My Quotations', icon: GitCompare, count: supplierQuotes.length },
     { id: 'supplier-orders', label: 'Orders & POs', icon: Package, count: supplierOrders.length },
     { id: 'supplier-profile', label: 'Company & Profile', icon: Building2 },
-    { id: 'supplier-messages', label: 'Messages', icon: MessageSquare, count: supplierUnreadMessages },
   ];
 
   const adminLinks = [

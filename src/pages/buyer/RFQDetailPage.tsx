@@ -24,6 +24,7 @@ import {
   Zap,
   Lock
 } from 'lucide-react';
+import { SupportDeskInlineBox } from '../../components/common/SupportChatWidget';
 
 interface RFQDetailPageProps {
   rfqId: string;
@@ -455,6 +456,9 @@ export const RFQDetailPage: React.FC<RFQDetailPageProps> = ({ rfqId, onNavigate 
           </table>
         </CardContent>
       </Card>
+
+      {/* Direct Text Box for Customer Service & Procurement Officers */}
+      <SupportDeskInlineBox defaultRfqNumber={rfq.rfqNumber} />
 
       {/* Buyer Cancel RFQ Modal */}
       {!isSupplier && (

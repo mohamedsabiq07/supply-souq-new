@@ -25,6 +25,7 @@ import {
   Scale,
 } from 'lucide-react';
 import { CreateRFQButton } from '../../components/common/CreateRFQButton';
+import { SupportDeskInlineBox } from '../../components/common/SupportChatWidget';
 
 interface CompareQuotesPageProps {
   rfqId?: string;
@@ -809,6 +810,9 @@ export const CompareQuotesPage: React.FC<CompareQuotesPageProps> = ({ rfqId, onN
           </Card>
         </div>
       )}
+
+      {/* Direct Text Box for Customer Service & Procurement Officers */}
+      <SupportDeskInlineBox defaultRfqNumber={targetRFQ.rfqNumber} />
     </div>
   );
 };

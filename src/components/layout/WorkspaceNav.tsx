@@ -6,13 +6,10 @@ import {
   FileText,
   GitCompare,
   Package,
-  MessageSquare,
+  Headphones,
   ShieldCheck,
-  PlusCircle,
   Building2,
   LogOut,
-  ChevronRight,
-  Sparkles,
   Zap,
 } from 'lucide-react';
 
@@ -43,7 +40,6 @@ export const WorkspaceNav: React.FC<WorkspaceNavProps> = ({ currentView, setCurr
   const buyerOrdersCount =
     customerPOs.filter(c => c.buyerCompanyId === companyId).length +
     purchaseOrders.filter(p => p.buyerCompanyId === companyId).length;
-  const buyerUnreadMessages = messages.filter(m => m.recipientCompanyId === companyId && !m.isRead).length;
 
   // Supplier counts
   const supplierLiveRFQs = rfqs.filter(r => r.status !== 'draft' && r.status !== 'cancelled');
@@ -51,14 +47,20 @@ export const WorkspaceNav: React.FC<WorkspaceNavProps> = ({ currentView, setCurr
   const supplierOrdersCount =
     supplierPOs.filter(s => s.supplierCompanyId === companyId).length +
     purchaseOrders.filter(p => p.supplierCompanyId === companyId).length;
-  const supplierUnreadMessages = messages.filter(m => m.recipientCompanyId === companyId && !m.isRead).length;
+
+  // Unread replies strictly from ProcureSouq Admin / Procurement Officers
+  const unreadOfficerReplies = messages.filter(
+    m =>
+      m.recipientCompanyId === companyId &&
+      (m.senderRole === 'admin' || m.senderCompanyId === 'procuresouq-admin') &&
+      !m.isRead
+  ).length;
 
   const buyerTabs = [
     { id: 'buyer-dashboard', label: 'Overview', icon: LayoutDashboard },
     { id: 'buyer-rfqs', label: 'My RFQs', icon: FileText, count: buyerRFQs.length },
     { id: 'buyer-compare-quick', label: 'Quote Comparisons', icon: GitCompare, count: comparingRFQs.length, highlight: true },
     { id: 'buyer-orders', label: 'POs, Orders & Deliveries', icon: Package, count: buyerOrdersCount },
-    { id: 'buyer-messages', label: 'Messages', icon: MessageSquare, count: buyerUnreadMessages },
   ];
 
   const supplierTabs = [
@@ -66,7 +68,6 @@ export const WorkspaceNav: React.FC<WorkspaceNavProps> = ({ currentView, setCurr
     { id: 'supplier-inbox', label: 'Available RFQs', icon: FileText, count: supplierLiveRFQs.length, highlight: true },
     { id: 'supplier-quotes', label: 'My Quotations', icon: GitCompare, count: supplierQuotes.length },
     { id: 'supplier-orders', label: 'POs Received & Fulfilment', icon: Package, count: supplierOrdersCount },
-    { id: 'supplier-messages', label: 'Messages', icon: MessageSquare, count: supplierUnreadMessages },
   ];
 
   const adminTabs = [
@@ -138,8 +139,27 @@ export const WorkspaceNav: React.FC<WorkspaceNavProps> = ({ currentView, setCurr
           })}
         </nav>
 
-        {/* Right: Fast Action CTA */}
+        {/* Right: Fast Action CTA + Direct Customer Service / Procurement Officer Text Box Trigger */}
         <div className="flex items-center gap-2 shrink-0">
+          {role !== 'admin' && (
+            <button
+              type="button"
+              onClick={() => {
+                window.dispatchEvent(new CustomEvent('open-support-chat'));
+              }}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/50 dark:hover:bg-rose-900/60 text-[#cf2e46] dark:text-rose-300 border border-rose-200 dark:border-rose-800/70 text-xs font-bold transition-all active:scale-95 cursor-pointer"
+              title="Open direct text box with Customer Service & Procurement Officers"
+            >
+              <Headphones className="w-3.5 h-3.5 text-[#cf2e46]" />
+              <span className="hidden md:inline">Text Procurement Officer</span>
+              {unreadOfficerReplies > 0 && (
+                <span className="px-1.5 py-0.2 rounded-full bg-[#cf2e46] text-white text-[10px] font-black">
+                  {unreadOfficerReplies}
+                </span>
+              )}
+            </button>
+          )}
+
           {role === 'supplier' && (
             <button
               type="button"

@@ -45,6 +45,7 @@ import { RegisterPage } from './pages/auth/RegisterPage';
 // Shader Pages
 import { HalftoneShader } from './components/shader/HalftoneShader';
 import { BackgroundsShowcasePage } from './pages/public/BackgroundsShowcasePage';
+import { SupportChatWidget } from './components/common/SupportChatWidget';
 
 const checkIsAdminSecretRoute = () => {
   try {
@@ -489,6 +490,9 @@ const AppContent: React.FC = () => {
           </main>
         </div>
       )}
+
+      {/* Floating Customer Service & Procurement Officers Chat Box (Buyers & Suppliers) */}
+      {isAuthenticated && <SupportChatWidget />}
     </div>
   );
 };

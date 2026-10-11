@@ -21,6 +21,7 @@ import {
   Building2,
 } from 'lucide-react';
 import { CreateRFQButton } from '../../components/common/CreateRFQButton';
+import { SupportDeskInlineBox } from '../../components/common/SupportChatWidget';
 
 interface BuyerDashboardProps {
   onNavigate: (view: string, params?: any) => void;
@@ -200,6 +201,9 @@ export const BuyerDashboard: React.FC<BuyerDashboardProps> = ({ onNavigate }) =>
           icon={<Truck className="w-6 h-6 text-emerald-600" />}
         />
       </div>
+
+      {/* Direct Text Box for Customer Service & Procurement Officers */}
+      <SupportDeskInlineBox />
 
       {/* Action Banner when Qualified Offers are Ready */}
       {rfqsWithPublishedOffers.length > 0 && (

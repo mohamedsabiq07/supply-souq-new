@@ -2157,14 +2157,23 @@ export const AdminProcurementOps: React.FC = () => {
           msgRoleFilter === 'all' ? true : cp.role === msgRoleFilter
         );
 
+        const getCleanThreadMessages = (companyId: string) =>
+          messages.filter(
+            (m) =>
+              m.id !== 'msg-1' &&
+              m.id !== 'msg-2-voice' &&
+              ((m.senderCompanyId === companyId &&
+                (m.recipientCompanyId === 'procuresouq-admin' ||
+                  m.rfqId === 'procuresouq-general-support' ||
+                  m.rfqNumber === 'PS-SUPPORT')) ||
+                (m.recipientCompanyId === companyId &&
+                  (m.senderRole === 'admin' || m.senderCompanyId === 'procuresouq-admin')))
+          );
+
         // Sort counterparties so those with recent messages appear at the top
         allCounterparties.sort((a, b) => {
-          const aCount = messages.filter(
-            (m) => m.senderCompanyId === a.id || m.recipientCompanyId === a.id
-          ).length;
-          const bCount = messages.filter(
-            (m) => m.senderCompanyId === b.id || m.recipientCompanyId === b.id
-          ).length;
+          const aCount = getCleanThreadMessages(a.id).length;
+          const bCount = getCleanThreadMessages(b.id).length;
           return bCount - aCount;
         });
 
@@ -2174,13 +2183,7 @@ export const AdminProcurementOps: React.FC = () => {
           null;
 
         const partnerMessages = activePartner
-          ? messages.filter(
-              (m) =>
-                m.id !== 'msg-1' &&
-                m.id !== 'msg-2-voice' &&
-                (m.senderCompanyId === activePartner.id ||
-                  m.recipientCompanyId === activePartner.id)
-            )
+          ? getCleanThreadMessages(activePartner.id)
           : [];
 
         const handleSendAdminReply = (e: React.FormEvent) => {
@@ -2195,12 +2198,9 @@ export const AdminProcurementOps: React.FC = () => {
             rfqId: channelRfqId,
             rfqNumber: channelRfqNumber,
             senderId: 'admin-ops-desk',
-            senderName: 'ProcureSouq Operations Desk',
+            senderName: 'ProcureSouq Customer Service & Procurement Officer',
             senderCompanyId: 'procuresouq-admin',
-            senderCompanyName:
-              activePartner.role === 'supplier'
-                ? 'ProcureSouq Supplier Operations Desk'
-                : 'ProcureSouq Procurement & Customer Support Desk',
+            senderCompanyName: 'Customer Service & Procurement Officers',
             senderRole: 'admin',
             recipientCompanyId: activePartner.id,
             recipientCompanyName: activePartner.name,
@@ -2223,11 +2223,11 @@ export const AdminProcurementOps: React.FC = () => {
                       Anti-Circumvention Hub-and-Spoke Messaging
                     </span>
                     <h3 className="text-base font-extrabold text-slate-900">
-                      Buyer & Supplier Manual Support & Clarification Desk
+                      Customer Service & Procurement Officer Inbox (Buyers & Suppliers)
                     </h3>
                   </div>
                   <p className="text-xs text-slate-500 mt-1">
-                    Buyers and Suppliers never communicate directly with each other. All Buyer questions and Supplier questions arrive here at ProcureSouq’s central desk for manual response.
+                    Buyers and Suppliers text your Customer Service & Procurement Officers directly from their workspace text box. Respond manually below.
                   </p>
                 </div>
 
@@ -2265,12 +2265,7 @@ export const AdminProcurementOps: React.FC = () => {
                   <div className="divide-y divide-slate-100 overflow-y-auto max-h-[440px]">
                     {allCounterparties.map((cp) => {
                       const isSelected = activePartner?.id === cp.id;
-                      const threadMsgs = messages.filter(
-                        (m) =>
-                          m.id !== 'msg-1' &&
-                          m.id !== 'msg-2-voice' &&
-                          (m.senderCompanyId === cp.id || m.recipientCompanyId === cp.id)
-                      );
+                      const threadMsgs = getCleanThreadMessages(cp.id);
                       const lastMsg = threadMsgs[threadMsgs.length - 1];
 
                       return (

@@ -21,6 +21,7 @@ import {
   PackageCheck,
   Gift
 } from 'lucide-react';
+import { SupportDeskInlineBox } from '../../components/common/SupportChatWidget';
 
 interface SupplierDashboardProps {
   onNavigate: (view: string, params?: any) => void;
@@ -147,6 +148,9 @@ export const SupplierDashboard: React.FC<SupplierDashboardProps> = ({ onNavigate
           icon={<Clock className="w-6 h-6 text-sky-600" />}
         />
       </div>
+
+      {/* Direct Text Box for Customer Service & Procurement Officers */}
+      <SupportDeskInlineBox />
 
       {/* Live RFQ Opportunities */}
       <div className="space-y-4">
