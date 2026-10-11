@@ -140,18 +140,18 @@ export const OnboardingGuidePage: React.FC<OnboardingGuidePageProps> = ({
                 },
                 {
                   step: '03',
-                  title: 'Compare 5 Vetted Offers',
-                  desc: 'ProcureSouq internally collects, evaluates technical compliance, and publishes up to 5 anonymized commercial offers (Offer 1–5) for your comparison.',
+                  title: 'Receive 5 Live Direct Quotes',
+                  desc: 'Verified stockists submit itemized unit prices, lead times, and 5% VAT calculations within 24 hours. Compare side-by-side on one screen.',
                   icon: GitCompare,
-                  badge: '5 Vetted Offers',
+                  badge: '18% Cost Savings',
                   color: 'text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-800/60'
                 },
                 {
                   step: '04',
-                  title: 'Order & Managed Delivery',
-                  desc: 'Select your preferred offer, upload or issue your PO to ProcureSouq (PS-CPO), and track 6-stage UAE site delivery with POD.',
+                  title: 'Award PO & Site Delivery',
+                  desc: 'Select the best offer and issue an official digital Purchase Order with 1-click. Track live fulfillment directly to your project site.',
                   icon: PackageCheck,
-                  badge: 'Single Point of Contact',
+                  badge: 'Direct Site Delivery',
                   color: 'text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800/60'
                 }
               ].map((card, idx) => {
@@ -183,35 +183,35 @@ export const OnboardingGuidePage: React.FC<OnboardingGuidePageProps> = ({
           <div className="bg-white dark:bg-gradient-to-b dark:from-[#111114] dark:to-[#0c0c0e] border border-slate-200/80 dark:border-white/[0.08] rounded-3xl p-6 sm:p-8 space-y-6">
             <h3 className="text-lg font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
               <Zap className="w-5 h-5 text-amber-500" />
-              Managed B2B Procurement Workflow Explained
+              Detailed Buyer Platform Workflow Explained
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-slate-700 dark:text-zinc-300">
               <div className="bg-slate-50/70 dark:bg-white/[0.03] p-5 rounded-2xl border border-slate-200/80 dark:border-white/[0.06] space-y-2">
-                <span className="font-bold text-sm text-slate-900 dark:text-white block">1. Single Point of Contact (ProcureSouq Desk)</span>
+                <span className="font-bold text-sm text-slate-900 dark:text-white block">1. Transparent Multi-Stockist Distribution</span>
                 <p className="leading-relaxed text-slate-600 dark:text-zinc-400">
-                  When you submit an RFQ, ProcureSouq’s procurement team reviews your specs and invites verified UAE stockists while keeping your company identity confidential — protecting you from unsolicited vendor calls.
+                  When you submit an RFQ, ProcureSouq automatically parses your line items and alerts verified authorized stockists in your material category. No middlemen or broker margins are added.
                 </p>
               </div>
 
               <div className="bg-slate-50/70 dark:bg-white/[0.03] p-5 rounded-2xl border border-slate-200/80 dark:border-white/[0.06] space-y-2">
-                <span className="font-bold text-sm text-slate-900 dark:text-white block">2. Five Vetted Customer Offers (Offer 1–5)</span>
+                <span className="font-bold text-sm text-slate-900 dark:text-white block">2. Standardized 5% UAE VAT Quotations</span>
                 <p className="leading-relaxed text-slate-600 dark:text-zinc-400">
-                  Our team verifies technical compliance, brand compatibility, and partial/full BOQ coverage before publishing up to 5 sanitized offers with transparent rule-based recommendations.
+                  All quotations are structured identically: Unit Price, Subtotal, 5% UAE VAT, Grand Total, Brand Offered, Lead Time, and Payment Terms (e.g., 30 Days Credit, PDC, or COD).
                 </p>
               </div>
 
               <div className="bg-slate-50/70 dark:bg-white/[0.03] p-5 rounded-2xl border border-slate-200/80 dark:border-white/[0.06] space-y-2">
-                <span className="font-bold text-sm text-slate-900 dark:text-white block">3. Official Customer PO (PS-CPO) & Support Desk</span>
+                <span className="font-bold text-sm text-slate-900 dark:text-white block">3. Automated Free Cable & Invoice Cost Audit</span>
                 <p className="leading-relaxed text-slate-600 dark:text-zinc-400">
-                  Upload your corporate Purchase Order or generate one through ProcureSouq. Communicate directly with ProcureSouq’s team anytime via the built-in Support & Messaging Desk.
+                  You can upload your past supplier invoices or bills to benchmark every line item against live stockist prices and identify competitive wholesale rates in seconds.
                 </p>
               </div>
 
               <div className="bg-slate-50/70 dark:bg-white/[0.03] p-5 rounded-2xl border border-slate-200/80 dark:border-white/[0.06] space-y-2">
-                <span className="font-bold text-sm text-slate-900 dark:text-white block">4. 6-Stage Coordinated Fulfilment & POD</span>
+                <span className="font-bold text-sm text-slate-900 dark:text-white block">4. Direct Order Fulfillment & Site Tracking</span>
                 <p className="leading-relaxed text-slate-600 dark:text-zinc-400">
-                  ProcureSouq issues an internal Supplier PO (`PS-SPO`) and coordinates delivery from `Order Confirmed` through `Delivered` with Delivery Notes, Tax Invoices, and Proof of Delivery (POD).
+                  Once awarded, the stockist receives your official PO with your site delivery address, coordinates dispatch with driver contact, and delivers materials directly to your site.
                 </p>
               </div>
             </div>
@@ -222,24 +222,24 @@ export const OnboardingGuidePage: React.FC<OnboardingGuidePageProps> = ({
             <CardContent className="p-6 sm:p-8 space-y-5">
               <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <HelpCircle className="w-5 h-5 text-amber-500" />
-                Frequently Asked Questions for Buyers
+                Frequently Asked Questions for Contractors
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-600 dark:text-zinc-300">
                 <div className="p-4 bg-slate-50/70 dark:bg-white/[0.02] rounded-2xl border border-slate-200/80 dark:border-white/[0.06] space-y-1.5 shadow-2xs">
-                  <strong className="text-slate-900 dark:text-white block font-bold">Who is my counterparty when I submit an RFQ?</strong>
-                  <p className="text-slate-600 dark:text-zinc-400 leading-relaxed">ProcureSouq is your single point of contact. We coordinate supplier quotations, technical evaluation, ordering, and site delivery on your behalf.</p>
+                  <strong className="text-slate-900 dark:text-white block font-bold">Is ProcureSouq free for contractors and MEP buyers?</strong>
+                  <p className="text-slate-600 dark:text-zinc-400 leading-relaxed">Yes! Buyers use ProcureSouq 100% free of charge to post RFQs and receive up to 5 live quotations per requirement.</p>
                 </div>
                 <div className="p-4 bg-slate-50/70 dark:bg-white/[0.02] rounded-2xl border border-slate-200/80 dark:border-white/[0.06] space-y-1.5 shadow-2xs">
                   <strong className="text-slate-900 dark:text-white block font-bold">How are suppliers vetted on the platform?</strong>
-                  <p className="text-slate-600 dark:text-zinc-400 leading-relaxed">Every supplier in our pool holds an active UAE Trade License, verified warehouse location, and valid TRN tax registration before receiving ProcureSouq RFQ invitations.</p>
+                  <p className="text-slate-600 dark:text-zinc-400 leading-relaxed">Every supplier must possess an active UAE Trade License, verified warehouse location, and valid TRN tax registration before quoting.</p>
                 </div>
                 <div className="p-4 bg-slate-50/70 dark:bg-white/[0.02] rounded-2xl border border-slate-200/80 dark:border-white/[0.06] space-y-1.5 shadow-2xs">
-                  <strong className="text-slate-900 dark:text-white block font-bold">Can I upload my existing Excel BOQ or PDF schedule?</strong>
-                  <p className="text-slate-600 dark:text-zinc-400 leading-relaxed">Yes! You can upload Excel BOQs, PDF quotation requests, and technical specifications, or enter line items manually.</p>
+                  <strong className="text-slate-900 dark:text-white block font-bold">Can I upload my existing Excel BOQ or paper bill?</strong>
+                  <p className="text-slate-600 dark:text-zinc-400 leading-relaxed">Yes! You can upload Excel files, PDF schedules, or snap a mobile camera photo of your handwritten paper list.</p>
                 </div>
                 <div className="p-4 bg-slate-50/70 dark:bg-white/[0.02] rounded-2xl border border-slate-200/80 dark:border-white/[0.06] space-y-1.5 shadow-2xs">
-                  <strong className="text-slate-900 dark:text-white block font-bold">How do I ask a question or report an issue?</strong>
-                  <p className="text-slate-600 dark:text-zinc-400 leading-relaxed">Use the Messages tab in your workspace to message ProcureSouq’s Procurement & Support Desk directly via text or voice note.</p>
+                  <strong className="text-slate-900 dark:text-white block font-bold">What payment terms are offered?</strong>
+                  <p className="text-slate-600 dark:text-zinc-400 leading-relaxed">Suppliers specify payment terms on every quotation: 30–60 Days Credit, Post-Dated Cheques (PDC), or Cash on Delivery (COD).</p>
                 </div>
               </div>
             </CardContent>
@@ -301,10 +301,10 @@ export const OnboardingGuidePage: React.FC<OnboardingGuidePageProps> = ({
                 },
                 {
                   step: '04',
-                  title: 'Quote to ProcureSouq & Fulfill POs',
-                  desc: 'View assigned RFQs in your inbox, submit confidential quotes to ProcureSouq, receive official Supplier POs (PS-SPO), and fulfill orders.',
+                  title: 'Submit Quotes & Fulfill POs',
+                  desc: 'View live buyer RFQs in your inbox, enter your competitive unit rates and lead times, win awarded POs, and fulfill orders directly.',
                   icon: DollarSign,
-                  badge: 'Official PS-SPO',
+                  badge: 'Direct PO Awards',
                   color: 'text-brand-700 dark:text-brand-300 bg-brand-50 dark:bg-brand-950/40 border-brand-200 dark:border-brand-800/60'
                 }
               ].map((card, idx) => {
@@ -372,7 +372,7 @@ export const OnboardingGuidePage: React.FC<OnboardingGuidePageProps> = ({
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
                   <div>
                     <strong className="block text-slate-900 dark:text-white font-bold">Dedicated Sales Desk Responder</strong>
-                    <span className="text-slate-600 dark:text-zinc-400">Committed sales team to submit quotations on assigned RFQs within 24 hours.</span>
+                    <span className="text-slate-600 dark:text-zinc-400">Committed sales team to submit quotations on live contractor RFQs within 24 hours.</span>
                   </div>
                 </div>
               </div>
@@ -388,20 +388,20 @@ export const OnboardingGuidePage: React.FC<OnboardingGuidePageProps> = ({
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-600 dark:text-zinc-300">
                 <div className="p-4 bg-slate-50/70 dark:bg-white/[0.02] rounded-2xl border border-slate-200/80 dark:border-white/[0.06] space-y-1.5 shadow-2xs">
-                  <strong className="text-slate-900 dark:text-white block font-bold">Who do I quote and sell to on ProcureSouq?</strong>
-                  <p className="text-slate-600 dark:text-zinc-400 leading-relaxed">You deal directly with ProcureSouq’s Managed Procurement Desk. Assigned RFQs appear in your inbox and your quotes remain strictly confidential from other suppliers.</p>
+                  <strong className="text-slate-900 dark:text-white block font-bold">How do I receive RFQs from contractors?</strong>
+                  <p className="text-slate-600 dark:text-zinc-400 leading-relaxed">All matching buyer RFQs appear in real-time in your "Live RFQ Inbox" filtered by the supply categories you select.</p>
                 </div>
                 <div className="p-4 bg-slate-50/70 dark:bg-white/[0.02] rounded-2xl border border-slate-200/80 dark:border-white/[0.06] space-y-1.5 shadow-2xs">
                   <strong className="text-slate-900 dark:text-white block font-bold">Will my submitted quotations be saved permanently?</strong>
-                  <p className="text-slate-600 dark:text-zinc-400 leading-relaxed">Yes! Every quote you submit is stored permanently in the Supabase database and linked to the original RFQ.</p>
+                  <p className="text-slate-600 dark:text-zinc-400 leading-relaxed">Yes! Every quote you submit is stored permanently in the Supabase database. You can track all active, evaluating, and won quotes anytime.</p>
                 </div>
                 <div className="p-4 bg-slate-50/70 dark:bg-white/[0.02] rounded-2xl border border-slate-200/80 dark:border-white/[0.06] space-y-1.5 shadow-2xs">
-                  <strong className="text-slate-900 dark:text-white block font-bold">How are purchase orders issued to suppliers?</strong>
-                  <p className="text-slate-600 dark:text-zinc-400 leading-relaxed">Once an order is confirmed, ProcureSouq issues an official Supplier Purchase Order (`PS-SPO`) in your Supplier POs & Fulfilment desk.</p>
+                  <strong className="text-slate-900 dark:text-white block font-bold">How are purchase orders awarded?</strong>
+                  <p className="text-slate-600 dark:text-zinc-400 leading-relaxed">When a buyer selects your quote, an official PO is generated with the buyer's billing details and delivery address in your "Orders & POs" desk.</p>
                 </div>
                 <div className="p-4 bg-slate-50/70 dark:bg-white/[0.02] rounded-2xl border border-slate-200/80 dark:border-white/[0.06] space-y-1.5 shadow-2xs">
-                  <strong className="text-slate-900 dark:text-white block font-bold">How do I ask a question about an RFQ or order?</strong>
-                  <p className="text-slate-600 dark:text-zinc-400 leading-relaxed">Use the Messages tab in your workspace to message ProcureSouq’s Supplier Operations Desk directly.</p>
+                  <strong className="text-slate-900 dark:text-white block font-bold">Can I update delivery dispatch status?</strong>
+                  <p className="text-slate-600 dark:text-zinc-400 leading-relaxed">Yes! You can update order status (Accepted, Processing, Dispatched, Delivered) and add logistics tracking notes.</p>
                 </div>
               </div>
             </CardContent>
