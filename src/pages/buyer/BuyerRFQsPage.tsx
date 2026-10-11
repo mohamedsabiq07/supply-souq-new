@@ -89,7 +89,7 @@ export const BuyerRFQsPage: React.FC<BuyerRFQsPageProps> = ({ onNavigate }) => {
       </div>
 
       {filteredRFQs.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="flex flex-col gap-3.5">
           {filteredRFQs.map((rfq) => (
             <RFQCard
               key={rfq.id}

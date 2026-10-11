@@ -164,7 +164,7 @@ export const SupplierDashboard: React.FC<SupplierDashboardProps> = ({ onNavigate
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="flex flex-col gap-3.5">
           {matchingRFQs.slice(0, 4).map((rfq) => {
             const supplierHasQuoted = hasSupplierQuoted(rfq.id, currentCompany.id);
             const maxQuotes = isRFQExtendedUnlocked(rfq.id) ? 10 : 5;

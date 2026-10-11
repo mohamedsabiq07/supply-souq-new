@@ -221,7 +221,7 @@ export const SupplierInboxPage: React.FC<SupplierInboxPageProps> = ({ onNavigate
       </div>
 
       {filtered.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="flex flex-col gap-3.5">
           {filtered.map((rfq) => {
             const isDeclined = isRFQDeclinedBySupplier(rfq.id, currentCompany.id);
             const decRec = myDeclinedRecords.find(d => d.rfqId === rfq.id);
