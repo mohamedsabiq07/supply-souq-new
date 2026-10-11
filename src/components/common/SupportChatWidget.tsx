@@ -247,27 +247,6 @@ export const SupportDeskInlineBox: React.FC<SupportDeskInlineBoxProps> = ({
             </p>
           </div>
         </div>
-
-        {/* Optional Topic / RFQ Reference Tag */}
-        <div className="flex items-center gap-2 shrink-0">
-          <label className="text-[10px] font-bold uppercase tracking-wider text-slate-300">
-            Regarding:
-          </label>
-          <select
-            value={selectedRfqRef}
-            onChange={(e) => setSelectedRfqRef(e.target.value)}
-            className="bg-white/10 hover:bg-white/15 text-white text-xs font-bold px-2.5 py-1.5 rounded-lg border border-white/20 focus:outline-none cursor-pointer"
-          >
-            <option value="PS-SUPPORT" className="text-slate-900">
-              General Support / Procurement Officer
-            </option>
-            {relevantRfqs.map((r) => (
-              <option key={r.id} value={r.rfqNumber} className="text-slate-900">
-                {r.rfqNumber} — {r.title.slice(0, 32)}
-              </option>
-            ))}
-          </select>
-        </div>
       </div>
 
       {/* Conversation History (Shown when messages exist or in non-compact mode) */}
@@ -289,11 +268,6 @@ export const SupportDeskInlineBox: React.FC<SupportDeskInlineBoxProps> = ({
                   className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}
                 >
                   <div className="flex items-center gap-1.5 text-[10px] text-slate-400 dark:text-zinc-500 mb-0.5 px-1">
-                    {msg.rfqNumber && msg.rfqNumber !== 'PS-SUPPORT' && (
-                      <span className="font-mono font-bold text-[#cf2e46]">
-                        [{msg.rfqNumber}]
-                      </span>
-                    )}
                     <span className="font-bold text-slate-700 dark:text-zinc-300">
                       {isMe ? 'You' : 'ProcureSouq Customer Service & Procurement Officer'}
                     </span>
@@ -456,26 +430,20 @@ export const SupportChatWidget: React.FC = () => {
     deskTitle,
     threadMessages,
     unreadAdminReplies,
-    relevantRfqs,
     sendMessage,
   } = useProcureSouqSupportThread();
 
   const [isOpen, setIsOpen] = useState(false);
   const [inputText, setInputText] = useState('');
-  const [selectedRfqRef, setSelectedRfqRef] = useState<string>('PS-SUPPORT');
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleOpenChat = (e: any) => {
+    const handleOpenChat = () => {
       setIsOpen(true);
-      if (e?.detail?.rfqNumber) {
-        setSelectedRfqRef(e.detail.rfqNumber);
-      }
     };
     window.addEventListener('open-support-chat', handleOpenChat as EventListener);
-    (window as any).__openSupportChat = (rfqNumber?: string) => {
+    (window as any).__openSupportChat = () => {
       setIsOpen(true);
-      if (rfqNumber) setSelectedRfqRef(rfqNumber);
     };
     return () => {
       window.removeEventListener('open-support-chat', handleOpenChat as EventListener);
@@ -496,13 +464,9 @@ export const SupportChatWidget: React.FC = () => {
     e.preventDefault();
     if (!inputText.trim()) return;
 
-    const matchedRfq = relevantRfqs.find(
-      (r) => r.rfqNumber === selectedRfqRef || r.id === selectedRfqRef
-    );
-
     sendMessage({
-      rfqId: matchedRfq ? matchedRfq.id : 'procuresouq-general-support',
-      rfqNumber: matchedRfq ? matchedRfq.rfqNumber : 'PS-SUPPORT',
+      rfqId: 'procuresouq-general-support',
+      rfqNumber: 'PS-SUPPORT',
       senderId: currentUser.id || 'user',
       senderName: currentUser.fullName || currentCompany.name || 'User',
       senderCompanyId: currentCompany.id,
@@ -547,25 +511,6 @@ export const SupportChatWidget: React.FC = () => {
             </button>
           </div>
 
-          {/* Regarding Selector */}
-          <div className="px-3.5 py-2 bg-slate-100 dark:bg-white/[0.04] border-b border-slate-200/80 dark:border-white/[0.06] flex items-center justify-between gap-2 text-[11px]">
-            <span className="font-bold text-slate-600 dark:text-zinc-400 shrink-0">
-              Topic / RFQ:
-            </span>
-            <select
-              value={selectedRfqRef}
-              onChange={(e) => setSelectedRfqRef(e.target.value)}
-              className="flex-1 bg-white dark:bg-[#18181c] text-slate-900 dark:text-white font-semibold px-2 py-1 rounded-lg border border-slate-200 dark:border-white/[0.1] text-[11px] focus:outline-none"
-            >
-              <option value="PS-SUPPORT">General Customer Service & Procurement</option>
-              {relevantRfqs.map((r) => (
-                <option key={r.id} value={r.rfqNumber}>
-                  {r.rfqNumber} — {r.title.slice(0, 26)}
-                </option>
-              ))}
-            </select>
-          </div>
-
           {/* Messages List */}
           <div
             ref={scrollRef}
@@ -582,11 +527,6 @@ export const SupportChatWidget: React.FC = () => {
                     className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}
                   >
                     <div className="flex items-center gap-1 text-[10px] text-slate-400 mb-0.5 px-1">
-                      {msg.rfqNumber && msg.rfqNumber !== 'PS-SUPPORT' && (
-                        <span className="font-mono font-bold text-[#cf2e46]">
-                          [{msg.rfqNumber}]
-                        </span>
-                      )}
                       <span className="font-bold text-slate-600 dark:text-zinc-300">
                         {isMe ? 'You' : 'ProcureSouq Officer'}
                       </span>
