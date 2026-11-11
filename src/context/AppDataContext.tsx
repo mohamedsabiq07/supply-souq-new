@@ -52,6 +52,7 @@ import {
   v2TestApprovalHistory,
   v2TestNotifications,
 } from '../data/seedData';
+import { mergeWithPreloadedSuppliers } from '../lib/uaeElectricalSuppliers';
 import { supabase } from '../lib/supabase';
 import { 
   supabaseService, 
@@ -361,11 +362,11 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) {
-          return parsed;
+          return mergeWithPreloadedSuppliers(parsed);
         }
       }
     } catch (e) {}
-    return initialCompanies;
+    return mergeWithPreloadedSuppliers(initialCompanies);
   });
 
   const [categories] = useState<Category[]>(initialCategories);
@@ -816,7 +817,7 @@ export const AppDataProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
         // 1. Merge Companies
         if (result.companies && result.companies.length > 0) {
-          setCompanies((prev) => mergeEntities(prev, result.companies));
+          setCompanies((prev) => mergeWithPreloadedSuppliers(mergeEntities(prev, result.companies)));
         }
 
         // 2. Merge RFQs

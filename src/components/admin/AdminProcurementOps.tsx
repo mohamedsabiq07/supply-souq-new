@@ -4,6 +4,14 @@ import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { formatAED, formatDate } from '../../lib/utils';
 import {
+  mergeWithPreloadedSuppliers,
+  buildSupplierIntroPitchText,
+  buildFormalRfqBoqRequestText,
+  buildWhatsAppUrl,
+  buildMailtoUrl,
+  SupplierCategoryGroup,
+} from '../../lib/uaeElectricalSuppliers';
+import {
   RFQ,
   Quotation,
   CustomerOffer,
@@ -117,9 +125,22 @@ export const AdminProcurementOps: React.FC = () => {
     activeRFQ?.supplierQuoteDeadline?.slice(0, 10) || '2026-10-18'
   );
 
-  // Supplier invitation selection state
-  const verifiedSuppliers = companies.filter(
-    (c) => (c.companyType === 'supplier' || c.companyType === 'both') && c.verificationStatus === 'verified'
+  // Supplier invitation selection state (pre-loaded 25 UAE electrical stockists + live registered suppliers, deduplicated by email/name)
+  const verifiedSuppliers = React.useMemo(
+    () =>
+      mergeWithPreloadedSuppliers(companies).filter(
+        (c) => (c.companyType === 'supplier' || c.companyType === 'both') && c.verificationStatus === 'verified'
+      ),
+    [companies]
+  );
+  const [supplierCategoryFilter, setSupplierCategoryFilter] = useState<'ALL' | SupplierCategoryGroup>('ALL');
+  const [showPitchPreview, setShowPitchPreview] = useState<'none' | 'intro_pitch' | 'rfq_boq'>('none');
+  const filteredSuppliers = React.useMemo(
+    () =>
+      supplierCategoryFilter === 'ALL'
+        ? verifiedSuppliers
+        : verifiedSuppliers.filter((s) => s.categoryGroup === supplierCategoryFilter),
+    [verifiedSuppliers, supplierCategoryFilter]
   );
   const [selectedSupplierIds, setSelectedSupplierIds] = useState<string[]>([]);
   const [inviteChannel, setInviteChannel] = useState<'portal' | 'email' | 'whatsapp_future'>('portal');
@@ -858,13 +879,196 @@ export const AdminProcurementOps: React.FC = () => {
       {/* =================================================================== */}
       {subTab === 'request_quotes' && activeRFQ && (
         <div className="space-y-6">
+          {/* 1-Click Outreach & Formal RFQ BOQ Dispatch Command Center */}
+          <Card className="p-5 border-slate-200 bg-gradient-to-r from-slate-900 via-slate-900 to-slate-800 text-white space-y-4">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+              <div>
+                <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-extrabold uppercase tracking-wider mb-1.5">
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  25 Pre-Loaded UAE Electrical Stockists • Zero Login/Data Clash Architecture
+                </div>
+                <h3 className="text-base font-extrabold text-white">
+                  Direct WhatsApp & Email Dispatch — Intro Pitch Letter & Active RFQ BOQ ({activeRFQ.rfqNumber})
+                </h3>
+                <p className="text-xs text-slate-300 mt-0.5">
+                  Send your formal introductory supplier pitch or the itemized BOQ for{' '}
+                  <strong className="text-white">{activeRFQ.rfqNumber} ({activeRFQ.title})</strong> to all 25 UAE electrical stockists via 1-Click Batch Email (BCC) or individual WhatsApp/Email. If any supplier registers on their own, their live account merges automatically by email with zero conflict.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setShowPitchPreview((prev) => (prev === 'intro_pitch' ? 'none' : 'intro_pitch'))
+                  }
+                  className={`px-3 py-2 rounded-lg text-xs font-bold border transition ${
+                    showPitchPreview === 'intro_pitch'
+                      ? 'bg-white text-slate-900 border-white'
+                      : 'bg-slate-800 text-slate-200 border-slate-700 hover:bg-slate-700'
+                  }`}
+                >
+                  {showPitchPreview === 'intro_pitch' ? 'Hide Intro Pitch Preview' : 'Preview Intro Pitch Letter'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setShowPitchPreview((prev) => (prev === 'rfq_boq' ? 'none' : 'rfq_boq'))
+                  }
+                  className={`px-3 py-2 rounded-lg text-xs font-bold border transition ${
+                    showPitchPreview === 'rfq_boq'
+                      ? 'bg-white text-slate-900 border-white'
+                      : 'bg-slate-800 text-slate-200 border-slate-700 hover:bg-slate-700'
+                  }`}
+                >
+                  {showPitchPreview === 'rfq_boq' ? 'Hide RFQ BOQ Preview' : `Preview ${activeRFQ.rfqNumber} BOQ Request`}
+                </button>
+              </div>
+            </div>
+
+            {/* Batch Action Buttons */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 border-t border-slate-800">
+              {/* Box 1: Introductory Supplier Pitch (All 25 Suppliers) */}
+              <div className="p-3.5 rounded-xl bg-slate-800/90 border border-slate-700 space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-extrabold text-amber-300 uppercase tracking-wider">
+                    1. Introductory Supplier Pitch Letter (All 25 Stockists)
+                  </span>
+                  <span className="text-[10px] text-slate-400">No Platform Fee Mentioned</span>
+                </div>
+                <p className="text-[11px] text-slate-300">
+                  Introduces you as the electrical engineer running the ProcureSouq procurement desk and invites them to quote on UAE contracting BOQs.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <a
+                    href={buildMailtoUrl(
+                      (selectedSupplierIds.length > 0
+                        ? verifiedSuppliers.filter((s) => selectedSupplierIds.includes(s.id))
+                        : verifiedSuppliers
+                      ).map((s) => s.email),
+                      'Electrical BOQ Tenders & Supplier Onboarding — ProcureSouq UAE Procurement Desk',
+                      buildSupplierIntroPitchText(),
+                      true
+                    )}
+                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#9e1c2e] hover:bg-[#841524] text-white text-xs font-extrabold transition"
+                  >
+                    <Send className="w-3.5 h-3.5" />
+                    Email Intro Pitch to {selectedSupplierIds.length > 0 ? `Selected (${selectedSupplierIds.length})` : `All ${verifiedSuppliers.length} Suppliers`} (BCC)
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigator.clipboard.writeText(buildSupplierIntroPitchText());
+                      triggerToast('Copied formal Introductory Supplier Pitch Letter to clipboard.');
+                    }}
+                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-white text-xs font-bold transition"
+                  >
+                    <FileText className="w-3.5 h-3.5" />
+                    Copy Pitch Text
+                  </button>
+                </div>
+              </div>
+
+              {/* Box 2: Formal RFQ BOQ Quotation Request */}
+              <div className="p-3.5 rounded-xl bg-slate-800/90 border border-slate-700 space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-extrabold text-emerald-300 uppercase tracking-wider">
+                    2. Formal BOQ Quotation Request ({activeRFQ.rfqNumber})
+                  </span>
+                  <span className="text-[10px] text-slate-400">{activeRFQ.items.length} BOQ Items • Buyer Masked</span>
+                </div>
+                <p className="text-[11px] text-slate-300">
+                  Sends the complete itemized BOQ for <strong>{activeRFQ.rfqNumber}</strong> ({activeRFQ.deliveryEmirate}) requesting unit prices, brands, and delivery lead time.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <a
+                    href={buildMailtoUrl(
+                      (selectedSupplierIds.length > 0
+                        ? verifiedSuppliers.filter((s) => selectedSupplierIds.includes(s.id))
+                        : verifiedSuppliers
+                      ).map((s) => s.email),
+                      `Request for Quotation (${activeRFQ.rfqNumber}): ${activeRFQ.title} — ProcureSouq UAE`,
+                      buildFormalRfqBoqRequestText(activeRFQ, undefined, quoteDeadlineInput),
+                      true
+                    )}
+                    onClick={() => {
+                      const targetIds =
+                        selectedSupplierIds.length > 0
+                          ? selectedSupplierIds
+                          : verifiedSuppliers.map((s) => s.id);
+                      inviteSuppliersToRFQ(
+                        activeRFQ.id,
+                        targetIds,
+                        'email',
+                        quoteDeadlineInput,
+                        staffAssignee
+                      );
+                      triggerToast(
+                        `Logged RFQ BOQ email dispatch for ${targetIds.length} supplier(s) on ${activeRFQ.rfqNumber}.`
+                      );
+                    }}
+                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold transition"
+                  >
+                    <Send className="w-3.5 h-3.5" />
+                    Email {activeRFQ.rfqNumber} BOQ to {selectedSupplierIds.length > 0 ? `Selected (${selectedSupplierIds.length})` : `All ${verifiedSuppliers.length} Suppliers`} (BCC)
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigator.clipboard.writeText(
+                        buildFormalRfqBoqRequestText(activeRFQ, undefined, quoteDeadlineInput)
+                      );
+                      triggerToast(`Copied formal BOQ Quotation Request for ${activeRFQ.rfqNumber} to clipboard.`);
+                    }}
+                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-white text-xs font-bold transition"
+                  >
+                    <ClipboardList className="w-3.5 h-3.5" />
+                    Copy BOQ Request Text
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Expandable Template Preview Box */}
+            {showPitchPreview !== 'none' && (
+              <div className="p-4 rounded-xl bg-slate-950 border border-slate-700 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-slate-300">
+                    {showPitchPreview === 'intro_pitch'
+                      ? 'Introductory Supplier Pitch Template (WhatsApp & Email — Zero Fee Mention)'
+                      : `Formal RFQ BOQ Quotation Request Template (${activeRFQ.rfqNumber})`}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const text =
+                        showPitchPreview === 'intro_pitch'
+                          ? buildSupplierIntroPitchText()
+                          : buildFormalRfqBoqRequestText(activeRFQ, undefined, quoteDeadlineInput);
+                      navigator.clipboard.writeText(text);
+                      triggerToast('Template copied to clipboard.');
+                    }}
+                    className="px-2.5 py-1 rounded bg-emerald-600 text-white text-[11px] font-bold hover:bg-emerald-700"
+                  >
+                    Copy Text
+                  </button>
+                </div>
+                <pre className="text-xs text-slate-200 whitespace-pre-wrap font-mono bg-slate-900 p-3 rounded-lg border border-slate-800 max-h-64 overflow-y-auto">
+                  {showPitchPreview === 'intro_pitch'
+                    ? buildSupplierIntroPitchText()
+                    : buildFormalRfqBoqRequestText(activeRFQ, undefined, quoteDeadlineInput)}
+                </pre>
+              </div>
+            )}
+          </Card>
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Supplier Selection Directory */}
             <Card className="lg:col-span-2 p-6 border-slate-200 bg-white space-y-4">
               <div className="flex items-center justify-between flex-wrap gap-2">
                 <div>
                   <h3 className="text-sm font-extrabold text-slate-900">
-                    Step 3: Dispatch RFQ ({activeRFQ.rfqNumber}) to Approved UAE Suppliers
+                    Step 3: Dispatch RFQ ({activeRFQ.rfqNumber}) to Approved UAE Electrical Stockists ({filteredSuppliers.length})
                   </h3>
                   <p className="text-xs text-slate-500">
                     Suppliers receive only the material BOQ and specifications — buyer identity and contact details remain strictly confidential.
@@ -879,6 +1083,51 @@ export const AdminProcurementOps: React.FC = () => {
                     <Upload className="w-3.5 h-3.5 mr-1" />
                     + Manual Supplier Quote Upload
                   </Button>
+                </div>
+              </div>
+
+              {/* Category Filter Pills & Select All */}
+              <div className="flex items-center justify-between flex-wrap gap-2 pt-1">
+                <div className="flex flex-wrap gap-1.5">
+                  {(
+                    [
+                      'ALL',
+                      'Cables & Wires',
+                      'Switchgear & DBs',
+                      'Conduits & Containment',
+                      'Multi-Brand MEP',
+                    ] as const
+                  ).map((cat) => (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => setSupplierCategoryFilter(cat)}
+                      className={`px-2.5 py-1 rounded-lg text-[11px] font-bold border transition ${
+                        supplierCategoryFilter === cat
+                          ? 'bg-slate-900 text-white border-slate-900'
+                          : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
+                      }`}
+                    >
+                      {cat === 'ALL' ? `All Stockists (${verifiedSuppliers.length})` : cat}
+                    </button>
+                  ))}
+                </div>
+                <div className="flex items-center gap-2 text-xs">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedSupplierIds(filteredSuppliers.map((s) => s.id))}
+                    className="text-[#9e1c2e] font-bold hover:underline"
+                  >
+                    Select Visible ({filteredSuppliers.length})
+                  </button>
+                  <span className="text-slate-300">|</span>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedSupplierIds([])}
+                    className="text-slate-500 font-semibold hover:underline"
+                  >
+                    Clear
+                  </button>
                 </div>
               </div>
 
@@ -923,7 +1172,7 @@ export const AdminProcurementOps: React.FC = () => {
                     }}
                     className="w-full font-bold"
                   >
-                    Send RFQ to Selected ({selectedSupplierIds.length})
+                    Assign RFQ in Portal ({selectedSupplierIds.length})
                   </Button>
                 </div>
               </div>
@@ -933,20 +1182,36 @@ export const AdminProcurementOps: React.FC = () => {
                   <thead>
                     <tr className="bg-slate-900 text-white text-[10px] uppercase">
                       <th className="py-2.5 px-3">Select</th>
-                      <th className="py-2.5 px-3">Verified Supplier</th>
-                      <th className="py-2.5 px-3">Emirate / Zone</th>
-                      <th className="py-2.5 px-3">Rating</th>
-                      <th className="py-2.5 px-3">Status for {activeRFQ.rfqNumber}</th>
+                      <th className="py-2.5 px-3">Verified UAE Stockist & Specialties</th>
+                      <th className="py-2.5 px-3">Location</th>
+                      <th className="py-2.5 px-3">1-Click WhatsApp & Email Outreach</th>
+                      <th className="py-2.5 px-3">Status ({activeRFQ.rfqNumber})</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-200">
-                    {verifiedSuppliers.map((sup) => {
-                      const inv = rfqInvitations.find((i) => i.supplierCompanyId === sup.id);
-                      const hasQuote = rfqQuotes.some((q) => q.supplierCompanyId === sup.id);
+                    {filteredSuppliers.map((sup) => {
+                      const inv = rfqInvitations.find(
+                        (i) =>
+                          i.supplierCompanyId === sup.id ||
+                          i.supplierEmail?.toLowerCase() === sup.email.toLowerCase()
+                      );
+                      const hasQuote = rfqQuotes.some(
+                        (q) =>
+                          q.supplierCompanyId === sup.id ||
+                          q.supplierCompanyName.toLowerCase() === sup.name.toLowerCase()
+                      );
                       const checked = selectedSupplierIds.includes(sup.id);
+                      const waTarget = sup.whatsappPhone || sup.phone;
+                      const introPitchMsg = buildSupplierIntroPitchText(sup.name);
+                      const rfqBoqMsg = buildFormalRfqBoqRequestText(
+                        activeRFQ,
+                        sup.name,
+                        quoteDeadlineInput
+                      );
+
                       return (
                         <tr key={sup.id} className="hover:bg-slate-50">
-                          <td className="py-2.5 px-3">
+                          <td className="py-2.5 px-3 align-top">
                             <input
                               type="checkbox"
                               checked={checked}
@@ -957,18 +1222,94 @@ export const AdminProcurementOps: React.FC = () => {
                                   setSelectedSupplierIds((prev) => prev.filter((id) => id !== sup.id));
                                 }
                               }}
-                              className="w-4 h-4 accent-[#9e1c2e]"
+                              className="w-4 h-4 accent-[#9e1c2e] mt-1"
                             />
                           </td>
-                          <td className="py-2.5 px-3">
-                            <div className="font-bold text-slate-900">{sup.name}</div>
-                            <div className="text-[10px] text-slate-500">{sup.email} • {sup.phone}</div>
+                          <td className="py-2.5 px-3 align-top">
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              <span className="font-bold text-slate-900">{sup.name}</span>
+                              <span className="px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 font-bold text-[10px]">
+                                {sup.categoryGroup}
+                              </span>
+                              <span className="text-[10px] font-bold text-amber-600">{sup.rating} ★</span>
+                            </div>
+                            <div className="text-[11px] text-slate-600 mt-0.5">{sup.specialtiesSummary}</div>
+                            <div className="text-[10px] text-slate-500 mt-0.5 font-mono">
+                              {sup.email} • Tel: {sup.phone}
+                              {sup.whatsappPhone ? ` • WA: +${sup.whatsappPhone}` : ''}
+                            </div>
                           </td>
-                          <td className="py-2.5 px-3 text-slate-600">
-                            {sup.emirate} ({sup.industrialZone})
+                          <td className="py-2.5 px-3 text-slate-600 align-top">
+                            <div className="font-bold text-slate-800">{sup.emirate}</div>
+                            <div className="text-[10px] text-slate-500">{sup.address || sup.industrialZone}</div>
                           </td>
-                          <td className="py-2.5 px-3 font-bold text-amber-600">{sup.rating} ★</td>
-                          <td className="py-2.5 px-3">
+                          <td className="py-2.5 px-3 align-top">
+                            <div className="flex flex-wrap gap-1.5">
+                              {/* WhatsApp Intro Pitch */}
+                              <a
+                                href={buildWhatsAppUrl(waTarget, introPitchMsg)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 px-2 py-1 rounded bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold text-[10px] transition"
+                                title={`Send WhatsApp Intro Pitch to ${sup.name}`}
+                              >
+                                💬 WA Pitch
+                              </a>
+                              {/* WhatsApp Formal RFQ BOQ Request */}
+                              <a
+                                href={buildWhatsAppUrl(waTarget, rfqBoqMsg)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={() => {
+                                  inviteSuppliersToRFQ(
+                                    activeRFQ.id,
+                                    [sup.id],
+                                    'whatsapp_future',
+                                    quoteDeadlineInput,
+                                    staffAssignee
+                                  );
+                                }}
+                                className="inline-flex items-center gap-1 px-2 py-1 rounded bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[10px] transition"
+                                title={`Send ${activeRFQ.rfqNumber} BOQ via WhatsApp to ${sup.name}`}
+                              >
+                                💬 WA BOQ
+                              </a>
+                              {/* Email Intro Pitch */}
+                              <a
+                                href={buildMailtoUrl(
+                                  [sup.email],
+                                  `Supplier Onboarding & Electrical BOQ Tenders — ProcureSouq UAE`,
+                                  introPitchMsg
+                                )}
+                                className="inline-flex items-center gap-1 px-2 py-1 rounded bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 font-bold text-[10px] transition"
+                                title={`Email Intro Pitch to ${sup.email}`}
+                              >
+                                ✉️ Email Pitch
+                              </a>
+                              {/* Email Formal RFQ BOQ Request */}
+                              <a
+                                href={buildMailtoUrl(
+                                  [sup.email],
+                                  `Request for Quotation (${activeRFQ.rfqNumber}): ${activeRFQ.title} — ProcureSouq UAE`,
+                                  rfqBoqMsg
+                                )}
+                                onClick={() => {
+                                  inviteSuppliersToRFQ(
+                                    activeRFQ.id,
+                                    [sup.id],
+                                    'email',
+                                    quoteDeadlineInput,
+                                    staffAssignee
+                                  );
+                                }}
+                                className="inline-flex items-center gap-1 px-2 py-1 rounded bg-slate-900 hover:bg-slate-800 text-white font-bold text-[10px] transition"
+                                title={`Email ${activeRFQ.rfqNumber} BOQ to ${sup.email}`}
+                              >
+                                ✉️ Email BOQ
+                              </a>
+                            </div>
+                          </td>
+                          <td className="py-2.5 px-3 align-top">
                             {hasQuote ? (
                               <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-bold border border-emerald-200">
                                 Quotation Received
@@ -978,7 +1319,7 @@ export const AdminProcurementOps: React.FC = () => {
                                 Invited via {inv.invitationChannel}
                               </span>
                             ) : (
-                              <span className="text-slate-400">Not Invited Yet</span>
+                              <span className="text-slate-400">Ready to Contact</span>
                             )}
                           </td>
                         </tr>
